@@ -27,13 +27,13 @@ describe("Unit: ManageOrganizationsController", function () {
 
     var orgs = [
         {
+            guid: "2345",
+            name: "org2"
+        },
+        {
             guid: "1234",
             name: "org1",
             spaces: [ { name: "space1" }, { name: "space2" } ]
-        },
-        {
-            guid: "2345",
-            name: "org2"
         }
     ];
 
@@ -244,4 +244,18 @@ describe("Unit: ManageOrganizationsController", function () {
         expect(targetProvider.refresh.called).to.be.true;
     });
 
+    it('should sort list of organizations', function() {
+        createAndInitSut();
+
+        var isSortedByName = function(organizationsList) {
+            for (var i = 0; i < organizationsList.length - 1; ++i) {
+                if (organizationsList[i].name.localeCompare(organizationsList[i + 1].name) > 0) {
+                    return false;
+                }
+            }
+            return true;
+        };
+
+        expect(isSortedByName(scope.organizations)).to.be.true;
+    })
 });

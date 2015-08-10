@@ -133,7 +133,9 @@
             });
 
             function refreshOrganizations(organizations) {
-                $scope.organizations = organizations;
+                $scope.organizations = organizations.sort(function(org1, org2) {
+                   return org1.name.localeCompare(org2.name);
+                });
                 if($scope.current) {
                     $scope.showOrg($scope.current.guid);
                 }
