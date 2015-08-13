@@ -33,7 +33,7 @@ Console is only a reverse-proxy - it doesn't have application logic. To run and 
 Although, there is one project always required - [user-management](https://github.com/trustedanalytics/user-management) which is responsible for downloading user details, organizations list, etc. A whole list of dependencies is stored in [service-mapping.json](app/server/config/service-mapping.json).
 
 To run the service locally or in Cloud Foundry, the VCAP_SERVICES environment variables with proper values inside needs to be defined:
-'''
+```
 export VCAP_SERVICES='{
   "user-provided": [
    {
@@ -51,13 +51,13 @@ export VCAP_SERVICES='{
    }
   ]
 }'
-'''
+```
 
 #### Binding to external microservices
 It's the easiest way of setting up a local environment. The idea is to spin up the console only and connect it to microservices already running in an external environment. It can be done be using ``vcap.**`` property. For example if we want to connect to user-management service
 deployed on CF we need to add an value to VCAP_SERVICES environment:
 
-'''
+```
 export VCAP_SERVICES='{
   "user-provided": [
    {
@@ -74,7 +74,7 @@ export VCAP_SERVICES='{
    }
   ]
 }'
-'''
+```
 
 All the properties used for external services binding can be found in [local-services.json](app/server/config/local-services.json) file. 
 
