@@ -1,0 +1,60 @@
+//
+   Copyright (c) 2015 Intel Corporation
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+//-
+.panel.panel-warning(ng-show='!targetAvailable()')
+    .panel-heading Target unavailable
+    .panel-body Please choose a proper {{ targetType }} from menu in upper corner
+
+.panel.panel-warning(ng-show='state.isError()')
+    .panel-heading Error loading content
+    .panel-body Service is unavailable
+table.table.user-list(ng-show='state.isLoaded() && users.length > 0', ng-table='tableParams', template-header="users-table-header")
+    tr.user-list-item(data-ng-repeat='user in $data')
+        td {{user.username}}
+        td(ng-repeat="(avRole, avRoleName) in availableRoles")
+            .checkbox.c-checkbox
+                label
+                    input(type="checkbox"
+                            ng-disabled="isCheckboxDisabled(avRole, user.guid, user.username)"
+                            ng-model="roleCheckboxes[user.guid][avRole]"
+                            ng-click="updateUserRoles(user, avRole)")
+                    span.fa.fa-check
+        td
+            a.delete-user.fa-times.fa(ng-click='deleteUser(user)', ng-hide="roleCheckboxes[user.guid]['managers'] && managersCounter <= 1")
+
+div(ng-show='state.isLoaded() && users.length === 0')
+    | No users available
+
+script(type="text/ng-template" id="users-table-header")
+    tr
+        th(sortable="'username'") Username
+        th(ng-repeat="(avRole, avRoleName) in availableRoles") {{avRoleName}}
+        th
+
+script(type="text/ng-template", id="confirm-delete")
+    .ngdialog-message.clearfix
+        p
+            | The user will be removed from this
+            = ' '
+            span(ng-if="data.userViewType === 1") organization,
+            span(ng-if="data.userViewType === 2") space,
+            = ' '
+            | are you sure you want to proceed with removing
+            = ' '
+            b {{ data.userToDelete.username }}
+            | ?
+        .pull-right
+            button.btn.btn-primary(type='button', ng-click='confirm()') Delete
+            button.btn.btn-default(type='button', ng-click="cancel()") Cancel

@@ -1,0 +1,13 @@
+{
+  "user-management": "http://localhost:9998",
+  "datacatalog": "http://localhost:5000",
+  "datacatalogexport": "http://localhost:9990",
+  "dataaquisitionservice": "http://localhost:9997",
+  "servicecatalog": "http://localhost:9999",
+  "metrics-provider": "http://localhost:9997",
+  "router-metrics-provider": "http://localhost:9996",
+  "app-launcher-helper": "http://localhost:9996",
+  "platformcontext": "http://localhost:9995",
+  "fileserver": "http://localhost:9994",
+  "latestevents": "http://localhost:9993"
+}

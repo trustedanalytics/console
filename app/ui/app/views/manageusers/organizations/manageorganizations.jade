@@ -1,0 +1,76 @@
+//
+   Copyright (c) 2015 Intel Corporation
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+//-
+.content
+    .content-wrapper
+        d-spinner(ng-show='state.isPending()')
+        .row
+            .col-lg-6.org-list(ng-init='setCurrentOrg()' ng-show='state.isLoaded()')
+                ul.nav.nav-stacked.nav-pills
+                    li(ng-repeat="org in organizations" ng-class="org.guid === current.guid ? 'active' : ''")
+                        a(ng-click="showOrg(org.guid)") {{org.name}}
+            .col-lg-6(ng-show='state.isLoaded()')
+                h3.org-title
+                    span.fa-pencil-square-o(editable-text="current.name" e-style="min-width:500px"
+                    onbeforesave="updateName($data)") {{current.name}}
+                .buttons
+                    button.btn.btn-primary(type="button" ng-click="redirectTo('app.dashboard')")
+                        span.btn-label
+                            i.icon-speedometer
+                        | Dashboard
+                    button.btn.btn-primary(type="button" ng-click="redirectTo('app.manage.orgusers')")
+                        span.btn-label
+                            i.icon-users
+                        | Manage users
+                .space-list
+                    h4
+                        |   Organization spaces
+                    ul.list-group
+                        li.list-group-item.space-list-item(ng-repeat="space in current.spaces")
+                            span
+                                | {{space.name}}
+                            a(ng-click='deleteSpace(space)')
+                                span.fa-times.fa
+                        li.list-group-item
+                            form.new-space-form
+                                input.new-space(type="text" placeholder="New space name..." ng-model='spaceName', required='')
+                                button.btn.btn-primary(ng-click="addSpace()")
+                                    | Add space
+                .delete-button
+                    button.btn.btn-danger(ng-click="deleteOrganization(org.guid)")
+                        | Delete organization
+
+script(type="text/ng-template", id="operation-error")
+    h3.mt0.bg-danger {{operationErrorTitle}}
+    .ngdialog-message.clearfix
+        p(ng-show='operationError')
+            code {{operationError}}
+        .pull-right
+            button.btn.btn-default(type='button', ng-click="closeThisDialog()") OK
+
+script(type="text/ng-template", id="delete-confirm")
+    .ngdialog-message.clearfix
+        p Are you sure you wish to delete this organization?
+        .pull-right
+            button.btn.btn-primary(type='button', ng-click="confirm()") Confirm
+            button.btn.btn-default(type='button', ng-click="closeThisDialog()") Cancel
+
+
+script(type="text/ng-template", id="delete-space-confirm")
+    .ngdialog-message.clearfix
+        p Are you sure you wish to delete this space?
+        .pull-right
+            button.btn.btn-primary(type='button', ng-click="confirm()") Confirm
+            button.btn.btn-default(type='button', ng-click="cancel()") Cancel

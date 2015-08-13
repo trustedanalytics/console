@@ -1,0 +1,47 @@
+//
+   Copyright (c) 2015 Intel Corporation
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+//-
+d-spinner(ng-show='state.isPending()')
+
+.dashboard.row(ng-show="state.isLoaded()")
+    d-target-selector.target-selector.pull-right(hide-space="true")
+    .category-title.clearfix Health & metrics
+    
+    d-tile-small-white-numeric(number="data.appsRunning", text="'Applications running'").col-lg-4.col-md-6.col-sm-6
+    d-tile-small-white-numeric(number="data.appsDown", text="'Applications down'").col-lg-4.col-md-6.col-sm-6
+    d-tile-small-white-numeric(number="data.totalUsers", text="'Users count'").col-lg-4.col-md-6.col-sm-6
+    d-tile-load-chart.col-lg-12.col-md-12.col-sm-12
+    
+    // d-tile-blue-numeric(number="data.capacity.numerator + '/' + data.capacity.denominator", text="'Capacity'").col-lg-6.col-md-8.col-sm-8.tile-height-small
+
+    .category-title.clearfix Quotas
+    d-tile-progress(value="data.memoryUsage | percent", title="'Memory usage'").col-lg-4.col-sm-6
+    d-tile-blue-numeric(number="data.serviceUsage", text="'Service usage'").col-lg-4.col-sm-6.tile-height-large
+    d-tile-blue-numeric(number="data.domainsUsage", text="'Domains usage'").col-lg-4.col-sm-6.tile-height-large
+
+    .col-md-4.left-col
+        .category-title Data
+        d-tile-blue-numeric(number="data.datasetCount", text="'Datasets count'").tile-height-small
+        d-tile-blue-numeric(number="data.privateDatasets", text="'Private datasets'").tile-height-small
+        d-tile-blue-numeric(number="data.publicDatasets", text="'Public datasets'").tile-height-small
+
+    .col-md-8
+        .category-title Other
+
+        d-tile-news(events="data.latestEvents")
+
+.dashboard(ng-show='state.isError()')
+  d-target-selector.target-selector.pull-right(hide-space="true")
+  .error Error loading metrics

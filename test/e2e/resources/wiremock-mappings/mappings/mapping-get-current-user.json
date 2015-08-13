@@ -1,0 +1,25 @@
+{
+  "request" : {
+    "url" : "/rest/users/current",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-get-current-user.json",
+    "headers" : {
+      "Cache-Control" : "no-cache, no-store, max-age=0, must-revalidate",
+      "Content-Type" : "application/json;charset=UTF-8",
+      "Date" : "Mon, 04 May 2015 14:28:01 GMT",
+      "Expires" : "0",
+      "Pragma" : "no-cache",
+      "Server" : "Apache-Coyote/1.1",
+      "X-Application-Context" : "user-management:cloud,redis:61446",
+      "X-Cf-Requestid" : "197390b4-ed10-40bc-7d76-aa088712bdba",
+      "X-Content-Type-Options" : "nosniff",
+      "X-Frame-Options" : "DENY",
+      "X-Xss-Protection" : "1; mode=block",
+      "Via" : "1.1 jfdmzpr03.jf.intel.com",
+      "Connection" : "Keep-Alive"
+    }
+  }
+}

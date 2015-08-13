@@ -1,0 +1,12 @@
+[
+    "../../bower_components/fontawesome/css/font-awesome.min.css",
+    "../../bower_components/fontawesome/fonts/*",
+    "../../bower_components/simple-line-icons/css/simple-line-icons.css",
+    "../../bower_components/simple-line-icons/fonts/*",
+    "../../bower_components/ng-table/ng-table.min.css",
+    "../../bower_components/angular-xeditable/dist/js/xeditable.js",
+    "../../bower_components/angular-xeditable/dist/css/xeditable.css",
+    "../../bower_components/parsleyjs/dist/parsley.min.js",
+    "../../bower_components/amcharts/dist/amcharts/amcharts.js",
+    "../../bower_components/amcharts/dist/amcharts/serial.js"
+]

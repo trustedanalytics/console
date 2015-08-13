@@ -1,0 +1,54 @@
+//
+   Copyright (c) 2015 Intel Corporation
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+//-
+h3
+    d-target-selector.pull-right
+    | Marketplace
+
+.marketplace.content
+
+    d-spinner(ng-show='ctrl.state.isPending()')
+
+    div(ng-show='ctrl.state.isLoaded()')
+
+        //.input-group.search
+            span.input-group-addon.icon-search
+            input.form-control(type='text', placeholder='Search', ng-model='ctrl.searchText')
+
+        .service-list
+            .service-card.col-lg-3.col-md-4.col-sm-6(ng-repeat="service in filtered = (ctrl.services | orderBy: 'name' | filter: ctrl.filterService)")
+                a.panel(ui-sref='app.service({ serviceId: service.id })')
+                    img(ng-src='{{ service.image }}', alt='{{ service.name }}', ng-if='service.image')
+                    .placeholder(ng-if='!service.image')
+                        span.icons.icon-settings
+                    div {{ service.name }}
+                    .description {{ service.description }}
+                    .tags
+                        span.label.label-tag(data-ng-repeat='tag in service.tags')
+                            | {{ tag }}
+
+            .items-count(ng-show='ctrl.services && ctrl.services.length != 0')
+                | Showing {{ filtered.length }} of {{ ctrl.services.length }}
+
+    .panel.panel-danger(ng-show='ctrl.state.isError()')
+        .panel-heading Error
+        .panel-body Error occurred
+
+    .panel.panel-warning(ng-show='!ctrl.space && (ctrl.state.isLoaded() || ctrl.state.isError())')
+        .panel-heading No space specified
+        .panel-body
+            | In order to view market place, you have to choose target space. Use widget in the top right corner to do that.
+            | <br>
+            | If there are no available spaces for your account, please contact administrator.

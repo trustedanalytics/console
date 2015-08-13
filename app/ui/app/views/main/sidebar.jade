@@ -1,0 +1,34 @@
+//
+   Copyright (c) 2015 Intel Corporation
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+//-
+menu(ng-controller="MenuController")
+    nav.sidebar
+        ul.nav
+            li.nav-heading
+                span Main navigation
+
+            li(ng-if="hasAccess(item)" ng-repeat='item in menuItems'
+                ng-class="{ active: isActive(item) }"
+                ng-init="item.collapse = !isActive(item); initSelected(item); collapse=item.collapse; initial = true" )
+                a(ng-href="{{ getHref(item.sref) }}" title="{{ item.text }}"
+                    ng-click="clickOnMenu(item, $event); initial = false")
+
+                    em(ng-class="item.icon")
+                    span {{ item.text }}
+
+                ul.nav.sidebar-subnav(ng-if="item.items" collapse="item.collapse")
+                    include ./submenu.jade
+                ul.nav.sidebar-subnav.nav-floating(ng-if="item.items" collapse="item.collapse || initial")
+                    include ./submenu.jade

@@ -1,0 +1,107 @@
+/**
+ * Copyright (c) 2015 Intel Corporation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+.sidebar {
+
+  height: 100%;
+  padding-bottom: 20px;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  .nav-heading {
+    padding: 20px 15px 12px;
+    letter-spacing: .035em;
+  }
+
+  > .nav {
+
+    > .nav-heading:first-child {
+      padding-top: 20px;
+    }
+
+    > li {
+
+      > a {
+        padding: 12px 24px;
+        letter-spacing: .025em;
+
+        > em {
+          width: 1.8em;
+          display: inline-block;
+        }
+      }
+    }
+  }
+}
+
+.sidebar-subnav {
+
+  > .sidebar-subnav-header {
+    display: none;
+    padding: 10px 20px;
+    font-weight: bold;
+  }
+
+  &.nav > li > a {
+    padding-left: 53px;
+  }
+
+  &.nav-floating {
+    position: absolute;
+    top: 0;
+    left: $menu-collapsed-width;
+    display: none;
+    white-space: nowrap;
+
+    > .sidebar-subnav-header {
+      display: block;
+    }
+
+    li > a {
+      padding-left: 20px;
+    }
+  }
+
+}
+
+.menu-collapsed {
+
+  .sidebar {
+    overflow: visible;
+
+    > .nav {
+
+      > li > a {
+        padding: 20px 0;
+        font-size: 1.6em;
+        text-align: center;
+      }
+
+      .sidebar-subnav,
+      > .nav-heading,
+      > li > a > span {
+        display: none;
+      }
+
+      .nav-floating.in,
+      .nav-floating.collapsing {
+        display: block;
+      }
+
+    }
+
+  }
+}

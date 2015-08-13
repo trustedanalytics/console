@@ -1,0 +1,22 @@
+applications:
+  - name: console
+    memory: 512M
+    instances: 1
+    host: console
+    buildpack: nodejs_buildpack
+    services:
+      - user-management
+      - datacatalog
+      - servicecatalog
+      - dataaquisitionservice
+      - metrics-provider
+      - router-metrics-provider
+      - platformcontext
+      - app-launcher-helper
+      - sso
+      - fileserver
+      - datacatalogexport
+      - latestevents
+    env:
+      NPM_CONFIG_PRODUCTION: true
+      VERSION: dev

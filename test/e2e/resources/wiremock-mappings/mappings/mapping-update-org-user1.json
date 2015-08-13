@@ -1,0 +1,28 @@
+{
+  "request" : {
+    "url" : "/rest/orgs/test-org-id1/users/user-1",
+    "method" : "PUT",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"guid\":\"user-1\",\"username\":\"admin\",\"roles\":[\"auditors\",\"billing_managers\",\"managers\"]}",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-update-org-user1.json",
+    "headers" : {
+      "Cache-Control" : "no-cache, no-store, max-age=0, must-revalidate",
+      "Content-Length" : "0",
+      "Date" : "Mon, 04 May 2015 14:42:39 GMT",
+      "Expires" : "0",
+      "Pragma" : "no-cache",
+      "Server" : "Apache-Coyote/1.1",
+      "X-Application-Context" : "user-management:cloud,redis:61446",
+      "X-Cf-Requestid" : "e9937a08-8ba5-447a-4263-2d009e81fd13",
+      "X-Content-Type-Options" : "nosniff",
+      "X-Frame-Options" : "DENY",
+      "X-Xss-Protection" : "1; mode=block",
+      "Content-Type" : "text/plain; charset=utf-8"
+    }
+  }
+}

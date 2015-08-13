@@ -1,0 +1,38 @@
+//
+   Copyright (c) 2015 Intel Corporation
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+//-
+h3 Send an invitation
+
+.panel.send-invitation
+
+    d-spinner(ng-show='ctrl.state.isPending()')
+
+    form(data-ng-submit='ctrl.sendInvitation()', ng-show='ctrl.state.isDefault()')
+        .description Sending an invitation will allow invited person to create a new organization
+            | and become its manager.
+        .form
+            input.form-control(type='email', name='email', ng-model='ctrl.email', placeholder='Enter e-mail')
+            input.btn.btn-primary(type='submit', value='Send invitation')
+
+    div(ng-show='ctrl.state.isError()')
+        .description Error while sending an invitation to {{ ctrl.email }}
+        code {{ ctrl.details }}
+
+    div(ng-show='ctrl.state.isLoaded()')
+        .description Invitation has been sent to {{ ctrl.email }} with the following link:
+        div
+            a(href='{{ ctrl.details }}') {{ ctrl.details }}
+        .reset
+            button.btn.btn-primary(ng-click='ctrl.reset()') Send another invitation

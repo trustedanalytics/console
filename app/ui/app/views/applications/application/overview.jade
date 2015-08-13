@@ -1,0 +1,86 @@
+//
+   Copyright (c) 2015 Intel Corporation
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+//-
+div
+    h4.state State:
+        span.fa-check(ng-if='application.state.toLowerCase() === "started"')
+            | OK
+        span.fa-refresh(ng-if='application.state.toLowerCase() === "starting"')
+            | Starting
+        span.fa-stop(ng-if='application.state.toLowerCase() === "stopped"')
+            | Stopped
+        button.btn.btn-primary.fa-refresh.app-refresher(ng-click='onRefresh()') Refresh page
+
+    h4 Actions
+    div.actions
+        button.btn.btn-primary.fa-times(ng-click='onDelete()') Delete
+        button.btn.btn-primary.fa-play(ng-click='onStart()'
+                ng-disabled="application.state.toLowerCase() === 'started'") Start
+        button.btn.btn-primary.fa-stop(ng-click='onStop()'
+                ng-disabled="application.state.toLowerCase() === 'stopped'") Stop
+        button.btn.btn-primary.fa-refresh(ng-click='onRestage()') Restage
+
+    h4 Metrics
+    table.table.metrics
+        tr
+            td Memory:
+            td {{ application.memory }}MB
+        tr
+            td Disk quota:
+            td {{ application.disk_quota }}MB
+
+
+    h4 Details
+    table.table
+        tr
+            td Running instances:
+            td
+                | {{ application.running_instances }} / {{ application.instances
+                | }}
+        tr
+            td Domains:
+            td
+                div(ng-repeat='route in application.routes')
+                    a(ng-href='//{{ route.host }}.{{ route.domain.name }}')
+                        | {{ route.host
+                        | }}.{{ route.domain.name }}
+        tr
+            td Services bound:
+            td
+                div(ng-repeat='instance in appInstances')
+                    a(ng-href="{{ instance.dashboard_url }}", ng-if='instance.dashboard_url') {{ instance.name }}
+                    span(ng-if='!instance.dashboard_url') {{ instance.name }}
+        tr
+            td Detected buildpack:
+            td {{ application.detected_buildpack }}
+        tr
+            td Start command:
+            td
+                a(ng-hide='startCommandVisible', ng-click='startCommandVisible = true') Show data
+                a(ng-show='startCommandVisible', ng-click='startCommandVisible = false') Hide data
+                div(ng-show='startCommandVisible')
+                    | {{ application.detected_start_command }}
+        tr
+            td Environment:
+            td
+                a(ng-hide='envVisible', ng-click='envVisible = true') Show data
+                a(ng-show='envVisible', ng-click='envVisible = false') Hide data
+                ul.env-list(ng-show='envVisible')
+                    li(ng-repeat='env in application.env')
+                        span {{ env.key }}:
+                        | &nbsp;{{ env.value }}
+        tr
+            td Updated at:
+            td {{ application.package_updated_at | date:&apos;MMM d, y, H:mm:ss&apos; }}

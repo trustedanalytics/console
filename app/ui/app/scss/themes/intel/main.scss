@@ -1,0 +1,118 @@
+/**
+ * Copyright (c) 2015 Intel Corporation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+body {
+  color: $text-color;
+  font-family: $font-family;
+  background-color: $body-background-color;
+}
+
+.wrapper > menu {
+  background-color: $sidebar-bg;
+}
+
+.wrapper > footer {
+  border-top: 1px solid $footer-border-color;
+}
+
+a, a:active, a:hover {
+  color: $text-color-blue;
+}
+
+h4 {
+  font-weight: lighter;
+}
+
+.content-wrapper {
+
+  h3 {
+    background: transparent;
+    border: none;
+    color: $text-color;
+    font-size: 30px;
+    margin-bottom: 0;
+    font-weight: lighter;
+
+    > small {
+      color: inherit;
+    }
+  }
+}
+
+.terms {
+  h3 {
+    color: #000000;
+    font-size: 24px;
+    padding-top: 20px;
+    padding-left: 30px;
+  }
+
+  p {
+    padding: 0px 40px 10px 40px;
+    text-align: justify;
+  }
+}
+
+.terms-heading {
+  font-size: 30px;
+}
+
+.panel {
+  border: 1px solid #EBEBEB;
+  border-radius: 0;
+  box-shadow: 5px 5px rgba(32, 32, 32, 0.1);
+  color: $text-color-gray;
+
+  .btn {
+    border: none;
+    border-radius: 0;
+  }
+}
+
+.panel-blue {
+  background-color: $panel-blue-color;
+  color: #fff;
+  border: none;
+
+  .btn {
+    background-color: $btn-yellow-color;
+    color: $panel-blue-color;
+
+    &:hover, &:active {
+      background-color: darken($btn-yellow-color, 10%);
+      color: $panel-blue-color;
+    }
+  }
+}
+
+.table .table {
+  background-color: #fff;
+
+  tbody > tr:nth-child(odd) {
+    background-color: #F8F8F8;
+  }
+}
+
+.label {
+  border-radius: 0;
+}
+
+.label-tag {
+  background: $btn-primary-color;
+}
+
+.app-refresher {
+  float: right;
+}

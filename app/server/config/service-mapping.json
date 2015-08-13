@@ -1,0 +1,79 @@
+[{
+  "path": "/rest/registrations",
+  "name": "user-management"
+}, {
+  "path": "/rest/invitations",
+  "name": "user-management"
+}, {
+  "path": "/rest/users",
+  "name": "user-management"
+}, {
+  "path": "/rest/datasets",
+  "name": "datacatalog"
+}, {
+  "path": "/rest/tables",
+  "name": "datacatalogexport"
+}, {
+  "path": "/rest/das",
+  "name": "dataaquisitionservice"
+}, {
+  "path": "/rest/spaces/[^/]+/services*",
+  "name": "servicecatalog"
+}, {
+  "path": "/rest/spaces/[^/]+/summary*",
+  "name": "servicecatalog"
+}, {
+  "path": "/rest/services",
+  "name": "servicecatalog"
+}, {
+  "path": "/rest/service_instances",
+  "name": "servicecatalog"
+}, {
+  "path": "/rest/atk/scoring-engine",
+  "name": "servicecatalog"
+}, {
+  "path": "/rest/spaces/[^/]+/service_instances*",
+  "name": "servicecatalog"
+}, {
+  "path": "/rest/spaces",
+  "name": "user-management"
+}, {
+  "path": "/rest/orgs/[^/]+/spaces",
+  "name": "user-management"
+}, {
+  "path": "/rest/orgs/[^/]+/name",
+  "name": "user-management"
+}, {
+  "path": "/rest/apps",
+  "name": "servicecatalog"
+}, {
+  "path": "/rest/service_bindings",
+  "name": "servicecatalog"
+}, {
+  "path": "/rest/orgs/[^/]+/metrics",
+  "name": "metrics-provider"
+}, {
+  "path": "/rest/metrics/load-data",
+  "name": "router-metrics-provider"
+}, {
+  "path": "/rest/orgs/[^/]+/users",
+  "name": "user-management"
+}, {
+  "path": "/rest/spaces/[^/]+/users",
+  "name": "user-management"
+}, {
+  "path": "/rest/orgs/[^/]+/atkinstances",
+  "name": "app-launcher-helper"
+}, {
+  "path": "/rest/platform_context",
+  "name": "platformcontext"
+}, {
+  "path": "/files",
+  "name": "fileserver"
+}, {
+  "path": "/rest/orgs",
+  "name": "user-management"
+}, {
+  "path": "/rest/les",
+  "name": "latestevents"
+}]

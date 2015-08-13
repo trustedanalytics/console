@@ -1,0 +1,234 @@
+/**
+ * Copyright (c) 2015 Intel Corporation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+$bg-color: #1C5FA6;
+$panel-color: #1C72C5;
+$btn-yellow-color: #FBDE2A;
+$btn-blue-color: #22407E;
+$link-color-primary: #FFFFFF;
+$link-color-secondary: #A4DBFF;
+$error-color: #DD1031;
+
+body {
+  background-color: $bg-color;
+  color: #fff;
+  font-family: 'Intel Clear W';
+}
+
+a, a:hover, a:active, a:visited {
+  color: #A4DBFF;
+  text-decoration: none;
+}
+
+.new-account {
+  padding: 25px;
+  width: 320px;
+  margin: 120px auto 0;
+  background-color: $panel-color;
+  background-image: url('/new-account/img/strip.png');
+  background-repeat: repeat-x;
+
+  text-align: center;
+
+  h3 {
+    font-size: 30px;
+    font-weight: lighter;
+    margin: 20px 0;
+  }
+
+  p {
+    margin: 20px 0 0;
+  }
+
+  .logo {
+    margin: 0 0 20px 0;
+  }
+
+  .login-link {
+    color: $link-color-secondary;
+  }
+
+  .form {
+
+    h3 {
+      font-size: 24px;
+    }
+
+    .row {
+      margin: 0 0 10px;
+    }
+
+    .error {
+      background-color: $error-color;
+      font-size: 12px;
+      padding: 5px;
+    }
+
+    input:not([type='checkbox']) {
+      width: 100%;
+      padding: 7px 10px;
+      font-size: 12px;
+      color: #000;
+    }
+
+    .tos {
+      text-align: left;
+
+      label {
+        font-weight: normal;
+        > * {
+          vertical-align: middle;
+        }
+      }
+
+      input[type='checkbox'] {
+        margin: 0 5px 0 0;
+      }
+    }
+
+    button {
+      width: 100%;
+      background: $btn-blue-color;
+      color: $link-color-primary;
+      border-radius: 0;
+      border: none;
+      padding: 7px;
+      font-size: 13px;
+    }
+  }
+
+  .spinner {
+    margin: 0;
+  }
+}
+
+.submit-button {
+  text-align: center;
+}
+
+.modal {
+  color: #000;
+}
+
+/***************************************************************************************/
+/************************************  SPINNER  ****************************************/
+/***************************************************************************************/
+
+.spinner {
+
+  @mixin animation-delay($delay) {
+    -webkit-animation-delay: $delay;
+    animation-delay: $delay;
+  }
+
+  text-align: center;
+  margin-top: 50px;
+
+  .bullets {
+    display: inline-block;
+    height: 10px;
+    position: relative;
+
+    .bullet {
+      position: absolute;
+      padding: 5px;
+      border-radius: 50%;
+      background: $btn-yellow-color;
+      -webkit-animation: spinnerKeyframes 1s ease-in-out 0s infinite;
+      animation: spinnerKeyframes 1s ease-in-out 0s infinite;
+      -webkit-transform: translateX(-100px);
+      transform: translateX(-100px);
+
+      @for $i from 1 through 4 {
+        &:nth-child(#{$i}) {
+          @include animation-delay(($i - 1) * 150ms)
+        }
+      }
+    }
+
+  }
+}
+
+@mixin spinner-keyframe {
+  0% {
+    -webkit-transform: translateX(-100px);
+    transform: translateX(-100px);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: translateX(100px);
+    transform: translateX(100px);
+    opacity: 0;
+  }
+}
+
+@-webkit-keyframes spinnerKeyframes {
+  @include spinner-keyframe;
+}
+@keyframes spinnerKeyframes {
+  @include spinner-keyframe;
+}
+
+
+/* ========================================================================
+   Component: fonts
+ ========================================================================== */
+
+@mixin intel-font($type) {
+  font-family: 'Intel Clear W';
+  src: url('/new-account/fonts/IntelClear_WLat_' + $type + '.eot');
+  src: url('/new-account/fonts/IntelClear_WLat_' + $type + '.eot?#iefix') format('embedded-opentype'),
+  url('/new-account/fonts/IntelClear_WLat_' + $type + '.woff') format('woff'),
+  url('/new-account/fonts/IntelClear_WLat_' + $type + '.ttf') format('truetype');
+}
+
+@font-face {
+  @include intel-font('Rg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  @include intel-font('It');
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  @include intel-font('Bd');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  @include intel-font('BdIt');
+  font-weight: bold;
+  font-style: italic;
+}
+
+@font-face {
+  @include intel-font('Lt');
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  @include intel-font('LtIt');
+  font-weight: 100;
+  font-style: italic;
+}

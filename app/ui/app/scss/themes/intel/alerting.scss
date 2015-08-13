@@ -1,0 +1,142 @@
+/**
+ * Copyright (c) 2015 Intel Corporation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+#toast-container {
+  margin-top: 60px;
+
+  > div {
+    opacity: 1;
+  }
+
+  &:not(.no-enter) > div.ng-enter.ng-enter-active,
+  &:not(.no-leave) > div.ng-leave {
+    opacity: 1;
+  }
+
+  &.full-width {
+    top: 55px;
+    left: 0;
+    right: 0;
+    margin-top: 0;
+
+    .toast {
+      width: 100%;
+      border-radius: 0;
+      box-shadow: none;
+    }
+  }
+
+  .toast-error {
+    background-color: $color-error;
+  }
+
+  .generic-error {
+    .toast-title {
+      float: left;
+      margin-right: 5px;
+    }
+
+    .toast-details {
+      font-size: 12px;
+    }
+  }
+}
+
+#cookies-alert-container{
+  position: fixed;
+  z-index: 99999;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: {
+    color: $color-cookies;
+    image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAB3RJTUUH3wcDCBcvL2if0wAAAklJREFUSMe9lj1rFFEUhp87M8tGVrQIuGyIIWAKO4ughTYWadZCSWFvo4Wd/8B/YKEIdlZpLAQD2ljYaLFdSKUY/EiIIAgSDJswu/Na7Dt4neyHLOqBy8y93PucOeeejwkMEUkJkAE1jxQIQOItBSCgD+QevRBCUWWFIfAUmPHIIug8MOf3XWAnUtYDDoCDEEI/5mUARTFQHEKoAccMT4ELwApwBjgNNHxuH9gGtoCXQMf7U0ldSTlAkiQDC4qiKOENoA4sAG3gOrDktaq1Ag6B98AT4AXw2Wv7QB5C+OUWSSckNSWdl7Qm6bukQkflg0cphfeu+WzTrBQg84WWPl8A7gCrnlflI/DY7zeARVt20mcA7gGfgL6kbhktpc/bwJUR8Eky47NtswZBIqlhs65J2hzhlnEuUsVdm2Y1JTUSx3niaFkaFroVWfQYJsGMFTNric3BoVifAP/q5BondbMA0sRa5x3nYQL8IbAxQUkwax4IiU2Zi5KohD2tHHwNrAPPgG8TrGiYmWRjvnTd89XK8xJwKtr7CHgD3Ir2/FYqCteWfa/NAlcjWCxVwBfgQWTRalRKdoEiccrvuLbIl34OuB196SiZBS5Gz7KEbJupLLqwLdeRMulK+A/gFfAWuAwsRwpawH1b0PLaoVkA/T9JtHeSliUdl3RzQhIOTbTc9bzjqrjH9LJnRsfMPIuaReqSe7ZS7FrA3chFo+QAeG5G3/PeNOV6mFtGlusQtcq/2nBCCPmRnmwl07bM0i3dEv5fmn74178tPwF14/zJV0LhVQAAAABJRU5ErkJggg==');
+    repeat: no-repeat;
+    position: 15px 17px;
+  }
+
+  .toast-message {
+    float: left;
+    padding: 10px 50px;
+  }
+
+  a {
+    color: $text-color-blue;
+  }
+
+  a:hover {
+    color: grey;
+  }
+
+  button {
+    float: right;
+    margin: 14px 20px;
+  }
+}
+
+.ngdialog.ngdialog-theme-default {
+
+  .ngdialog-content {
+    padding: 0;
+    border-radius: 0 !important;
+    width: 500px;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.4);
+
+    .ngdialog-message {
+      padding: 50px 25px 30px;
+
+      > p {
+        margin-bottom: 25px;
+        font-size: 16px;
+      }
+
+      .list {
+        padding: 13px;
+        margin-bottom: 20px;
+        background: #eee;
+        max-height: 187px;
+        overflow: auto;
+
+        ul {
+          margin: 0 0 0 22px;
+          padding: 0;
+        }
+      }
+
+      button + button {
+        margin-left: 5px;
+      }
+    }
+  }
+
+  .ngdialog-overlay {
+    background: rgba(0,0,0,.2);
+  }
+
+  .ngdialog-close:before {
+    right: 15px;
+    top: 15px;
+    font-size: 32px;
+  }
+}
+
+.alert-success {
+  background-color: #A6CC43;
+}
+
+.label-yellow {
+  background-color: $btn-yellow-color;
+  color: $text-color-blue;
+}

@@ -1,0 +1,109 @@
+//
+   Copyright (c) 2015 Intel Corporation
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+//-
+h3
+    d-target-selector.target-selector.pull-right(hide-space="true")
+    span(ng-show="state.isLoaded()") Found {{ pagination.total }} datasets
+    span(ng-show="!state.isLoaded()") &nbsp;
+
+.panel.advanced-search
+    .heading
+        | Advanced search
+    .body
+        div
+            .heading Format
+            a.format-filter(ng-click='format.value = null', ng-class='{selected: !format.value}')
+                div
+                    div.fa.fa-globe
+                    | all
+            a.format-filter(ng-repeat='f in formats', ng-click='format.value = f', ng-class='{selected: f === format.value}')
+                div
+                    div(class='fa fa-{{ getFormatIcon(f) }}')
+                    | {{ f }}
+        div
+            .heading Creation time
+            .dates
+                div
+                    span from:
+                    .input-group
+                        input.form-control(type='text', datepicker-popup="yyyy-MM-dd", ng-model='created.from', is-open='fromOpened')
+                        span.input-group-btn
+                            button.btn.btn-default(type='button', ng-click='openFrom($event)')
+                                em.fa.fa-calendar
+                div
+                    span to:
+                    .input-group
+                        input.form-control(type='text', datepicker-popup="yyyy-MM-dd", ng-model='created.to', is-open='toOpened')
+                        span.input-group-btn
+                            button.btn.btn-default(type='button', ng-click='openTo($event)')
+                                em.fa.fa-calendar
+        div
+            .heading Tool for visualization
+            .tools
+                .form-group
+                    .radio
+                        label
+                            input(type='radio', name='tool', value='arcadia', , ng-model="tool")
+                            span.fa.fa-circle
+                            | Arcadia
+                    .radio
+                        label
+                            input(type='radio', name='tool', value='hue', ng-model="tool")
+                            span.fa.fa-circle
+                            | Hue
+
+d-categories(on-category-change='onCategoryChange(category)', categories='categories')
+
+//.clearfix
+    .search
+        .input-group
+            span.input-group-addon.icon-search
+            form(data-ng-submit='search()')
+                input.form-control(type='text', placeholder='Search', data-ng-model='textToFind')
+
+d-spinner(ng-show='state.isPending()')
+
+div(ng-show='state.isLoaded() || state.isError()')
+    d-panel-info(ng-show='state.isPostError()', heading='Publish failed', type='danger')
+        | There was an error during publishing data set.
+
+    .catalog-list
+        div(data-ng-show='!pagination.total')
+            h3 No results found
+
+        .card.col-lg-3.col-md-4.col-sm-6(data-ng-repeat='dataSet in dataSets track by $index')
+            div
+                span.fa.fa-lock.private-indicator(ng-hide="dataSet.isPublic")
+                span.format.fa(class='fa-{{ getFormatIcon(dataSet.format) }}')
+                a.title(ui-sref='app.dataset({ datasetId: dataSet.id })') {{ dataSet.title }}
+                //.description {{ dataSet._source.description | limitTo: 256}}
+                //.tags
+                    span(data-ng-repeat='tag in dataSet._source.keyword | limitTo: 10')
+                        | {{ tag | limitTo: 30 }}
+                d-publish-data-set.publish-btn(data='dataSet', tool="tool", mode="unified")
+
+    .clearfix
+        ul.pagination.pull-right
+            li(ng-class="{'disabled': !page.active}", ng-repeat='page in pagination.pages', ng-switch='page.type')
+                a(ng-switch-when='prev', ng-click='changePage(page.number)') &laquo;
+                a(ng-switch-when='first', ng-click='changePage(page.number)')
+                    span(ng-bind='page.number')
+                a(ng-switch-when='page', ng-click='changePage(page.number)')
+                    span(ng-bind='page.number')
+                a(ng-switch-when='more', ng-click='changePage(page.number)') &mldr;
+                a(ng-switch-when='last', ng-click='changePage(page.number)')
+                    span(ng-bind='page.number')
+                a(ng-switch-when='next', ng-click='changePage(page.number)') &raquo;
+        .counter Showing {{ dataSets.length || 0 }} of {{ pagination.total }}

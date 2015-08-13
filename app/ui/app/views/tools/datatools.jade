@@ -1,0 +1,91 @@
+//
+   Copyright (c) 2015 Intel Corporation
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+//-
+h3
+    d-target-selector.pull-right
+    | Intel Analytics PIP Installation
+
+.tools
+
+    .panel.instances
+        h3(ng-show="organization.guid") List of ATK instances in {{ organization.name }} organization
+        d-spinner(ng-show="state.isPending()")
+        div(ng-show="state.isLoaded()")
+            table.table.list-group(ng-show='instances.length')
+                thead
+                    th ATK server name
+                    th ATK server state
+                    th ATK server URL
+                    th Delete
+                    th Scoring engine name
+                    th Scoring engine state
+                    th Scoring engine URL
+                    th Delete
+                tbody
+                    tr(ng-repeat="instance in instances | orderBy : 'name'")
+                        td {{ instance.name }}
+                        td
+                            d-state(state="instance.state")
+                        td
+                            a(ng-href="{{ instance.url | ensureProtocol }}") {{ instance.url }}
+                        td
+                            a.delete(ng-click='deleteInstance(instance.name, instance.guid, instance.service_guid)')
+                        td(ng-if="scoringEnginePlanGuid && !instance.scoring_engine.url", colspan="4")
+                            button(class="btn btn-primary", ng-click="createScoringEngine(instance.name, instance.url)") Create scoring engine
+                        td(ng-if="!(scoringEnginePlanGuid && !instance.scoring_engine.url)")
+                            | {{ instance.scoring_engine.name }}
+                        td(ng-if="!(scoringEnginePlanGuid && !instance.scoring_engine.url)")
+                            d-state(state="instance.scoring_engine.state")
+                        td(ng-if="!(scoringEnginePlanGuid && !instance.scoring_engine.url)")
+                            a(href="http://{{ instance.scoring_engine.url }}") {{ instance.scoring_engine.url }}
+                        td(ng-if="!(scoringEnginePlanGuid && !instance.scoring_engine.url)")
+                            a.delete(ng-click='deleteInstance(instance.scoring_engine.name, instance.scoring_engine.guid, instance.scoring_engine.service_guid)')
+                        td(ng-if="!scoringEnginePlanGuid && !instance.scoring_engine.url", colspan="4")
+            .no-instances(ng-hide='instances.length')
+                | No instances found
+            div
+                form(ng-submit='createInstance(newInstanceName)')
+                    input.form-control(type='text', required='', placeholder='Instance name', ng-model='newInstanceName')
+                    button.btn.btn-primary(type='submit') Create new instance
+
+        .panel.panel-warning.notice
+            .panel-heading Note
+            .panel-body
+                | To follow progress of service creation, please look at &#32;
+                a(ui-sref="app.latestevents")
+                    | Latest events dashboard
+
+    script(type="text/ng-template", id="confirm-delete")
+        .ngdialog-message.clearfix
+            p
+                | Are you sure you want to delete
+                = ' '
+                b {{ data.instanceToDelete }}
+                | ?
+            .pull-right
+                button.btn.btn-primary(type='button', ng-click='confirm(true)') Delete
+                button.btn.btn-default(type='button', ng-click="cancel()") Cancel
+    .panel.installation
+        h3 ATK Installation &amp; Usage
+        br
+        p To install Analytics Python client and connect it to ATK engine on Trusted Analytics platform, please, follow the instructions presented on
+            = ' '
+            a(href='https://github.com/trustedanalytics/project-main/wiki/ATK-Overview') ATK GitHub page
+            |.  
+        br
+        p(ng-show="clientState.isLoaded()") You can also download ATK Client from
+            = ' '
+            a(href='{{ atkClientFile }}') here
+            |.

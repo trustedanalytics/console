@@ -1,0 +1,130 @@
+/**
+ * Copyright (c) 2015 Intel Corporation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+.tools {
+
+  .panel {
+    padding: 25px 20px;
+
+    .notice {
+      padding: 0px 0px;
+      margin-top: 20px;
+    }
+
+    h3 {
+      color: $text-color-gray;
+    }
+
+    h4 {
+      margin: 20px 0 10px;
+    }
+
+    .download-button > .btn-primary {
+      font-size: 18px;
+
+      &::before {
+        margin-right: 10px;
+        font-size: 20px;
+      }
+    }
+
+    .cli-list {
+      margin: 10px 0 0 10px;
+
+      a {
+        display: inline-block;
+        padding: 5px 0 5px 7px;
+
+        &::before {
+          position: relative;
+            left: -7px;
+            font-size: 16px;
+          }
+        }
+    }
+
+    &.installation h3 {
+      padding-bottom: 0;
+    }
+
+    &.instances {
+      .spinner {
+        margin-top: 20px;
+      }
+
+      input {
+        width: 400px;
+        display: inline-block;
+      }
+
+      button {
+        height: 35px;
+      }
+
+      .no-instances {
+        margin-bottom: 20px;
+      }
+
+      .table {
+        margin-bottom: 20px;
+      }
+    }
+
+    .list-group, .list-group .list-group-item {
+      border-radius: 0;
+      a.delete {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        vertical-align: middle;
+        position: relative;
+
+        &::before, &::after {
+          background-color: #d9534f;
+          display: block;
+          position: absolute;
+          content: "";
+          width: 4px;
+          height: 16px;
+          left: 6px;
+        }
+
+        &:hover {
+          &::before, &::after {
+            background-color: #c9302c;
+          }
+        }
+
+        &::before {
+          -webkit-transform: rotate(45deg);
+          transform: rotate(45deg);
+        }
+
+        &::after {
+          -webkit-transform: rotate(-45deg);
+          transform: rotate(-45deg);
+        }
+      }
+    }
+  }
+
+  .toggle-list {
+    margin-left: 20px;
+  }
+
+  pre {
+    white-space: normal;
+  }
+}

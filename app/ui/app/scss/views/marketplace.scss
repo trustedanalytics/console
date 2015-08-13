@@ -1,0 +1,330 @@
+/**
+ * Copyright (c) 2015 Intel Corporation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+.marketplace {
+
+  .service-list {
+    display: flex;
+    flex-flow: row wrap;
+    margin: 0 -10px;
+  }
+
+  .service-card {
+    padding: 10px;
+    float: none;
+    display: flex;
+    flex-direction: column;
+
+    .placeholder > span {
+      color: $icon-grey-color;
+      vertical-align: middle;
+      font-size: 50px;
+    }
+
+    > a {
+      display: block;
+      border: 1px solid #dddddd;
+      color: $btn-primary-color;
+      padding: 25px 20px;
+      flex: 1;
+      text-decoration: none;
+
+      &.panel {
+        margin: 0;
+      }
+    }
+
+    .tags {
+      padding-top: 15px;
+      clear: left;
+      font-size: 12px;
+
+      span {
+        margin-right: 5px;
+      }
+    }
+
+    .description {
+      margin-top: 5px;
+      color: $text-color-gray;
+    }
+  }
+}
+
+.no-flexboxlegacy .marketplace .service-card {
+  display: block;
+}
+
+.marketplace .service-card img {
+  float: left;
+  margin-right: 15px;
+}
+
+.service .placeholder, .marketplace .service-card .placeholder {
+  float: left;
+  width: 64px;
+  height: 64px;
+  line-height: 64px;
+  margin-right: 10px;
+  text-align: center;
+}
+
+.service .placeholder > span {
+  vertical-align: middle;
+  font-size: 50px;
+}
+
+.no-flexboxlegacy .marketplace .service-card > a {
+  min-height: 105px;
+}
+
+.marketplace {
+
+  .search {
+    position: absolute;
+    top: 40px;
+    right: 50px;
+    width: 300px;
+
+    span::before {
+      position: relative;
+      bottom: -1px;
+    }
+  }
+
+  .items-count {
+    flex: 1 100%;
+    margin: 0 10px;
+  }
+}
+
+/********************************* SERVICE VIEW ****************************/
+
+.service {
+
+  .icon {
+    width: 64px;
+    float: left;
+    margin-right: 20px;
+  }
+
+  .placeholder {
+    margin-top: -3px;
+    color: $text-color-gray;
+  }
+
+  .panel {
+    border: none
+  }
+
+  .service-name {
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  .description {
+    padding: 30px 25px;
+    font-size: 20px;
+    font-weight: lighter;
+
+    .tags {
+      padding-top: 20px;
+      font-size: 14px;
+      clear: left;
+
+      span + span {
+        margin-left: 10px;
+      }
+    }
+  }
+
+  .plan-details {
+
+    .description, d-cost span:first-child {
+      padding: 0;
+      margin: 0;
+    }
+
+    .description {
+      font-size: 22px;
+      font-weight: lighter;
+    }
+
+    .price {
+      font-size: 18px;
+      font-weight: lighter;
+    }
+
+    .properties {
+      margin-top: 20px;
+      font-size: 15px;
+
+      > div {
+        font-weight: bold;
+      }
+
+      > ul {
+        list-style-type: none;
+        padding-left: 10px;
+
+        > li {
+          padding: 5px 0;
+
+          &::before {
+            content: '-';
+            position: relative;
+            left: -5px;
+          }
+        }
+
+      }
+    }
+
+    input, button {
+      border-radius: 0;
+      height: 35px;
+    }
+  }
+
+  .new-instance {
+    margin-top: 20px;
+
+    input[type=text] {
+      width: 300px;
+      display: inline-block;
+    }
+
+    .panel {
+      margin-top: 10px;
+      margin-bottom: 5px;
+    }
+
+    .spinner {
+      margin-top: 0px;
+    }
+  }
+
+  .instances {
+
+    padding: 25px 30px;
+
+    .header {
+      font-size: 20px;
+      font-weight: lighter;
+    }
+
+    .app-bound + .app-bound {
+      margin-left: 5px;
+    }
+
+    .app-bound:not(:last-child)::after {
+      content: ',';
+    }
+
+    a.delete {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      vertical-align: middle;
+      position: relative;
+
+      &::before, &::after {
+        background-color: #d9534f;
+        display: block;
+        position: absolute;
+        content: "";
+        width: 4px;
+        height: 16px;
+        left: 6px;
+      }
+
+      &:hover {
+        &::before, &::after {
+          background-color: #c9302c;
+        }
+      }
+
+      &::before {
+        -webkit-transform: rotate(45deg);
+        transform: rotate(45deg);
+      }
+
+      &::after {
+        -webkit-transform: rotate(-45deg);
+        transform: rotate(-45deg);
+      }
+    }
+  }
+}
+
+.vertical-tabs {
+  list-style: none;
+  padding: 0;
+
+  > li {
+    display: block;
+    margin-right: -4px;
+
+    > a {
+      display: block;
+      padding: 10px 15px;
+      word-wrap: break-word;
+      border-radius: 4px 0 0 4px;
+      border: 1px solid transparent;
+    }
+
+    + li > a {
+      margin-top: 2px;
+    }
+
+    &.active {
+      margin-right: -1px;
+      position: relative;
+
+      > a {
+        border-color: #dddddd;
+        border-right-color: transparent;
+        color: #555555;
+        background-color: #ffffff;
+        cursor: default;
+
+        &:hover {
+          border-color: #dddddd;
+          border-right-color: transparent;
+          color: #555555;
+          background-color: #ffffff;
+          cursor: default;
+        }
+
+      }
+    }
+
+    > a:hover {
+      background-color: #eeeeee;
+    }
+
+    &:first-child > a::before {
+      content: "";
+      display: block;
+      position: absolute;
+      right: -4px;
+      width: 4px;
+      height: 3px;
+      background: #ffffff;
+      border-top: 1px solid #dddddd;
+      top: 0;
+    }
+  }
+}

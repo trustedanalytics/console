@@ -1,0 +1,52 @@
+//
+   Copyright (c) 2015 Intel Corporation
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+//-
+h3
+    d-target-selector.pull-right
+    | Transfers
+
+.datacatalog.transfers
+
+    d-spinner(ng-show='state.isPending()')
+
+    div(ng-show='state.isLoaded()')
+        button.btn.btn-primary(data-ng-click='reload()')
+            span.fa.fa-refresh
+            | Refresh
+
+        table#listTransfers.table(ng-table='transfers', show-filter='true')
+            tr(ng-repeat='item in $data')
+                td(data-title="'Source'", filter="{'source':'text'}")
+                    a(target='_blank', href='{{item.source}}') {{item.source | limitTo: 90}}
+
+                td(data-title="'Created'", sortable="'timestamps.NEW'")
+                    span(ng-if='item.timestamps.NEW') {{epochToUtc(item.timestamps.NEW) | date:&apos;dd.MM.yyyy HH:mm:ss&apos;}}
+
+                td(data-title="'Last state'", sortable="'lastTimestamp.time'", align='center')
+                    div
+                        span(ng-if='item.lastTimestamp.time>0')
+                            | {{item.lastTimestamp.state}} 
+                            br
+                            | {{utc=epochToUtc(item.lastTimestamp.time) | date:&apos;dd.MM.yyyy HH:mm:ss&apos;}}
+
+                td(data-title="'Category'", sortable="'category'", filter="{'category':'text'}")
+                    | {{item.category}}
+
+                td(data-title="'Title'", sortable="'title'", filter="{'title':'text'}")
+                    | {{item.title}}
+
+                td(data-title="'Item'")
+                    a(href='#/datacatalog/dataset/{{item.id}}', ng-show="item.state=='FINISHED'")
+                        span.icon-play

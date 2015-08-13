@@ -1,0 +1,37 @@
+<!--
+
+    Copyright (c) 2015 Intel Corporation
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<code-highlight language="python">"""
+config file for rest client
+"""
+# default connection config
+class server_defaults:
+    host = "&lt;atk_hostname&gt;"
+    port = 9099
+    scheme = "http"
+    version = "v1"
+    headers = {'Content-type': 'application/json',
+               'Accept': 'application/json,text/plain',
+               'Authorization': "test_api_key_1"}
+class upload_defaults:
+    rows = 10000
+class polling_defaults:
+    start_interval_secs = 1
+    max_interval_secs = 20
+    backoff_factor = 1.02
+
+build_id = None</code-highlight>

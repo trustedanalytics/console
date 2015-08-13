@@ -1,0 +1,24 @@
+{
+  "request" : {
+    "url" : "/rest/spaces/test-space-id1/users/user-1",
+    "method" : "DELETE"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-delete-user-from-space.json",
+    "headers" : {
+      "Cache-Control" : "no-cache, no-store, max-age=0, must-revalidate",
+      "Content-Length" : "0",
+      "Date" : "Tue, 05 May 2015 08:18:11 GMT",
+      "Expires" : "0",
+      "Pragma" : "no-cache",
+      "Server" : "Apache-Coyote/1.1",
+      "X-Application-Context" : "user-management:cloud,redis:61446",
+      "X-Cf-Requestid" : "6e4dd6b9-ecef-497e-4942-a1000e541286",
+      "X-Content-Type-Options" : "nosniff",
+      "X-Frame-Options" : "DENY",
+      "X-Xss-Protection" : "1; mode=block",
+      "Content-Type" : "text/plain; charset=utf-8"
+    }
+  }
+}

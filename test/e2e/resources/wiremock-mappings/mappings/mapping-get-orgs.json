@@ -1,0 +1,26 @@
+{
+  "request" : {
+    "url" : "/rest/orgs",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-get-orgs.json",
+    "headers" : {
+      "Cache-Control" : "no-cache, no-store, max-age=0, must-revalidate",
+      "Content-Type" : "application/json;charset=UTF-8",
+      "Date" : "Mon, 04 May 2015 14:28:01 GMT",
+      "Expires" : "0",
+      "Pragma" : "no-cache",
+      "Server" : "Apache-Coyote/1.1",
+      "X-Application-Context" : "user-management:cloud,redis:61446",
+      "X-Cf-Requestid" : "11470205-676f-4c98-4ddc-fa8031fdea1d",
+      "X-Content-Type-Options" : "nosniff",
+      "X-Frame-Options" : "DENY",
+      "X-Xss-Protection" : "1; mode=block",
+      "Transfer-Encoding" : "chunked",
+      "Via" : "1.1 jfdmzpr03.jf.intel.com",
+      "Connection" : "Keep-Alive"
+    }
+  }
+}

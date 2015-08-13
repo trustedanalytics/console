@@ -1,0 +1,27 @@
+server:
+  port: 8080
+
+web:
+  debug: false
+
+endpoints.metrics.enabled: true
+spring.profiles.active: cloud,in-memory
+server.sessionTimeout: 7200 # session timeout in seconds
+
+zuul:
+  routes:
+    wildcard:
+      path: /rest/**
+      url: http://localhost:12346
+      stripPrefix: false
+eureka.client.enabled: false
+
+security:
+  user:
+    password: user
+  ignored: /**
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+

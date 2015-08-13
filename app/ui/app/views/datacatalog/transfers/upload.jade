@@ -1,0 +1,57 @@
+//
+   Copyright (c) 2015 Intel Corporation
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+//-
+.uploaddataset
+    h3
+        d-target-selector.pull-right
+        | Upload a data set
+
+    d-spinner(ng-show='state.isPending()')
+
+    div(ng-show='state.value != state.values.PENDING ')
+        form.form-horizontal(data-ng-submit='submitDownload()')
+            .form-group
+                label.col-sm-2.control-label(for='link') Link
+                .col-sm-10
+                    input#link.form-control(type='url', placeholder='place link...', required='', data-ng-model='link')
+
+            .form-group
+                label.col-sm-2.control-label(for='title') Title
+                .col-sm-10
+                    input#title.form-control(type='text', required='', placeholder='title for link...', data-ng-model='title')
+
+            .form-group
+                label.col-sm-2.control-label(for='public') Should be public?
+                .col-sm-10
+                    .checkbox.c-checkbox
+                        label
+                            input#public(type="checkbox"
+                            ng-model="public"
+                            ng-click="updateUserRoles(user, avRole)",
+                            placeholder='Check if the dataset should be accessible for other organizations')
+                            span.fa.fa-check
+
+            .form-group
+                label.col-sm-2.control-label Chose category
+                .categories.col-sm-5
+                    a.btn-radio(ng-repeat='c in categories',
+                            data-ng-click="setCategory(c)", ng-class="{active:category==c}", role='button')
+                        div(class='fa fa-{{ getIcon(c) }}')
+                        | {{ c }}
+
+            .form-group
+                .col-sm-offset-2.col-sm-10
+                    input.btn.btn-primary(type='submit' value='Upload')
+                    p

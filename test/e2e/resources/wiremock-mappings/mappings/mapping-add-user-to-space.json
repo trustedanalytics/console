@@ -1,0 +1,30 @@
+{
+  "request" : {
+    "url" : "/rest/spaces/test-space-id1/users",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"username\":\"andrzej-demo@yopmail.com\",\"roles\":[\"auditors\"],\"org_guid\":\"test-org-id1\"}",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-add-user-to-space.json",
+    "headers" : {
+      "Cache-Control" : "no-cache, no-store, max-age=0, must-revalidate",
+      "Content-Type" : "application/json;charset=UTF-8",
+      "Date" : "Tue, 05 May 2015 08:15:37 GMT",
+      "Expires" : "0",
+      "Pragma" : "no-cache",
+      "Server" : "Apache-Coyote/1.1",
+      "X-Application-Context" : "user-management:cloud,redis:61446",
+      "X-Cf-Requestid" : "6a792ae2-55a6-45bd-6a4c-a38603499ed8",
+      "X-Content-Type-Options" : "nosniff",
+      "X-Frame-Options" : "DENY",
+      "X-Xss-Protection" : "1; mode=block",
+      "Content-Length" : "156",
+      "Via" : "1.1 jfdmzpr06.jf.intel.com",
+      "Connection" : "Keep-Alive"
+    }
+  }
+}

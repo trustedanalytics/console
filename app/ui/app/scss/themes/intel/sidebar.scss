@@ -1,0 +1,88 @@
+/**
+ * Copyright (c) 2015 Intel Corporation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+.sidebar {
+  background-color: $sidebar-bg;
+
+  .nav-heading {
+    color: $sidebar-heading-color;
+    font-size: 20px;
+    font-weight: lighter;
+  }
+
+  > .nav {
+    background: url('/app/img/dienamic-strip.png') no-repeat;
+    padding-top: 11px;
+
+    > li {
+      > a {
+        color: $sidebar-item-color;
+
+        &:focus, &:hover {
+          color: $sidebar-item-color-active;
+          background-color: $sidebar-item-bg-active;
+        }
+
+        > em {
+          color: $sidebar-icon-color;
+        }
+      }
+
+      // Active item state
+      &.active,
+      &.open {
+
+        > a {
+          background-color: $sidebar-item-bg-active;
+          color: $sidebar-item-color-active;
+
+          > em {
+            color: $sidebar-icon-color-active;
+          }
+        }
+      }
+    }
+  }
+
+}
+
+.sidebar-subnav {
+  background-color: $sidebar-bg;
+
+  &.nav-floating {
+    border: 1px solid $body-background-color;
+  }
+
+  > .sidebar-subnav-header {
+    color: $sidebar-item-color;
+  }
+
+  > li {
+    > a,
+    > .nav-item {
+      color: $sidebar-item-color;
+
+      &:focus, &:hover {
+        color: $sidebar-item-color-active;
+        background-color: $sidebar-bg;
+      }
+    }
+
+    &.active > a {
+      color: $sidebar-icon-color-active;
+    }
+  }
+
+}

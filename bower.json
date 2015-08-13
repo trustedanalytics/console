@@ -1,0 +1,37 @@
+{
+  "name": "console",
+  "author": "Intel Corporation",
+  "version": "0.0.0",
+  "license": "Apache-2.0",
+  "private": true,
+  "dependencies": {
+    "angular-ui-router": "0.2.15",
+    "angular": "1.4.3",
+    "angular-route": "1.4.3",
+    "angular-bootstrap": "0.13.0",
+    "angular-cookies": "1.4.3",
+    "angular-animate": "1.4.3",
+    "angular-mocks": "1.4.3",
+    "fontawesome": "4.3.0",
+    "oclazyload": "1.0.1",
+    "ngstorage": "0.3.6",
+    "jquery": "2.1.4",
+    "modernizr": "2.8.3",
+    "angular-sanitize": "1.4.3",
+    "angular-resource": "1.4.3",
+    "simple-line-icons": "1.0.0",
+    "underscore": "1.8.3",
+    "ng-table": "0.3.3",
+    "ua-parser-js": "0.7.9",
+    "angular-xeditable": "0.1.9",
+    "ngDialog": "0.4.0",
+    "parsleyjs": "2.1.2",
+    "angularjs-toaster": "0.4.15",
+    "restangular": "1.5.1",
+    "bootstrap-sass": "3.3.5",
+    "amcharts": "3.14.5"
+  },
+  "resolutions": {
+    "angular": "1.4.3"
+  }
+}

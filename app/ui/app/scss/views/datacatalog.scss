@@ -1,0 +1,374 @@
+/**
+ * Copyright (c) 2015 Intel Corporation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+.datacatalog {
+
+  .search {
+    position: relative;
+    top: -80px;
+    right: 60px;
+    float: right;
+    width: 300px;
+    .advanced {
+      cursor: pointer;
+    }
+  }
+}
+
+.tag {
+  cursor: pointer;
+}
+
+.datacatalog {
+  .card button {
+    margin-top: 5px;
+  }
+  table tr {
+    border-bottom: 1px #eee dotted;
+    td {
+      padding: 4px;
+      vertical-align: middle;
+    }
+  }
+  .form-control {
+    overflow: hidden;
+    max-width: 255px;
+  }
+
+  .filter-catalog {
+    float: left;
+    width: 30%;
+    margin-right: 5%;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    padding: 4px;
+  }
+
+  .catalog-list {
+    flex-flow: row wrap;
+    display: flex;
+    margin-left: -8px;
+
+    h3 {
+      margin-left: 8px;
+    }
+  }
+
+  .card {
+
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+
+    > div {
+      flex: 1;
+      border: 1px solid #EBEBEB;
+      padding: 20px 20px 60px;
+      margin: 8px;
+      box-shadow: 3px 3px #EBEBEB;
+      position: relative;
+    }
+
+    .description {
+      font-size: 11px;
+    }
+    span.icon-stats {
+      float: left;
+      margin-right: 20px;
+      font-size: 40px;
+    }
+
+    .publish-btn {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
+    }
+
+    button {
+      width: 100%;
+      background-color: $btn-primary-color;
+      border-radius: 0;
+      color: #fff;
+
+      em {
+        color: #FBDE2B;
+        margin-right: 5px;
+      }
+
+      &:active, &:hover {
+        background-color: darken($btn-primary-color, 8%);
+        color: #fff;
+      }
+    }
+
+    .format {
+      font-size: 36px;
+      color: $btn-primary-color;
+      margin-right: 20px;
+      margin-top: 3px;
+      float: left;
+    }
+
+    .title {
+      vertical-align: middle;
+    }
+
+    .tags {
+      color: $btn-primary-color;
+      margin: 10px 0;
+      font-size: 12px;
+
+      span + span {
+        margin-left: 10px;
+      }
+    }
+
+    .private-indicator {
+      float: right;
+      font-size: 20px;
+      margin-left: 10px;
+      color: $btn-primary-color;
+    }
+  }
+
+  .pagination {
+    margin: 0;
+  }
+
+  .counter {
+    margin-top: 10px;
+  }
+
+  .advanced-search {
+    padding: 20px;
+    box-shadow: none;
+
+    > .heading {
+      font-size: 18px;
+      font-weight: lighter;
+      color: #333;
+      text-decoration: none;
+
+      a {
+        position: relative ;
+      }
+
+      a::before {
+        content: '';
+        position: absolute;
+        top: -20px;
+        bottom: -20px;
+        left: -20px;
+        right: -20px;
+      }
+    }
+
+    .body {
+
+      > div {
+        display: inline-block;
+        margin: 10px 20px 0 0;
+        vertical-align: top;
+      }
+
+      .heading {
+        font-weight: bold;
+        font-size: 14px;
+      }
+
+      .dates {
+        line-height: 35px;
+
+        > div {
+          display: inline-block;
+
+
+          > * {
+            vertical-align: top;
+          }
+
+          > span {
+            margin-right: 5px;
+          }
+        }
+
+        .input-group {
+          display: inline-block;
+
+          input[type=text]{
+            width:auto;
+          }
+
+          span {
+            width:auto;
+            padding: 0 5px;
+            display: inline-block;
+          }
+        }
+      }
+
+      .tools {
+        vertical-align: middle;
+      }
+    }
+
+    a.format-filter {
+      width: 60px;
+      height: 60px;
+      line-height: 60px;
+      border: 1px solid #ebebeb;
+      display: inline-block;
+      text-align: center;
+      margin-right: 10px;
+      font-size: 13px;
+      padding: 1px;
+
+      > div {
+        display: inline-block;
+        line-height: normal;
+        vertical-align: middle;
+      }
+
+      .fa {
+        display: block;
+        font-size: 21px;
+        margin-bottom: 1px;
+      }
+
+      .fa-json {
+        font-size: 18px;
+        padding-bottom: 3px;
+      }
+
+      &:active, &:hover {
+        background-color: #f2f2f2;
+        text-decoration: none;
+      }
+
+      &.selected {
+        border: 2px solid $btn-primary-color;
+        padding: 0;
+      }
+    }
+  }
+}
+
+.no-flexboxlegacy .card {
+  display: block;
+
+   > div {
+     min-height: 160px;
+   }
+}
+
+.dataset {
+
+  h3 > span.editable-click {
+    color: #fff;
+    border-color: transparent;
+    position: relative;
+
+    &:hover, &:active {
+      border-color: #fff;
+    }
+
+    &::before {
+      position: absolute;
+      right: -34px;
+      top: 4px;
+      font-size: 20px;
+      border: none;
+    }
+  }
+
+  .panel {
+    padding: 35px 30px;
+
+    table {
+      width: 100%;
+
+      tr {
+        border: 1px none #E4E4E4;
+        border-style: solid none;
+
+        td {
+          padding: 15px 0;
+        }
+
+        td:first-child {
+          font-size: 15px;
+        }
+      }
+    }
+
+    .btns {
+      margin-bottom: 30px;
+
+      button {
+        margin-right: 5px;
+      }
+    }
+
+    .view-btn em::before {
+      margin-right: 10px;
+      color: $btn-yellow-color;
+    }
+
+    h4 {
+      margin: 0 0 20px;
+    }
+  }
+}
+
+.uploaddataset, .datacatalog {
+  .categories a {
+    margin: 2px 12px 12px 2px;
+    width: 100px;
+    height: 90px;
+    border: 1px solid #ebebeb;
+    padding: 20px 0;
+    color: $btn-primary-color;
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+
+    &:hover, &:active {
+      background-color: darken(#fff, 5%);
+    }
+
+    &.active {
+      border: 3px solid $btn-primary-color;
+    }
+
+    > div {
+      margin-bottom: 5px;
+      display: block;
+    }
+
+    .fa {
+      font-size: 21px;
+    }
+  }
+}
+
+.transfers {
+  .btn-primary {
+    span {
+      margin-right: 5px;
+      color: $btn-yellow-color;
+    }
+  }
+}

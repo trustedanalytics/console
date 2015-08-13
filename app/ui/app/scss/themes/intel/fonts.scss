@@ -1,0 +1,58 @@
+/**
+ * Copyright (c) 2015 Intel Corporation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+@mixin intel-font($type) {
+  font-family: 'Intel Clear W';
+  src: url('/app/fonts/IntelClear_WLat_' + $type + '.eot');
+  src: url('/app/fonts/IntelClear_WLat_' + $type + '.eot?#iefix') format('embedded-opentype'),
+  url('/app/fonts/IntelClear_WLat_' + $type + '.woff') format('woff'),
+  url('/app/fonts/IntelClear_WLat_' + $type + '.ttf') format('truetype');
+}
+
+@font-face {
+  @include intel-font('Rg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  @include intel-font('It');
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  @include intel-font('Bd');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  @include intel-font('BdIt');
+  font-weight: bold;
+  font-style: italic;
+}
+
+@font-face {
+  @include intel-font('Lt');
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  @include intel-font('LtIt');
+  font-weight: 100;
+  font-style: italic;
+}

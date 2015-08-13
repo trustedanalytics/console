@@ -1,0 +1,73 @@
+//
+   Copyright (c) 2015 Intel Corporation
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+//-
+.service
+
+    d-spinner(ng-show='ctrl.state.isPending()')
+
+    div(ng-show='ctrl.state.isLoaded()')
+        h3
+            d-target-selector.pull-right
+            | {{ ctrl.service.name }}
+            small {{ ctrl.service.provider }}
+
+        .description.panel.clearfix
+            .icon(ng-if='ctrl.service.image')
+                img(ng-src='{{ ctrl.service.image }}', alt='{{ ctrl.service.name }}')
+
+            .placeholder(ng-if='!ctrl.service.image')
+                span.fa.fa-cogs
+
+            | {{ ctrl.service.description }}
+
+            .tags(ng-if='ctrl.service.tags.length')
+                span.label.label-tag(data-ng-repeat='tag in ctrl.service.tags')
+                    | {{ tag }}
+
+        h4 Available plans
+        .service-plans.panel
+            .vertical-tabs
+                div
+                    ul
+                        li(ng-repeat='plan in ctrl.service.plans', ng-class='{ active: ctrl.selectedPlan === plan }')
+                            a(ng-click='ctrl.selectPlan(plan)') {{ plan.name }}
+
+                    .plan-details(ng-repeat='plan in ctrl.service.plans', ng-show='ctrl.selectedPlan === plan')
+                        .description {{ plan.description }}
+                        .price
+                            | Price:
+                            d-cost(ng-model='plan.costs[0]')
+                        .properties(ng-if='plan.bullets.length')
+                            div Plan properties:
+                            ul
+                                li(ng-repeat='bullet in plan.bullets') {{ bullet }}
+
+                        .new-instance
+                            form(ng-submit='ctrl.createServiceInstance(plan)', ng-if='!ctrl.newInstanceState.isPending()')
+                                input.form-control(type='text', required='', placeholder='Instance name', ng-model='ctrl.newInstance.name', ng-disabled='!ctrl.space()')
+                                button.btn.btn-primary(type='submit', ng-disabled='!ctrl.space()') Create new instance
+                                .panel.panel-warning(ng-if='!ctrl.space()')
+                                    .panel-body Space has to be chosen in order to create a new instance
+                            d-spinner(text="'Creating new instance... Please wait'", ng-if='ctrl.newInstanceState.isPending()')
+
+        d-service-instances(service-id='ctrl.serviceId', service-name='ctrl.service.name')
+
+    .panel.panel-danger(ng-show='ctrl.state.isGenericError()')
+        .panel-heading Error
+        .panel-body Error while getting service data
+
+    .panel.panel-danger(ng-show='ctrl.state.is(ctrl.state.values.NOT_FOUND)')
+        .panel-heading Error
+        .panel-body Service not found

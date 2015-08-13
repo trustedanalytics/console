@@ -1,0 +1,111 @@
+/**
+ * Copyright (c) 2015 Intel Corporation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+$content-padding: 20px;
+$footer-height: 60px;
+
+html, body {
+  height: 100%;
+}
+
+a {
+  cursor: pointer;
+}
+
+.wrapper {
+  position: relative;
+  min-height: 100%;
+  overflow-x: hidden;
+
+  > menu {
+    position: fixed;
+    top: $header-height;
+    left: 0;
+    bottom: 0;
+    width: $menu-width;
+    padding: 0;
+    margin: 0;
+    z-index: 9999;
+
+    > .nav-floating {
+      margin-left: $menu-collapsed-width;
+      z-index: 1000;
+      display: block;
+      height: auto !important;
+    }
+  }
+
+  > header {
+    position: fixed;
+    width: 100%;
+    z-index: 100;
+  }
+
+  > section {
+    margin: $header-height 0 $footer-height $menu-width;
+  }
+
+  > footer {
+    position: absolute;
+    left: $menu-width;
+    right: 0;
+    bottom: 0;
+    height: $footer-height;
+    line-height: $footer-height;
+    padding: 0 20px;
+
+    > p {
+      margin: 0;
+      vertical-align: middle;
+    }
+
+    > a {
+      color: #ffffff;
+      padding-left: 25px;
+    }
+  }
+
+  .content-wrapper {
+    padding: $content-padding;
+
+    h3 {
+      margin-top: 0;
+      margin-bottom: 20px;
+
+      > small {
+        display: block;
+        font-size: 12px;
+      }
+    }
+  }
+}
+
+.menu-collapsed {
+
+  .wrapper {
+
+    > menu {
+      width: $menu-collapsed-width;
+    }
+
+    > section {
+      margin-left: $menu-collapsed-width;
+    }
+
+    > footer {
+      left: $menu-collapsed-width;
+    }
+  }
+}

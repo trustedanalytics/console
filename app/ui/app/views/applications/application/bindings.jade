@@ -1,0 +1,58 @@
+//
+   Copyright (c) 2015 Intel Corporation
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+//-
+.application-bindings
+
+    d-spinner(ng-if='bindCtrl.state.isPending()')
+
+    .clearfix(ng-if='bindCtrl.state.isLoaded()')
+        .panel.panel-blue.restage-info
+            | You have to restage the app after binding/unbinding a service
+            button.btn.btn-primary.fa-refresh(ng-click='appCtrl.restage()') Restage
+        div
+            .col.col-md-6
+                ul.list-group.panel
+                    li.list-group-item
+                        .list-header-text Bound service instances
+                        .search.input-group.input-group-sm
+                            input.form-control(type='text', placeholder='Search', ng-model='boundSearchText')
+
+                    li.list-group-item(ng-repeat="service in bindCtrl.servicesBound | filter: boundSearchText | orderBy: 'name'")
+                        a(ng-if='service.service', ui-sref='app.service({ serviceId: service.service })') {{ service.name }}
+                        span(ng-if='!service.service') {{ service.name }}
+                        a.btn.btn-primary.btn-xs.pull-right.bind-btn(ng-click='bindCtrl.unbindService(service)') Unbind
+
+                    li.empty.list-group-item(ng-if='!bindCtrl.servicesBound.length')
+                        | No services bound
+
+            .col.col-md-6
+                ul.list-group.panel
+                    li.list-group-item
+                        .list-header-text
+                            | Available service instances
+                        .search.input-group.input-group-sm
+                            input.form-control(type='text', placeholder='Search', ng-model='availableSearchText')
+
+                    li.list-group-item(ng-repeat="service in bindCtrl.servicesAvailable | filter: availableSearchText | orderBy: 'name'")
+                        a(ng-if='service.service', ui-sref='app.service({ serviceId: service.service })') {{ service.name }}
+                        span(ng-if='!service.service') {{ service.name }}
+                        a.btn.btn-primary.btn-xs.pull-right.bind-btn(ng-click='bindCtrl.bindService(service)') Bind
+
+                    li.empty.list-group-item(ng-if='!bindCtrl.servicesAvailable.length')
+                        | No services available
+
+    .panel.panel-danger(ng-if='bindCtrl.state.isError()')
+        .panel-body
+            | Error while downloading service instances

@@ -1,0 +1,30 @@
+{
+  "request" : {
+    "url" : "/rest/spaces/test-space-id1/users/user-1",
+    "method" : "PUT",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"guid\":\"user-1\",\"username\":\"admin\",\"roles\":[\"managers\",\"developers\",\"auditors\"],\"org_guid\":\"test-org-id1\"}",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-update-space-user1.json",
+    "headers" : {
+      "Cache-Control" : "no-cache, no-store, max-age=0, must-revalidate",
+      "Content-Length" : "0",
+      "Date" : "Tue, 05 May 2015 08:15:25 GMT",
+      "Expires" : "0",
+      "Pragma" : "no-cache",
+      "Server" : "Apache-Coyote/1.1",
+      "X-Application-Context" : "user-management:cloud,redis:61446",
+      "X-Cf-Requestid" : "ce697194-12b8-4f80-67b2-e9326b8ce4fe",
+      "X-Content-Type-Options" : "nosniff",
+      "X-Frame-Options" : "DENY",
+      "X-Xss-Protection" : "1; mode=block",
+      "Content-Type" : "text/plain; charset=utf-8",
+      "Via" : "1.1 jfdmzpr06.jf.intel.com",
+      "Connection" : "Keep-Alive"
+    }
+  }
+}
