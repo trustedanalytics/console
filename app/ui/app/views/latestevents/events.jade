@@ -14,7 +14,7 @@
    limitations under the License.
 //-
 h3
-    d-target-selector.pull-right
+    d-target-selector.pull-right(hide-space="true")
     | Latest events
 
 .events(ng-controller='LatestEventsController')
@@ -27,10 +27,12 @@ h3
             table.table.list-group(ng-table='tableParams')
                 thead
                     th Time
+                    th SourceName
                     th Category
                     th Message
                 tbody
                     tr(ng-repeat="event in $data")
                         td {{ event.timestamp | date : "yyyy-MM-dd 'at' HH:mm:ss.sss" }}
+                        td {{ event.sourceName }}
                         td {{ event.category }}
                         td {{ event.message }}

@@ -19,8 +19,8 @@
     App.factory('EventsResource', ['Restangular', function (Restangular) {
         var events = Restangular.service('les/events');
 
-        events.getPage = function (from, size) {
-            return events.one().customGET("", {'from':from, 'size': size});
+        events.getPage = function (org, from, size) {
+            return events.one().customGET("", {'org':org, 'from':from, 'size': size});
         };
         return events;
     }]);

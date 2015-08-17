@@ -17,15 +17,21 @@
 (function () {
     "use strict";
 
-    App.controller('LatestEventsController', ['$scope', 'State', 'EventsResource', 'ngTableParams',
-        function ($scope, State, EventsResource, ngTableParams) {
+    App.controller('LatestEventsController', ['$scope', 'State', 'EventsResource', 'ngTableParams', 'targetProvider',
+        function ($scope, State, EventsResource, ngTableParams, targetProvider) {
+            function getOrgId() {
+                return (targetProvider.getOrganization() || {}).guid;
+            }
+
             var state = new State().setPending();
             $scope.state = state;
 
             $scope.collectData = function($defer, params) {
                 $scope.state.setPending();
 
-                EventsResource.getPage((params.page()-1)*params.count(), params.count())
+                $scope.organization = getOrgId();
+
+                EventsResource.getPage($scope.organization, (params.page()-1)*params.count(), params.count())
                 .then(function(response){
                     $scope.events = response.events;
 
@@ -41,6 +47,13 @@
                 count: 10,
             }, {
                 getData: $scope.collectData
+            });
+
+            $scope.$on('targetChanged', function () {
+                $scope.organization = getOrgId();
+                if ($scope.organization) {
+                    $scope.tableParams.reload();
+                }
             });
         }]);
 }());
