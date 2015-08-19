@@ -29,9 +29,7 @@
             $scope.collectData = function($defer, params) {
                 $scope.state.setPending();
 
-                $scope.organization = getOrgId();
-
-                EventsResource.getPage($scope.organization, (params.page()-1)*params.count(), params.count())
+                EventsResource.getPage(getOrgId(), (params.page()-1)*params.count(), params.count())
                 .then(function(response){
                     $scope.events = response.events;
 
@@ -50,8 +48,8 @@
             });
 
             $scope.$on('targetChanged', function () {
-                $scope.organization = getOrgId();
-                if ($scope.organization) {
+                var orgId = getOrgId();
+                if (orgId) {
                     $scope.tableParams.reload();
                 }
             });

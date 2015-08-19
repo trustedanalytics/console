@@ -15,15 +15,18 @@
  */
 describe("Unit: LatestEventsController", function() {
 
-    var controller, scope, state, eventsResource, deferred, rootScope, params;
+    var controller, scope, state, eventsResource, deferred, rootScope, params, provider;
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $rootScope, $q, EventsResource){
+    beforeEach(inject(function($controller, $rootScope, $q, EventsResource, targetProvider) {
 
         deferred = $q.defer();
 
         eventsResource = EventsResource;
         eventsResource.getPage = sinon.stub().returns(deferred.promise);
+
+        provider = targetProvider;
+        provider.getOrganization = sinon.stub().returns(deferred.promise);
 
         params = {
             page: function() {return 1},
@@ -37,7 +40,8 @@ describe("Unit: LatestEventsController", function() {
         createController = function () {
             controller = $controller('LatestEventsController', {
                 $scope: scope,
-                EventsResource: eventsResource
+                EventsResource: eventsResource,
+                targetProvider: provider
             });
         };
     }));
@@ -49,7 +53,7 @@ describe("Unit: LatestEventsController", function() {
         scope.collectData(deferred, params);
 
         expect(eventsResource.getPage.called).to.be.true;
-        expect(scope.state.isPending()).to.be.true
+        expect(scope.state.isPending()).to.be.true;
     });
 
     it('should be loaded after successfull getPage', function() {
@@ -65,5 +69,13 @@ describe("Unit: LatestEventsController", function() {
         rootScope.$digest();
 
         expect(scope.state.isLoaded()).to.be.true
+    });
+
+    it('should ask for organization Id', function() {
+        createController();
+
+        scope.collectData(deferred, params);
+
+        expect(provider.getOrganization.called).to.be.true;
     });
 });
