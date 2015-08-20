@@ -38,7 +38,7 @@ h3
                     .tags
                         span.label.label-tag(data-ng-repeat='tag in service.tags')
                             | {{ tag }}
-
+            div(class='clearing')
             .items-count(ng-show='ctrl.services && ctrl.services.length != 0')
                 | Showing {{ filtered.length }} of {{ ctrl.services.length }}
 

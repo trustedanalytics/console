@@ -23,7 +23,7 @@
 
   .service-card {
     padding: 10px;
-    float: none;
+    float: left;
     display: flex;
     flex-direction: column;
 
@@ -43,6 +43,7 @@
 
       &.panel {
         margin: 0;
+        height: 185px;
       }
     }
 
@@ -102,6 +103,10 @@
       position: relative;
       bottom: -1px;
     }
+  }
+
+  .clearing {
+    clear: both;
   }
 
   .items-count {
