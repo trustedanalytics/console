@@ -20,6 +20,7 @@ describe("Unit: IPythonController", function () {
         _targetProvider,
         serviceInstanceMock,
         applicationMock,
+        planMock,
         SERVICE_ID = 'qweqwe',
         $rootScope,
         $q,
@@ -31,9 +32,10 @@ describe("Unit: IPythonController", function () {
     beforeEach(module('app'));
 
     beforeEach(inject(function ($controller, TestHelpers, _$rootScope_, _$q_,
-                                ServiceInstanceResource, ApplicationResource) {
+                                ServiceInstanceResource, ApplicationResource, ServicePlanResource) {
         serviceInstanceMock = ServiceInstanceResource;
         applicationMock = ApplicationResource;
+        planMock = ServicePlanResource;
 
         _targetProvider = new TestHelpers().stubTargetProvider();
         $q = _$q_;
@@ -56,7 +58,8 @@ describe("Unit: IPythonController", function () {
                 targetProvider: _targetProvider,
                 NotificationService: notificationService,
                 ServiceInstanceResource: serviceInstanceMock,
-                ApplicationResource: applicationMock
+                ApplicationResource: applicationMock,
+                ServicePlanResource: planMock
             });
         };
     }));
@@ -70,8 +73,13 @@ describe("Unit: IPythonController", function () {
 
         var spyCreateInstance = sinon.spy(serviceInstanceMock, 'createInstance');
 
+        var deferredGetPlan = $q.defer();
+        planMock.getPlan = sinon.stub().returns(deferredGetPlan.promise);
+
         createController();
         scope.createInstance('lala');
+
+        deferredGetPlan.resolve();
 
         expect(spyCreateInstance.called, 'createInstance called').to.be.true;
 
@@ -80,6 +88,9 @@ describe("Unit: IPythonController", function () {
 
     it('deleteInstance, delete entity ok, list refreshed', function () {
         var appId = 123;
+
+        var deferredGetPlan = $q.defer();
+        planMock.getPlan = sinon.stub().returns(deferredGetPlan.promise);
 
         var deferredApp = $q.defer();
         applicationMock.deleteApplication = sinon.stub().returns(deferredApp.promise);
@@ -94,6 +105,7 @@ describe("Unit: IPythonController", function () {
         createController();
         scope.deleteInstance(appId);
 
+        deferredGetPlan.resolve();
         deferredApp.resolve();
         deferredAppGetAll.resolve();
         confirmDeferred.resolve(arguments);
@@ -108,6 +120,9 @@ describe("Unit: IPythonController", function () {
     it('deleteInstance, not confirmed, deleteApplication should not be called', function () {
         var appId = 123;
 
+        var deferredGetPlan = $q.defer();
+        planMock.getPlan = sinon.stub().returns(deferredGetPlan.promise);
+
         var deferredApp = $q.defer();
         applicationMock.deleteApplication = sinon.stub().returns(deferredApp.promise);
 
@@ -121,6 +136,7 @@ describe("Unit: IPythonController", function () {
         createController();
         scope.deleteInstance(appId);
 
+        deferredGetPlan.resolve();
         deferredApp.reject();
         deferredAppGetAll.resolve();
         confirmDeferred.reject(arguments);

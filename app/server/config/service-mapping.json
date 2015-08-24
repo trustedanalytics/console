@@ -47,6 +47,9 @@
   "path": "/rest/apps",
   "name": "servicecatalog"
 }, {
+  "path": "/rest/service_plan",
+  "name": "servicecatalog"
+},{
   "path": "/rest/service_bindings",
   "name": "servicecatalog"
 }, {

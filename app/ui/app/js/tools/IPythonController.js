@@ -17,18 +17,16 @@
     "use strict";
 
     App.controller('IPythonController', ['$scope', 'targetProvider', 'State', 'NotificationService',
-        'ServiceInstanceResource', 'ApplicationResource',
-        function ($scope, targetProvider, State, NotificationService, ServiceInstanceResource, ApplicationResource) {
+        'ServiceInstanceResource', 'ApplicationResource', 'ServicePlanResource',
+        function ($scope, targetProvider, State, NotificationService, ServiceInstanceResource,
+                  ApplicationResource, ServicePlanResource) {
             var state = new State().setPending();
             $scope.state = state;
 
             var IPYTHON_SERVICE_LABEL = 'ipython';
+            var IPYTHON_SERVICE_PLANE_NAME = 'free';
 
-            // Service plan guid for ipython will be temporarily hardcoded in console. It is the same
-            // across all of the environments.
-            // Cf-client does not support yet properly the functionality to return a plan guid
-            // for a specific service (DPNG-1502)
-            var IPYTHON_SERVICE_PLAN_GUID = 'e87979c6-22d3-4b56-b2cd-953c5b6630de';
+            $scope.service_plan = "";
 
             var org = targetProvider.getOrganization();
             $scope.organization = org;
@@ -44,14 +42,14 @@
             });
 
             if (space.guid) {
-                $scope.state.setPending();
+                setServicePlan($scope, ServicePlanResource, IPYTHON_SERVICE_LABEL, IPYTHON_SERVICE_PLANE_NAME);
                 getInstances($scope, ApplicationResource, space.guid, IPYTHON_SERVICE_LABEL);
             }
 
-            $scope.createInstance = function (name) {
+            $scope.createInstance = function (name, service_plan_guid) {
                 org = targetProvider.getOrganization().guid;
                 space = targetProvider.getSpace().guid;
-                ServiceInstanceResource.createInstance(name, IPYTHON_SERVICE_PLAN_GUID, org, space)
+                ServiceInstanceResource.createInstance(name, service_plan_guid, org, space)
                     .then(function () {
                         $scope.state.setPending();
                         NotificationService.success('Application has been created');
@@ -85,11 +83,21 @@
         }]);
 
     function getInstances($scope, ApplicationResource, spaceId, serviceLabel) {
-        $scope.state.setPending();
         ApplicationResource.getAllByServiceType(spaceId, serviceLabel)
             .then( function(applications) {
                 $scope.instances = applications;
                 $scope.state.setLoaded();
+            })
+            .catch( function() {
+                $scope.state.setError();
+            });
+    }
+
+    function setServicePlan($scope, ServicePlanResource, serviceLabel, planName) {
+        $scope.state.setPending();
+        ServicePlanResource.getPlan(planName, serviceLabel)
+            .then( function(plan) {
+                $scope.service_plan = plan;
             })
             .catch( function() {
                 $scope.state.setError();
