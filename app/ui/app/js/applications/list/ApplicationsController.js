@@ -31,6 +31,26 @@
 
             self.details = [];
 
+            var updateAppNames = function(apps, atkInstances) {
+                for (var app in apps) {
+                    if (apps.hasOwnProperty(app)) {
+                        for (var atk in atkInstances) {
+                            if (atkInstances.hasOwnProperty(atk) && apps[app] && apps[app].urls) {
+                                if (apps[app].urls[0] === atkInstances[atk].url) {
+                                    apps[app].name = atkInstances[atk].name;
+                                    break;
+                                }
+                                if (atkInstances[atk].scoring_engine &&
+                                    apps[app].urls[0] === atkInstances[atk].scoring_engine.url) {
+                                    apps[app].name = atkInstances[atk].scoring_engine.name;
+                                }
+                            }
+                        }
+                    }
+                }
+                return apps;
+            };
+
             function getAtkInstances($scope, org, AtkInstanceResource) {
                 AtkInstanceResource.getAll(org.guid)
                     .then(function onSuccess(response) {
@@ -48,24 +68,6 @@
                         self.state = states.ERROR;
                     });
             }
-
-            var updateAppNames = function(apps, atkInstances) {
-                for (var app in apps) {
-                    for(var atk in atkInstances) {
-                        if(apps[app] && apps[app].urls) {
-                            if (apps[app].urls[0] === atkInstances[atk].url) {
-                                apps[app].name = atkInstances[atk].name;
-                                break;
-                            } else if (atkInstances[atk].scoring_engine &&
-                                apps[app].urls[0] === atkInstances[atk].scoring_engine.url) {
-                                apps[app].name = atkInstances[atk].scoring_engine.name;
-                            }
-                        }
-
-                    }
-                }
-                return apps;
-            };
 
             var updateApplications = function() {
                 if(!_.isEmpty(targetProvider.getSpace())) {

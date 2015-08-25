@@ -18,12 +18,8 @@ exports.config = {
 
     baseUrl: 'http://localhost:8080/',
 
-
     capabilities: {
-        browserName: 'chrome'
+        browserName: 'chrome' /* 'firefox' */
     },
-    /*capabilities: {
-        browserName: 'firefox'
-    },*/
     specs: ['../e2e/*Test.js']
 };

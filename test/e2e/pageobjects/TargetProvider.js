@@ -30,13 +30,13 @@ var targetProviderPage = function() {
                 .filter(function(link) {
                     return link.getInnerHtml().then(function(orgName){
                         return orgName === name;
-                    })
+                    });
                 })
                 .then(function(filteredLinks){
                     filteredLinks[0].click();
                 });
         }
-    }
+    };
 };
 
 module.exports.targetProviderPage = targetProviderPage;

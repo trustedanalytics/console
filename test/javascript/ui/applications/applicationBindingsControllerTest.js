@@ -28,9 +28,9 @@ describe("Unit: ApplicationBindingsController", function () {
         SAMPLE_BINDINGS = [
             {guid:'b1', app_guid:'a1', service_instance_guid: 'i2'},
             {guid:'b2', app_guid:'a1', service_instance_guid: 'i3'},
-            {guid:'b3', app_guid:'a1', service_instance_guid: 'i4'},
-            ]
-        SAMPLE_INSTANCES = [{guid:'i1'},{guid:'i2'},{guid:'i3'}],
+            {guid:'b3', app_guid:'a1', service_instance_guid: 'i4'}
+        ],
+        SAMPLE_INSTANCES = [{guid:'i1'},{guid:'i2'},{guid:'i3'}];
 
     beforeEach(module('app'));
 
@@ -121,7 +121,7 @@ describe("Unit: ApplicationBindingsController", function () {
 
         createController();
         controller.setApplication(SAMPLE_APPLICATION);
-        controller.setInstances(SAMPLE_INSTANCES)
+        controller.setInstances(SAMPLE_INSTANCES);
 
         $rootScope.$digest();
 
@@ -204,7 +204,6 @@ describe("Unit: ApplicationBindingsController", function () {
         controller.unbindService({ guid: 's1' });
 
         expect(controller.state.value, 'state').to.be.equal(_state.values.PENDING);
-        //expect(serviceBindingResource.deleteBinding.called, 'called with id').to.be.true;
     });
 
     it('unbindService success, get bindings', function () {

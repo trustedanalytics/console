@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict'
+'use strict';
 var _ = require('underscore');
 
 var userOnListPage = function(rowLocator) {
@@ -57,9 +57,9 @@ var userOnListPage = function(rowLocator) {
                 });
 
                 return locator.all(by.css('td')).get(idx).element(by.css('input[type="checkbox"]')).click();
-            })
+            });
         }
-    }
+    };
 };
 
 var userListPage = function() {
@@ -71,24 +71,23 @@ var userListPage = function() {
         getPages : function() {
             return userPages;
         }
-    }
-}
+    };
+};
 
 var manageUsersInOrganizationPage = function() {
     return {
-        get: function (orgId) {
+        get: function () {
             return browser.get('/#/app/manage/orgusers');
         },
         getUserList: function () {
             var list = userListPage();
             return element.all(by.css('.user-list .user-list-item'))
-                .each(function(row, i) {
+                .each(function(row) {
                     list.addUserPage(userOnListPage(row));
                 })
                 .then(function() {
                     return list;
-                })
-
+                });
         },
         waitForDeleteDialog: function() {
             browser.sleep(2000);
@@ -103,8 +102,8 @@ var manageUsersInOrganizationPage = function() {
         },
         cancelDelete: function() {
             return element(by.css('.ngdialog button.btn-default')).click();
-        },
-    }
+        }
+    };
 };
 
 module.exports.manageUsersInOrganizationPage = manageUsersInOrganizationPage;

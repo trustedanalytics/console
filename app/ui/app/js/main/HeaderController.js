@@ -42,7 +42,7 @@
         $scope.onLogout = function(){
             targetProvider.clear();
         };
-        
+
         $scope.toggleMenu = function() {
             $scope.appState.menuCollapsed = !$scope.appState.menuCollapsed;
             $rootScope.$broadcast("toggleMenu");

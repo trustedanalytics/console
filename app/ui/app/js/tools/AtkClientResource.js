@@ -17,12 +17,12 @@
     "use strict";
 
     App.factory('AtkClientResource', ['$http', function ($http) {
-       var resource = {};
-    	
+        var resource = {};
+
         resource.getOne = function (callback, errcallback) {
             return $http.get('/files/atkclient')
-            	.success(callback)
-            	.error(errcallback);
+                .success(callback)
+                .error(errcallback);
         };
 
         return resource;

@@ -96,7 +96,6 @@ describe("Unit: DataSetController", function() {
 
         var called = false;
 
-        var body = { isPublic: true };
         dataSetResource.update = function (id, body) {
             expect(id).to.be.equal(SAMPLE_DATASET.id);
             expect(body.isPublic).to.be.equal(SAMPLE_PUBLIC_DATASET.isPublic);
@@ -119,8 +118,7 @@ describe("Unit: DataSetController", function() {
 
         var getDatasetSpied = sinon.spy(dataSetResource, 'getById');
 
-        var body = {isPublic: true};
-        dataSetResource.update = function(id, body){
+        dataSetResource.update = function(){
             return updateDefer.promise;
         };
 
@@ -146,7 +144,6 @@ describe("Unit: DataSetController", function() {
         scope.dataSet = SAMPLE_PUBLIC_DATASET;
 
         var called = false;
-        var body = {isPublic: false}
         dataSetResource.update = function(id, body){
             expect(id).to.be.equal(SAMPLE_PUBLIC_DATASET.id);
             expect(body.isPublic).to.be.equal(SAMPLE_DATASET.isPublic);
@@ -168,8 +165,7 @@ describe("Unit: DataSetController", function() {
         var updateDefer = q.defer();
 
         var getDatasetSpied = sinon.spy(dataSetResource, 'getById');
-        var body = {isPublic: false};
-        dataSetResource.update = function(id, body){
+        dataSetResource.update = function(){
             return updateDefer.promise;
         };
 
@@ -214,7 +210,7 @@ describe("Unit: DataSetController", function() {
         scope.dataSet = SAMPLE_PUBLIC_DATASET;
 
         var deleteDeferred = q.defer();
-        dataSetResource.deleteById = function(id){
+        dataSetResource.deleteById = function(){
             return deleteDeferred.promise;
         };
 
@@ -237,7 +233,7 @@ describe("Unit: DataSetController", function() {
         scope.dataSet = SAMPLE_PUBLIC_DATASET;
 
         var deleteDeferred = q.defer();
-        dataSetResource.deleteById = function(id){
+        dataSetResource.deleteById = function(){
             return deleteDeferred.promise;
         };
 

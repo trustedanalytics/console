@@ -22,7 +22,7 @@ describe("Unit: orgUserService", function () {
     beforeEach(module('app'));
 
     beforeEach(module(function($provide){
-        targetProviderStub = {}
+        targetProviderStub = {};
         $provide.value('targetProvider', targetProviderStub);
     }));
 

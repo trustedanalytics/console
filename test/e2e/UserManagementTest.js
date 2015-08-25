@@ -27,7 +27,7 @@ describe('User Management Tests', function() {
         targetProvider = targetProviderPage();
         manageUsersInOrganization.get();
         browser.waitForAngular();
-    })
+    });
 
     it('should load organization users list', function() {
         targetProvider.setOrganization('test-org')
@@ -51,7 +51,7 @@ describe('User Management Tests', function() {
             })
             .then(function(value) {
                 username = value;
-                return userPage.clickDelete()
+                return userPage.clickDelete();
             })
             .then(manageUsersInOrganization.waitForDeleteDialog)
             .then(manageUsersInOrganization.confirmDelete)

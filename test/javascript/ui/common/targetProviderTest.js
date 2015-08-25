@@ -161,7 +161,7 @@ describe("Unit: TargetProvider", function() {
         expect(angular.fromJson(angular.toJson(orgs))).to.be.deep.equal(fullList);
     }));
 
-    it('getOrganizations should display an error if organization list is empty', inject(function($httpBackend) {
+    it('getOrganizations should display an error if organization list is empty', inject(function() {
 
         var deferred = $q.defer();
         var emptyOrganizationsError = 'You are not assigned to any organization. Contact administrators.';

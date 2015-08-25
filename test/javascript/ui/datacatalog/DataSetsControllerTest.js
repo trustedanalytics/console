@@ -177,9 +177,9 @@ describe("Unit: DataSetsController", function() {
         expect(query.query).to.be.equal('mockquery');
         expect(query.filters.length).to.be.equal(2);
 
-        var createdFilter = _.find(query.filters, function(f){
+        _.find(query.filters, function(f){
             return f.creationTime;
-        });;
+        });
         expect(findFilter(query.filters, 'creationTime')).to.be.deep.equal(['mockfrom', 'mockto']);
 
         expect(findFilter(query.filters, 'format')).to.be.deep.equal(['mockformat']);

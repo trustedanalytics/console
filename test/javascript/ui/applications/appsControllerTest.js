@@ -121,7 +121,7 @@ describe("Unit: AppsController", function () {
             var deferred = $q.defer();
             deferred.reject();
             return deferred.promise;
-        }
+        };
         applicationResource.getAll = sinon.stub().returns(deferred.promise);
         deferred.reject();
         createController();

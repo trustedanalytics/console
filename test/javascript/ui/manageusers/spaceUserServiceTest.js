@@ -23,7 +23,7 @@ describe("Unit: spaceUserService", function () {
 
 
     beforeEach(module(function($provide){
-        targetProviderStub = {}
+        targetProviderStub = {};
         $provide.value('targetProvider', targetProviderStub);
     }));
 
@@ -39,7 +39,7 @@ describe("Unit: spaceUserService", function () {
     });
 
 
-    it('should call for users from apropriate space on refresh', inject(function ($injector) {
+    it('should call for users from apropriate space on refresh', inject(function () {
         targetProviderStub.getSpace = sinon.stub().returns({guid: "1234"});
 
         var callback = sinon.stub();
@@ -51,7 +51,7 @@ describe("Unit: spaceUserService", function () {
         expect(callback.called).to.be.true;
     }));
 
-    it('should fail while calling for users form unavailable space on refresh', inject(function ($injector) {
+    it('should fail while calling for users form unavailable space on refresh', inject(function () {
         targetProviderStub.getSpace = sinon.stub().returns(null);
 
         var errcallback = sinon.stub();

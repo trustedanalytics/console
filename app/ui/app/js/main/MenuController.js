@@ -26,7 +26,7 @@
             $scope.isActive = function (item) {
                 return $state.is(item.sref) || $state.includes(item.sref) || _.some(item.items, $scope.isActive);
             };
-            
+
             $scope.initSelected = function (item) {
                 if(!item.collapse) {
                     $scope.selected = item;
@@ -50,7 +50,7 @@
             $scope.getHref = function(sref) {
                 return $state.href(sref);
             };
-            
+
             $scope.toggleCollapse = function() {
                 for(var i = 0; i < $scope.menuItems.length; i++) {
                     if($scope.menuItems[i] === $scope.selected && !$scope.appState.menuCollapsed) {
@@ -60,7 +60,7 @@
                     }
                 }
             };
-            
+
             $scope.toggleCollapseOnSelection = function(item) {
                 for(var i = 0; i < $scope.menuItems.length; i++) {
                     if($scope.menuItems[i] === item) {
@@ -70,11 +70,11 @@
                     }
                 }
             };
-            
+
             $rootScope.$on('toggleMenu', function() {
                 $scope.toggleCollapse();
             });
-            
+
             $scope.clickOnMenu = function(item, event) {
                 if(!item.hasOwnProperty("items")) {
                     $scope.selected = item;
@@ -82,13 +82,13 @@
                 $scope.toggleCollapseOnSelection(item);
                 event.stopPropagation();
             };
-            
+
             $scope.clickOnSubmenu = function(item, event) {
                 $scope.selected = item;
                 $scope.toggleCollapse();
                 event.stopPropagation();
             };
-            
+
             $window.onclick = function() {
                 if($scope.appState.menuCollapsed){
                     $scope.toggleCollapse();

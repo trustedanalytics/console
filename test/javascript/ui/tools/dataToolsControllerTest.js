@@ -25,7 +25,7 @@ describe("Unit: DataToolsController", function () {
         serviceInstanceResource,
         notificationService,
         createController,
-        $q;
+        $q,
         SAMPLE_ORGANIZATION = { guid: 'o1' },
         SAMPLE_SPACE = { guid: 's1' },
         SAMPLE_ATK_RESPONSE = Object.freeze({
@@ -231,8 +231,6 @@ describe("Unit: DataToolsController", function () {
 
         atkInstancesResource.getAll = sinon.stub().returns($q.defer().promise);
 
-        var getAtkClientSpied = sinon.spy(atkClientResource, 'getOne');
-
         scope.createInstance(name);
         scope.$apply();
         expect(scope.state.value).to.be.equal(state.values.PENDING);
@@ -241,7 +239,7 @@ describe("Unit: DataToolsController", function () {
 
     function loadAtkInstances() {
         var deferred = $q.defer();
-        atkInstancesResource.getAll = function(orgId) {
+        atkInstancesResource.getAll = function() {
             return deferred.promise;
         };
         targetProvider.organization = angular.copy(SAMPLE_ORGANIZATION);

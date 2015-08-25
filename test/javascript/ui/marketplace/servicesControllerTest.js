@@ -28,6 +28,13 @@ describe("Unit: ServicesController", function () {
         state,
         scope;
 
+    var serviceSample = {
+        name: 'SomeService1',
+        image: 'c29tZSBleGFtcGxlIGJhc2U2NCBpbWFnZQ==',
+        description: 'Service one description',
+        tags: ['tag1', 'tag2']
+    };
+
     beforeEach(module('app'));
 
     beforeEach(module(function($provide){
@@ -182,11 +189,4 @@ describe("Unit: ServicesController", function () {
 
         expect(serviceMatches).to.be.false;
     });
-
-    var serviceSample = {
-        name: 'SomeService1',
-        image: 'c29tZSBleGFtcGxlIGJhc2U2NCBpbWFnZQ==',
-        description: 'Service one description',
-        tags: ['tag1', 'tag2']
-    };
 });
