@@ -19,10 +19,12 @@
     /*jshint newcap: false*/
     App.controller('ManageUsersController', ['$scope', 'UserService',
         'userViewType', 'ngTableParams', 'State', 'UserRoleMapperService', 'UsersListService',
-        'UserActionsNotificationsService', 'UserProvider',
+        'UserActionsNotificationsService', 'UserProvider', 'UserView',
         function ($scope, UserService, userViewType, ngTableParams, State,
-                  UserRoleMapperService, UsersListService, UserActionsNotificationsService, UserProvider) {
+                  UserRoleMapperService, UsersListService, UserActionsNotificationsService, UserProvider, UserView) {
             $scope.state = new State();
+            $scope.viewTypes = UserView;
+            $scope.viewType = userViewType;
             $scope.changeTab = function (tab) {
                 $scope.tab = tab;
             };

@@ -14,18 +14,19 @@
    limitations under the License.
 //-
 .adduser
-    form.form-horizontal(data-ng-submit='addUser()', validate-form='', novalidate='')
+    form.form-horizontal(name='add_user_form', data-ng-submit='addUser()', validate-form='', novalidate='')
         .form-group
             .clearfix
                 label.col-sm-2.control-label(for='add-username') Email:
                 .col-sm-4
-                    input#add-username.form-control(type='email', ng-model='userToAdd.username', required='')
+                    input#add-username.form-control(name='user_email', type='email', ng-model='userToAdd.username', required='')
             .clearfix
                 label.col-sm-2.control-label(for='add-role') Role: 
                 .col-sm-4
-                    select#add-role.form-control(ng-model='userToAdd.role', ng-options='role as name for (role, name) in availableRoles', required='')
-                        option(value='') -- Choose role --
+                    select#add-role.form-control(name='role_select', ng-model='userToAdd.role', ng-options='role as name for (role, name) in availableRoles', ng-required='viewTypes.SPACES === viewType')
+                        option(value='') {{(viewTypes.ORGANIZATIONS === viewType) ? 'None' : '-- Choose role --'}}
+
         .form-group
             .col-sm-offset-2.col-sm-10
-                input.btn.btn-primary(type='submit', value='Add user', ng-disabled="!state.isLoaded()")
+                input.btn.btn-primary(type='submit', value='Add user', ng-disabled="!state.isLoaded() || !add_user_form.$valid")
 
