@@ -16,8 +16,8 @@
 (function () {
     "use strict";
 
-    App.controller('ToolsController', ['userAgent','NotificationService', 'PlatformContextResource',
-                                       function (userAgent, NotificationService, PlatformContextResource) {
+    App.controller('ToolsController', ['userAgent','NotificationService', 'PlatformContextProvider',
+                                       function (userAgent, NotificationService, PlatformContextProvider) {
         var self = this;
 
         var clis = {
@@ -89,12 +89,11 @@
 
         self.currentPackage = currentPackage;
 
-        PlatformContextResource
-            .withErrorMessage("Error while fetching platform context")
+        PlatformContextProvider
             .getPlatformContext()
-            .then(function onSuccess(data){
+            .then(function onSuccess(platformContext){
                 // get the endpoint address, remove trailing / if present
-                self.apiEndpoint = data.apiEndpoint.replace(/\/$/, '');
+                self.apiEndpoint = platformContext.apiEndpoint.replace(/\/$/, '');
             });
 
         self.clis = clis;
