@@ -74,6 +74,22 @@
                         bodyOutputType: 'templateWithData',
                         body: "{template: 'generic-error-template', data: " + angular.toJson(error) + "}"
                     });
+                },
+
+                progress: function progress(templateId, data) {
+                    var deferred = $q.defer();
+                    ngDialog.open(
+                        {
+                            template: templateId,
+                            controller: ['$scope', function ($scope) {
+                                $scope.data = data;
+                                $scope.ok = function () {
+                                    deferred.resolve(arguments);
+                                    $scope.closeThisDialog();
+                                };
+                            }]
+                        });
+                    return deferred.promise;
                 }
             };
         }]);

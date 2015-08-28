@@ -8,5 +8,6 @@
     "../../bower_components/angular-xeditable/dist/css/xeditable.css",
     "../../bower_components/parsleyjs/dist/parsley.min.js",
     "../../bower_components/amcharts/dist/amcharts/amcharts.js",
-    "../../bower_components/amcharts/dist/amcharts/serial.js"
+    "../../bower_components/amcharts/dist/amcharts/serial.js",
+    "../../bower_components/angular-file-upload/dist/angular-file-upload.min.js"
 ]

@@ -21,11 +21,30 @@
     d-spinner(ng-show='state.isPending()')
 
     div(ng-show='state.value != state.values.PENDING ')
+
         form.form-horizontal(data-ng-submit='submitDownload()')
             .form-group
+                label.col-sm-2.control-label(for='input') Choose input type
+                .col-sm-10
+                    .radio
+                        label
+                            input(type='radio', name='uploadType', value='link', , ng-model="input")
+                            span.fa.fa-circle
+                            | Link
+                    .radio
+                        label
+                            input(type='radio', name='uploadType', value='local', ng-model="input")
+                            span.fa.fa-circle
+                            | Local path
+            .form-group(ng-if="input === 'link'")
                 label.col-sm-2.control-label(for='link') Link
                 .col-sm-10
-                    input#link.form-control(type='url', placeholder='place link...', required='', data-ng-model='link')
+                    input#link.form-control(type='url', placeholder='place link...', required='', data-ng-model='link',
+                    ng-if="input === 'link'")
+            .form-group(ng-if="input === 'local'")
+                label.col-sm-2.control-label(for='file') Local file
+                .col-sm-10
+                    input.btn.btn-primary(type='file', nv-file-select="", uploader="uploader", name='upfile')
 
             .form-group
                 label.col-sm-2.control-label(for='title') Title
@@ -55,3 +74,11 @@
                 .col-sm-offset-2.col-sm-10
                     input.btn.btn-primary(type='submit' value='Upload')
                     p
+
+script(type="text/ng-template", id="progress-upload")
+    .ngdialog-message.clearfix
+        .progress
+            .progress-bar(ng-style="{ 'width': data.uploader.progress + '%' }")
+        p(ng-if="data.uploader.queue[0].isUploaded")
+            | Upload finished successfully!
+        button.btn.btn-default(ng-if="data.uploader.queue[0].isUploaded" type='button', ng-click="ok()") OK

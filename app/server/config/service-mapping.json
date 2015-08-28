@@ -76,7 +76,11 @@
 }, {
   "path": "/rest/orgs",
   "name": "user-management"
-}, {
+},
+{
   "path": "/rest/les",
   "name": "latestevents"
+}, {
+  "path": "/rest/upload",
+  "name": "hdfs-uploader"
 }]

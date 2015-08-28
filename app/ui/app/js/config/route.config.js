@@ -143,7 +143,8 @@ App.config(['$stateProvider', '$urlRouterProvider', 'LazyLoadProvider', 'AppConf
                 title: 'Upload a dataset',
                 controller: 'UploadDataSetController',
                 controllerAs: 'ctrl',
-                templateUrl: getViewPath('datacatalog/transfers/upload.html')
+                templateUrl: getViewPath('datacatalog/transfers/upload.html'),
+                resolve: LazyLoadProvider.load(['file-upload'])
             })
             .state('app.manage', {
                 url: '/manage',

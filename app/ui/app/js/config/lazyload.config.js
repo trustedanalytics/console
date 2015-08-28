@@ -51,6 +51,9 @@
                 name: 'highlightjs',
                 files: ['vendor/highlightjs/highlight.pack.js',
                         'vendor/highlightjs/styles/github.css']
+            }, {
+                name: 'file-upload',
+                files: ['vendor/angular-file-upload/dist/angular-file-upload.min.js']
             }
         ]
     });

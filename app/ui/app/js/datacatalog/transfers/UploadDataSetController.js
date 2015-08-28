@@ -16,13 +16,16 @@
 (function () {
     "use strict";
 
-    App.controller('UploadDataSetController', ['$scope', 'DasResource', 'State', 'categoriesIcons', 'NotificationService',
-        function ($scope, DasResource, State, categoriesIcons, NotificationService) {
+    App.controller('UploadDataSetController', ['$scope', 'DasResource', 'State', 'categoriesIcons',
+        'NotificationService', 'FileUploader', 'targetProvider',
+        function ($scope, DasResource, State, categoriesIcons, NotificationService, FileUploader, targetProvider) {
             var self = this;
 
             $scope.state = new State();
 
             $scope.category = "other";
+
+            $scope.public = false;
 
             $scope.categories = [
                 'agriculture',
@@ -41,24 +44,48 @@
 
             self.clearInput = function () {
                 $scope.link = "";
+                $scope.file = "";
                 $scope.category = "";
                 $scope.title = "";
                 $scope.public = "";
             };
 
+            $scope.uploader = new FileUploader({
+                url: "/rest/upload/" + targetProvider.getOrganization().guid,
+                onBeforeUploadItem: function (item){
+                    item.formData.push({
+                        orgUUID: targetProvider.getOrganization().guid,
+                        category: $scope.category,
+                        title: $scope.title,
+                        publicRequest: $scope.public
+                    });
+                }
+            });
+
             $scope.submitDownload = function () {
 
                 $scope.state.setPending();
-                DasResource
-                    .withErrorMessage('Error when sending link')
-                    .postTransfer({"source": $scope.link, "category": $scope.category, "title": $scope.title}, $scope.public)
-                    .then(function onSuccess() {
-                        $scope.state.setLoaded();
-                        NotificationService.success('Link has been sent');
-                        self.clearInput();
-                    }).catch(function onError() {
-                        $scope.state.setError();
-                    });
+                if($scope.input === 'link') {
+                    DasResource
+                        .withErrorMessage('Error when sending link')
+                        .postTransfer({"source": $scope.link, "category": $scope.category, "title": $scope.title}, $scope.public)
+                        .then(function onSuccess() {
+                            $scope.state.setLoaded();
+                            NotificationService.success('Link has been sent');
+                            self.clearInput();
+                        }).catch(function onError() {
+                            $scope.state.setError();
+                        });
+                } else {
+                    $scope.uploader.queue[0].upload();
+                    NotificationService.progress('progress-upload', {uploader : $scope.uploader})
+                        .then(function () {
+                            $scope.state.setLoaded();
+                            self.clearInput();
+                        }).catch(function onError() {
+                            $scope.state.setError();
+                        });
+                }
             };
 
             $scope.getIcon = function (category) {

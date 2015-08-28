@@ -9,5 +9,7 @@
   "app-launcher-helper": "http://localhost:9996",
   "platformcontext": "http://localhost:9995",
   "fileserver": "http://localhost:9994",
-  "latestevents": "http://localhost:9993"
+  "latestevents": "http://localhost:9993",
+  "hdfs-uploader": "http://localhost:9998"
+
 }

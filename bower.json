@@ -29,7 +29,8 @@
     "angularjs-toaster": "0.4.15",
     "restangular": "1.5.1",
     "bootstrap-sass": "3.3.5",
-    "amcharts": "3.14.5"
+    "amcharts": "3.14.5",
+    "angular-file-upload": "2.1.1"
   },
   "resolutions": {
     "angular": "1.4.3"
