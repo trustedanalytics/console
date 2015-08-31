@@ -13,13 +13,13 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 //-
-button.btn.btn-primary(type='button', data-ng-click='publish()', ng-if="mode === modes.UNIFIED")
+button.btn.btn-primary(type='button', data-ng-click='publish()', ng-if="mode === modes.UNIFIED && availableTools.length > 0")
     em.fa-plus
     | View
-button.btn.btn-primary(type='button', data-ng-click='publish(tools.HUE)', ng-if="mode === modes.SEPARATE")
+button.btn.btn-primary(type='button', data-ng-click='publish(tools.HUE)', ng-if="mode === modes.SEPARATE && isToolAvailable('Hue')")
     em.fa-plus
     | View in Hue
-button.btn.btn-primary(type='button', data-ng-click='publish(tools.ARCADIA)', ng-if="mode === modes.SEPARATE")
+button.btn.btn-primary(type='button', data-ng-click='publish(tools.ARCADIA)', ng-if="mode === modes.SEPARATE && isToolAvailable('Arcadia')")
     em.fa-plus
     | View in Arcadia
 

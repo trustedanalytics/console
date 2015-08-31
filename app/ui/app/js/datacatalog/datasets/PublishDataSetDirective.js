@@ -26,8 +26,8 @@
         ARCADIA: 'arcadia'
     });
 
-    App.directive('dPublishDataSet', ['DataTableResource', 'State', '$window', 'ngDialog',
-        function (DataTableResource, State, $window, ngDialog) {
+    App.directive('dPublishDataSet', ['DataTableResource', 'State', '$window', 'ngDialog', 'PlatformContextProvider',
+        function (DataTableResource, State, $window, ngDialog, PlatformContextProvider) {
             return {
                 scope:{
                     dataSet:"=data",
@@ -45,6 +45,19 @@
 
                     $scope.tool = $scope.tool || tools.ARCADIA;
                     $scope.tools = tools;
+
+                    $scope.availableTools = [];
+
+                    PlatformContextProvider.getPlatformContext().then(function(data){
+                        var externalTools = data.externalTools.list;
+                        $scope.availableTools = _.pluck(_.where(externalTools, {available: true}), 'name').map(function(name) {
+                            return name.toLowerCase();
+                        });
+                    });
+
+                    $scope.isToolAvailable = function(toolName) {
+                        return _.contains($scope.availableTools, toolName.toLowerCase());
+                    };
 
                     $scope.publish = function(tool){
                         if(!tool) {

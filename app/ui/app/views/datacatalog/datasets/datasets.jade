@@ -49,17 +49,17 @@ h3
                         span.input-group-btn
                             button.btn.btn-default(type='button', ng-click='openTo($event)')
                                 em.fa.fa-calendar
-        div
+        div(ng-if='availableTools.length > 1')
             .heading Tool for visualization
             .tools
                 .form-group
                     .radio
-                        label
+                        label(ng-if="isToolAvailable('Arcadia')")
                             input(type='radio', name='tool', value='arcadia', , ng-model="tool")
                             span.fa.fa-circle
                             | Arcadia
                     .radio
-                        label
+                        label(ng-if="isToolAvailable('Hue')")
                             input(type='radio', name='tool', value='hue', ng-model="tool")
                             span.fa.fa-circle
                             | Hue

@@ -17,13 +17,12 @@
     "use strict";
 
     App.controller('DataSetsController', ['$scope', 'DataSetResource', '$routeParams',
-        'ngTableParams', 'State', '$cookies',
-        function ($scope, DataSetResource, $routeParams, ngTableParams, State, $cookies) {
+        'ngTableParams', 'State', '$cookies', 'PlatformContextProvider',
+        function ($scope, DataSetResource, $routeParams, ngTableParams, State, $cookies, PlatformContextProvider) {
 
             var TOOL_KEY = 'datacatalog_tool',
                 DEFAULT_TOOL = 'arcadia',
                 searchText = '';
-
 
             $scope.pagination = {
                 pageSize: 12,
@@ -59,6 +58,25 @@
                 var ngTable = new ngTableParams();
                 $scope.pagination.pages = ngTable.generatePagesArray($scope.pagination.currentPage, $scope.pagination.total, $scope.pagination.numPerPage);
             }
+
+            $scope.availableTools = [];
+
+            PlatformContextProvider.getPlatformContext().then(function(data){
+                var externalTools = data.externalTools.list;
+                $scope.availableTools = _.pluck(_.where(externalTools, {available: true}), 'name').map(function(name) {
+                    return name.toLowerCase();
+                });
+
+                if(!_.contains($scope.availableTools, $scope.tool)) {
+                    $scope.tool = _.contains($scope.availableTools, DEFAULT_TOOL) ?
+                        DEFAULT_TOOL :
+                        _.first($scope.availableTools);
+                }
+            });
+
+            $scope.isToolAvailable = function(toolName) {
+                return _.contains($scope.availableTools, toolName.toLowerCase());
+            };
 
             /*jshint newcap: true*/
 

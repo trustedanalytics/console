@@ -22,7 +22,10 @@ describe("Unit: DataSetsController", function() {
         rootScope,
         state,
         dataSetResource,
-        q;
+        q,
+        platformContextProvider,
+
+        DEFAULT_TOOL_NAME = 'arcadia';
 
     beforeEach(inject(function($injector, $rootScope, State, $q){
         rootScope = $rootScope;
@@ -40,13 +43,23 @@ describe("Unit: DataSetsController", function() {
                 return this;
             }
         };
+        platformContextProvider = {
+            getPlatformContext: function() {
+                return q.defer().promise;
+            }
+        };
 
-        controller = $injector.get('$controller')('DataSetsController', {
-            $scope: scope,
-            DataSetResource: dataSetResource
-        });
+        getSUT($injector);
         state = scope.state;
     }));
+
+    function getSUT($injector) {
+        return controller = $injector.get('$controller')('DataSetsController', {
+            $scope: scope,
+            DataSetResource: dataSetResource,
+            PlatformContextProvider: platformContextProvider
+        });
+    }
 
     it('should not be null', function(){
         expect(controller).not.to.be.null;
@@ -183,6 +196,57 @@ describe("Unit: DataSetsController", function() {
         expect(findFilter(query.filters, 'creationTime')).to.be.deep.equal(['mockfrom', 'mockto']);
 
         expect(findFilter(query.filters, 'format')).to.be.deep.equal(['mockformat']);
+    }));
+
+    it('current tool is available, leave current tool', inject(function($injector){
+        var toolName = "currenttool";
+        var sample_data = {"externalTools": {"list":[{name:'othertool1',available:true}, {name:'othertool2',available:false}, {name:toolName,available:true}]}};
+        sample_data.plain = function(){ return this; };
+
+        platformContextProvider.getPlatformContext = sinon.spy(function() {
+            var deferred = q.defer();
+            deferred.resolve(sample_data);
+            return deferred.promise;
+        });
+
+        getSUT($injector);
+        scope.tool = toolName;
+        rootScope.$apply();
+
+        expect(scope.availableTools.length).to.be.equal(2);
+        expect(scope.tool).to.be.equal(toolName);
+    }));
+
+    it('current tool not available but default is, set default tool', inject(function($injector){
+        var sample_data = {"externalTools": {"list":[{name:'othertool2',available:false}, {name:'othertool1',available:true}, {name:DEFAULT_TOOL_NAME,available:true}]}};
+        sample_data.plain = function(){return this;};
+
+        platformContextProvider.getPlatformContext = sinon.spy(function() {
+            var deferred = q.defer();
+            deferred.resolve(sample_data);
+            return deferred.promise;
+        });
+
+        getSUT($injector);
+        scope.tool = 'notexistingtool';
+        rootScope.$apply();
+        expect(scope.tool).to.be.equal(DEFAULT_TOOL_NAME);
+    }));
+
+    it('neither current nor default tool available, set first available tool on the list', inject(function($injector){
+        var sample_data = {"externalTools": {"list":[{name:'othertool1',available:false}, {name:'othertool2',available:true}, {name:'othertool3',available:true}]}};
+        sample_data.plain = function(){return this;};
+
+        platformContextProvider.getPlatformContext = sinon.spy(function() {
+            var deferred = q.defer();
+            deferred.resolve(sample_data);
+            return deferred.promise;
+        });
+
+        getSUT($injector);
+        scope.tool = 'notexistingtool';
+        rootScope.$apply();
+        expect(scope.tool).to.be.equal('othertool2');
     }));
 
     function findFilter(filters, name){
