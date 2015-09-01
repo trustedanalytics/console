@@ -17,6 +17,7 @@ applications:
       - fileserver
       - datacatalogexport
       - latestevents
+      - hdfs-uploader
     env:
       NPM_CONFIG_PRODUCTION: true
       VERSION: dev
