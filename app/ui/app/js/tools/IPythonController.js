@@ -23,8 +23,8 @@
             var state = new State().setPending();
             $scope.state = state;
 
-            var IPYTHON_SERVICE_LABEL = 'ipython';
-            var IPYTHON_SERVICE_PLANE_NAME = 'free';
+            var IPYTHON_SERVICE_LABEL = 'ipython-proxy';
+            var IPYTHON_SERVICE_PLANE_NAME = 'simple';
 
             $scope.service_plan = "";
 
