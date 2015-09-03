@@ -139,7 +139,8 @@ describe("Unit: ManageUsersController", function () {
     it('should refresh users on targetChanged', function () {
         createAndInitSUT();
         scope.tableParams = {
-            reload: sinon.stub()
+            reload: sinon.stub(),
+            page: sinon.stub()
         };
 
         $rootScope.$broadcast('targetChanged');
@@ -157,7 +158,8 @@ describe("Unit: ManageUsersController", function () {
         createAndInitSUT();
 
         scope.tableParams = {
-            reload: sinon.stub()
+            reload: sinon.stub(),
+            page: sinon.stub()
         };
 
         var deferred = $q.defer();
@@ -178,7 +180,8 @@ describe("Unit: ManageUsersController", function () {
         createAndInitSUT();
 
         scope.tableParams = {
-            reload: sinon.stub()
+            reload: sinon.stub(),
+            page: sinon.stub()
         };
 
         var deferred = $q.defer();

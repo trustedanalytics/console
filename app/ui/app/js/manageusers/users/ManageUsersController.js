@@ -126,6 +126,7 @@
                         $scope.users = data;
                         UsersListService.setData(data);
                         if ($scope.tableParams) {
+                            $scope.tableParams.page(1);
                             $scope.tableParams.reload();
                         }
                         else {
