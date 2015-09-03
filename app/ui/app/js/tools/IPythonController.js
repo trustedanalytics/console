@@ -23,7 +23,8 @@
             var state = new State().setPending();
             $scope.state = state;
 
-            var IPYTHON_SERVICE_LABEL = 'ipython-proxy';
+            var IPYTHON_PROXY_SERVICE_LABEL = 'ipython-proxy';
+            var IPYTHON_SERVICE_LABEL = 'ipython'
             var IPYTHON_SERVICE_PLANE_NAME = 'simple';
 
             $scope.service_plan = "";
@@ -42,7 +43,7 @@
             });
 
             if (space.guid) {
-                setServicePlan($scope, ServicePlanResource, IPYTHON_SERVICE_LABEL, IPYTHON_SERVICE_PLANE_NAME);
+                setServicePlan($scope, ServicePlanResource, IPYTHON_PROXY_SERVICE_LABEL, IPYTHON_SERVICE_PLANE_NAME);
                 getInstances($scope, ApplicationResource, space.guid, IPYTHON_SERVICE_LABEL);
             }
 
