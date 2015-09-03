@@ -24,7 +24,7 @@
             $scope.state = state;
 
             var IPYTHON_PROXY_SERVICE_LABEL = 'ipython-proxy';
-            var IPYTHON_SERVICE_LABEL = 'ipython'
+            var IPYTHON_SERVICE_LABEL = 'ipython';
             var IPYTHON_SERVICE_PLANE_NAME = 'simple';
 
             $scope.service_plan = "";
