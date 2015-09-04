@@ -35,7 +35,7 @@ App.config(['$stateProvider', '$urlRouterProvider', 'LazyLoadProvider', 'AppConf
                 title: 'Dashboard',
                 controller: 'DashboardController',
                 templateUrl: getViewPath('dashboard/dashboard.html'),
-                resolve: LazyLoadProvider.load(['amcharts-serial'])
+                resolve: LazyLoadProvider.load(['c3charts-serial'])
             })
             .state('app.latestevents', {
                 url: '/events',
