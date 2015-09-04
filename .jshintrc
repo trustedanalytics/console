@@ -21,7 +21,7 @@
         "UAParser": true,
         "console": true,
         "App": true,
-        "c3": true,
+        "AmCharts": true,
         "hljs": true,
         // expect.js UTs methods
         "describe": true,

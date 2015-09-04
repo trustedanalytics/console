@@ -15,7 +15,7 @@
 //-
 d-spinner(ng-show='state.isPending()')
 
-.dashboard.row(d-visible="state.isLoaded()")
+.dashboard.row(ng-show="state.isLoaded()")
     d-target-selector.target-selector.pull-right(hide-space="true")
     .category-title.clearfix Health & metrics
     
@@ -23,7 +23,8 @@ d-spinner(ng-show='state.isPending()')
     d-tile-small-white-numeric(number="data.appsDown", text="'Applications down'").col-lg-4.col-md-6.col-sm-6
     d-tile-small-white-numeric(number="data.totalUsers", text="'Users count'").col-lg-4.col-md-6.col-sm-6
     d-tile-load-chart.col-lg-12.col-md-12.col-sm-12
-
+    
+    // d-tile-blue-numeric(number="data.capacity.numerator + '/' + data.capacity.denominator", text="'Capacity'").col-lg-6.col-md-8.col-sm-8.tile-height-small
 
     .category-title.clearfix Quotas
     d-tile-progress(value="data.memoryUsage | percent", title="'Memory usage'").col-lg-4.col-sm-6

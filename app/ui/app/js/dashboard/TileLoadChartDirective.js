@@ -27,27 +27,24 @@
                 $scope.state = state;
 
                 $scope.options = {
-                    axis: {
-                        x: {
-                            type: 'timeseries',
-                            tick: {
-                                format: '%H:%M',
-                            }
+                    graphs: [
+                        {
+                            title: "test",
+                            valueField: "value",
+                            fillAlphas: 0.4,
+                            lineColor: '#0076c7'
                         }
+                    ],
+                    categoryField: "timestamp",
+
+                    categoryAxis: {
+                        parseDates: true,
+                        minPeriod: 'mm'
                     },
-                    grid: {
-                        x: {
-                            show: true
-                        },
-                        y: {
-                            show: true
-                        }
-                    },
-                    point: {
-                        show: false
-                    },
-                    legend: {
-                        show: false
+                    chartCursor: {
+                        cursorAlpha: 0,
+                        fullWidth: true,
+                        categoryBalloonEnabled: false
                     }
                 };
 
