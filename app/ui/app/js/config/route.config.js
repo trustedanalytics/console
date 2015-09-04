@@ -20,6 +20,7 @@ App.config(['$stateProvider', '$urlRouterProvider', 'LazyLoadProvider', 'AppConf
         // TODO: This is workaround for marketplace icons not loading
         $sceProvider.enabled(false);
 
+        $urlRouterProvider.when('/app/datacatalog', '/app/datacatalog/datasets');
         $urlRouterProvider.otherwise('/app/dashboard');
 
         $stateProvider

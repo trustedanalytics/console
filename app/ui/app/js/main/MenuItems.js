@@ -21,7 +21,7 @@
             "icon": "icon-speedometer"
         }, {
             "text": "Data catalog",
-            "sref": "app.datacatalog.datasets",
+            "sref": "app.datacatalog",
             "icon": "icon-folder-alt"
         }, {
             "text": "Applications",
