@@ -34,7 +34,7 @@ h3
                             d-state(state="instance.state")
                         td
                             div(data-ng-repeat='url in instance.urls')
-                                a(href='{{ url | ensureHttps }}:4443')
+                                a(href='{{ url | ensureHttps }}')
                                     | {{ url }}
                             span(ng-if='!instance.urls.length') -
                         td

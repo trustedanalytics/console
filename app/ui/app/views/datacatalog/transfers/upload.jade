@@ -28,7 +28,7 @@
                 .col-sm-10
                     .radio
                         label
-                            input(type='radio', name='uploadType', value='link', , ng-model="input")
+                            input(type='radio', name='uploadType', value='link', ng-model="input")
                             span.fa.fa-circle
                             | Link
                     .radio
@@ -36,15 +36,16 @@
                             input(type='radio', name='uploadType', value='local', ng-model="input")
                             span.fa.fa-circle
                             | Local path
-            .form-group(ng-if="input === 'link'")
+
+            .form-group(ng-show="input === 'link'")
                 label.col-sm-2.control-label(for='link') Link
                 .col-sm-10
-                    input#link.form-control(type='url', placeholder='place link...', required='', data-ng-model='link',
-                    ng-if="input === 'link'")
-            .form-group(ng-if="input === 'local'")
+                    input#link.form-control(ng-required="input === 'link'" type='url', placeholder='place link...', data-ng-model='link')
+
+            .form-group(ng-show="input === 'local'")
                 label.col-sm-2.control-label(for='file') Local file
                 .col-sm-10
-                    input.btn.btn-primary(type='file', nv-file-select="", uploader="uploader", name='upfile')
+                    input.btn.btn-primary(ng-required="input === 'local'" type='file', nv-file-select="", uploader="uploader", name='upfile')
 
             .form-group
                 label.col-sm-2.control-label(for='title') Title
