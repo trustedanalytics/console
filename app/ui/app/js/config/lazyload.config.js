@@ -43,9 +43,10 @@
                 name: 'parsley',
                 files: ['vendor/parsleyjs/dist/parsley.min.js']
             }, {
-                name: 'amcharts-serial',
-                files: ['vendor/amcharts/dist/amcharts/amcharts.js',
-                        'vendor/amcharts/dist/amcharts/serial.js'],
+                name: 'c3charts-serial',
+                files: ['vendor/d3/d3.min.js',
+                        'vendor/c3/c3.min.js',
+                        'vendor/c3/c3.min.css'],
                 serie: true
             }, {
                 name: 'highlightjs',
