@@ -57,12 +57,15 @@ describe("Unit: LatestEventsController", function() {
     });
 
     it('should be loaded after successfull getPage', function() {
+
         createController();
 
-        toReturn = {
+        var toReturn = {
             events:[],
             total: 0
-        }
+        };
+
+        toReturn.plain = function(){return this};
 
         scope.collectData(deferred, params);
         deferred.resolve(toReturn);

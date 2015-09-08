@@ -16,7 +16,8 @@
 .panel.widget.tile-news
     .title
         | Latest events
-    .table-responsive.table-bordered
+    h4(ng-hide ="events.length>0") No latest events...
+    .table-responsive.table-bordered(ng-show="events.length>0")
         table.table
             thead
                 th Time

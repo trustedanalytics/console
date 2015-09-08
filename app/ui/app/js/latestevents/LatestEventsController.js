@@ -31,7 +31,7 @@
 
                 EventsResource.getPage(getOrgId(), (params.page()-1)*params.count(), params.count())
                 .then(function(response){
-                    $scope.events = response.events;
+                    $scope.events = response.plain().events;
 
                     params.total(response.total);
                     $defer.resolve($scope.events);
@@ -39,10 +39,15 @@
                 });
             };
 
+            $scope.hasEvents = function() {
+                console.log($scope.events.length);
+                return $scope.events.length > 0;
+            };
+
             /*jshint newcap: false*/
             $scope.tableParams = new ngTableParams({
                 page: 1,
-                count: 10,
+                count: 10
             }, {
                 getData: $scope.collectData
             });
