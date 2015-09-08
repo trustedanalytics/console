@@ -28,10 +28,10 @@ Before running the console, you have to install Node dependencies, compile UI. A
 npm install
 node ./node_modules/gulp/bin/gulp.js
 npm start
-```  
+```
 
 ### Setting up dependencies
-Console is only a reverse-proxy - it doesn't have application logic. To run and develop console locally, it's needed to configure the console to know where the dependencies are. There is no need to set up all dependent microservices at once. Most of the time developer works on 1-2 features and uses a few microservices only. 
+Console is only a reverse-proxy - it doesn't have application logic. To run and develop console locally, it's needed to configure the console to know where the dependencies are. There is no need to set up all dependent microservices at once. Most of the time developer works on 1-2 features and uses a few microservices only.
 
 Although, there is one project always required - [user-management](https://github.com/trustedanalytics/user-management) which is responsible for downloading user details, organizations list, etc. A whole list of dependencies is stored in [service-mapping.json](app/server/config/service-mapping.json).
 
@@ -79,7 +79,7 @@ export VCAP_SERVICES='{
 }'
 ```
 
-All the properties used for external services binding can be found in [local-services.json](app/server/config/local-services.json) file. 
+All the properties used for external services binding can be found in [local-services.json](app/server/config/local-services.json) file.
 
 #### Binding to local microservices
 An alternative to binding to external services is setting up dependent microservices on a local machine. Having them running locally there is no need to configure anything if they are running on proper ports. Such mappings of port - microservice can be found in [local-services.json](app/server/config/local-services.json).
@@ -114,4 +114,18 @@ $ gulp watch
 [16:50:20] Starting 'scripts:app'...
 [16:50:20] Finished 'scripts:app' after 454 ms
 
+```
+
+## Deploying to Cloud Foundry
+To deploy to Cloud Foundry we will assume a environment without internet access.
+First we will have to cache our dependencies:
+```
+rm -r ./node_modules/* npm-shrinkwrap.json # First delete all to get rid of the devDependencies
+NODE_ENV=production npm install # Install the production dependencies locally
+npm shrinkwrap # lockdown the module versions
+```
+
+Now we can push the console app to our Cloud Foundry:
+```
+cf push
 ```
