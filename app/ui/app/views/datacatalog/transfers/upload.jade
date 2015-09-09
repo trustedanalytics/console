@@ -22,35 +22,31 @@
 
     div(ng-show='state.value != state.values.PENDING ')
 
-        form.form-horizontal(data-ng-submit='submitDownload()')
+        form.form-horizontal(name="uploadForm" data-ng-submit='submitDownload()')
             .form-group
                 label.col-sm-2.control-label(for='input') Choose input type
                 .col-sm-10
-                    .radio
+                    .radio(ng-repeat="option in uploadFormData.uploadTypes" ng-init="uploadFormData.input = uploadFormData.uploadTypes[0]")
                         label
-                            input(type='radio', name='uploadType', value='link', ng-model="input")
+                            input(type='radio', name='uploadType', ng-value='option',
+                                ng-model="uploadFormData.input" ng-selected="option === uploadFormData.input")
                             span.fa.fa-circle
-                            | Link
-                    .radio
-                        label
-                            input(type='radio', name='uploadType', value='local', ng-model="input")
-                            span.fa.fa-circle
-                            | Local path
+                            | {{ option.text }}
 
-            .form-group(ng-show="input === 'link'")
-                label.col-sm-2.control-label(for='link') Link
+            .form-group(ng-if="uploadFormData.input.type === 'link'")
+                label.col-sm-2.control-label(for='link') {{ uploadFormData.input.text }}
                 .col-sm-10
-                    input#link.form-control(ng-required="input === 'link'" type='url', placeholder='place link...', data-ng-model='link')
+                    input#link.form-control(type='url', placeholder='place link...', data-ng-model='uploadFormData.link', required)
 
-            .form-group(ng-show="input === 'local'")
-                label.col-sm-2.control-label(for='file') Local file
+            .form-group(ng-if="uploadFormData.input.type === 'local'")
+                label.col-sm-2.control-label(for='file') {{ uploadFormData.input.text }}
                 .col-sm-10
-                    input.btn.btn-primary(ng-required="input === 'local'" type='file', nv-file-select="", uploader="uploader", name='upfile')
+                    input.btn.btn-primary(type='file', nv-file-select, uploader="uploader", name='upfile', data-ng-model='inputFile', required)
 
             .form-group
                 label.col-sm-2.control-label(for='title') Title
                 .col-sm-10
-                    input#title.form-control(type='text', required='', placeholder='title for link...', data-ng-model='title')
+                    input#title.form-control(type='text', placeholder='title for link...', data-ng-model='uploadFormData.title', required)
 
             .form-group
                 label.col-sm-2.control-label(for='public') Should be public?
@@ -58,7 +54,7 @@
                     .checkbox.c-checkbox
                         label
                             input#public(type="checkbox"
-                            ng-model="public"
+                            ng-model="uploadFormData.public"
                             ng-click="updateUserRoles(user, avRole)",
                             placeholder='Check if the dataset should be accessible for other organizations')
                             span.fa.fa-check
@@ -66,22 +62,33 @@
             .form-group
                 label.col-sm-2.control-label Choose category
                 .categories.col-sm-5
-                    a.btn-radio(ng-repeat='c in categories',
-                            data-ng-click="setCategory(c)", ng-class="{active:category==c}", role='button')
+                    a.btn-radio(ng-repeat='c in uploadFormData.categories',
+                            data-ng-click="setCategory(c)", ng-class="{active:uploadFormData.category==c}", role='button')
                         div(class='fa fa-{{ getIcon(c) }}')
                         | {{ c }}
 
             .form-group
                 .col-sm-offset-2.col-sm-10
-                    input.btn.btn-primary(type='submit' value='Upload')
-                    p
+                    input.btn.btn-primary(type='submit', value='Upload')
 
 script(type="text/ng-template", id="progress-upload")
     .ngdialog-message.clearfix
-        .progress
-            .progress-bar(ng-style="{ 'width': data.uploader.progress + '%' }")
-        p(ng-if="data.uploader.queue[0].isSuccess")
-            | Upload finished successfully!
-        p(ng-if="data.uploader.queue[0].isError")
-            | There was an error uploading the file.
-        button.btn.btn-default(ng-if="data.uploader.queue[0].isUploaded" type='button', ng-click="ok()") OK
+        div(ng-repeat="file in data.uploader.queue")
+            div(ng-if="file.isUploading")
+                div
+                    p.text-center
+                        | Uploading file
+                    .progress
+                        .progress-bar(ng-style="{ 'width': file.progress + '%' }")
+                    div
+                        span.col-sm-7.text-left
+                            | Uploading speed: {{ file.speed ? file.speed : '-' }} MB/s
+                        span.col-sm-5.text-right
+                            | Time left: {{ file.timeLeft ? (file.timeLeft | presentTimeFilter | date:'HH:mm:ss') : '-' }}
+                button.btn.btn-warning.pull-right(type='button', ng-click="file.cancel(); ok()") Cancel
+            p(ng-if="file.isSuccess")
+                | Upload finished successfully!
+            p(ng-if="file.isError")
+                | Upload finished with error!
+
+        button.btn.btn-default(ng-if="!data.uploader.isUploading" type='button', ng-click="ok()") OK

@@ -17,60 +17,43 @@
     "use strict";
 
     App.controller('UploadDataSetController', ['$scope', 'DasResource', 'State', 'categoriesIcons',
-        'NotificationService', 'FileUploader', 'targetProvider',
-        function ($scope, DasResource, State, categoriesIcons, NotificationService, FileUploader, targetProvider) {
+        'NotificationService', 'FileUploader', 'targetProvider', 'UploaderConfig', 'FileUploaderService',
+        function ($scope, DasResource, State, categoriesIcons, NotificationService, FileUploader, targetProvider,
+                  UploaderConfig, FileUploaderService) {
             var self = this;
 
-            $scope.state = new State();
+            self.getInitData = UploaderConfig;
 
-            $scope.category = "other";
-
-            $scope.public = false;
-
-            $scope.categories = [
-                'agriculture',
-                'business',
-                'climate',
-                'consumer',
-                'ecosystems',
-                'education',
-                'energy',
-                'finance',
-                'health',
-                'manufacturing',
-                'science',
-                'other'
-            ];
+            $scope.state = new State().setPending();
+            $scope.uploadFormData = self.getInitData();
+            $scope.fileSizeLimit = 0;
+            $scope.fileAllowedTypes = [];
 
             $scope.input = "link";
 
             self.clearInput = function () {
-                $scope.link = "";
-                $scope.file = "";
-                $scope.category = "";
-                $scope.title = "";
-                $scope.public = "";
+                $scope.uploadFormData = self.getInitData();
+                $scope.inputFile = null;
+                $scope.uploader.clearQueue();
             };
 
-            $scope.uploader = new FileUploader({
-                url: "/rest/upload/" + targetProvider.getOrganization().guid,
-                onBeforeUploadItem: function (item){
-                    item.formData.push({
-                        orgUUID: targetProvider.getOrganization().guid,
-                        category: $scope.category,
-                        title: $scope.title,
-                        publicRequest: $scope.public
-                    });
-                }
-            });
+            FileUploaderService.createFileUploader(
+                    $scope.uploadFormData
+            ).then(function(uploader){
+                    $scope.uploader = uploader;
+                    $scope.state.setLoaded();
+                });
 
             $scope.submitDownload = function () {
-
                 $scope.state.setPending();
-                if($scope.input === 'link') {
+                if($scope.uploadFormData.input.type === 'link') {
                     DasResource
                         .withErrorMessage('Error when sending link')
-                        .postTransfer({"source": $scope.link, "category": $scope.category, "title": $scope.title}, $scope.public)
+                        .postTransfer({
+                            source: $scope.uploadFormData.link,
+                            category: $scope.uploadFormData.category,
+                            title: $scope.uploadFormData.title
+                        }, $scope.uploadFormData.public)
                         .then(function onSuccess() {
                             $scope.state.setLoaded();
                             NotificationService.success('Link has been sent');
@@ -95,7 +78,7 @@
             };
 
             $scope.setCategory = function(c) {
-                $scope.category = c;
+                $scope.uploadFormData.category = c;
             };
         }]);
 

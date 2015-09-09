@@ -21,6 +21,7 @@ var favicon = require('serve-favicon');
 
 var auth = require('./auth/auth');
 var reverseProxy = require('./reverse-proxy');
+var config = require('./config/config');
 
 var app = express();
 
@@ -52,7 +53,11 @@ app.get('/rest/registrations/*',
 app.post('/rest/registrations',
     reverseProxy.forward);
 
-
+app.get('/rest/config/uploader', auth.checkLoggedIn,
+    function(req, res) {
+        res.send(config.get("UPLOADER_CONFIG"));
+    }
+);
 
 app.route('/rest/*')
     .get(
