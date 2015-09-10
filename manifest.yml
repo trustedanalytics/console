@@ -21,3 +21,6 @@ applications:
     env:
       NPM_CONFIG_PRODUCTION: true
       VERSION: dev
+      OAUTH2_CLIENT_CLIENTID: developer_console
+      OAUTH_CLIENT_ID: developer_console
+      SPRING_PROFILES_ACTIVE: cloud,redis
