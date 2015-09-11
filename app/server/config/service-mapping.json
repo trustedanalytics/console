@@ -79,7 +79,7 @@
 },
 {
   "path": "/rest/les",
-  "name": "latestevents"
+  "name": "latest-events-service"
 }, {
   "path": "/rest/upload",
   "name": "hdfs-uploader"

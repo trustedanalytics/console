@@ -16,7 +16,7 @@ applications:
       - sso
       - fileserver
       - datacatalogexport
-      - latestevents
+      - latest-events-service
       - hdfs-uploader
     env:
       NPM_CONFIG_PRODUCTION: true
