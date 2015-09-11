@@ -115,3 +115,14 @@ $ gulp watch
 [16:50:20] Finished 'scripts:app' after 454 ms
 
 ```
+
+### Bumping version
+
+Each commit to "master" branch requires bumping the patch version of the project. You can do it either by manually editing package.json or (preferred solution) by running 
+
+```
+npm version patch --no-git-tag-version
+
+```
+
+Running "npm version patch" without --no-git-tag-version option will result in creating a new commit and git tag 
