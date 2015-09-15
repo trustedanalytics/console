@@ -122,7 +122,8 @@ App.config(['$stateProvider', '$urlRouterProvider', 'LazyLoadProvider', 'AppConf
                 title: 'Data sets',
                 controller: 'DataSetsController',
                 controllerAs: 'ctrl',
-                templateUrl: getViewPath('datacatalog/datasets/datasets.html')
+                templateUrl: getViewPath('datacatalog/datasets/datasets.html'),
+                resolve: LazyLoadProvider.load(['dibari.angular-ellipsis'])
             })
             .state('app.dataset', {
                 url: '/dataset/:datasetId',

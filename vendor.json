@@ -10,5 +10,6 @@
     "../../bower_components/angular-file-upload/dist/angular-file-upload.min.js",
     "../../bower_components/d3/d3.min.js",
     "../../bower_components/c3/c3.min.js",
-    "../../bower_components/c3/c3.min.css"
+    "../../bower_components/c3/c3.min.css",
+    "../../bower_components/angular-ellipsis/src/angular-ellipsis.min.js"
 ]

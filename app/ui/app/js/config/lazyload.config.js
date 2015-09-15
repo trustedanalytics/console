@@ -29,6 +29,10 @@
                 name: 'xeditable',
                 files: ['vendor/angular-xeditable/dist/js/xeditable.js',
                         'vendor/angular-xeditable/dist/css/xeditable.css']
+            },
+            {
+                name: 'dibari.angular-ellipsis',
+                files: ['vendor/angular-ellipsis/src/angular-ellipsis.min.js']
             }
         ],
         standalones: [

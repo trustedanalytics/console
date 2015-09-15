@@ -87,7 +87,7 @@ div(ng-show='state.isLoaded() || state.isError()')
             div
                 span.fa.fa-lock.private-indicator(ng-hide="dataSet.isPublic")
                 span.format.fa(class='fa-{{ getFormatIcon(dataSet.format) }}')
-                a.title(ui-sref='app.dataset({ datasetId: dataSet.id })') {{ dataSet.title }}
+                a.title(ui-sref='app.dataset({ datasetId: dataSet.id })' ng-bind="dataSet.title" data-ellipsis data-ellipsis-separator="")
                 //.description {{ dataSet._source.description | limitTo: 256}}
                 //.tags
                     span(data-ng-repeat='tag in dataSet._source.keyword | limitTo: 10')
