@@ -69,15 +69,19 @@
                 }
             };
             self.lastTimestamp = function (timestamps) {
-                var max = 0;
-
-                for (var i in timestamps) {
-                    if (timestamps[i] > max) {
-                        max = timestamps[i];
+                return _.max(
+                    _.values(
+                        _.mapObject(timestamps, function(val, key) {
+                            return {
+                                state: key,
+                                time: val
+                            };
+                        })
+                    ),
+                    function(obj) {
+                        return obj.time;
                     }
-                }
-
-                return {state: i, time: max};
+                );
             };
 
             $scope.transfers = new ngTableParams({

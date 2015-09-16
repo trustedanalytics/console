@@ -169,4 +169,19 @@ describe("Unit: DataSetTransferListControllerTest", function() {
         expect(getTransfersSpied.called).to.be.true;
     });
 
+    it('lastTimestamp, given timestamp-state pairs, the object with latest stae is found', function() {
+        var controller = getSUT();
+        var testTimestamps = {
+            "DOWNLOADED" : 1440504890,
+            "ERROR" : 1440505096,
+            "VALIDATED" : 1440504890,
+            "NEW" : 1440504890
+        }
+
+        var maxPairs = controller.lastTimestamp(testTimestamps);
+        expect(maxPairs.state).to.be.equal("ERROR");
+        expect(maxPairs.time).to.be.equal(1440505096);
+    });
+
+
 });
