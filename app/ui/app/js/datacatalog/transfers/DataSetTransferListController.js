@@ -65,23 +65,15 @@
             self.populateDataWithLastTimestamp = function (data) {
                 $scope.downloadQueue = data;
                 for (var i = 0; i < data.length; i++) {
-                    $scope.downloadQueue[i].lastTimestamp = self.lastTimestamp(data[i].timestamps);
+                    $scope.downloadQueue[i].lastTimestamp = self.getCurrentStatesTimestamp(data[i].timestamps, data[i].state);
                 }
             };
-            self.lastTimestamp = function (timestamps) {
-                return _.max(
-                    _.values(
-                        _.mapObject(timestamps, function(val, key) {
-                            return {
-                                state: key,
-                                time: val
-                            };
-                        })
-                    ),
-                    function(obj) {
-                        return obj.time;
-                    }
-                );
+            self.getCurrentStatesTimestamp = function (timestamps, state) {
+                var lastTimestamp = timestamps[state];
+                return {
+                    state: state,
+                    time: lastTimestamp
+                };
             };
 
             $scope.transfers = new ngTableParams({

@@ -83,16 +83,6 @@ describe("Unit: DataSetTransferListControllerTest", function() {
         });
     }
 
-    it('should find max timestamp', function() {
-        var controller = getSUT();
-        var result = controller.lastTimestamp({
-            'NEW': 10,
-            'DOWNLOAD': 15,
-            'FINISHED': 40
-        });
-        expect({state: 'FINISHED', time: 40}).to.be.deep.equal(result);
-    });
-
     it('getData, empty queue, download queue', function() {
         var controller = getSUT();
 
@@ -169,7 +159,7 @@ describe("Unit: DataSetTransferListControllerTest", function() {
         expect(getTransfersSpied.called).to.be.true;
     });
 
-    it('lastTimestamp, given timestamp-state pairs, the object with latest stae is found', function() {
+    it('getCurrentStatesTimestamp, given timestamp-state pairs, the object with current state is found', function() {
         var controller = getSUT();
         var testTimestamps = {
             "DOWNLOADED" : 1440504890,
@@ -178,7 +168,7 @@ describe("Unit: DataSetTransferListControllerTest", function() {
             "NEW" : 1440504890
         }
 
-        var maxPairs = controller.lastTimestamp(testTimestamps);
+        var maxPairs = controller.getCurrentStatesTimestamp(testTimestamps, "ERROR");
         expect(maxPairs.state).to.be.equal("ERROR");
         expect(maxPairs.time).to.be.equal(1440505096);
     });
