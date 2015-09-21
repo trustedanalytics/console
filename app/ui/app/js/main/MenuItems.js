@@ -44,6 +44,9 @@
                 },  {
                     "text": "IPython",
                     "sref": "app.ipython"
+                },  {
+                    "text": "RStudio",
+                    "sref": "app.rstudio"
                 }
             ]
         }, {

@@ -5,6 +5,7 @@
   "dataaquisitionservice": "http://localhost:9997",
   "servicecatalog": "http://localhost:9999",
   "metrics-provider": "http://localhost:9997",
+  "service-exposer": "http://localhost:9991",
   "router-metrics-provider": "http://localhost:9996",
   "app-launcher-helper": "http://localhost:9996",
   "platformcontext": "http://localhost:9995",

@@ -16,19 +16,17 @@
 (function () {
     "use strict";
 
-    App.factory('ServiceResource', ['Restangular', function (Restangular) {
-        var service = Restangular.service("services");
-        service.getService = function(id) {
-            return this.one(id).get();
+    App.factory('ToolsInstanceResource', ['Restangular', function (Restangular) {
+        var service = Restangular.service("tools/service_instances");
+
+        service.getToolsInstances = function(orgId, spaceId, serviceType) {
+            return this.one().get({
+                org: orgId,
+                space: spaceId,
+                service: serviceType
+            });
         };
 
-        service.getListBySpace = function(space) {
-            return this.one().customGET("", {space: space});
-        };
-
-        service.getAllServicePlansForLabel = function(label) {
-            return this.one(label).one("service_plans").get();
-        };
         return service;
     }]);
 

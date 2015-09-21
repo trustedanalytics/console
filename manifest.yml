@@ -18,6 +18,7 @@ applications:
       - datacatalogexport
       - latest-events-service
       - hdfs-uploader
+      - service-exposer
     env:
       NPM_CONFIG_PRODUCTION: true
       VERSION: dev

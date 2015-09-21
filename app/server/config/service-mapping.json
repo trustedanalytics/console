@@ -17,6 +17,9 @@
   "path": "/rest/das",
   "name": "dataaquisitionservice"
 }, {
+  "path": "/rest/tools/service_instances",
+  "name": "service-exposer"
+}, {
   "path": "/rest/spaces/[^/]+/services*",
   "name": "servicecatalog"
 }, {
