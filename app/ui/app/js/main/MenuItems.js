@@ -32,14 +32,15 @@
             "sref": "app.marketplace",
             "icon": "icon-bag"
         }, {
-            "text": "Tools",
+            "text": "App Developer",
+            "icon": "fa-building",
+            "sref": "app.appcli"
+        },{
+            "text": "Data Science",
             "icon": "icon-wrench",
             "items": [
-                {
-                    "text": "App Developer",
-                    "sref": "app.appcli"
-                }, {
-                    "text": "Data Scientist",
+                 {
+                    "text": "ATK",
                     "sref": "app.datatools"
                 },  {
                     "text": "IPython",
