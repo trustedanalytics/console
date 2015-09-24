@@ -135,27 +135,21 @@
             }
 
             $scope.$on('searchChanged', function(eventName, _searchText){
-                $scope.pagination.currentPage = 1;
                 searchText = _searchText;
-                $scope.search();
+                $scope.changePage(1);
+
             });
 
             $scope.$on('targetChanged', function(){
-                $scope.pagination.currentPage = 1;
-                $scope.search();
+                $scope.changePage(1);
             });
 
-            $scope.$watch('created', function onCreatedChange(newValue, oldValue){
-                if(newValue !== oldValue) {
-                    $scope.search();
+            $scope.$watchGroup(['created.from', 'created.to', 'format.value'], function(newValues, oldValues, scope) {
+                if(_.difference(newValues, oldValues)){
+                    $scope.changePage(1);
                 }
-            }, true);
+            });
 
-            $scope.$watch('format', function onFormatChange(newValue, oldValue){
-                if(newValue !== oldValue) {
-                    $scope.search();
-                }
-            }, true);
 
             $scope.changePage = function(pageNo) {
                 $scope.pagination.currentPage = pageNo;
