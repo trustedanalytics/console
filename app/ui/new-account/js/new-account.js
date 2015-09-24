@@ -57,14 +57,9 @@
         }
 
         $scope.createUser = function () {
-            var valid = true,
-                validators = $scope.validators;
-            for (var validator in validators) {
-                if (validators.hasOwnProperty(validator) && !validators[validator]()) {
-                    valid = false;
-                    break;
-                }
-            }
+            var valid = _.every($scope.validators, function(validator) {
+                return validator();
+            });
 
             if (valid) {
                 var user = $scope.user;
@@ -86,8 +81,14 @@
                                 $scope.status = statuses.INCORRECT_CODE;
                                 break;
                             case 409:
-                                $scope.status = statuses.ERROR;
-                                $scope.errorMessage = 'User ' + user.email + ' already exists.';
+                                if(data.field && data.field === "organization") {
+                                    $scope.status = statuses.DEFAULT;
+                                    $scope.orgError = data.message;
+                                }
+                                else {
+                                    $scope.status = statuses.ERROR;
+                                    $scope.errorMessage = (data || {}).message;
+                                }
                                 break;
                             default:
                                 $scope.status = statuses.ERROR;
