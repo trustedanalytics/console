@@ -144,7 +144,7 @@
                 $scope.changePage(1);
             });
 
-            $scope.$watchGroup(['created.from', 'created.to', 'format.value'], function(newValues, oldValues, scope) {
+            $scope.$watchGroup(['created.from', 'created.to', 'format.value'], function(newValues, oldValues) {
                 if(_.difference(newValues, oldValues)){
                     $scope.changePage(1);
                 }
