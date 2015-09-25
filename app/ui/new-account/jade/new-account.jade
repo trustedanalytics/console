@@ -66,7 +66,8 @@ html(ng-app='newAccountApp')
                             .error(ng-hide='validators.passwordMatch()') Passwords don&apos;t match
 
                         .row(ng-if='!hideorg')
-                            input(type='text', ng-model='user.org', placeholder='Organization name', required='!hideorg')
+                            input(type='text', ng-model='user.org', placeholder='Organization name', ng-model-options="{ updateOn: 'blur' }", required='!hideorg' ng-trim="false")
+                            .error(ng-hide='validators.orgNameDoesntBeginWithWhitespace()') Organization name cannot start from whitespace
                             .error(ng-hide='!orgError') {{ orgError }}
                         .row.tos
                             label

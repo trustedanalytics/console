@@ -65,7 +65,7 @@
                 var user = $scope.user;
                 var registration = {
                     password: user.password,
-                    org: user.org
+                    org: user.org.trim()
                 };
                 $scope.spinnerText = 'Creating an account for ' + user.email;
                 $scope.status = statuses.PROCESSING;
@@ -111,6 +111,11 @@
                 return password.length === 0 || password.length >= 6;
             }, passwordMatch: function () {
                 return $scope.user.password === $scope.user.passwordRepetition || !$scope.user.passwordRepetition || !$scope.user.password;
+            }, orgNameDoesntBeginWithWhitespace: function() {
+                if($scope.user.org === undefined) {
+                    return true;
+                }
+                return $scope.user.org.length > 0 && /\w/.test($scope.user.org[0]);
             }
         };
     }]);
