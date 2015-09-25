@@ -141,8 +141,8 @@ $dashboard-red: #DD1031;
     }
 
     &.tile-news {
-      height: $dashboard-tile-height-small + $dashboard-tile-height-large * 3 + $dashboard-tile-margin * 3;
       padding: 30px 40px;
+      max-height: 100%;
 
       .title {
         font-size: 24px;
@@ -153,6 +153,18 @@ $dashboard-red: #DD1031;
       tr {
         color: $dashboard-text-gray-darker;
         font-size: 14px;
+
+        > td:nth-child(1) {
+          width: 210px;
+        }
+
+        > td:nth-child(2) {
+          width: 160px; 
+        }
+      }
+
+      tr:nth-child(even) {
+        background: #F8F8F8;
       }
     }
 
