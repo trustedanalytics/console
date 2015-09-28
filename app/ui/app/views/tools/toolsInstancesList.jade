@@ -51,7 +51,9 @@ h3
             | No instances found
          div
             form(ng-submit='createInstance(newInstanceName)')
-               input.form-control(type='text', required='', placeholder='Instance name', ng-model='newInstanceName')
+               input.form-control(type='text', required='', placeholder='Instance name',
+                  title="Allowed characters: [letters, numbers, _, -, .]"
+                  ng-model='newInstanceName', ng-trim="true" pattern="^[a-zA-Z][a-zA-Z0-9-_\.]+")
                button.btn.btn-primary(type='submit') Create new {{instanceType}} instance
          .no-instances(ng-show='!servicePlanGuid')
             | There is no required broker to build RStudio application on this platform
