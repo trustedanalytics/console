@@ -42,6 +42,8 @@
                 'other'
             ];
 
+            $scope.input = "link";
+
             self.clearInput = function () {
                 $scope.link = "";
                 $scope.file = "";
