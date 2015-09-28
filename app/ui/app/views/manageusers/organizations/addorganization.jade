@@ -25,6 +25,6 @@
                     input#orgname.form-control(type='text', placeholder='Enter organization name...', required='', ng-model='orgName')
             .form-group
                 .col-sm-offset-2.col-sm-10
-                    input.btn.btn-primary(type='submit', value='Add organization')
+                    input.btn.btn-primary(type='submit', value='Add organization', ng-disabled="!orgName")
 
 
