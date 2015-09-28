@@ -32,7 +32,7 @@
             "sref": "app.marketplace",
             "icon": "icon-bag"
         }, {
-            "text": "App Developer",
+            "text": "App Development",
             "icon": "fa-building",
             "sref": "app.appcli"
         },{
