@@ -79,7 +79,7 @@
         }
 
         function bindCustomMethods(elem) {
-            if(!Object.isFrozen(elem)) {
+            if(_.isObject(elem) && !Object.isFrozen(elem)) {
                 elem.supressGenericError = _.partial(getRestangularWithEmptyInterceptor, elem);
                 elem.withErrorMessage = _.partial(getRestangularWithGenericInterceptor, elem);
             }
