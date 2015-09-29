@@ -80,6 +80,8 @@ script(type="text/ng-template", id="progress-upload")
     .ngdialog-message.clearfix
         .progress
             .progress-bar(ng-style="{ 'width': data.uploader.progress + '%' }")
-        p(ng-if="data.uploader.queue[0].isUploaded")
+        p(ng-if="data.uploader.queue[0].isSuccess")
             | Upload finished successfully!
+        p(ng-if="data.uploader.queue[0].isError")
+            | There was an error uploading the file.
         button.btn.btn-default(ng-if="data.uploader.queue[0].isUploaded" type='button', ng-click="ok()") OK
