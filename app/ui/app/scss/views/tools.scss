@@ -85,6 +85,23 @@
       .table {
         margin-bottom: 20px;
       }
+
+      table {
+        input {
+          width: 170px;
+          height: 35px;
+          float: left;
+        }
+
+        button {
+          float: left;
+          width: 50px;
+        }
+      }
+    }
+
+    .passCol {
+      width: 236px;
     }
 
     .list-group, .list-group .list-group-item {

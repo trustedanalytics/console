@@ -57,6 +57,10 @@
                 $scope.transfers.reload();
             };
 
+            $scope.isUrl = function(item) {
+                return !_.isEmpty(item.match("^(http|https|ftp|hdfs)://.*$"));
+            };
+
             $scope.epochToUtc = function (epoch) {
                 var date = new Date(0);
                 date.setUTCSeconds(epoch);
@@ -87,6 +91,7 @@
                 getData: self.getData
             });
 
+
             function updateData($defer, params) {
                 var orderedData = !_.isEmpty(params.sorting()) ?
                     $filter('orderBy')($scope.downloadQueue, params.orderBy()) :
@@ -101,4 +106,5 @@
                 $defer.resolve(data);
             }
         }]);
+
 }());

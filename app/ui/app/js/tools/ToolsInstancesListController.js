@@ -51,6 +51,7 @@
                     })
                     .finally(function () {
                         getInstances($scope, ToolsInstanceResource, $scope.organization.guid, $scope.space.guid, $scope.instanceType);
+                        $scope.newInstanceName = "";
                     });
             };
 

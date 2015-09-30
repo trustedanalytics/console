@@ -29,7 +29,10 @@ h3
         table#listTransfers.table(ng-table='transfers', show-filter='true')
             tr(ng-repeat='item in $data')
                 td(data-title="'Source'", filter="{'source':'text'}")
-                    a(target='_blank', href='{{item.source}}') {{item.source | limitTo: 90}}
+                    span(ng-if='!isUrl(item.source)')
+                        | {{item.source}}
+                    a(ng-if='isUrl(item.source)', target='_blank', href='{{item.source}}')
+                        | {{item.source}}
 
                 td(data-title="'Created'", sortable="'timestamps.NEW'")
                     span(ng-if='item.timestamps.NEW') {{epochToUtc(item.timestamps.NEW) | date:&apos;dd.MM.yyyy HH:mm:ss&apos;}}
@@ -37,7 +40,7 @@ h3
                 td(data-title="'Last state'", sortable="'lastTimestamp.time'", align='center')
                     div
                         span(ng-if='item.lastTimestamp.time>0')
-                            | {{item.lastTimestamp.state}} 
+                            | {{item.lastTimestamp.state}}
                             br
                             | {{utc=epochToUtc(item.lastTimestamp.time) | date:&apos;dd.MM.yyyy HH:mm:ss&apos;}}
 
