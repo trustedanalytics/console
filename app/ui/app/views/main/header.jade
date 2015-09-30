@@ -30,7 +30,7 @@ header(ng-controller='HeaderController')
                 li
                     a(ui-sref="app.latestevents")
                         em.icon-book-open
-                li
+                li(ng-show="searchEnabled")
                     a(ng-click="showSearch()")
                         em.icon-magnifier
                 li

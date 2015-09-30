@@ -53,7 +53,8 @@ App.config(['$stateProvider', '$urlRouterProvider', 'LazyLoadProvider', 'AppConf
                 title: 'Marketplace',
                 controller: 'ServicesController',
                 controllerAs: 'ctrl',
-                templateUrl: getViewPath('marketplace/list/services.html')
+                templateUrl: getViewPath('marketplace/list/services.html'),
+                searchEnabled: true
             })
             .state('app.service', {
                 url: '/service/:serviceId',
@@ -130,7 +131,8 @@ App.config(['$stateProvider', '$urlRouterProvider', 'LazyLoadProvider', 'AppConf
                 controller: 'DataSetsController',
                 controllerAs: 'ctrl',
                 templateUrl: getViewPath('datacatalog/datasets/datasets.html'),
-                resolve: LazyLoadProvider.load(['dibari.angular-ellipsis'])
+                resolve: LazyLoadProvider.load(['dibari.angular-ellipsis']),
+                searchEnabled: true
             })
             .state('app.dataset', {
                 url: '/dataset/:datasetId',

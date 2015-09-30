@@ -16,10 +16,11 @@
 (function () {
     "use strict";
 
-    App.controller('HeaderController', ['$scope', '$rootScope', 'AppState', 'UserProvider','targetProvider',
-        function($scope, $rootScope, AppState, UserProvider, targetProvider) {
+    App.controller('HeaderController', ['$scope', '$rootScope', '$state', 'AppState', 'UserProvider','targetProvider',
+        function($scope, $rootScope, $state, AppState, UserProvider, targetProvider) {
         $scope.appState = AppState;
         $scope.searchControl = {};
+        $scope.searchEnabled = $state.current.searchEnabled;
 
         UserProvider.getUser(function(user){
             $scope.user = user;
@@ -30,9 +31,10 @@
         };
 
         $rootScope.search = "";
-        // Clean search on state change
+
         $rootScope.$on('$stateChangeSuccess', function() {
-          $rootScope.search = "";
+            $scope.searchEnabled = $state.current.searchEnabled;
+            $rootScope.search = "";
         });
 
         $scope.onSearch = function(){
