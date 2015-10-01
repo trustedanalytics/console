@@ -56,10 +56,10 @@
 
                         .new-instance
                             form(ng-submit='ctrl.createServiceInstance(plan)', ng-if='!ctrl.newInstanceState.isPending()')
-                                input.form-control(type='text', pattern="^[a-zA-Z][a-zA-Z0-9-_\.]+", required='',
+                                input.form-control(type='text', pattern="^[a-zA-Z][a-zA-Z0-9-_\.]*", required='',
                                     title="Allowed characters: [letters, numbers, _, -, .]"
                                     placeholder='Instance name', ng-model='ctrl.newInstance.name', ng-disabled='!ctrl.space()', )
-                                button.btn.btn-primary(type='submit', ng-disabled='!ctrl.space()') Create new instance
+                                button.btn.btn-primary(type='submit', ng-disabled='!ctrl.space() || !ctrl.newInstance.name') Create new instance
                                 .panel.panel-warning(ng-if='!ctrl.space()')
                                     .panel-body Space has to be chosen in order to create a new instance
                             d-spinner(text="'Creating new instance... Please wait'", ng-if='ctrl.newInstanceState.isPending()')
