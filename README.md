@@ -1,5 +1,5 @@
 [![Dependency Status](https://gemnasium.com/trustedanalytics/console.svg)](https://gemnasium.com/trustedanalytics/console)
-[![Code Climate](https://codeclimate.com/repos/55e2d60c69568061d50034a0/badges/8e67b84db7b88dfb66d7/gpa.svg)](https://codeclimate.com/repos/55e2d60c69568061d50034a0/feed)
+[![Code Climate](https://codeclimate.com/github/trustedanalytics/console/badges/gpa.svg)](https://codeclimate.com/github/trustedanalytics/console)
 
 Console
 =======
