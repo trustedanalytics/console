@@ -33,6 +33,10 @@
             {
                 name: 'dibari.angular-ellipsis',
                 files: ['vendor/angular-ellipsis/src/angular-ellipsis.min.js']
+            },
+            {
+                name: 'ngMessages',
+                files: ['vendor/angular-messages/angular-messages.min.js']
             }
         ],
         standalones: [

@@ -61,7 +61,8 @@ App.config(['$stateProvider', '$urlRouterProvider', 'LazyLoadProvider', 'AppConf
                 title: 'Service',
                 controller: 'ServiceController',
                 controllerAs: 'ctrl',
-                templateUrl: getViewPath('marketplace/service/service.html')
+                templateUrl: getViewPath('marketplace/service/service.html'),
+                resolve: LazyLoadProvider.load(['ngMessages'])
             })
             .state('app.applications', {
                 url: '/applications',

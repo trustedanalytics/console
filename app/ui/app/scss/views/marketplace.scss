@@ -219,6 +219,11 @@
     .spinner {
       margin-top: 0px;
     }
+
+    div span.validationMessage {
+      color: #FF4136;
+      font-size: 13px;
+    }
   }
 
   .instances {
