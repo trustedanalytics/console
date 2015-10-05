@@ -50,11 +50,14 @@ h3
          .no-instances(ng-hide="anyRows")
             | No instances found
          div
-            form(ng-submit='createInstance(newInstanceName)')
-               input.form-control(type='text', required='', placeholder='Instance name',
-                  title="Allowed characters: [letters, numbers, _, -, .]"
-                  ng-model='newInstanceName', ng-trim="true" pattern="^[a-zA-Z][a-zA-Z0-9-_\.]+")
-               button.btn.btn-primary(type='submit') Create new {{instanceType}} instance
+            form(name='newInstanceType', ng-submit='createInstance(newInstanceName)')
+               input.form-control(name='instanceName', type='text', required='', placeholder='Instance name',
+                  ng-model='newInstanceName', ng-trim="true" pattern-validator="^[a-zA-Z][a-zA-Z0-9-_\.]*")
+               button.btn.btn-primary(type='submit', ng-disabled="!newInstanceType.instanceName.$valid")
+                  | Create new {{instanceType}} instance
+               div(ng-messages="newInstanceType.instanceName.$error")
+                  span(class="validationMessage", ng-message="regexValidator")
+                     | Allowed characters: [letters, numbers, _, -, .]
          .no-instances(ng-show='!servicePlanGuid')
             | There is no required broker to build RStudio application on this platform
    script(type="text/ng-template", id="confirm-delete")

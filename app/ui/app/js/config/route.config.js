@@ -111,14 +111,14 @@ App.config(['$stateProvider', '$urlRouterProvider', 'LazyLoadProvider', 'AppConf
                 title: 'IPython console',
                 controller: 'ToolsInstancesListController',
                 templateUrl: getViewPath('tools/toolsInstancesList.html'),
-                resolve: LazyLoadProvider.load(['highlightjs'])
+                resolve: LazyLoadProvider.load(['highlightjs', 'ngMessages'])
             })
             .state('app.rstudio', {
                 url: '/rstudio',
                 title: 'RStudio',
                 controller: 'ToolsInstancesListController',
                 templateUrl: getViewPath('tools/toolsInstancesList.html'),
-                resolve: LazyLoadProvider.load(['highlightjs'])
+                resolve: LazyLoadProvider.load(['highlightjs', 'ngMessages'])
             })
             .state('app.datacatalog', {
                 url: '/datacatalog',
