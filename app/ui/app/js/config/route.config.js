@@ -109,13 +109,15 @@ App.config(['$stateProvider', '$urlRouterProvider', 'LazyLoadProvider', 'AppConf
             .state('app.ipython', {
                 url: '/ipython',
                 title: 'IPython console',
+                entityDisplayName: 'IPython',
                 controller: 'ToolsInstancesListController',
                 templateUrl: getViewPath('tools/toolsInstancesList.html'),
                 resolve: LazyLoadProvider.load(['highlightjs', 'ngMessages'])
             })
             .state('app.rstudio', {
                 url: '/rstudio',
-                title: 'RStudio',
+                title: 'RStudio®',
+                entityDisplayName: 'RStudio®',
                 controller: 'ToolsInstancesListController',
                 templateUrl: getViewPath('tools/toolsInstancesList.html'),
                 resolve: LazyLoadProvider.load(['highlightjs', 'ngMessages'])
@@ -218,6 +220,12 @@ App.config(['$stateProvider', '$urlRouterProvider', 'LazyLoadProvider', 'AppConf
                 title: 'Terms of Use',
                 templateUrl: getViewPath('legal/termsOfUse.html'),
                 resolve: LazyLoadProvider.load(['parsley'])
+            })
+            .state('app.disclaimers', {
+                url: '/disclaimers',
+                title: 'Disclaimers',
+                controller: 'DisclaimersController',
+                templateUrl: getViewPath('legal/disclaimers.html')
             });
 
         function getViewPath(path) {

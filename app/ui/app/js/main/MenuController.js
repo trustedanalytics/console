@@ -15,13 +15,25 @@
  */
 (function () {
     App.controller('MenuController', ['$rootScope', '$scope', '$state', '$window', 'UserProvider',
-        'targetProvider', 'MenuItems',
-        function ($rootScope, $scope, $state, $window, UserProvider, targetProvider, MenuItems) {
+        'targetProvider', 'MenuItems', 'PlatformContextProvider',
+        function ($rootScope, $scope, $state, $window, UserProvider, targetProvider, MenuItems, PlatformContextProvider) {
 
             $scope.menuItems = MenuItems;
             $scope.access = {};
             $scope.access.manager = isManager(targetProvider.getOrganization());
             $scope.selected = null;
+
+            $scope.tools = [];
+            getExternalTools(PlatformContextProvider, $scope);
+
+            var itemValidators = [
+                function access(item) {
+                    return hasAccess(item.access, $scope.access);
+                },
+                function toolAvailability(item) {
+                    return isToolAvailable(item.tool, $scope.tools);
+                }
+            ];
 
             $scope.isActive = function (item) {
                 return $state.is(item.sref) || $state.includes(item.sref) || _.some(item.items, $scope.isActive);
@@ -33,9 +45,9 @@
                 }
             };
 
-            $scope.hasAccess = function (item) {
-                return !item.access || _.some(item.access, function (accessName) {
-                    return $scope.access[accessName];
+            $scope.isVisible = function(item) {
+                return _.every(itemValidators, function(validator){
+                    return validator(item);
                 });
             };
 
@@ -97,11 +109,33 @@
             };
         }]);
 
+    function hasAccess(accessRestrictions, accessGranted) {
+        return !accessRestrictions || _.some(accessRestrictions, function (accessName) {
+            return accessGranted[accessName];
+        });
+    }
+
+    function isToolAvailable(toolName, tools) {
+        if(!toolName) {
+            return true;
+        }
+        var tool = _.findWhere(tools, { name: toolName });
+        return tool && tool.available;
+    }
+
     function isAdmin(user) {
         return (user || {}).role === "ADMIN";
     }
 
     function isManager(organization) {
         return (organization || {}).manager;
+    }
+
+    function getExternalTools(PlatformContextProvider, $scope) {
+        PlatformContextProvider
+            .getPlatformContext()
+            .then(function(platformContext) {
+                $scope.tools = platformContext.externalTools.list;
+            });
     }
 })();

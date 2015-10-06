@@ -19,7 +19,7 @@ menu(ng-controller="MenuController")
             li.nav-heading
                 span Main navigation
 
-            li(ng-if="hasAccess(item)" ng-repeat='item in menuItems'
+            li(ng-if="isVisible(item)" ng-repeat='item in menuItems'
                 ng-class="{ active: isActive(item) }"
                 ng-init="item.collapse = !isActive(item); initSelected(item); collapse=item.collapse; initial = true" )
                 a(ng-href="{{ getHref(item.sref) }}" title="{{ item.text }}"

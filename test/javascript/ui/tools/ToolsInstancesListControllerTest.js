@@ -47,7 +47,12 @@ describe("Unit: ToolsInstanceListController", function () {
         notificationService = {
             confirm: function() {},
             success: function(){},
-            error: function(){}
+            error: function(){},
+            withErrorMessage: function() { return this; }
+        };
+
+        var state = {
+            current: sinon.stub().returnsThis()
         };
 
         _targetProvider.organization = organization;
@@ -62,7 +67,8 @@ describe("Unit: ToolsInstanceListController", function () {
                 NotificationService: notificationService,
                 ToolsInstanceResource: toolsInstanceMock,
                 ServiceInstanceResource: serviceInstanceMock,
-                ServiceResource: serviceResourceMock
+                ServiceResource: serviceResourceMock,
+                $state: state
             });
         };
     }));
@@ -95,17 +101,15 @@ describe("Unit: ToolsInstanceListController", function () {
             plain: sinon.stub().returns(this)
         };
 
-        var servicePlans = {
-            plain: sinon.stub().returns([
-                {
-                    metadata: { guid: "guid"},
-                    entity: {
-                        name: "name",
-                        free: true
-                    }
+        var servicePlans = [
+            {
+                metadata: { guid: "guid"},
+                entity: {
+                    name: "name",
+                    free: true
                 }
-            ])
-        };
+            }
+        ];
 
         var deferredApp = $q.defer();
         serviceInstanceMock.deleteInstance = sinon.stub().returns(deferredApp.promise);
@@ -137,17 +141,15 @@ describe("Unit: ToolsInstanceListController", function () {
 
     it('deleteInstance, not confirmed, deleteInstance should not be called', function () {
         var appId = 123;
-        var servicePlans = {
-            plain: sinon.stub().returns([
-                {
-                    metadata: { guid: "guid"},
-                    entity: {
-                        name: "name",
-                        free: true
-                    }
+        var servicePlans = [
+            {
+                metadata: { guid: "guid"},
+                entity: {
+                    name: "name",
+                    free: true
                 }
-            ])
-        };
+            }
+        ]
 
         var deferredApp = $q.defer();
         toolsInstanceMock.deleteInstance = sinon.stub().returns(deferredApp.promise);

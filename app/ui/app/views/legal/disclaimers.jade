@@ -13,7 +13,11 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 //-
-li.sidebar-subnav-header {{ item.text }}
-li(ng-repeat='subitem in item.items' ng-class="{ active: isActive(subitem) }" ng-if="isVisible(subitem)")
-    a(ng-href="{{ getHref(subitem.sref) }}" ng-click="clickOnSubmenu(item, $event)")
-        span {{ subitem.text }}
+h3 Disclaimers
+
+.content
+    div(ng-if="tools.rstudio")
+        h3 RStudio®
+        | RStudio® and Shiny are trademarks of RStudio, Inc.
+    div(ng-if="!hasDisclaimers()")
+        | No disclaimers available

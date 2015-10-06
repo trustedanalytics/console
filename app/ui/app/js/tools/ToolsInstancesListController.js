@@ -17,21 +17,22 @@
     "use strict";
 
     App.controller('ToolsInstancesListController', ['$scope', '$location', 'targetProvider', 'State', 'NotificationService',
-        'ToolsInstanceResource', 'ServiceResource', 'ServiceInstanceResource',
+        'ToolsInstanceResource', 'ServiceResource', 'ServiceInstanceResource', '$state',
         function ($scope, $location, targetProvider, State, NotificationService, ToolsInstanceResource, ServiceResource,
-                  ServiceInstanceResource) {
+                  ServiceInstanceResource, $state) {
 
             $scope.servicePlanGuid = "";
             $scope.state = new State();
 
             var SERVICE_LABEL = $location.path().split('/').pop();
             $scope.instanceType = SERVICE_LABEL;
+            $scope.brokerName = $state.current.entityDisplayName;
 
             $scope.$on('targetChanged', onTargetChanged);
 
             onTargetChanged();
-
             setServicePlan($scope, ServiceResource, SERVICE_LABEL);
+
 
             function onTargetChanged() {
                 $scope.organization = targetProvider.getOrganization();
@@ -41,13 +42,12 @@
 
             $scope.createInstance = function (name) {
                 $scope.state.setPending();
-                ServiceInstanceResource.createInstance(name, $scope.servicePlanGuid, $scope.organization.guid, $scope.space.guid)
+                ServiceInstanceResource
+                    .withErrorMessage('Failed to create the instance of ' + $scope.brokerName)
+                    .createInstance(name, $scope.servicePlanGuid, $scope.organization.guid, $scope.space.guid)
                     .then(function () {
-                        NotificationService.success('Creating an ' + $scope.instanceType +
+                        NotificationService.success('Creating an ' + $scope.brokerName +
                             ' instance may take a while. You can try to refresh the page after few seconds.');
-                    })
-                    .catch(function () {
-                        NotificationService.error('Failed to create the Application');
                     })
                     .finally(function () {
                         getInstances($scope, ToolsInstanceResource, $scope.organization.guid, $scope.space.guid, $scope.instanceType);
@@ -59,15 +59,13 @@
                 NotificationService.confirm('confirm-delete')
                     .then(function() {
                         $scope.state.setPending();
-                        return ServiceInstanceResource.deleteInstance(appId);
+                        return ServiceInstanceResource
+                            .withErrorMessage('Deleting instance of ' + $scope.brokerName + ' failed')
+                            .deleteInstance(appId);
                     })
                     .then(function onSuccess() {
-                        NotificationService.success('Deleting an ' + $scope.instanceType +
-                            ' instance may take a while. You can try to refresh the page after few seconds.');
-                    })
-                    .catch(function onError() {
-                        $scope.state.setLoaded();
-                        NotificationService.error('Deleting application failed');
+                        NotificationService.success('Deleting instance of ' + $scope.brokerName +
+                                                    ' may take a while. You can try to refresh the page after few seconds.');
                     })
                     .finally(function () {
                         getInstances($scope, ToolsInstanceResource, $scope.organization.guid, $scope.space.guid, $scope.instanceType);
@@ -118,11 +116,7 @@
         $scope.state.setPending();
         ServiceResource.getAllServicePlansForLabel(serviceLabel)
             .then(function(servicePlans) {
-                $scope.servicePlanGuid = getServicePlanGuid(servicePlans.plain());
-                $scope.state.setLoaded();
-            })
-            .catch( function() {
-                $scope.state.setError();
+                $scope.servicePlanGuid = getServicePlanGuid(servicePlans);
             });
     }
 }());

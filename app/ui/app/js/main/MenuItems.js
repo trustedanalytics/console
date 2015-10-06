@@ -44,10 +44,11 @@
                     "sref": "app.datatools"
                 },  {
                     "text": "IPython",
-                    "sref": "app.ipython"
+                    "sref": "app.ipython",
                 },  {
-                    "text": "RStudio",
-                    "sref": "app.rstudio"
+                    "text": "RStudio®",
+                    "sref": "app.rstudio",
+                    "tool": "rstudio"
                 }
             ]
         }, {

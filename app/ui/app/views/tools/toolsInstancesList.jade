@@ -15,10 +15,10 @@
 //-
 h3
    d-target-selector.pull-right
-   | {{ instanceType }}
+   | {{ brokerName }}
 .tools
    .panel.instances
-      h3(ng-show="organization.guid") List of {{instanceType}} instances {{ organization.name }} organization
+      h3(ng-show="organization.guid") List of {{ brokerName }} instances {{ organization.name }} organization
       d-spinner(ng-show="state.isPending()")
       div(ng-show="state.isLoaded()")
          table.table.list-group(ng-show="anyRows")
@@ -49,18 +49,18 @@ h3
                      a.delete(ng-click='deleteInstance(instance.guid)')
          .no-instances(ng-hide="anyRows")
             | No instances found
-         div
+
+         div(ng-show='servicePlanGuid')
             form(name='newInstanceType', ng-submit='createInstance(newInstanceName)')
                input.form-control(name='instanceName', type='text', required='', placeholder='Instance name',
                   ng-model='newInstanceName', ng-trim="true" pattern-validator="^[a-zA-Z][a-zA-Z0-9-_\.]*")
                button.btn.btn-primary(type='submit', ng-disabled="!newInstanceType.instanceName.$valid")
-                  | Create new {{instanceType}} instance
+                  | Create new {{ brokerName }} instance
                div(ng-messages="newInstanceType.instanceName.$error")
                   span(class="validationMessage", ng-message="regexValidator")
                      | Allowed characters: [letters, numbers, _, -, .]
-         .no-instances(ng-show='!servicePlanGuid')
-            | There is no required broker to build RStudio application on this platform
-   script(type="text/ng-template", id="confirm-delete")
+
+    script(type="text/ng-template", id="confirm-delete")
       .ngdialog-message.clearfix
          p
             | Are you sure you want to delete
