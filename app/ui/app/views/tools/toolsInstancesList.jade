@@ -26,7 +26,7 @@ h3
                th App Name
                th App Login
                th.passCol App Password
-               th App Url 
+               th App Url
                th Delete
             tbody
                tr(ng-repeat="(name, instance) in instances" ng-init="showPass = false")
@@ -37,7 +37,7 @@ h3
                      span(ng-if='!instance.login') -
                   td
                      input(type="text", class="form-control",
-                     ng-disabled="!showPass", readonly=true, ng-model="showPass ? instance.password : '****************'")
+                     ng-disabled="!showPass", readonly=true, ng-value="showPass ? instance.password : '****************'")
                      button(type="button", class="btn btn-sm", ng-class="!showPass ? 'btn-success' : 'btn-warning'"
                      ng-click="showPass = !showPass") {{ !showPass ? 'Show' : 'Hide' }}
                      span(ng-if='!instance.password') -

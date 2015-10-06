@@ -52,7 +52,7 @@
             ]
         }, {
             "text": "User management",
-            "icon": "icon-users",
+            "icon": "icon-people",
             "items": [
                 {
                     "text": "Onboarding",
