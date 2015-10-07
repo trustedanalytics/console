@@ -28,7 +28,9 @@ var gulp        = require('gulp'),
 gulp.task('clean', function (callback) {
     del(config.destDir, {
         force: true
-    }, callback);
+    }).then(function() {
+        callback();
+    });
 });
 
 gulp.task('test', gulpsync.sync(['test:server', 'test:ui']));
