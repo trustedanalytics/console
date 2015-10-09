@@ -49,9 +49,12 @@
                     "text": "RStudio®",
                     "sref": "app.rstudio",
                     "tool": "rstudio"
-                },  {
+                }, {
                     "text": "H2O",
                     "sref": "app.h2o"
+                }, {
+                    "text": "GearPump",
+                    "sref": "app.gearpump"
                 }
             ]
         }, {

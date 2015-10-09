@@ -114,7 +114,7 @@ App.config(['$stateProvider', '$urlRouterProvider', 'LazyLoadProvider', 'AppConf
                 entityDisplayName: 'RStudio®',
                 controller: 'ToolsInstancesListController',
                 templateUrl: getViewPath('tools/toolsInstancesList.html'),
-                resolve: LazyLoadProvider.load(['highlightjs', 'ngMessages'])
+                resolve: LazyLoadProvider.load(['ngMessages'])
             })
             .state('app.h2o', {
                 url: '/h2o',
@@ -122,7 +122,15 @@ App.config(['$stateProvider', '$urlRouterProvider', 'LazyLoadProvider', 'AppConf
                 entityDisplayName: 'H2O',
                 controller: 'ToolsInstancesListController',
                 templateUrl: getViewPath('tools/toolsInstancesList.html'),
-                resolve: LazyLoadProvider.load(['highlightjs', 'ngMessages'])
+                resolve: LazyLoadProvider.load(['ngMessages'])
+            })
+            .state('app.gearpump', {
+                url: '/gearpump',
+                title: 'GearPump',
+                entityDisplayName: 'GearPump',
+                controller: 'GearPumpController',
+                templateUrl: getViewPath('tools/toolsInstancesList.html'),
+                resolve: LazyLoadProvider.load(['ngMessages'])
             })
             .state('app.datacatalog', {
                 url: '/datacatalog',

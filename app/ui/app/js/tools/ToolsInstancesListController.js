@@ -71,6 +71,25 @@
                         getInstances($scope, ToolsInstanceResource, $scope.organization.guid, $scope.space.guid, $scope.instanceType);
                     });
             };
+
+            $scope.hasLogin = function (instances) {
+                return _.some(instances, function(instance) {
+                    return instance.login;
+                });
+            };
+
+            $scope.hasPassword = function (instances) {
+                return _.some(instances, function(instance) {
+                    return instance.password;
+                });
+            };
+
+            $scope.hasService = function (instances) {
+                return _.some(instances, function(instance) {
+                    return instance.service;
+                });
+            };
+
         }]);
 
     var checkIsObject = function(value) {

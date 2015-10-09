@@ -23,34 +23,36 @@ h3
       div(ng-show="state.isLoaded()")
          table.table.list-group(ng-show="anyRows")
             thead
-               th App Name
-               th App Login
-               th.passCol App Password
-               th App Url
+               th Instance Name
+               th(ng-if="hasLogin(instances)") App Login
+               th.passCol(ng-if="hasPassword(instances)") App Password
+               th
+                  span(ng-if="!hasService(instances)") App Url
+                  span(ng-if="hasService(instances)") Dashboard Url
                th Delete
             tbody
                tr(ng-repeat="(name, instance) in instances" ng-init="showPass = false")
-                  td {{ name }}
-                  td
+                  td {{ instance.name || name }}
+                  td(ng-if="instance.login")
                      span
                         | {{instance.login}}
                      span(ng-if='!instance.login') -
-                  td
+                  td(ng-if="instance.password")
                      input(type="text", class="form-control",
-                     ng-disabled="!showPass", readonly=true, ng-value="showPass ? instance.password : '****************'")
+                        ng-disabled="!showPass", readonly=true, ng-value="showPass ? instance.password : '****************'")
                      button(type="button", class="btn btn-sm", ng-class="!showPass ? 'btn-success' : 'btn-warning'"
-                     ng-click="showPass = !showPass") {{ !showPass ? 'Show' : 'Hide' }}
+                        ng-click="showPass = !showPass") {{ !showPass ? 'Show' : 'Hide' }}
                      span(ng-if='!instance.password') -
                   td
-                     a(ng-if='instance.hostname' href='{{ instance.hostname | ensureHttps }}')
-                        | {{ instance.hostname }}
-                     span(ng-if='!instance.hostname') -
+                     a(ng-if='instance.hostname || instance.dashboard_url' href='{{ (instance.hostname || instance.dashboard_url) | ensureHttps }}')
+                        | {{ instance.hostname || 'Go to dashboard' }}
+                     span(ng-if='!instance.hostname && !instance.dashboard_url') -
                   td
                      a.delete(ng-click='deleteInstance(instance.guid)')
          .no-instances(ng-hide="anyRows")
             | No instances found
 
-         div(ng-show='servicePlanGuid')
+         div(ng-show='servicePlanGuid || servicePlans')
             form(name='newInstanceType', ng-submit='createInstance(newInstanceName)')
                input.form-control(name='instanceName', type='text', required='', placeholder='Instance name',
                   ng-model='newInstanceName', ng-trim="true" pattern-validator="^[a-zA-Z][a-zA-Z0-9-_\.]*")

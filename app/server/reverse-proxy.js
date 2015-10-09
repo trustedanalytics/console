@@ -45,13 +45,13 @@ function forwardRequest(req, res) {
     var path = req.url;
     var service = getServiceName(path);
     if(!service) {
-        throw404(res, util.format("No service found for the path: %s", path));
+        throw404(res, util.format("No service found for the path: %s", JSON.stringify(path)));
         return;
     }
 
     var host = getHost(service.name);
     if(!host) {
-        throw404(res, util.format("No route found for service  %s", service));
+        throw404(res, util.format("No route found for service  %s", JSON.stringify(service)));
         return;
     }
 
