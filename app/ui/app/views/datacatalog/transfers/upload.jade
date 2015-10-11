@@ -36,7 +36,7 @@
             .form-group(ng-if="uploadFormData.input.type === 'link'")
                 label.col-sm-2.control-label(for='link') {{ uploadFormData.input.text }}
                 .col-sm-10
-                    input#link.form-control(type='url', placeholder='place link...', data-ng-model='uploadFormData.link', required)
+                    input#link.form-control(type='text', name="fileName", placeholder='place link...', data-ng-model='uploadFormData.link', pattern-validator="^(http|https|ftp|hdfs)://.*$", required)
 
             .form-group(ng-if="uploadFormData.input.type === 'local'")
                 label.col-sm-2.control-label(for='file') {{ uploadFormData.input.text }}
@@ -69,7 +69,8 @@
 
             .form-group
                 .col-sm-offset-2.col-sm-10
-                    input.btn.btn-primary(type='submit', value='Upload')
+                    input.btn.btn-primary(type='submit', value='Upload', ng-disabled="(!uploadForm.fileName.$valid && uploadFormData.input.type === 'link') || inputFile.length")
+
 
 script(type="text/ng-template", id="progress-upload")
     .ngdialog-message.clearfix
