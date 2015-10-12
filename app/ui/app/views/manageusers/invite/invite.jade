@@ -13,26 +13,29 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 //-
-h3 Send an invitation
+
+d-spinner(ng-show='state.isPending()')
 
 .panel.send-invitation
 
-    d-spinner(ng-show='ctrl.state.isPending()')
-
-    form(data-ng-submit='ctrl.sendInvitation()', ng-show='ctrl.state.isDefault()')
+    form(data-ng-submit='sendInvitation()', ng-show='state.isDefault()')
         .description Sending an invitation will allow invited person to create a new organization
             | and become its manager.
         .form
-            input.form-control(type='email', name='email', ng-model='ctrl.email', placeholder='Enter e-mail')
+            input.form-control(type='email', name='email', ng-model='email', placeholder='Enter e-mail')
             input.btn.btn-primary(type='submit', value='Send invitation')
 
-    div(ng-show='ctrl.state.isError()')
-        .description Error while sending an invitation to {{ ctrl.email }}
-        code {{ ctrl.details }}
+    div(ng-show='state.isError() || invitationState == "ERROR"')
+        .description Error while sending an invitation to {{ email }}
+        code {{ details }}
 
-    div(ng-show='ctrl.state.isLoaded()')
-        .description Invitation has been sent to {{ ctrl.email }} with the following link:
-        div
-            a(href='{{ ctrl.details }}') {{ ctrl.details }}
+    div(ng-show='state.isLoaded()')
+        div(ng-show='invitationState == "NEW"')
+            .description Invitation has been sent to {{ email }} with the following link:
+            div
+                a(href='{{ details }}') {{ details }}
+        div(ng-show='invitationState == "UPDATED"')
+            .description Updated pending invitation
+
         .reset
-            button.btn.btn-primary(ng-click='ctrl.reset()') Send another invitation
+            button.btn.btn-primary(ng-click='reset()') Send another invitation

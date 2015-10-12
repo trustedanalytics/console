@@ -16,43 +16,44 @@
 (function () {
     "use strict";
 
-    App.controller('InvitationSendController', ['$http', 'State', 'NotificationService',
-        function ($http, State, NotificationService) {
-        var self = this;
+    App.controller('InvitationSendController', ['$http', '$scope', 'State', 'NotificationService',
+        function ($http, $scope, State, NotificationService) {
+            $scope.state = new State();
+            $scope.state.setDefault();
 
-        var state = new State();
-        self.state = state;
-        state.value = state.values.DEFAULT;
+            $scope.sendInvitation = function () {
+                var invitation = {
+                    email: $scope.email,
+                    eligibleToCreateOrg: true
+                };
+                $scope.spinnerText = 'Sending an invitation';
+                $scope.state.setPending();
 
-        self.sendInvitation = function () {
-            var invitation = {
-                email: self.email,
-                eligibleToCreateOrg: true
+                $http.post('/rest/invitations', invitation)
+                    .success(function (response) {
+                        $scope.invitationState = response.state;
+                        $scope.details = response.details;
+                        $scope.state.setLoaded();
+                        if ($scope.invitationState === 'NEW') {
+                            NotificationService.success('Invitation sent');
+                        }
+                    }).error(function (response, status) {
+                        $scope.invitationState = response.state;
+                        var errorCode = parseInt(status, 10);
+                        if (errorCode === 403) {
+                            $scope.details = "You do not have permission to invite new users";
+                        } else {
+                            $scope.details = response.error;
+                        }
+                        $scope.state.setError();
+                        NotificationService.error($scope.details);
+                    });
             };
-            self.spinnerText = 'Sending an invitation';
-            state.value = state.values.PENDING;
 
-            $http.post('/rest/invitations', invitation)
-                .success(function (response) {
-                    self.details = response.details;
-                    state.value = state.values.LOADED;
-                    NotificationService.success('Invitation sent');
-                }).error(function (response, status) {
-                    var errorCode = parseInt(status, 10);
-                    if (errorCode === 403) {
-                        self.details = "You do not have permission to invite new users";
-                    } else {
-                        self.details = response.error;
-                    }
-                    state.setError();
-                    NotificationService.error(self.details);
-                });
-        };
-
-            self.reset = function()
+            $scope.reset = function()
             {
-                self.email = '';
-                state.setDefault();
+                $scope.email = '';
+                $scope.state.setDefault();
             };
     }]);
 }());

@@ -60,7 +60,7 @@
             "items": [
                 {
                     "text": "Onboarding",
-                    "sref": "app.invite",
+                    "sref": "app.manage.invite.send",
                     "access": ["admin"]
                 }, {
                     "text": "Manage organization users",

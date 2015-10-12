@@ -42,12 +42,6 @@ App.config(['$stateProvider', '$urlRouterProvider', 'LazyLoadProvider', 'AppConf
                 controller: 'LatestEventsController',
                 templateUrl: getViewPath('latestevents/events.html')
             })
-            .state('app.invite', {
-                url: '/invite',
-                title: 'Invite new user',
-                controller: 'InvitationSendController as ctrl',
-                templateUrl: getViewPath('manageusers/invite/invite.html')
-            })
             .state('app.marketplace', {
                 url: '/marketplace',
                 title: 'Marketplace',
@@ -172,6 +166,26 @@ App.config(['$stateProvider', '$urlRouterProvider', 'LazyLoadProvider', 'AppConf
                 url: '/manage',
                 abstract: true,
                 template: '<ui-view />'
+            })
+            .state('app.manage.invite', {
+                url: '/invite',
+                title: 'Invitations',
+                controller: 'InvitationsController',
+                controllerAs: 'ctrl',
+                abstract: true,
+                templateUrl: getViewPath('manageusers/invite/invitations.html')
+            })
+            .state('app.manage.invite.send', {
+                url: '/send',
+                title: 'Invite new user',
+                controller: 'InvitationSendController as ctrl',
+                templateUrl: getViewPath('manageusers/invite/invite.html')
+            })
+            .state('app.manage.invite.pending', {
+                url: '/pending',
+                title: 'Pending',
+                controller: 'PendingInvitationsController as ctrl',
+                templateUrl: getViewPath('manageusers/invite/pending.html')
             })
             .state('app.manage.orgusers', {
                 url: '/orgusers',

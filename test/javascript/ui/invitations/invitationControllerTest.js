@@ -28,7 +28,7 @@ describe("Unit: InvitationSendController", function() {
                 error: function(){}
             }
         });
-        state = controller.state;
+        //state = controller.state;
 
         httpBackend = $injector.get('$httpBackend');
     }));
@@ -38,32 +38,32 @@ describe("Unit: InvitationSendController", function() {
     });
 
     it('default status is default', inject(function(){
-        expect(state.value).to.be.equal(state.values.DEFAULT);
+        expect(scope.state.value).to.be.equal(scope.state.values.DEFAULT);
     }));
 
     it('send invitation status is sending', inject(function(){
-        controller.sendInvitation();
+        scope.sendInvitation();
 
-        expect(state.value).to.be.equal(state.values.PENDING);
+        expect(scope.state.value).to.be.equal(scope.state.values.PENDING);
     }));
 
     it('invitation sent status success is sent', inject(function(){
         httpBackend.expectPOST('/rest/invitations')
             .respond({});
 
-        controller.sendInvitation();
+        scope.sendInvitation();
         httpBackend.flush();
 
-        expect(state.value).to.be.equal(state.values.LOADED);
+        expect(scope.state.value).to.be.equal(scope.state.values.LOADED);
     }));
 
     it('invitation sent set details', inject(function(){
         httpBackend.expectPOST('/rest/invitations')
             .respond(500, {});
 
-        controller.sendInvitation();
+        scope.sendInvitation();
         httpBackend.flush();
 
-        expect(state.value).to.be.equal(state.values.ERROR);
+        expect(scope.state.value).to.be.equal(scope.state.values.ERROR);
     }));
 });

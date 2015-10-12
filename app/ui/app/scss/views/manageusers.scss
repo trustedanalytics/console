@@ -83,6 +83,12 @@
   }
 }
 
+.pending-buttons {
+  .btn {
+    margin-right: 5px;
+  }
+
+}
 .nav.nav-pills > li.active > a {
   background-color: $btn-primary-color;
 }
