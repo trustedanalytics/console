@@ -122,6 +122,14 @@ App.config(['$stateProvider', '$urlRouterProvider', 'LazyLoadProvider', 'AppConf
                 templateUrl: getViewPath('tools/toolsInstancesList.html'),
                 resolve: LazyLoadProvider.load(['highlightjs', 'ngMessages'])
             })
+            .state('app.h2o', {
+                url: '/h2o',
+                title: 'H2O UI',
+                entityDisplayName: 'H2O',
+                controller: 'ToolsInstancesListController',
+                templateUrl: getViewPath('tools/toolsInstancesList.html'),
+                resolve: LazyLoadProvider.load(['highlightjs', 'ngMessages'])
+            })
             .state('app.datacatalog', {
                 url: '/datacatalog',
                 controller: 'DataCatalogController',
