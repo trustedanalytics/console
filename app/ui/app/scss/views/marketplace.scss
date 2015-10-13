@@ -34,7 +34,7 @@
     }
 
     > a {
-      display: block;
+      display: block; 
       border: 1px solid #dddddd;
       color: $btn-primary-color;
       padding: 25px 20px;
@@ -43,7 +43,7 @@
 
       &.panel {
         margin: 0;
-        height: 185px;
+        min-height: 185px;
       }
     }
 

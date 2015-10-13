@@ -2,7 +2,7 @@
   "name": "console",
   "author": "Intel Corporation",
   "license": "Apache-2.0",
-  "version": "0.4.39",
+  "version": "0.4.40",
   "private": true,
   "dependencies": {
     "cookie-parser": "1.4.0",
