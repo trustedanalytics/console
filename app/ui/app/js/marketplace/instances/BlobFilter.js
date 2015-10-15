@@ -13,17 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-(function () {
-    "use strict";
-
-    App.constant('AppConfig', {
-        company: 'Intel Corporation',
-        name: 'Trusted Analytics',
-        description: 'Developer console for Trusted Analytics platform',
-
-        viewsBase: '/app/views/'
-    })
-    .config(['$compileProvider', function ($compileProvider) {
-        $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|tel|file|blob):/);
-     }]);
-}());
+App.filter('blob', function () {
+    return function (content) {
+        var blob = new Blob([content], { type: 'text/plain' });
+        return URL.createObjectURL(blob);
+    };
+});

@@ -16,14 +16,19 @@
 (function () {
     "use strict";
 
-    App.constant('AppConfig', {
-        company: 'Intel Corporation',
-        name: 'Trusted Analytics',
-        description: 'Developer console for Trusted Analytics platform',
+    App.factory('ServiceInstancesResource', ['Restangular', function (Restangular) {
+        var service = Restangular.service("service_instances");
 
-        viewsBase: '/app/views/'
-    })
-    .config(['$compileProvider', function ($compileProvider) {
-        $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|tel|file|blob):/);
-     }]);
+        service.getSummary = function(spaceId, service_keys) {
+            var params = _.pick({
+                space: spaceId,
+                service_keys: service_keys
+            }, _.identity);
+            return this.one('summary').get(params);
+        };
+
+        return service;
+    }]);
+
+
 }());

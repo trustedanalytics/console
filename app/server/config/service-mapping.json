@@ -29,6 +29,9 @@
   "path": "/rest/services",
   "name": "servicecatalog"
 }, {
+  "path": "/rest/service_keys",
+  "name": "servicecatalog"
+}, {
   "path": "/rest/service_instances",
   "name": "servicecatalog"
 }, {
@@ -76,8 +79,7 @@
 }, {
   "path": "/rest/orgs",
   "name": "user-management"
-},
-{
+}, {
   "path": "/rest/les",
   "name": "latest-events-service"
 }, {

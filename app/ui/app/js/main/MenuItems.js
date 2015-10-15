@@ -28,9 +28,17 @@
             "sref": "app.applications",
             "icon": "icon-grid"
         }, {
-            "text": "Marketplace",
-            "sref": "app.marketplace",
-            "icon": "icon-bag"
+            "text": "Services",
+            "icon": "icon-bag",
+            "items": [
+                {
+                    "text": "Marketplace",
+                    "sref": "app.services.marketplace"
+                }, {
+                    "text": "Instances",
+                    "sref": "app.services.instances"
+                }
+            ]
         }, {
             "text": "App Development",
             "icon": "fa-building",

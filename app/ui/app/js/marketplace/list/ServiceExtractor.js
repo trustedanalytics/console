@@ -20,17 +20,9 @@
         return {
             extract: function (data) {
                 var self = this;
-                var resources = data.resources || [];
-                var services = [];
-                for (var i in resources) {
-                    if (resources.hasOwnProperty(i)) {
-                        var service = self.extractService(resources[i]);
-                        if (service) {
-                            services.push(service);
-                        }
-                    }
-                }
-                return services;
+                return _.map(data || [], function extract(resource) {
+                    return self.extractService(resource);
+                });
             },
             extractService: function (resource) {
                 var entity = resource.entity || {};

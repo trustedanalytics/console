@@ -1,0 +1,52 @@
+//
+   Copyright (c) 2015 Intel Corporation
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+//-
+h3
+    d-target-selector.pull-right
+    | All service instances
+
+.service-instances.content
+
+    d-spinner(ng-show='state.isPending()')
+
+    div(ng-show='state.isLoaded()')
+        .service-item(ng-repeat="service in services | orderBy: 'displayName'")
+            .img
+                img(ng-src='{{ service.imageUrl }}', alt='{{ service.name }}', ng-if='service.imageUrl')
+                .placeholder(ng-if='!service.imageUrl')
+                    span.icons.icon-settings
+            .service-content
+                .name {{ service.displayName }}
+                .instances
+                    .instance(ng-repeat="instance in service.instances")
+                        .name {{ instance.name }}
+                        .key(ng-repeat="key in instance.service_keys")
+                            | {{ key.name }}
+                            a.export-add(ng-hide="exports.indexOf(key) > -1",
+                                ng-click="addExport(key)")
+                                | + Export
+                            a.export-remove(ng-show="exports.indexOf(key) > -1"
+                                ng-click="removeExport(key)")
+                                | - Remove from export
+                        .no-key(ng-if="!instance.service_keys.length")
+                            | No service keys
+
+        .vcap(ng-show="exports.length")
+            .title Exported Keys:
+            pre
+                code
+                    | {{ vcap | json }}
+            a.btn.btn-primary(ng-href="{{ file }}", download="config.json")
+                | Download JSON file

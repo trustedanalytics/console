@@ -1,6 +1,7 @@
 applications:
   - name: console
     memory: 512M
+    disk_quota: 128M
     instances: 1
     host: console
     buildpack: nodejs_buildpack

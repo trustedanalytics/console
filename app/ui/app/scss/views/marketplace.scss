@@ -338,3 +338,71 @@
     }
   }
 }
+
+.service-instances {
+
+  .service-item {
+    padding: 15px 0;
+    min-height: 64px;
+    box-sizing: content-box;
+
+    +.service-item {
+      border-top: 1px solid #ddd;
+    }
+
+    .img {
+      float: left;
+      width: 64px;
+      text-align: center;
+    }
+
+    .placeholder > span {
+      color: $icon-grey-color;
+      vertical-align: middle;
+      font-size: 50px;
+    }
+
+    .service-content {
+      margin-left: 80px;
+
+      > .name {
+        font-size: 20px;
+        font-weight: lighter;
+        margin-bottom: 6px;
+      }
+
+      .instance {
+        margin-bottom: 5px;
+
+        > .name {
+          font-weight: bold;
+        }
+
+        .key, .no-key {
+          margin-left: 20px;
+        }
+
+        a.export-add, a.export-remove {
+          font-size: 13px;
+          margin-left: 10px;
+        }
+
+        a.export-remove {
+          color: $color-red;
+        }
+
+        .no-key {
+          color: #999;
+        }
+      }
+    }
+  }
+
+  .vcap {
+    .title {
+      font-size: 20px;
+      font-weight: lighter;
+      margin: 20px 0 10px;
+    }
+  }
+}

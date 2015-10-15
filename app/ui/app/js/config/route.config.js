@@ -21,6 +21,7 @@ App.config(['$stateProvider', '$urlRouterProvider', 'LazyLoadProvider', 'AppConf
         $sceProvider.enabled(false);
 
         $urlRouterProvider.when('/app/datacatalog', '/app/datacatalog/datasets');
+        $urlRouterProvider.when('/app/services', '/app/services/marketplace');
         $urlRouterProvider.otherwise('/app/dashboard');
 
         $stateProvider
@@ -42,12 +43,24 @@ App.config(['$stateProvider', '$urlRouterProvider', 'LazyLoadProvider', 'AppConf
                 controller: 'LatestEventsController',
                 templateUrl: getViewPath('latestevents/events.html')
             })
-            .state('app.marketplace', {
+            .state('app.services', {
+                url: '/services',
+                abstract: true,
+                template: '<ui-view />'
+            })
+            .state('app.services.marketplace', {
                 url: '/marketplace',
                 title: 'Marketplace',
                 controller: 'ServicesController',
                 controllerAs: 'ctrl',
                 templateUrl: getViewPath('marketplace/list/services.html'),
+                searchEnabled: true
+            })
+            .state('app.services.instances', {
+                url: '/instances',
+                title: 'Service instances',
+                controller: 'ServiceInstancesListController',
+                templateUrl: getViewPath('marketplace/instances/list.html'),
                 searchEnabled: true
             })
             .state('app.service', {
