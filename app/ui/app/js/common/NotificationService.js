@@ -81,6 +81,9 @@
                     ngDialog.open(
                         {
                             template: templateId,
+                            showClose: false,
+                            closeByEscape: false,
+                            closeByDocument: false,
                             controller: ['$scope', function ($scope) {
                                 $scope.data = data;
                                 $scope.ok = function () {
