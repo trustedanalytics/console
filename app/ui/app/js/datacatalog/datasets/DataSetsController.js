@@ -92,6 +92,7 @@
                     }
                     if($scope.created.to) {
                         creationTime[1] = $scope.created.to;
+                        creationTime[1].setHours(23,59,59); 
                     }
                     filters.push({
                         creationTime: creationTime
