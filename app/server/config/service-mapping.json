@@ -74,9 +74,6 @@
   "path": "/rest/platform_context",
   "name": "platformcontext"
 }, {
-  "path": "/files",
-  "name": "fileserver"
-}, {
   "path": "/rest/orgs",
   "name": "user-management"
 },

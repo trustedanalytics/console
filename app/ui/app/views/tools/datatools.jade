@@ -78,15 +78,3 @@ h3
             .pull-right
                 button.btn.btn-primary(type='button', ng-click='confirm(true)') Delete
                 button.btn.btn-default(type='button', ng-click="cancel()") Cancel
-    .panel.installation
-        h3 ATK Installation &amp; Usage
-        br
-        p To install Analytics Python client and connect it to ATK engine on Trusted Analytics platform, please, follow the instructions presented on
-            = ' '
-            a(href='https://github.com/trustedanalytics/platform-wiki/wiki/ATK-Overview') ATK GitHub page
-            |.  
-        br
-        p(ng-show="clientState.isLoaded()") You can also download ATK Client from
-            = ' '
-            a(href='{{ atkClientFile }}') here
-            |.

@@ -21,10 +21,10 @@ describe("Unit: DataToolsController", function () {
         scope,
         atkInstancesResource,
         atkScoringEngineResource,
-        atkClientResource,
         serviceInstanceResource,
         notificationService,
         createController,
+        state,
         $q,
         SAMPLE_ORGANIZATION = { guid: 'o1' },
         SAMPLE_SPACE = { guid: 's1' },
@@ -62,10 +62,6 @@ describe("Unit: DataToolsController", function () {
 
         };
 
-        atkClientResource = {
-            getOne: function() {}
-        };
-
         serviceInstanceResource = {
             save: function() {},
             supressGenericError: function() {
@@ -84,7 +80,6 @@ describe("Unit: DataToolsController", function () {
                 targetProvider: targetProvider,
                 AtkInstanceResource: atkInstancesResource,
                 AtkScoringEngineResource: atkScoringEngineResource,
-                AtkClientResource: atkClientResource,
                 ServiceInstanceResource: serviceInstanceResource,
                 NotificationService: notificationService
             });
@@ -128,46 +123,6 @@ describe("Unit: DataToolsController", function () {
         rootScope.$broadcast('targetChanged');
 
         expect(getAllSpied.called).to.be.not.ok;
-    });
-
-    it('init, Atk Client Resources set, get atk client', function()  {
-
-        var getAllSpied = sinon.spy(atkClientResource, 'getOne');
-        createController();
-
-        expect(getAllSpied.called).to.be.ok;
-
-    });
-
-    it('init, get ATK Client success, set ATK Client link', function()  {
-
-        var onSuccessCallback = null;
-        atkClientResource.getOne = function(success) {
-            onSuccessCallback = success;
-        };
-
-        createController();
-        onSuccessCallback({
-            file: "abcd.zip"
-        });
-
-        expect(scope.atkClientFile).to.be.equal("files/abcd.zip");
-        expect(scope.clientState.value).to.be.equals(state.values.LOADED);
-    });
-
-    it('init, get ATK Client error, do not set ATK Client link', function()  {
-        var onErrorCallback = null;
-        atkClientResource.getOne = function(success, error) {
-            onErrorCallback = error;
-        };
-        var showNotificationSpied = sinon.spy(notificationService, 'error');
-
-        createController();
-        onErrorCallback();
-
-        expect(showNotificationSpied.called).to.be.ok;
-        expect(scope.clientState.value).to.be.equals(state.values.PENDING);
-
     });
 
     it('targetChanged, get atk instances', function () {

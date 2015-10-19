@@ -14,7 +14,6 @@ applications:
       - platformcontext
       - app-launcher-helper
       - sso
-      - fileserver
       - datacatalogexport
       - latest-events-service
       - hdfs-uploader

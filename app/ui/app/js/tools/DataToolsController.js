@@ -17,9 +17,9 @@
     "use strict";
 
     App.controller('DataToolsController', ['$scope', '$http', 'targetProvider',
-        'AtkInstanceResource', 'AtkClientResource', 'State', 'NotificationService', 'serviceExtractor', 'ServiceResource',
+        'AtkInstanceResource', 'State', 'NotificationService', 'serviceExtractor', 'ServiceResource',
         'ServiceInstanceResource', 'AtkScoringEngineResource', 'ApplicationResource',
-        function ($scope, $http, targetProvider, AtkInstanceResource, AtkClientResource, State,
+        function ($scope, $http, targetProvider, AtkInstanceResource, State,
                   NotificationService, serviceExtractor, ServiceResource, ServiceInstanceResource,
                   AtkScoringEngineResource, ApplicationResource) {
             var state = new State().setPending();
@@ -107,7 +107,6 @@
             $scope.deleteService = function (serviceGuid) {
                 ServiceInstanceResource.deleteInstance(serviceGuid);
             };
-            getAtkClient($scope, AtkClientResource, NotificationService);
         }]);
 
 
@@ -123,14 +122,4 @@
                 $scope.state.setLoaded();
             });
     }
-
-    function getAtkClient($scope, AtkClientResource, NotificationService) {
-        AtkClientResource.getOne(function onSuccess(response) {
-            $scope.atkClientFile = "files/" + response.file;
-            $scope.clientState.setLoaded();
-        }, function onError(){
-            NotificationService.error("Failed to download ATKClient link");
-        });
-    }
-
 }());
