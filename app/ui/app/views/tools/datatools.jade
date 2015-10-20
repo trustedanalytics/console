@@ -23,38 +23,39 @@ h3
         h3(ng-show="organization.guid") List of ATK instances in {{ organization.name }} organization
         d-spinner(ng-show="state.isPending()")
         div(ng-show="state.isLoaded()")
-            table.table.list-group(ng-show='instances.length')
-                thead
-                    th ATK server name
-                    th ATK server state
-                    th ATK server URL
-                    th Delete
-                    th Scoring engine name
-                    th Scoring engine state
-                    th Scoring engine URL
-                    th Delete
-                tbody
-                    tr(ng-repeat="instance in instances | orderBy : 'name'")
-                        td {{ instance.name }}
-                        td
-                            d-state(state="instance.state")
-                        td
-                            a(ng-href="{{ instance.url | ensureProtocol }}") {{ instance.url }}
-                        td
-                            a.delete(ng-click='deleteInstance(instance.name, instance.guid, instance.service_guid)')
-                        td(ng-if="scoringEnginePlanGuid && !instance.scoring_engine.url", colspan="4")
-                            button(class="btn btn-primary", ng-click="createScoringEngine(instance.name, instance.url)") Create scoring engine
-                        td(ng-if="!(scoringEnginePlanGuid && !instance.scoring_engine.url)")
-                            | {{ instance.scoring_engine.name }}
-                        td(ng-if="!(scoringEnginePlanGuid && !instance.scoring_engine.url)")
-                            d-state(state="instance.scoring_engine.state")
-                        td(ng-if="!(scoringEnginePlanGuid && !instance.scoring_engine.url)")
-                            a(href="http://{{ instance.scoring_engine.url }}") {{ instance.scoring_engine.url }}
-                        td(ng-if="!(scoringEnginePlanGuid && !instance.scoring_engine.url)")
-                            a.delete(ng-click='deleteInstance(instance.scoring_engine.name, instance.scoring_engine.guid, instance.scoring_engine.service_guid)')
-                        td(ng-if="!scoringEnginePlanGuid && !instance.scoring_engine.url", colspan="4")
-            .no-instances(ng-hide='instances.length')
-                | No instances found
+            .instances-table
+                table.table.list-group(ng-show='instances.length')
+                    thead
+                        th ATK server name
+                        th ATK server state
+                        th ATK server URL
+                        th Delete
+                        th Scoring engine name
+                        th Scoring engine state
+                        th Scoring engine URL
+                        th Delete
+                    tbody
+                        tr(ng-repeat="instance in instances | orderBy : 'name'")
+                            td {{ instance.name }}
+                            td
+                                d-state(state="instance.state")
+                            td
+                                a(ng-href="{{ instance.url | ensureProtocol }}") {{ instance.url }}
+                            td
+                                a.delete(ng-click='deleteInstance(instance.name, instance.guid, instance.service_guid)')
+                            td(ng-if="scoringEnginePlanGuid && !instance.scoring_engine.url", colspan="4")
+                                button(class="btn btn-primary", ng-click="createScoringEngine(instance.name, instance.url)") Create scoring engine
+                            td(ng-if="!(scoringEnginePlanGuid && !instance.scoring_engine.url)")
+                                | {{ instance.scoring_engine.name }}
+                            td(ng-if="!(scoringEnginePlanGuid && !instance.scoring_engine.url)")
+                                d-state(state="instance.scoring_engine.state")
+                            td(ng-if="!(scoringEnginePlanGuid && !instance.scoring_engine.url)")
+                                a(href="http://{{ instance.scoring_engine.url }}") {{ instance.scoring_engine.url }}
+                            td(ng-if="!(scoringEnginePlanGuid && !instance.scoring_engine.url)")
+                                a.delete(ng-click='deleteInstance(instance.scoring_engine.name, instance.scoring_engine.guid, instance.scoring_engine.service_guid)')
+                            td(ng-if="!scoringEnginePlanGuid && !instance.scoring_engine.url", colspan="4")
+                .no-instances(ng-hide='instances.length')
+                    | No instances found
             div
                 form(ng-submit='createInstance(newInstanceName)')
                     input.form-control(type='text', required='', placeholder='Instance name', ng-model='newInstanceName')
