@@ -60,7 +60,7 @@
             $scope.updateUserRoles = function(user) {
                 user.roles = UserRoleMapperService.mapCheckboxesToRoles(user, $scope.roleCheckboxes);
 
-                userService.updateUser(user)
+                userService.updateUserRoles(user)
                     .then(function(){
                         UserActionsNotificationsService.userRolesChanged(user);
                     })
