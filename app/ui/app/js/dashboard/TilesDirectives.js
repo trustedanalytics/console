@@ -30,7 +30,9 @@
         return {
             scope: {
                 number: '=',
-                text: '='
+                float: '=?',
+                text: '=',
+                unit: '=?'
             },
             templateUrl: 'app/views/dashboard/tile-blue-numeric.html'
         };

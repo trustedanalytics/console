@@ -85,4 +85,7 @@
 }, {
   "path": "/rest/upload",
   "name": "hdfs-uploader"
+}, {
+  "path": "/rest/platform/summary",
+  "name": "platform-operations"
 }]

@@ -16,6 +16,17 @@
 (function () {
     App.value('MenuItems', [
         {
+            "text": "Operations",
+            "icon": "icon-puzzle",
+            "items": [
+                {
+                    "text": "Platform Dashboard",
+                    "sref": "app.platformdashboard"
+                }
+            ],
+            "access": ["admin"]
+        },
+        {
             "text": "Dashboard",
             "sref": "app.dashboard",
             "icon": "icon-speedometer"

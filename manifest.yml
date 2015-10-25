@@ -19,6 +19,7 @@ applications:
       - latest-events-service
       - hdfs-uploader
       - service-exposer
+      - platform-operations
     env:
       NPM_CONFIG_PRODUCTION: true
       VERSION: dev

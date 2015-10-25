@@ -1,0 +1,208 @@
+/**
+ * Copyright (c) 2015 Intel Corporation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+$intel-blue: #0076c7;
+$dashboard-text-white: #fff;
+$dashboard-text-gray-darker: #53565b;
+$dashboard-tile-height-small: 96px;
+$dashboard-tile-height-large: 147px;
+$dashboard-tile-margin: 20px;
+
+$dashboard-orange: #F4B92F;
+$dashboard-green: #A6CC43;
+$dashboard-red: #DD1031;
+
+.platfromdashboard {
+
+  .panel {
+    padding: 25px 20px;
+  }
+
+  .summarypanel {
+    background-color: #fff;
+    padding: 30px;
+    min-width: 1000px;
+    height: 900px;
+
+    .widget {
+
+      &.blue-tile {
+        background-color: $intel-blue;
+        color: $dashboard-text-white;
+        font-weight: lighter;
+        border: none;
+
+        .text {
+          font-size: 24px;
+          padding-left: 25px;
+          width: auto;
+        }
+
+        .number {
+          font-size: 45px;
+          text-align: right;
+          width: 1px;
+          white-space: nowrap;
+        }
+
+        .float{
+          font-size: 45px;
+          text-align: right;
+          white-space: nowrap;
+          width: 1px;
+        }
+
+      }
+
+      &.numeric-tile > div {
+        width: 100%;
+        height: 100%;
+        display: table;
+
+        > div {
+          display: table-cell;
+          vertical-align: middle;
+          float: none;
+        }
+
+      }
+
+    }
+
+    .tile-height-small {
+      &.widget, .widget {
+        height: $dashboard-tile-height-small;
+      }
+    }
+
+    .tile-height-large {
+      &.widget, .widget {
+        height: $dashboard-tile-height-large;
+      }
+
+      .blue-tile {
+        .text {
+          padding-left: 40px;
+        }
+        .number {
+          padding-right: 40px;
+          padding-left: 0;
+        }
+
+        .float{
+          padding-right: 40px;
+          padding-left: 0;
+        }
+      }
+    }
+
+    .buildpacks {
+      color: #595959;
+      width: 100%;
+
+    }
+
+    th {
+      line-height: 45px;
+      padding-left: 10px;
+      font-size: 24px;
+      font-weight: lighter;
+    }
+
+    td {
+      line-height: 40px;
+      border-bottom: 1px solid #808080;
+      padding-left: 10px;
+    }
+
+    tbody {
+      height: 70px;
+    }
+
+    .odd {
+      background: #fff;
+    }
+
+    .even {
+      background: #F8F8F8;
+    }
+
+    .fa-check {
+      color: $dashboard-green;
+    }
+
+    .fa-cross {
+      color: $dashboard-red;
+    }
+
+    .time {
+      margin-bottom: 10px;
+      p {
+        font-size: 20px;
+      }
+    }
+
+  }
+
+  .deapanel {
+    background-color: #fff;
+    min-width: 100%;
+    height: 100%;
+
+    th {
+      line-height: 35px;
+      padding-left: 10px;
+      font-size: 24px;
+      font-weight: lighter;
+    }
+
+    td {
+      line-height: 30px;
+      border-bottom: 1px solid #808080;
+      padding-left: 10px;
+    }
+
+    tbody {
+      height: 60px;
+    }
+
+    .odd {
+      background: #fff;
+    }
+
+    .even {
+      background: #F8F8F8;
+    }
+
+    .dea {
+      color: #595959;
+      width: 100%;
+    }
+
+    .progress-bar {
+      background-color: $dashboard-orange;
+      color: $dashboard-text-gray-darker;
+      padding-left: 50%;
+    }
+
+    .memory {
+      margin: 10px 0;
+      width: 250px;
+    }
+
+  }
+
+}

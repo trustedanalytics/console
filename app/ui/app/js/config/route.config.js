@@ -22,6 +22,7 @@ App.config(['$stateProvider', '$urlRouterProvider', 'LazyLoadProvider', 'AppConf
 
         $urlRouterProvider.when('/app/datacatalog', '/app/datacatalog/datasets');
         $urlRouterProvider.when('/app/services', '/app/services/marketplace');
+        $urlRouterProvider.when('/app/platformdashboard', '/app/platformdashboard/summary');
         $urlRouterProvider.otherwise('/app/dashboard');
 
         $stateProvider
@@ -30,6 +31,22 @@ App.config(['$stateProvider', '$urlRouterProvider', 'LazyLoadProvider', 'AppConf
                 abstract: true,
                 templateUrl: getViewPath('main/app.html'),
                 resolve: LazyLoadProvider.load(['icons'])
+            })
+            .state('app.platformdashboard', {
+                url: '/platformdashboard',
+                title: 'Platform Dashboard',
+                controller: 'PlatformDashboardController',
+                templateUrl: getViewPath('operations/platform-dashboard.html')
+            })
+            .state('app.platformdashboard.summary', {
+                url: '/summary',
+                title: 'Summary',
+                templateUrl: getViewPath('operations/platform-summary.html')
+            })
+            .state('app.platformdashboard.dea', {
+                url: '/dea',
+                title: 'DEA',
+                templateUrl: getViewPath('operations/dea.html')
             })
             .state('app.dashboard', {
                 url: '/dashboard',

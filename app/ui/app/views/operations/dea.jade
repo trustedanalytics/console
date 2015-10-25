@@ -10,11 +10,19 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 //-
-.panel.widget.blue-tile.numeric-tile
-    div
-        .col-xs-6.text
-            | {{ text }}
-        .col-xs-6.number(ng-show='number')
-            | {{ number }}
-        .col-xs-12.float(ng-show='float')
-            | {{float | number: 2}} {{ unit }}
+.deapanel
+   table.dea
+      thead
+         th UUID
+         th Host
+         th Uptime
+         th Memory
+         th Reservable stagers
+      tbody
+         tr(ng-repeat="dea in componentSummary.componentMetrics" ng-class="{even: $even, odd: $odd}")
+            td {{dea.uuid}}
+            td {{dea.host}}
+            td {{dea.uptime}}
+            td
+               progressbar.memory(value='dea.memUsedBytes/(dea.memUsedBytes + dea.memFreeBytes) * 100')
+            td {{dea.reservableStagers}}
