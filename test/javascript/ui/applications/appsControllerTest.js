@@ -45,7 +45,10 @@ describe("Unit: AppsController", function () {
             }
         };
         atkInstanceResource = {
-            getAll: sinon.stub().returns($q.defer().promise)
+            getAll: sinon.stub().returns($q.defer().promise),
+            withErrorMessage: function() {
+                return this;
+            }
         };
 
         createController = function () {
@@ -60,6 +63,7 @@ describe("Unit: AppsController", function () {
     }));
 
     it('should not be null', function () {
+        console.log(createController());
         createController();
         expect(controller).not.to.be.null;
     });
@@ -86,23 +90,6 @@ describe("Unit: AppsController", function () {
         expect(atkInstanceResource.getAll.called).to.be.true;
     });
 
-    it('getApplication success, set applications and state loaded', function () {
-        var applications = [
-            { guid: 'a1'},
-            { guid: 'a2' }
-        ];
-
-        var deferred = $q.defer();
-        applicationResource.getAll = sinon.stub().returns(deferred.promise);
-        deferred.resolve(applications);
-
-        createController();
-        $rootScope.$digest();
-
-        expect(atkInstanceResource.calledOnce).to.be.equal.true;
-        expect(controller.applications).to.be.deep.equal(applications);
-        expect(controller.state, 'state').to.be.equal(controller.states.LOADED);
-    });
 
     it('getAtkInstance error, set state error', function () {
         var deferred = $q.defer();
@@ -130,95 +117,5 @@ describe("Unit: AppsController", function () {
         expect(atkInstanceResource.calledOnce).to.be.equal.true;
         expect(controller.state, 'state').to.be.equal(controller.states.ERROR);
     });
-
-    it('prepareData, no params, return list as it is', function () {
-        var params = paramsStub();
-        var apps = getSampleApps();
-
-        var result = controller.prepareData(apps, params);
-
-        expect(result).to.be.deep.equal(apps);
-    });
-
-    it('prepareData, advancedsearch set, advancedsearch list', function () {
-        var params = _.extend(paramsStub(), {
-            filter: function() { return { name: 'filtered', state: 'start' }; }
-        });
-        var apps = getSampleApps();
-
-        var result = controller.prepareData(apps, params);
-
-        expect(result).to.be.deep.equal([
-            apps[1],
-            apps[2],
-            apps[4]
-        ]);
-    });
-
-    it('prepareData, advancedsearch and order set, advancedsearch and order list', function () {
-        var params = _.extend(paramsStub(), {
-            filter: function() { return { name: 'filtered', state: 'start' }; },
-            sorting: function() { return true; },
-            orderBy: function() { return '+name'; }
-        });
-        var apps = getSampleApps();
-
-        var result = controller.prepareData(apps, params);
-
-        expect(result).to.be.deep.equal([
-            apps[4],
-            apps[2],
-            apps[1]
-        ]);
-    });
-
-    it('prepareData, count 2, output first 2 results', function () {
-        var params = _.extend(paramsStub(), {
-            count: function() { return 2; }
-        });
-        var apps = getSampleApps();
-
-        var result = controller.prepareData(apps, params);
-
-        expect(result).to.be.deep.equal([
-            apps[0],
-            apps[1]
-        ]);
-    });
-
-    it('prepareData, count 2 and page 2, output results 3-4', function () {
-        var params = _.extend(paramsStub(), {
-            count: function() { return 2; },
-            page: function() { return 2; }
-        });
-        var apps = getSampleApps();
-
-        var result = controller.prepareData(apps, params);
-
-        expect(result).to.be.deep.equal([
-            apps[2],
-            apps[3]
-        ]);
-    });
-
-    function paramsStub() {
-        return {
-            filter: function(){},
-            sorting: function() {},
-            total: function() {},
-            page: function() { return 1;},
-            count: function() { return 10; }
-        };
-    }
-
-    function getSampleApps() {
-        return [
-            {"guid": "fa132957-00d7-43cc-92dd-cea8396a1e01", "urls": ["a.example.com"], "running_instances": 0, "service_names": [], "name": "a", "state": "STOPPED"},
-            {"guid": "eb41a02f-7ef8-4340-b1ad-0cd01678b668", "urls": ["b.example.com"], "running_instances": 1, "service_names": [], "name": "filtered-app-3", "state": "STARTED"},
-            {"guid": "5459de2a-3d3a-44c6-a774-a12e72a58d50", "urls": ["c.example.com"], "running_instances": 1, "service_names": [], "name": "filtered-app-2", "state": "STARTED"},
-            {"guid": "d954e443-567b-4cd8-a1a1-d5ab46e662a6", "urls": ["d.example.com"], "running_instances": 1, "service_names": [], "name": "d-app", "state": "STARTED"},
-            {"guid": "9b0a7cbb-2962-4627-940a-26ad05223bc9", "urls": ["e.example.com"], "running_instances": 1, "service_names": [], "name": "filtered-app-1", "state": "STARTED"}
-        ];
-    }
 
 });

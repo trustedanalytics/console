@@ -17,9 +17,9 @@
     "use strict";
 
     App.controller('ApplicationsController', ['ApplicationResource', 'targetProvider', '$scope',
-        'ngTableParams', 'filterFilter', 'orderByFilter', '$q', 'AtkInstanceResource',
+        'ngTableParams', 'filterFilter', 'orderByFilter', '$q', 'AtkInstanceResource', 'ApplicationsTableParams',
         function (ApplicationResource, targetProvider, $scope, ngTableParams, filterFilter,
-                  orderByFilter, $q, AtkInstanceResource) {
+                  orderByFilter, $q, AtkInstanceResource, ApplicationsTableParams) {
             var self = this;
 
             var states = {
@@ -31,62 +31,45 @@
 
             self.details = [];
 
-            var updateAppNames = function(apps, atkInstances) {
-                for (var app in apps) {
-                    if (apps.hasOwnProperty(app)) {
-                        for (var atk in atkInstances) {
-                            if (atkInstances.hasOwnProperty(atk) && apps[app] && apps[app].urls) {
-                                if (apps[app].urls[0] === atkInstances[atk].url) {
-                                    apps[app].name = atkInstances[atk].name;
-                                    break;
-                                }
-                                if (atkInstances[atk].scoring_engine &&
-                                    apps[app].urls[0] === atkInstances[atk].scoring_engine.url) {
-                                    apps[app].name = atkInstances[atk].scoring_engine.name;
-                                }
-                            }
-                        }
-                    }
-                }
-                return apps;
-            };
-
-            function getAtkInstances($scope, org, AtkInstanceResource) {
-                AtkInstanceResource.getAll(org.guid)
+            function getAtkInstances() {
+                return AtkInstanceResource
+                    .withErrorMessage('Failed to load ATk instances')
+                    .getAll(targetProvider.getOrganization().guid)
                     .then(function onSuccess(response) {
-                        $scope.atkInstances = response.instances;
-                        ApplicationResource.getAll(targetProvider.getSpace().guid)
-                            .then(function(applications){
-                                self.applications = updateAppNames(applications, $scope.atkInstances);
-                                self.state = states.LOADED;
-                            })
-                            .catch(function(){
-                                self.state = states.ERROR;
-                            });
-                    })
-                    .catch(function() {
-                        self.state = states.ERROR;
+                        return response.instances;
+                    });
+            }
+
+            function getApplications() {
+                return ApplicationResource
+                    .withErrorMessage('Failed to load applications list')
+                    .getAll(targetProvider.getSpace().guid)
+                    .then(function(applications){
+                        return applications;
                     });
             }
 
             var updateApplications = function() {
                 if(!_.isEmpty(targetProvider.getSpace())) {
                     self.state = states.PENDING;
+                    $q.all([
+                        getApplications(),
+                        getAtkInstances()
+                    ]).then(function(results){
+                        self.applications = updateAppNames(results[0], results[1]);
+                        self.state = states.LOADED;
+                        $scope.tableParams.reload();
+                    }).catch(function(){
+                        self.state = states.ERROR;
+                    });
 
-                    getAtkInstances($scope, targetProvider.getOrganization(), AtkInstanceResource);
-                    ApplicationResource
-                        .withErrorMessage('Failed to load applications list')
-                        .getAll(targetProvider.getSpace().guid)
-                        .then(function(applications){
-                            self.applications = applications;
-                            self.state = states.LOADED;
-                        })
-                        .catch(function(){
-                            self.state = states.ERROR;
-                        });
                 }
             };
             updateApplications();
+
+            $scope.tableParams = ApplicationsTableParams.getTableParams($scope, function() {
+                return self.applications;
+            });
 
             $scope.$on('targetChanged', function(){
                 updateApplications();
@@ -101,35 +84,25 @@
                 ]);
                 return def;
             };
-
-            self.prepareData = function(data, params){
-                if(params.filter()) {
-                    data = filterFilter(data, params.filter());
-                }
-                if(params.sorting()) {
-                    data = orderByFilter(data, params.orderBy());
-                }
-                params.total(data.length);
-
-                var start = (params.page() - 1) * params.count();
-                var end = params.page() * params.count();
-                return data.slice(start, end);
-            };
-
-            /*jshint newcap: false*/
-            self.tableParams = new ngTableParams({
-                sorting: {
-                    name: 'asc'
-                },
-                page: 1,
-                count: 10
-            }, {
-                counts: [],
-                getData: function($defer, params) {
-                    var data = self.prepareData(self.applications || [], params);
-                    self.dataPrepared = data;
-                    $defer.resolve(data);
-                }
-            });
         }]);
+
+    function updateAppNames(apps, atkInstances) {
+        for (var app in apps) {
+            if (apps.hasOwnProperty(app)) {
+                for (var atk in atkInstances) {
+                    if (atkInstances.hasOwnProperty(atk) && apps[app] && apps[app].urls) {
+                        if (apps[app].urls[0] === atkInstances[atk].url) {
+                            apps[app].name = atkInstances[atk].name;
+                            break;
+                        }
+                        if (atkInstances[atk].scoring_engine &&
+                            apps[app].urls[0] === atkInstances[atk].scoring_engine.url) {
+                            apps[app].name = atkInstances[atk].scoring_engine.name;
+                        }
+                    }
+                }
+            }
+        }
+        return apps;
+    }
 }());

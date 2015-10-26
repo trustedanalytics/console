@@ -150,14 +150,15 @@ describe("Unit: DataSetsController", function() {
             query = _query;
             return q.defer().promise;
         };
+        var createdTo = new Date();
 
         scope.$apply();
-        scope.created.to = 'banana';
+        scope.created.to = createdTo;
         scope.$apply();
 
         expect(query.query).to.be.empty;
         expect(query.filters.length).to.be.equal(1);
-        expect(query.filters[0].creationTime).to.be.deep.equal([-1, 'banana']);
+        expect(query.filters[0].creationTime).to.be.deep.equal([-1, createdTo]);
     }));
 
     it('search changed, send request with query', inject(function(){
@@ -179,10 +180,11 @@ describe("Unit: DataSetsController", function() {
             query = _query;
             return q.defer().promise;
         };
+        var createdTo = new Date();
 
         scope.$apply();
         scope.created.from = 'mockfrom';
-        scope.created.to = 'mockto';
+        scope.created.to = createdTo;
         scope.format.value = 'mockformat';
         scope.$apply();
         rootScope.$broadcast('searchChanged', 'mockquery');
@@ -193,7 +195,7 @@ describe("Unit: DataSetsController", function() {
         _.find(query.filters, function(f){
             return f.creationTime;
         });
-        expect(findFilter(query.filters, 'creationTime')).to.be.deep.equal(['mockfrom', 'mockto']);
+        expect(findFilter(query.filters, 'creationTime')).to.be.deep.equal(['mockfrom', createdTo]);
 
         expect(findFilter(query.filters, 'format')).to.be.deep.equal(['mockformat']);
     }));
