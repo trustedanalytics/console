@@ -116,3 +116,7 @@ h4 {
 .app-refresher {
   float: right;
 }
+
+.clearfix::before, .clearfix::after {
+  clear: both;
+}
