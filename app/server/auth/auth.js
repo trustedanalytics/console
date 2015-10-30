@@ -63,8 +63,9 @@ function login(req, res, next) {
         req.logout();
         strategy.reset();
         res.redirect('/oauth');
+    } else {
+        next();
     }
-    next();
 }
 
 function checkLoggedIn(req, res, next) {
