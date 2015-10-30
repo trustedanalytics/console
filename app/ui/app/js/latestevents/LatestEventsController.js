@@ -40,8 +40,7 @@
             };
 
             $scope.hasEvents = function() {
-                console.log($scope.events.length);
-                return $scope.events.length > 0;
+                return !_.isEmpty($scope.events);
             };
 
             /*jshint newcap: false*/
