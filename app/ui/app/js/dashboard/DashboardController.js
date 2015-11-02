@@ -19,33 +19,15 @@
     App.controller('DashboardController', ['$scope', 'targetProvider', 'State', 'OrgMetricsResource', '$timeout', 'LoadChartResource',
         function ($scope, targetProvider, State, OrgMetricsResource, $timeout, LoadChartResource) {
 
-            var state = new State().setPending();
+            var state = new State().setPending(),
+                metricsTimeoutHandler,
+                loadTimeoutHandler,
+                TIMEOUT = 15 * 1000; // 15s
+
             $scope.state = state;
-            var timeoutId;
-
-            var getMetrics = function () {
-                if (targetProvider.getOrganization().guid) {
-                    $timeout.cancel(timeoutId);
-
-                    OrgMetricsResource.getMetrics(targetProvider.getOrganization().guid)
-                        .then(function onSuccess(data){
-                            $scope.data = data;
-                            LoadChartResource.getChart()
-                                .then(function onSuccess(chartData) {
-                                    $scope.data.throughput = parseFloat(
-                                        _.last(_.sortBy(chartData, 'timestamp')).value
-                                    ).toFixed(2);
-                                    state.setLoaded();
-                                }).catch(function onError() {
-                                    state.setError();
-                                });
-                        })
-                        .catch(function onError() {
-                            state.setError();
-                        });
-
-                    timeoutId = $timeout(getMetrics, 15 * 1000);
-                }
+            $scope.loadChart = {
+                values: null,
+                state: new State().setPending()
             };
 
             $scope.$on('targetChanged', function(){
@@ -54,9 +36,46 @@
             });
 
             $scope.$on('$destroy', function(){
-                $timeout.cancel(timeoutId);
+                $timeout.cancel(metricsTimeoutHandler);
+                $timeout.cancel(loadTimeoutHandler);
             });
 
             getMetrics();
+            getLoadData();
+
+            function getMetrics() {
+                $timeout.cancel(metricsTimeoutHandler);
+
+                var orgId = targetProvider.getOrganization().guid;
+                if(orgId) {
+                    OrgMetricsResource.getMetrics(orgId)
+                        .then(function onSuccess(data) {
+                            $scope.data = data;
+                            state.setLoaded();
+                        })
+                        .catch(function onError() {
+                            state.setError();
+                        })
+                        .finally(function () {
+                            metricsTimeoutHandler = $timeout(getMetrics, TIMEOUT);
+                        });
+                }
+            }
+
+            function getLoadData() {
+                $timeout.cancel(loadTimeoutHandler);
+                LoadChartResource.getChart()
+                    .then(function onSuccess(data) {
+                        $scope.loadChart.values = _.sortBy(data, 'timestamp');
+                        $scope.loadChart.state.setLoaded();
+                    })
+                    .catch(function onError() {
+                        $scope.loadChart.state.setError();
+                    })
+                    .finally(function() {
+                        loadTimeoutHandler = $timeout(getLoadData, TIMEOUT);
+                    });
+            }
+
         }]);
 }());

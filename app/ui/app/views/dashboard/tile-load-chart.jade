@@ -19,5 +19,5 @@
     d-spinner(ng-show='state.isPending()')
     .error(ng-show='state.isError()')
         | Error loading chart data
-    .chart
+    .chart(d-visible='state.isLoaded() && parentState.isLoaded()')
         c3-chart(options='options', data='chartData')

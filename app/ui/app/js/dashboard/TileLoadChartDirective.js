@@ -16,16 +16,14 @@
 (function() {
     App.directive('dTileLoadChart', [function () {
         return {
-            scope: {},
+            scope: {
+                chartData: '=',
+                state: '=',
+                parentState: '='
+            },
             templateUrl: 'app/views/dashboard/tile-load-chart.html',
-            controller: ['$scope', '$timeout', 'LoadChartResource', 'State',
-            function ($scope, $timeout, LoadChartResource, State) {
-                var DELAY = 30 * 1000,  // 30s
-                    timeoutId = null,
-                    state = new State().setPending();
-
-                $scope.state = state;
-
+            controller: ['$scope',
+            function ($scope) {
                 $scope.options = {
                     axis: {
                         x: {
@@ -50,30 +48,6 @@
                         show: false
                     }
                 };
-
-                function getData() {
-                    LoadChartResource
-                        .supressGenericError()
-                        .getChart()
-                        .then(function onSuccess(data) {
-                            $scope.chartData = _.sortBy(data, 'timestamp');
-                            state.setLoaded();
-                        })
-                        .catch(function onError() {
-                            state.setError();
-                        })
-                        .finally(function onFinally() {
-                            timeoutId = $timeout(getData, DELAY);
-                        });
-                }
-
-                getData();
-
-                $scope.$on('$destroy', function () {
-                    if (timeoutId) {
-                        $timeout.cancel(timeoutId);
-                    }
-                });
             }]
         };
     }]);

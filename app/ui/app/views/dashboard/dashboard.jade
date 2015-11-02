@@ -16,13 +16,14 @@
 d-spinner(ng-show='state.isPending()')
 
 .dashboard.row(d-visible="state.isLoaded()")
-    d-target-selector.target-selector.pull-right(hide-space="true")
-    .category-title.clearfix Health & metrics
+    .category-title.clearfix
+        d-target-selector.target-selector.pull-right(hide-space="true")
+        | Health & metrics
     
     d-tile-small-white-numeric(number="data.appsRunning", text="'Applications running'").col-lg-4.col-md-6.col-sm-6
     d-tile-small-white-numeric(number="data.appsDown", text="'Applications down'").col-lg-4.col-md-6.col-sm-6
     d-tile-small-white-numeric(number="data.totalUsers", text="'Users count'").col-lg-4.col-md-6.col-sm-6
-    d-tile-load-chart.col-lg-12.col-md-12.col-sm-12
+    d-tile-load-chart(chart-data="loadChart.values" state="loadChart.state" parent-state="state").col-lg-12.col-md-12.col-sm-12
 
 
     .category-title.clearfix Quotas
