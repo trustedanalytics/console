@@ -53,7 +53,7 @@
                 ApplicationResource
                     .withErrorMessage('Restage failed')
                     .postStatus(appId, {
-                        name: 'RESTAGING'
+                        state: 'RESTAGING'
                     })
                     .then(function () {
                         NotificationService.success('Restage has been scheduled');
@@ -67,7 +67,7 @@
                 self.state.setPending();
 
                 ApplicationResource.postStatus(appId, {
-                    name: 'STARTED'
+                    state: 'STARTED'
                 })
                 .then(function onSuccess() {
                     NotificationService.success('Starting application has been scheduled.');
@@ -84,7 +84,7 @@
                 self.state.setPending();
 
                 ApplicationResource.postStatus(appId, {
-                    name: 'STOPPED'
+                    state: 'STOPPED'
                 })
                 .then(function onSuccess() {
                     NotificationService.success('Stopping the application has been scheduled.');

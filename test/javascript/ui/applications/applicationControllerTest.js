@@ -136,7 +136,7 @@ describe("Unit: ApplicationController", function () {
 
         deferredStatus.resolve();
         $rootScope.$digest();
-        expect(applicationResource.postStatus.calledWith(APP_ID, {name: 'RESTAGING'})).to.be.true;
+        expect(applicationResource.postStatus.calledWith(APP_ID, {state: 'RESTAGING'})).to.be.true;
     });
 
     it('delete, delete application resource', function(){
@@ -174,7 +174,7 @@ describe("Unit: ApplicationController", function () {
 
         deferredStatus.resolve();
         $rootScope.$digest();
-        expect(applicationResource.postStatus.calledWith(APP_ID, {name: "STARTED"})).to.be.true;
+        expect(applicationResource.postStatus.calledWith(APP_ID, {state: "STARTED"})).to.be.true;
         expect(notificationService.success.calledOnce).to.be.true;
     });
 
@@ -190,7 +190,7 @@ describe("Unit: ApplicationController", function () {
 
         deferredStatus.reject();
         $rootScope.$digest();
-        expect(applicationResource.postStatus.calledWith(APP_ID, {name: "STARTED"})).to.be.true;
+        expect(applicationResource.postStatus.calledWith(APP_ID, {state: "STARTED"})).to.be.true;
         expect(notificationService.error.calledOnce).to.be.true;
     });
 
@@ -206,7 +206,7 @@ describe("Unit: ApplicationController", function () {
 
         deferredStatus.resolve();
         $rootScope.$digest();
-        expect(applicationResource.postStatus.calledWith(APP_ID, {name: "STOPPED"})).to.be.true;
+        expect(applicationResource.postStatus.calledWith(APP_ID, {state: "STOPPED"})).to.be.true;
         expect(notificationService.success.calledOnce).to.be.true;
     });
 
@@ -222,7 +222,7 @@ describe("Unit: ApplicationController", function () {
 
         deferredStatus.reject();
         $rootScope.$digest();
-        expect(applicationResource.postStatus.calledWith(APP_ID, {name: "STOPPED"})).to.be.true;
+        expect(applicationResource.postStatus.calledWith(APP_ID, {state: "STOPPED"})).to.be.true;
         expect(notificationService.error.calledOnce).to.be.true;
     });
 
