@@ -40,7 +40,7 @@ h3
                             td
                                 d-state(state="instance.state")
                             td
-                                a(ng-href="{{ instance.url | ensureProtocol }}") {{ instance.url }}
+                                a(ng-href="{{ instance.url | ensureProtocol }}", target="_blank") {{ instance.url }}
                             td
                                 a.delete(ng-click='deleteInstance(instance.name, instance.guid, instance.service_guid)')
                             td(ng-if="scoringEnginePlanGuid && !instance.scoring_engine.url", colspan="4")
@@ -50,7 +50,7 @@ h3
                             td(ng-if="!(scoringEnginePlanGuid && !instance.scoring_engine.url)")
                                 d-state(state="instance.scoring_engine.state")
                             td(ng-if="!(scoringEnginePlanGuid && !instance.scoring_engine.url)")
-                                a(href="http://{{ instance.scoring_engine.url }}") {{ instance.scoring_engine.url }}
+                                a(href="http://{{ instance.scoring_engine.url }}", target="_blank") {{ instance.scoring_engine.url }}
                             td(ng-if="!(scoringEnginePlanGuid && !instance.scoring_engine.url)")
                                 a.delete(ng-click='deleteInstance(instance.scoring_engine.name, instance.scoring_engine.guid, instance.scoring_engine.service_guid)')
                             td(ng-if="!scoringEnginePlanGuid && !instance.scoring_engine.url", colspan="4")

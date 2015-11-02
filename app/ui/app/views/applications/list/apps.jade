@@ -35,7 +35,7 @@ h3
 
                 td(data-title="'URLs'")
                     div(data-ng-repeat='url in app.urls')
-                        a(href='{{ url | ensureProtocol }}')
+                        a(href='{{ url | ensureProtocol }}' target="_blank")
                             | {{ url }}
                     span(ng-if='!app.urls.length') -
 

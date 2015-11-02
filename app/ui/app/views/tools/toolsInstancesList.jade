@@ -45,7 +45,7 @@ h3
                             ng-click="showPass = !showPass") {{ !showPass ? 'Show' : 'Hide' }}
                          span(ng-if='!instance.password') -
                       td
-                         a(ng-if='instance.hostname || instance.dashboard_url' href='{{ (instance.hostname || instance.dashboard_url) | ensureHttps }}')
+                         a(ng-if='instance.hostname || instance.dashboard_url', href='{{ (instance.hostname || instance.dashboard_url) | ensureHttps }}', target="_blank")
                             | {{ instance.hostname || 'Go to dashboard' }}
                          span(ng-if='!instance.hostname && !instance.dashboard_url') -
                       td

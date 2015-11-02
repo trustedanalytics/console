@@ -75,7 +75,7 @@
                             .withErrorMessage('Publish of the data set failed')
                             .publish($scope.dataSet)
                             .then(function onSucces(data) {
-                                $window.location.href = data[tool+'_url'];
+                                $window.open(data[tool+'_url'], '_blank');
                             }).catch(function onError() {
                                 state.setError();
                                 publishDialog.close();

@@ -41,7 +41,7 @@
                 td
                     a.app-bound(ng-repeat='app in instance.bound_apps', ui-sref='app.application({ appId: app.guid })') {{ app.name }}
                 td
-                    a(ng-if='instance.dashboard_url', ng-href='{{ instance.dashboard_url }}') Go to dashboard &raquo;
+                    a(ng-if='instance.dashboard_url', ng-href='{{ instance.dashboard_url }}', target="_blank") Go to dashboard &raquo;
                 td
                     a.delete(ng-click='ctrl.tryDeleteInstance(instance)')
 | {{ instanceToDelete.name }}
