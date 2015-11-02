@@ -55,7 +55,7 @@ html(ng-app='newAccountApp')
                 h3 You have been invited to join Trusted Analytics platform
                 div
                     form(ng-submit='createUser()')
-                        .row
+                        .row(title="{{ user.email }}")
                             | {{ user.email }}
                         .row
                             input(type='password', ng-model='user.password', placeholder='Password', required='', ng-model-options="{ updateOn: 'blur' }")

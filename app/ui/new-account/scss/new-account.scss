@@ -68,6 +68,8 @@ a, a:hover, a:active, a:visited {
 
     .row {
       margin: 0 0 10px;
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
 
     .error {
