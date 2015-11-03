@@ -15,7 +15,7 @@
  */
 describe("Unit: LatestEventsController", function() {
 
-    var controller, scope, state, eventsResource, deferred, rootScope, params, provider;
+    var controller, scope, eventsResource, deferred, rootScope, params, provider;
     beforeEach(module('app'));
 
     beforeEach(inject(function($controller, $rootScope, $q, EventsResource, targetProvider) {
@@ -29,8 +29,8 @@ describe("Unit: LatestEventsController", function() {
         provider.getOrganization = sinon.stub().returns(deferred.promise);
 
         params = {
-            page: function() {return 1},
-            count: function() {return 2},
+            page: function() {return 1;},
+            count: function() {return 2;},
             total: function(total) {}
         };
 
@@ -71,7 +71,7 @@ describe("Unit: LatestEventsController", function() {
         deferred.resolve(toReturn);
         rootScope.$digest();
 
-        expect(scope.state.isLoaded()).to.be.true
+        expect(scope.state.isLoaded()).to.be.true;
     });
 
     it('should ask for organization Id', function() {

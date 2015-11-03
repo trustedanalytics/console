@@ -111,11 +111,11 @@ describe("Unit: ManageOrganizationsController", function () {
         createAndInitSut();
         scope.showOrg("2345");
         expect(scope.current.name).to.be.equals("org2");
-    })
+    });
 
     it('should change target organization to current and redirect to action on button press', function() {
         createAndInitSut();
-        scope.redirectTo('test.state')
+        scope.redirectTo('test.state');
         expect(targetProvider.setOrganization.withArgs(orgs[0]).called).to.be.true;
         expect(state.go.withArgs('test.state').called).to.be.true;
     });
@@ -257,5 +257,5 @@ describe("Unit: ManageOrganizationsController", function () {
         };
 
         expect(isSortedByName(scope.organizations)).to.be.true;
-    })
+    });
 });

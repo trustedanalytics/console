@@ -51,7 +51,7 @@ describe("Unit: TargetSelectorController", function() {
                 callback({role: 'USER'});
             }
 
-        }
+        };
 
     }));
 
@@ -86,7 +86,7 @@ describe("Unit: TargetSelectorController", function() {
 
         UserProvider.getUser = function(callback){
             callback({role: 'ADMIN'});
-        }
+        };
 
         var sut = getSUT();
         scope.$digest();

@@ -66,7 +66,7 @@ describe("Unit: PlatformContextProvider", function() {
         expect(result).to.be.equal(PLATFORM_CONTEXT_DEFAULT);
     }));
 
-    it('getPlatformContext, exists in cookie, return value and do not query resource', inject(function($q){
+    it('getPlatformContext, exists in cookie, return value and do not query resource', inject(function(){
         cookies.getObject = sinon.stub().returns(PLATFORM_CONTEXT_DEFAULT);
 
         var result = null;

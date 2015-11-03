@@ -22,14 +22,10 @@ describe("Unit: ManageUsersController", function () {
     var userServiceMock;
     var userProviderMock;
     var orgUserServiceMock;
-    var getUsersSuccessCallback;
-    var getUsersErrorCallback;
-    var getAllSpied;
     var targetProvider;
     var users;
     var currentUser;
     var UserActionsNotificationsService;
-    var UserProvider;
     var $q;
     var UserView;
     beforeEach(module('app'));

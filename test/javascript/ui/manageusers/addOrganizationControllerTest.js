@@ -40,7 +40,7 @@ describe("Unit: AddOrganizationsController", function () {
         };
         state = {
             go: sinon.stub()
-        }
+        };
     }));
 
     function getSUT() {
@@ -66,7 +66,7 @@ describe("Unit: AddOrganizationsController", function () {
                 name: 'abc2'
             }]);
 
-        var sut = getSUT();
+        getSUT();
         $scope.$root.$digest();
         $scope.orgName = 'abc1';
         $scope.addOrganization();
@@ -91,7 +91,7 @@ describe("Unit: AddOrganizationsController", function () {
                 name: 'abc2'
             }]);
 
-        var sut = getSUT();
+        getSUT();
         $scope.$root.$digest();
 
         $scope.orgName = 'abc3';
