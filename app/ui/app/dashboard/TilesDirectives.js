@@ -34,7 +34,12 @@
                 text: '=',
                 unit: '=?'
             },
-            templateUrl: 'app/dashboard/tile-blue-numeric.html'
+            templateUrl: 'app/dashboard/tile-blue-numeric.html',
+            controller: function($scope) {
+                $scope.isVisible = function(data) {
+                    return angular.isNumber(data) || (angular.isString(data) && data.length)
+                }
+            }
         };
     });
 
