@@ -60,7 +60,7 @@
                             $scope.$broadcast('instanceCreated');
                         })
                         .catch(function(error) {
-                            if ( error.status === 500 && self.service.name === ATK_SERVICE_NAME) {
+                            if (self.service.name === ATK_SERVICE_NAME && error.status >= 500) {
                                 self.newInstanceState.setDefault();
                                 NotificationService.success("Creating an ATK instance may take a while. You can try to refresh the page after a minute or two.", "Task scheduled");
                             }
