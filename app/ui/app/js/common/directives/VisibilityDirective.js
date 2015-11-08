@@ -16,15 +16,15 @@
 (function () {
     "use strict";
 
-    App.directive('dVisible', [function () {
+    App.directive('dVisible', function () {
         return {
             replace: true,
             restrict: 'A',
-            link: function ($scope, $element, $attrs){
-                $scope.$watch($attrs.dVisible, function(value){
+            link: function ($scope, $element, $attrs) {
+                $scope.$watch($attrs.dVisible, function (value) {
                     $element.css('visibility', value ? 'visible' : 'hidden');
                 });
             }
         };
-    }]);
+    });
 })();

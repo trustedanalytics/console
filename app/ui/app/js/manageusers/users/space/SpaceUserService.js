@@ -16,62 +16,61 @@
 (function () {
     "use strict";
 
-    App.factory('spaceUserService', ['Restangular', 'targetProvider', '$q',
-        function (Restangular, targetProvider, $q) {
-            var service = Restangular.service("spaces");
+    App.factory('spaceUserService', function (Restangular, targetProvider, $q) {
+        var service = Restangular.service("spaces");
 
-            function getSpaceId() {
-                return (targetProvider.getSpace() || {}).guid;
+        function getSpaceId() {
+            return (targetProvider.getSpace() || {}).guid;
+        }
+
+        function getOrgId() {
+            return (targetProvider.getOrganization() || {}).guid;
+        }
+
+        function getUsersResource() {
+            return service.one(getSpaceId()).all("users");
+        }
+
+        service.getAll = function () {
+            if (getSpaceId()) {
+                return getUsersResource().getList();
+
             }
-
-            function getOrgId() {
-                return (targetProvider.getOrganization() || {}).guid;
+            else {
+                var deferred = $q.defer();
+                deferred.reject();
+                return deferred.promise;
             }
+        };
 
-            function getUsersResource() {
-                return service.one(getSpaceId()).all("users");
-            }
+        service.targetAvailable = function () {
+            return typeof getSpaceId() !== 'undefined';
+        };
+        service.getTargetType = function () {
+            return "spaces";
+        };
 
-            service.getAll = function() {
-                if (getSpaceId()) {
-                    return getUsersResource().getList();
+        service.addUser = function (user) {
+            user.org_guid = getOrgId();
+            return getUsersResource().post(user);
+        };
 
-                }
-                else {
-                    var deferred = $q.defer();
-                    deferred.reject();
-                    return deferred.promise;
-                }
+        service.updateUserRoles = function (user) {
+            return getUsersResource().one(user.guid).customPOST({"roles": user.roles});
+        };
+
+        service.getRoles = function () {
+            return {
+                "managers": "Space Manager",
+                "auditors": "Space Auditor",
+                "developers": "Space Developer"
             };
+        };
 
-            service.targetAvailable = function () {
-                return typeof getSpaceId() !== 'undefined';
-            };
-            service.getTargetType = function () {
-                return "spaces";
-            };
+        service.deleteUser = function (userId) {
+            return getUsersResource().one(userId).remove();
+        };
 
-            service.addUser = function(user) {
-                user.org_guid = getOrgId();
-                return getUsersResource().post(user);
-            };
-
-            service.updateUserRoles = function(user) {
-                return getUsersResource().one(user.guid).customPOST({"roles": user.roles});
-            };
-
-            service.getRoles = function() {
-                return {
-                    "managers": "Space Manager",
-                    "auditors": "Space Auditor",
-                    "developers": "Space Developer"
-                };
-            };
-
-            service.deleteUser = function(userId) {
-                return getUsersResource().one(userId).remove();
-            };
-
-            return service;
-        }]);
+        return service;
+    });
 }());

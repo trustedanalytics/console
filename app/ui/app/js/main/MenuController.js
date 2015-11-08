@@ -14,112 +14,111 @@
  * limitations under the License.
  */
 (function () {
-    App.controller('MenuController', ['$rootScope', '$scope', '$state', '$window', 'UserProvider',
-        'targetProvider', 'MenuItems', 'PlatformContextProvider',
-        function ($rootScope, $scope, $state, $window, UserProvider, targetProvider, MenuItems, PlatformContextProvider) {
+    App.controller('MenuController', function ($rootScope, $scope, $state, $window, UserProvider, targetProvider,
+        MenuItems, PlatformContextProvider) {
 
-            $scope.menuItems = MenuItems;
-            $scope.access = {};
-            $scope.access.manager = isManager(targetProvider.getOrganization());
-            $scope.selected = null;
+        $scope.menuItems = MenuItems;
+        $scope.access = {};
+        $scope.access.manager = isManager(targetProvider.getOrganization());
+        $scope.selected = null;
 
-            $scope.tools = [];
-            getExternalTools(PlatformContextProvider, $scope);
+        $scope.tools = [];
+        getExternalTools(PlatformContextProvider, $scope);
 
-            var itemValidators = [
-                function access(item) {
-                    return hasAccess(item.access, $scope.access);
-                },
-                function toolAvailability(item) {
-                    return isToolAvailable(item.tool, $scope.tools);
-                }
-            ];
+        var itemValidators = [
+            function access(item) {
+                return hasAccess(item.access, $scope.access);
+            },
+            function toolAvailability(item) {
+                return isToolAvailable(item.tool, $scope.tools);
+            }
+        ];
 
-            $scope.isActive = function (item) {
-                return $state.is(item.sref) || $state.includes(item.sref) || _.some(item.items, $scope.isActive);
-            };
+        $scope.isActive = function (item) {
+            return $state.is(item.sref) || $state.includes(item.sref) || _.some(item.items, $scope.isActive);
+        };
 
-            $scope.initSelected = function (item) {
-                if(!item.collapse) {
-                    $scope.selected = item;
-                }
-            };
-
-            $scope.isVisible = function(item) {
-                return _.every(itemValidators, function(validator){
-                    return validator(item);
-                });
-            };
-
-            $rootScope.$on('targetChanged', function () {
-                $scope.access.manager = isManager(targetProvider.getOrganization());
-            });
-
-            UserProvider.getUser(function (user) {
-                $scope.access.admin = isAdmin(user);
-            });
-
-            $scope.getHref = function(sref) {
-                return $state.href(sref);
-            };
-
-            $scope.toggleCollapse = function() {
-                for(var i = 0; i < $scope.menuItems.length; i++) {
-                    if($scope.menuItems[i] === $scope.selected && !$scope.appState.menuCollapsed) {
-                        $scope.menuItems[i].collapse = false;
-                    } else {
-                        $scope.menuItems[i].collapse = true;
-                    }
-                }
-            };
-
-            $scope.toggleCollapseOnSelection = function(item) {
-                for(var i = 0; i < $scope.menuItems.length; i++) {
-                    if($scope.menuItems[i] === item) {
-                        $scope.menuItems[i].collapse = !$scope.menuItems[i].collapse;
-                    } else if($scope.menuItems[i] !== $scope.selected || $scope.appState.menuCollapsed) {
-                        $scope.menuItems[i].collapse = true;
-                    }
-                }
-            };
-
-            $rootScope.$on('toggleMenu', function() {
-                $scope.toggleCollapse();
-            });
-
-            $scope.clickOnMenu = function(item, event) {
-                if(!item.hasOwnProperty("items")) {
-                    $scope.selected = item;
-                }
-                $scope.toggleCollapseOnSelection(item);
-                event.stopPropagation();
-            };
-
-            $scope.clickOnSubmenu = function(item, event) {
+        $scope.initSelected = function (item) {
+            if (!item.collapse) {
                 $scope.selected = item;
-                $scope.toggleCollapse();
-                event.stopPropagation();
-            };
+            }
+        };
 
-            $window.onclick = function() {
-                if($scope.appState.menuCollapsed){
-                    $scope.toggleCollapse();
-                    $scope.$apply();
+        $scope.isVisible = function (item) {
+            return _.every(itemValidators, function (validator) {
+                return validator(item);
+            });
+        };
+
+        $rootScope.$on('targetChanged', function () {
+            $scope.access.manager = isManager(targetProvider.getOrganization());
+        });
+
+        UserProvider.getUser(function (user) {
+            $scope.access.admin = isAdmin(user);
+        });
+
+        $scope.getHref = function (sref) {
+            return $state.href(sref);
+        };
+
+        $scope.toggleCollapse = function () {
+            for (var i = 0; i < $scope.menuItems.length; i++) {
+                if ($scope.menuItems[i] === $scope.selected && !$scope.appState.menuCollapsed) {
+                    $scope.menuItems[i].collapse = false;
+                } else {
+                    $scope.menuItems[i].collapse = true;
                 }
-            };
-        }]);
+            }
+        };
+
+        $scope.toggleCollapseOnSelection = function (item) {
+            for (var i = 0; i < $scope.menuItems.length; i++) {
+                if ($scope.menuItems[i] === item) {
+                    $scope.menuItems[i].collapse = !$scope.menuItems[i].collapse;
+                } else if ($scope.menuItems[i] !== $scope.selected || $scope.appState.menuCollapsed) {
+                    $scope.menuItems[i].collapse = true;
+                }
+            }
+        };
+
+        $rootScope.$on('toggleMenu', function () {
+            $scope.toggleCollapse();
+        });
+
+        $scope.clickOnMenu = function (item, event) {
+            if (!item.hasOwnProperty("items")) {
+                $scope.selected = item;
+            }
+            $scope.toggleCollapseOnSelection(item);
+            event.stopPropagation();
+        };
+
+        $scope.clickOnSubmenu = function (item, event) {
+            $scope.selected = item;
+            $scope.toggleCollapse();
+            event.stopPropagation();
+        };
+
+        $window.onclick = function () {
+            if ($scope.appState.menuCollapsed) {
+                $scope.toggleCollapse();
+                $scope.$apply();
+            }
+        };
+    });
 
     function hasAccess(accessRestrictions, accessGranted) {
         return !accessRestrictions || _.some(accessRestrictions, function (accessName) {
-            return accessGranted[accessName];
-        });
+                return accessGranted[accessName];
+            });
     }
 
     function isToolAvailable(toolName, tools) {
-        if(!toolName) {
+        if (!toolName) {
             return true;
         }
-        var tool = _.findWhere(tools, { name: toolName });
+        var tool = _.findWhere(tools, {name: toolName});
         return tool && tool.available;
     }
 
@@ -134,7 +133,7 @@
     function getExternalTools(PlatformContextProvider, $scope) {
         PlatformContextProvider
             .getPlatformContext()
-            .then(function(platformContext) {
+            .then(function (platformContext) {
                 $scope.tools = platformContext.externalTools.list;
             });
     }

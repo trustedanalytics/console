@@ -16,7 +16,7 @@
 (function () {
     "use strict";
 
-    App.factory('ServiceBindingResource', ['Restangular', function (Restangular) {
+    App.factory('ServiceBindingResource', function (Restangular) {
         var service = Restangular.service('service_bindings');
 
         service.deleteBinding = function (bindingId) {
@@ -24,7 +24,7 @@
         };
 
         return service;
-    }]);
+    });
 
 
 }());

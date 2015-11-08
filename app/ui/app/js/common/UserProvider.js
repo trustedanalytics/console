@@ -16,24 +16,24 @@
 (function () {
     "use strict";
 
-    App.factory('UserProvider', ['Restangular',  function(Restangular) {
+    App.factory('UserProvider', function (Restangular) {
 
         var service = Restangular.service("users");
         var user = null;
-        var callbacks  = [];
-        service.getUser = function(userCallback) {
-            if(user) {
+        var callbacks = [];
+        service.getUser = function (userCallback) {
+            if (user) {
                 userCallback(user);
             }
             else {
                 callbacks.push(userCallback);
-                if(callbacks.length === 1) {
+                if (callbacks.length === 1) {
                     service.one("current").get().then(doCallbacks);
                 }
             }
         };
 
-        service.updatePassword = function(oldPassword, newPassword) {
+        service.updatePassword = function (oldPassword, newPassword) {
             var data = {
                 oldPassword: oldPassword,
                 password: newPassword
@@ -44,12 +44,12 @@
 
         function doCallbacks(userData) {
             user = userData;
-            callbacks.forEach(function(callback){
+            callbacks.forEach(function (callback) {
                 callback(userData);
             });
             callbacks = [];
         }
 
         return service;
-    }]);
+    });
 }());

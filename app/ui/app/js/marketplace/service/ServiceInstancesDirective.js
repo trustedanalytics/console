@@ -16,81 +16,80 @@
 (function () {
     "use strict";
 
-    App.controller('ServiceInstancesController', ['ServiceInstanceResource',
-        '$scope', 'targetProvider', 'State', 'NotificationService',
-        function (ServiceInstanceResource, $scope,
-                  targetProvider, State, NotificationService) {
-            var self = this,
-                id = $scope.serviceId;
+    App.controller('ServiceInstancesController', function (ServiceInstanceResource, $scope, targetProvider, State,
+        NotificationService) {
 
-            var ATK_SERVICE_NAME = "atk";
+        var self = this,
+            id = $scope.serviceId;
 
-            var state = new State();
-            self.state = state;
+        var ATK_SERVICE_NAME = "atk";
 
-            self.instancesState = new State().setLoaded();
-            self.deleteState = new State().setDefault();
+        var state = new State();
+        self.state = state;
 
-            self.getInstances = function () {
-                getInstancesData(self, targetProvider.getSpace(), id, ServiceInstanceResource);
-            };
+        self.instancesState = new State().setLoaded();
+        self.deleteState = new State().setDefault();
 
-            var updateInstances = function () {
-                self.instancesState.setPending();
-                self.deleteState.setDefault();
-                if (targetProvider.getSpace()) {
-                    self.getInstances();
-                }
-            };
+        self.getInstances = function () {
+            getInstancesData(self, targetProvider.getSpace(), id, ServiceInstanceResource);
+        };
+
+        var updateInstances = function () {
+            self.instancesState.setPending();
+            self.deleteState.setDefault();
+            if (targetProvider.getSpace()) {
+                self.getInstances();
+            }
+        };
+        updateInstances();
+
+        $scope.$on('instanceCreated', function () {
             updateInstances();
+        });
 
-            $scope.$on('instanceCreated', function() {
-                updateInstances();
-            });
+        self.tryDeleteInstance = function (instance) {
+            NotificationService.confirm('confirm-delete', {instanceToDelete: instance})
+                .then(function onConfirm() {
+                    self.deleteInstance(instance);
+                });
+        };
 
-            self.tryDeleteInstance = function (instance) {
-                NotificationService.confirm('confirm-delete', { instanceToDelete: instance })
-                    .then(function onConfirm(){
-                        self.deleteInstance(instance);
-                    });
-            };
+        self.deleteInstance = function (instance) {
+            if (!instance) {
+                return;
+            }
 
-            self.deleteInstance = function (instance) {
-                if (!instance) {
-                    return;
-                }
-
-                self.deleteState.setPending();
-                ServiceInstanceResource
-                    .supressGenericError()
-                    .deleteInstance(instance.guid)
-                    .then(function () {
+            self.deleteState.setPending();
+            ServiceInstanceResource
+                .supressGenericError()
+                .deleteInstance(instance.guid)
+                .then(function () {
+                    self.deleteState.setDefault();
+                    NotificationService.success('Instance has been deleted');
+                    updateInstances();
+                })
+                .catch(function (error) {
+                    if (error.status === 500 && $scope.serviceName === ATK_SERVICE_NAME) {
                         self.deleteState.setDefault();
-                        NotificationService.success('Instance has been deleted');
-                        updateInstances();
-                    })
-                    .catch(function(error) {
-                        if ( error.status === 500 && $scope.serviceName === ATK_SERVICE_NAME) {
-                            self.deleteState.setDefault();
-                            NotificationService.success("Deleting an ATK instance may take a while. You can try to refresh the page after in a minute or two.", "Task scheduled");
-                        }
-                        else {
-                            self.deleteState.setDefault();
-                            NotificationService.genericError(error.data, 'Error while deleting the instance');
-                        }
-                    });
-            };
+                        NotificationService.success("Deleting an ATK instance may take a while. You can try to refresh the page after in a minute or two.", "Task scheduled");
+                    }
+                    else {
+                        self.deleteState.setDefault();
+                        NotificationService.genericError(error.data, 'Error while deleting the instance');
+                    }
+                });
+        };
 
-            $scope.$on('targetChanged', function () {
-                updateInstances();
-            });
+        $scope.$on('targetChanged', function () {
+            updateInstances();
+        });
 
-            self.organization = targetProvider.getOrganization;
-            self.space = targetProvider.getSpace;
-        }]);
+        self.organization = targetProvider.getOrganization;
+        self.space = targetProvider.getSpace;
+    });
 
 
-    App.directive('dServiceInstances', function(){
+    App.directive('dServiceInstances', function () {
         return {
             scope: {
                 serviceId: '=',
@@ -110,7 +109,7 @@
                 self.instances = instances;
                 self.instancesState.setLoaded();
             })
-            .catch(function(){
+            .catch(function () {
                 self.instancesState.setError();
             });
     }

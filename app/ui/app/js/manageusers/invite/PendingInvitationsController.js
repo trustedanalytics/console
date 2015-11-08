@@ -18,83 +18,82 @@
     "use strict";
 
     /*jshint newcap: false*/
-    App.controller('PendingInvitationsController', ['$scope', 'State', 'NotificationService',
-        'PendingInvitationsResource', 'ngTableParams', '$filter',
-        function ($scope, State, NotificationService, PendingInvitationsResource, ngTableParams, $filter) {
-            $scope.state = new State();
-            $scope.state.setDefault();
-            loadInvitations();
+    App.controller('PendingInvitationsController', function ($scope, State, NotificationService,
+        PendingInvitationsResource, ngTableParams, $filter) {
 
-            $scope.resend = function(email) {
-                $scope.state.setPending();
-                PendingInvitationsResource
-                    .withErrorMessage("Failed to resend invitation email to "+email)
-                    .resend(email)
-                    .then(function onResendSuccess() {
-                        $scope.state.setLoaded();
-                        NotificationService.success("Invitation resent to "+email);
-                    })
-                    .catch(function() {
-                        $scope.state.setError();
-                    });
-            };
+        $scope.state = new State();
+        $scope.state.setDefault();
+        loadInvitations();
 
-            $scope.delete = function(email) {
-                $scope.state.setPending();
-                PendingInvitationsResource
-                    .withErrorMessage("Failed to delete invitation for "+email)
-                    .delete(email)
-                    .then(function onResendSuccess() {
+        $scope.resend = function (email) {
+            $scope.state.setPending();
+            PendingInvitationsResource
+                .withErrorMessage("Failed to resend invitation email to " + email)
+                .resend(email)
+                .then(function onResendSuccess() {
+                    $scope.state.setLoaded();
+                    NotificationService.success("Invitation resent to " + email);
+                })
+                .catch(function () {
+                    $scope.state.setError();
+                });
+        };
 
-                        loadInvitations();
-                        $scope.state.setLoaded();
-                        NotificationService.success("Invitation deleted");
+        $scope.delete = function (email) {
+            $scope.state.setPending();
+            PendingInvitationsResource
+                .withErrorMessage("Failed to delete invitation for " + email)
+                .delete(email)
+                .then(function onResendSuccess() {
 
-                    })
-                    .catch(function() {
-                        $scope.state.setError();
-                    });
-            };
+                    loadInvitations();
+                    $scope.state.setLoaded();
+                    NotificationService.success("Invitation deleted");
 
-            function loadInvitations() {
-                $scope.state.setPending();
-                PendingInvitationsResource
-                    .withErrorMessage('Failed to get pending invitations')
-                    .getList()
-                    .then(function onSuccess(invitations) {
-                        $scope.state.setLoaded();
-                        $scope.invitations = invitations;
-                        if($scope.tableParams) {
-                            $scope.tableParams.page(1);
-                            $scope.tableParams.reload();
-                        }
-                        else {
-                            $scope.tableParams = new ngTableParams(
-                                {
-                                    page: 1,
-                                    count: 20,
-                                    sorting: {
-                                        name: 'asc'
-                                    }
-                                },
-                                {
-                                    total: $scope.invitations.length,
-                                    getData: function ($defer, params) {
-                                        var orderedData = params.sorting() ?
-                                            $filter('orderBy')($scope.invitations, params.orderBy()) :
-                                            $scope.invitations;
-                                        params.total(orderedData.length);
+                })
+                .catch(function () {
+                    $scope.state.setError();
+                });
+        };
 
-                                        $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-                                    }
-                                });
-                        }
-                    })
-                    .catch(function() {
-                        $scope.state.setError();
-                        NotificationService.error("Error retrieving invitations");
-                    });
-            }
+        function loadInvitations() {
+            $scope.state.setPending();
+            PendingInvitationsResource
+                .withErrorMessage('Failed to get pending invitations')
+                .getList()
+                .then(function onSuccess(invitations) {
+                    $scope.state.setLoaded();
+                    $scope.invitations = invitations;
+                    if ($scope.tableParams) {
+                        $scope.tableParams.page(1);
+                        $scope.tableParams.reload();
+                    }
+                    else {
+                        $scope.tableParams = new ngTableParams(
+                            {
+                                page: 1,
+                                count: 20,
+                                sorting: {
+                                    name: 'asc'
+                                }
+                            },
+                            {
+                                total: $scope.invitations.length,
+                                getData: function ($defer, params) {
+                                    var orderedData = params.sorting() ?
+                                        $filter('orderBy')($scope.invitations, params.orderBy()) :
+                                        $scope.invitations;
+                                    params.total(orderedData.length);
+
+                                    $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+                                }
+                            });
+                    }
+                })
+                .catch(function () {
+                    $scope.state.setError();
+                    NotificationService.error("Error retrieving invitations");
+                });
         }
-    ]);
+    });
 }());

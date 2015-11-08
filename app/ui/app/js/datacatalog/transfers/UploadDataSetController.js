@@ -16,70 +16,69 @@
 (function () {
     "use strict";
 
-    App.controller('UploadDataSetController', ['$scope', 'DasResource', 'State', 'categoriesIcons',
-        'NotificationService', 'FileUploader', 'targetProvider', 'UploaderConfig', 'FileUploaderService',
-        function ($scope, DasResource, State, categoriesIcons, NotificationService, FileUploader, targetProvider,
-                  UploaderConfig, FileUploaderService) {
-            var self = this;
+    App.controller('UploadDataSetController', function ($scope, DasResource, State, categoriesIcons,
+        NotificationService, FileUploader, targetProvider, UploaderConfig, FileUploaderService) {
 
-            self.getInitData = UploaderConfig;
+        var self = this;
 
-            $scope.state = new State().setPending();
+        self.getInitData = UploaderConfig;
+
+        $scope.state = new State().setPending();
+        $scope.uploadFormData = self.getInitData();
+        $scope.fileSizeLimit = 0;
+        $scope.fileAllowedTypes = [];
+
+        $scope.input = "link";
+
+        self.clearInput = function () {
             $scope.uploadFormData = self.getInitData();
-            $scope.fileSizeLimit = 0;
-            $scope.fileAllowedTypes = [];
+            $scope.inputFile = null;
+            $scope.uploader.clearQueue();
+        };
 
-            $scope.input = "link";
+        FileUploaderService.createFileUploader(
+            $scope.uploadFormData
+        ).then(function (uploader) {
+            $scope.uploader = uploader;
+            $scope.state.setLoaded();
+        });
 
-            self.clearInput = function () {
-                $scope.uploadFormData = self.getInitData();
-                $scope.inputFile = null;
-                $scope.uploader.clearQueue();
-            };
-
-            FileUploaderService.createFileUploader(
-                    $scope.uploadFormData
-            ).then(function(uploader){
-                    $scope.uploader = uploader;
-                    $scope.state.setLoaded();
+        $scope.submitDownload = function () {
+            $scope.state.setPending();
+            if ($scope.uploadFormData.input.type === 'link') {
+                DasResource
+                    .withErrorMessage('Error when sending link')
+                    .postTransfer({
+                        source: $scope.uploadFormData.link,
+                        category: $scope.uploadFormData.category,
+                        title: $scope.uploadFormData.title
+                    }, $scope.uploadFormData.public)
+                    .then(function onSuccess() {
+                        $scope.state.setLoaded();
+                        NotificationService.success('Link has been sent');
+                        self.clearInput();
+                    }).catch(function onError() {
+                    $scope.state.setError();
                 });
+            } else {
+                $scope.uploader.queue[0].upload();
+                NotificationService.progress('progress-upload', {uploader: $scope.uploader})
+                    .then(function () {
+                        $scope.state.setLoaded();
+                        self.clearInput();
+                    }).catch(function onError() {
+                    $scope.state.setError();
+                });
+            }
+        };
 
-            $scope.submitDownload = function () {
-                $scope.state.setPending();
-                if($scope.uploadFormData.input.type === 'link') {
-                    DasResource
-                        .withErrorMessage('Error when sending link')
-                        .postTransfer({
-                            source: $scope.uploadFormData.link,
-                            category: $scope.uploadFormData.category,
-                            title: $scope.uploadFormData.title
-                        }, $scope.uploadFormData.public)
-                        .then(function onSuccess() {
-                            $scope.state.setLoaded();
-                            NotificationService.success('Link has been sent');
-                            self.clearInput();
-                        }).catch(function onError() {
-                            $scope.state.setError();
-                        });
-                } else {
-                    $scope.uploader.queue[0].upload();
-                    NotificationService.progress('progress-upload', {uploader : $scope.uploader})
-                        .then(function () {
-                            $scope.state.setLoaded();
-                            self.clearInput();
-                        }).catch(function onError() {
-                            $scope.state.setError();
-                        });
-                }
-            };
+        $scope.getIcon = function (category) {
+            return categoriesIcons[category] || categoriesIcons.other;
+        };
 
-            $scope.getIcon = function (category) {
-                return categoriesIcons[category] || categoriesIcons.other;
-            };
-
-            $scope.setCategory = function(c) {
-                $scope.uploadFormData.category = c;
-            };
-        }]);
+        $scope.setCategory = function (c) {
+            $scope.uploadFormData.category = c;
+        };
+    });
 
 }());

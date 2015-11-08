@@ -16,7 +16,7 @@
 (function() {
     "use strict";
 
-    App.factory('DataTableResource', ['Restangular',function (Restangular) {
+    App.factory('DataTableResource', function (Restangular) {
         var resource = Restangular.service('tables');
 
         resource.publish = function(dataSet){
@@ -24,6 +24,6 @@
         };
 
         return resource;
-    }]);
+    });
 }());
 

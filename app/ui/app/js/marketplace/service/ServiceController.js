@@ -17,68 +17,67 @@
     "use strict";
 
 
-    App.controller('ServiceController', ['ServiceResource', 'serviceExtractor', 'NotificationService',
-        '$stateParams', 'targetProvider', '$scope', 'ServiceInstanceResource', 'State',
-        function (ServiceResource, serviceExtractor, NotificationService, $stateParams, targetProvider,
-                  $scope, ServiceInstanceResource, State) {
-            var self = this,
-                id = $stateParams.serviceId;
+    App.controller('ServiceController', function (ServiceResource, serviceExtractor, NotificationService, $stateParams,
+        targetProvider, $scope, ServiceInstanceResource, State) {
 
-            var ATK_SERVICE_NAME = "atk";
+        var self = this,
+            id = $stateParams.serviceId;
 
-            self.serviceId = id;
+        var ATK_SERVICE_NAME = "atk";
 
-            self.state = new State().setPending();
-            self.deleteState = new State().setLoaded();
-            self.newInstanceState = new State().setDefault();
+        self.serviceId = id;
 
-            self.organization = function() {
-                return targetProvider.getOrganization();
-            };
-            self.space = function() {
-                return targetProvider.getSpace();
-            };
+        self.state = new State().setPending();
+        self.deleteState = new State().setLoaded();
+        self.newInstanceState = new State().setDefault();
 
-            self.getService = function () {
-                getServiceData(self, id, ServiceResource, serviceExtractor);
-            };
+        self.organization = function () {
+            return targetProvider.getOrganization();
+        };
+        self.space = function () {
+            return targetProvider.getSpace();
+        };
 
-            self.createServiceInstance = function(plan) {
-                if(targetProvider.getSpace()) {
-                    self.newInstanceState.setPending();
-                    ServiceInstanceResource
-                        .supressGenericError()
-                        .createInstance(
-                            self.newInstance.name,
-                            plan.guid,
-                            targetProvider.getOrganization().guid,
-                            targetProvider.getSpace().guid
-                        )
-                        .then(function() {
+        self.getService = function () {
+            getServiceData(self, id, ServiceResource, serviceExtractor);
+        };
+
+        self.createServiceInstance = function (plan) {
+            if (targetProvider.getSpace()) {
+                self.newInstanceState.setPending();
+                ServiceInstanceResource
+                    .supressGenericError()
+                    .createInstance(
+                        self.newInstance.name,
+                        plan.guid,
+                        targetProvider.getOrganization().guid,
+                        targetProvider.getSpace().guid
+                    )
+                    .then(function () {
+                        self.newInstanceState.setDefault();
+                        NotificationService.success('Instance has been created');
+                        $scope.$broadcast('instanceCreated');
+                    })
+                    .catch(function (error) {
+                        if (self.service.name === ATK_SERVICE_NAME && error.status >= 500) {
                             self.newInstanceState.setDefault();
-                            NotificationService.success('Instance has been created');
-                            $scope.$broadcast('instanceCreated');
-                        })
-                        .catch(function(error) {
-                            if (self.service.name === ATK_SERVICE_NAME && error.status >= 500) {
-                                self.newInstanceState.setDefault();
-                                NotificationService.success("Creating an ATK instance may take a while. You can try to refresh the page after a minute or two.", "Task scheduled");
-                            }
-                            else {
-                                self.newInstanceState.setError();
-                                NotificationService.genericError(error.data,  'Error creating new service instance');
-                            }
-                        });
-                }
-            };
+                            NotificationService.success("Creating an ATK instance may take a while. You can try to refresh the page after a minute or two.", "Task scheduled");
+                        }
+                        else {
+                            self.newInstanceState.setError();
+                            NotificationService.genericError(error.data, 'Error creating new service instance');
+                        }
+                    });
+            }
+        };
 
-            self.getService();
+        self.getService();
 
-            self.selectPlan = function (plan) {
-                self.selectedPlan = plan;
-                self.newInstanceState.setDefault();
-            };
-        }]);
+        self.selectPlan = function (plan) {
+            self.selectedPlan = plan;
+            self.newInstanceState.setDefault();
+        };
+    });
 
     function getServiceData(self, id, Service, serviceExtractor) {
         Service

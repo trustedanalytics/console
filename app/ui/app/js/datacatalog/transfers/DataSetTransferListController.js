@@ -17,94 +17,91 @@
     "use strict";
 
     /*jshint newcap: false*/
-    App.controller('DataSetTransferListController', ['$scope', 'State', 'DasResource',
-        'ngTableParams', '$filter',
+    App.controller('DataSetTransferListController', function ($scope, State, DasResource, ngTableParams, $filter) {
+        var self = this;
 
-        function ($scope, State, DasResource, ngTableParams, $filter) {
-            var self = this;
+        $scope.state = new State().setPending();
+        $scope.downloadQueue = [];
 
-            $scope.state = new State().setPending();
+        $scope.$on('targetChanged', function () {
             $scope.downloadQueue = [];
+            $scope.transfers.reload();
+        });
 
-            $scope.$on('targetChanged', function () {
-                $scope.downloadQueue = [];
-                $scope.transfers.reload();
-            });
-
-            self.getData = function ($defer, params) {
-                if (!_.isEmpty($scope.downloadQueue)) {
-                    updateData($defer, params);
-                    $scope.state.setLoaded();
-                } else {
-                    $scope.state.setPending();
-                    DasResource
-                        .withErrorMessage('Failed to get the transfers list')
-                        .getTransfers()
-                        .then(function (data) {
-                            self.populateDataWithLastTimestamp(data);
-                            updateData($defer, params);
-                            $scope.state.setLoaded();
-                        })
-                        .catch(function () {
-                            $scope.state.setError();
-                        });
-                }
-            };
-
-            $scope.reload = function() {
+        self.getData = function ($defer, params) {
+            if (!_.isEmpty($scope.downloadQueue)) {
+                updateData($defer, params);
+                $scope.state.setLoaded();
+            } else {
                 $scope.state.setPending();
-                $scope.downloadQueue = [];
-                $scope.transfers.reload();
-            };
-
-            $scope.isUrl = function(item) {
-                return !_.isEmpty(item.match("^(http|https|ftp|hdfs)://.*$"));
-            };
-
-            $scope.epochToUtc = function (epoch) {
-                var date = new Date(0);
-                date.setUTCSeconds(epoch);
-                return date;
-            };
-            self.populateDataWithLastTimestamp = function (data) {
-                $scope.downloadQueue = data;
-                for (var i = 0; i < data.length; i++) {
-                    $scope.downloadQueue[i].lastTimestamp = self.getCurrentStatesTimestamp(data[i].timestamps, data[i].state);
-                }
-            };
-            self.getCurrentStatesTimestamp = function (timestamps, state) {
-                var lastTimestamp = timestamps[state];
-                return {
-                    state: state,
-                    time: lastTimestamp
-                };
-            };
-
-            $scope.transfers = new ngTableParams({
-                page: 1,
-                count: 10,
-                filter: {},
-                sorting: {
-                    'timestamps.NEW': 'desc'
-                }
-            }, {
-                getData: self.getData
-            });
-
-
-            function updateData($defer, params) {
-                var orderedData = !_.isEmpty(params.sorting()) ?
-                    $filter('orderBy')($scope.downloadQueue, params.orderBy()) :
-                    $scope.downloadQueue;
-
-                orderedData = params.filter() ?
-                    $filter('filter')(orderedData, params.filter()) :
-                    orderedData;
-
-                params.total(orderedData.length);
-                var data = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
-                $defer.resolve(data);
+                DasResource
+                    .withErrorMessage('Failed to get the transfers list')
+                    .getTransfers()
+                    .then(function (data) {
+                        self.populateDataWithLastTimestamp(data);
+                        updateData($defer, params);
+                        $scope.state.setLoaded();
+                    })
+                    .catch(function () {
+                        $scope.state.setError();
+                    });
             }
-        }]);
+        };
+
+        $scope.reload = function () {
+            $scope.state.setPending();
+            $scope.downloadQueue = [];
+            $scope.transfers.reload();
+        };
+
+        $scope.isUrl = function (item) {
+            return !_.isEmpty(item.match("^(http|https|ftp|hdfs)://.*$"));
+        };
+
+        $scope.epochToUtc = function (epoch) {
+            var date = new Date(0);
+            date.setUTCSeconds(epoch);
+            return date;
+        };
+        self.populateDataWithLastTimestamp = function (data) {
+            $scope.downloadQueue = data;
+            for (var i = 0; i < data.length; i++) {
+                $scope.downloadQueue[i].lastTimestamp = self.getCurrentStatesTimestamp(data[i].timestamps, data[i].state);
+            }
+        };
+        self.getCurrentStatesTimestamp = function (timestamps, state) {
+            var lastTimestamp = timestamps[state];
+            return {
+                state: state,
+                time: lastTimestamp
+            };
+        };
+
+        $scope.transfers = new ngTableParams({
+            page: 1,
+            count: 10,
+            filter: {},
+            sorting: {
+                'timestamps.NEW': 'desc'
+            }
+        }, {
+            getData: self.getData
+        });
+
+
+        function updateData($defer, params) {
+            var orderedData = !_.isEmpty(params.sorting()) ?
+                $filter('orderBy')($scope.downloadQueue, params.orderBy()) :
+                $scope.downloadQueue;
+
+            orderedData = params.filter() ?
+                $filter('filter')(orderedData, params.filter()) :
+                orderedData;
+
+            params.total(orderedData.length);
+            var data = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
+            $defer.resolve(data);
+        }
+    });
 
 }());

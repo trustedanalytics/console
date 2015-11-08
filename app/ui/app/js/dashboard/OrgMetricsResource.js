@@ -16,7 +16,7 @@
 (function () {
     "use strict";
 
-    App.factory('OrgMetricsResource', ['Restangular', function (Restangular) {
+    App.factory('OrgMetricsResource', function (Restangular) {
         var resource = Restangular.service("orgs");
 
         resource.getMetrics = function (orgId) {
@@ -24,5 +24,5 @@
         };
 
         return resource;
-    }]);
+    });
 }());

@@ -16,8 +16,7 @@
 (function () {
     "use strict";
 
-    App.controller('ToolsController', ['userAgent','NotificationService', 'PlatformContextProvider',
-                                       function (userAgent, NotificationService, PlatformContextProvider) {
+    App.controller('ToolsController', function (userAgent, NotificationService, PlatformContextProvider) {
         var self = this;
 
         var clis = {
@@ -91,12 +90,12 @@
 
         PlatformContextProvider
             .getPlatformContext()
-            .then(function onSuccess(platformContext){
+            .then(function onSuccess(platformContext) {
                 // get the endpoint address, remove trailing / if present
                 self.apiEndpoint = platformContext.apiEndpoint.replace(/\/$/, '');
             });
 
         self.clis = clis;
 
-    }]);
+    });
 }());

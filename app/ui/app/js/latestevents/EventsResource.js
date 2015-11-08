@@ -16,12 +16,12 @@
 (function () {
     "use strict";
 
-    App.factory('EventsResource', ['Restangular', function (Restangular) {
+    App.factory('EventsResource', function (Restangular) {
         var events = Restangular.service('les/events');
 
         events.getPage = function (org, from, size) {
             return events.one().customGET("", {'org':org, 'from':from, 'size': size});
         };
         return events;
-    }]);
+    });
 }());

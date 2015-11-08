@@ -16,7 +16,7 @@
 (function () {
     "use strict";
 
-    App.factory('serviceExtractor', [function () {
+    App.factory('serviceExtractor', function () {
         return {
             extract: function (data) {
                 var self = this;
@@ -52,7 +52,7 @@
             }
         };
 
-    }]);
+    });
 
 
 }());

@@ -40,7 +40,7 @@
             };
         });
     })
-    .decorator('Restangular', ['$delegate', 'NotificationService', function($delegate, NotificationService) {
+    .decorator('Restangular', /*@ngInject*/ function($delegate, NotificationService) {
         return getRestangular(null, getGenericInterceptor());
 
         function getRestangular(parent, interceptor) {
@@ -118,5 +118,5 @@
         function getUrl(service) {
             return _.has(service, 'getRestangularUrl') ? service.getRestangularUrl() : service.one().getRestangularUrl();
         }
-    }]);
+    });
 }());

@@ -16,78 +16,76 @@
 (function () {
     "use strict";
 
-    App.controller('ApplicationBindingsController',
-        ['$scope', 'ApplicationResource', 'ServiceBindingResource',
-            'applicationBindingExtractor', 'State', '$stateParams', 'NotificationService',
-            function ($scope, ApplicationResource,
-                      ServiceBindingResource, applicationBindingExtractor,
-                      State, $stateParams, NotificationService) {
-                var self = this,
-                    appId = $stateParams.appId;
+    App.controller('ApplicationBindingsController', function ($scope, ApplicationResource, ServiceBindingResource,
+            applicationBindingExtractor, State, $stateParams, NotificationService) {
 
-                var state = new State().setPending();
-                self.state = state;
-                self.appId = appId;
+            var self = this,
+                appId = $stateParams.appId;
 
-                self.loadBindings = function () {
-                    loadBindings(self, ApplicationResource, applicationBindingExtractor);
-                };
+            var state = new State().setPending();
+            self.state = state;
+            self.appId = appId;
 
-                self.setApplication = function (application) {
-                    self.application = application;
-                    updateInstances(self);
-                };
+            self.loadBindings = function () {
+                loadBindings(self, ApplicationResource, applicationBindingExtractor);
+            };
 
-                $scope.$watch('appCtrl.application', function (application) {
-                    self.setApplication(application);
-                });
+            self.setApplication = function (application) {
+                self.application = application;
+                updateInstances(self);
+            };
 
-                self.setInstances = function (instances) {
-                    self.services = instances;
-                    updateInstances(self);
-                };
+            $scope.$watch('appCtrl.application', function (application) {
+                self.setApplication(application);
+            });
 
-                $scope.$watch('appCtrl.instances', function (instances) {
-                    self.setInstances(instances);
-                });
+            self.setInstances = function (instances) {
+                self.services = instances;
+                updateInstances(self);
+            };
 
-                self.bindService = function (service) {
-                    if (!self.application) {
-                        return;
-                    }
-                    state.value = state.values.PENDING;
-                    ApplicationResource
-                        .withErrorMessage('Failed to bind the service')
-                        .createBinding(self.application.guid, service.guid)
+            $scope.$watch('appCtrl.instances', function (instances) {
+                self.setInstances(instances);
+            });
+
+            self.bindService = function (service) {
+                if (!self.application) {
+                    return;
+                }
+                state.value = state.values.PENDING;
+                ApplicationResource
+                    .withErrorMessage('Failed to bind the service')
+                    .createBinding(self.application.guid, service.guid)
+                    .then(function () {
+                        NotificationService.success('Service has been bound');
+                    })
+                    .finally(function () {
+                        self.loadBindings();
+                    });
+            };
+
+            self.unbindService = function (service) {
+                if (!self.application) {
+                    return;
+                }
+                state.value = state.values.PENDING;
+                var binding = _.findWhere(self.bindings, {service_instance_guid: service.guid});
+                if (binding) {
+                    ServiceBindingResource.deleteBinding(binding.guid)
                         .then(function () {
-                            NotificationService.success('Service has been bound');
+                            NotificationService.success('Service has been unbound');
+                            self.loadBindings();
                         })
-                        .finally(function () {
+                        .catch(function () {
+                            NotificationService.error('Failed to bind the service');
                             self.loadBindings();
                         });
-                };
+                }
+            };
 
-                self.unbindService = function (service) {
-                    if (!self.application) {
-                        return;
-                    }
-                    state.value = state.values.PENDING;
-                    var binding = _.findWhere(self.bindings, { service_instance_guid: service.guid });
-                    if (binding) {
-                        ServiceBindingResource.deleteBinding(binding.guid)
-                            .then(function () {
-                                NotificationService.success('Service has been unbound');
-                                self.loadBindings();
-                            })
-                            .catch(function () {
-                                NotificationService.error('Failed to bind the service');
-                                self.loadBindings();
-                            });
-                    }
-                };
-
-                self.loadBindings();
-            }]);
+            self.loadBindings();
+        }
+    );
 
     function updateInstances(self) {
         if (!self.application || !self.services || !self.bindings) {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 (function() {
-    App.directive('dTileLoadChart', [function () {
+    App.directive('dTileLoadChart', function () {
         return {
             scope: {
                 chartData: '=',
@@ -50,5 +50,5 @@
                 };
             }]
         };
-    }]);
+    });
 })();

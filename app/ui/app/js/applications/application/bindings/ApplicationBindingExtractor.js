@@ -16,7 +16,7 @@
 (function () {
     "use strict";
 
-    App.factory('applicationBindingExtractor', [function () {
+    App.factory('applicationBindingExtractor', function () {
         return {
             extract: function (data) {
                 var resources = data.resources || [];
@@ -28,7 +28,7 @@
             }
         };
 
-    }]);
+    });
 
 
 }());

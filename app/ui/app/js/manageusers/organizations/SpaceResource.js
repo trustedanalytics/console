@@ -16,20 +16,20 @@
 (function () {
     "use strict";
 
-    App.factory('SpaceResource', ['Restangular', function (Restangular) {
+    App.factory('SpaceResource', function (Restangular) {
         var resource = Restangular.service('spaces');
 
-        resource.createSpace = function(name, orgId) {
+        resource.createSpace = function (name, orgId) {
             return this.post({
                 org_guid: orgId,
                 name: name
             });
         };
 
-        resource.removeSpace = function(spaceId) {
+        resource.removeSpace = function (spaceId) {
             return this.one(spaceId).remove();
         };
 
         return resource;
-    }]);
+    });
 }());

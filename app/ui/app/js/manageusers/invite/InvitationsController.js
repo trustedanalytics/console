@@ -17,10 +17,9 @@
     "use strict";
 
     /*jshint newcap: false*/
-    App.controller('InvitationsController', ['$scope', '$state',
-        function ($scope, $state) {
-            $scope.isTabActive = function(sref) {
-                return $state.is(sref) || $state.includes(sref);
-            };
-        }]);
+    App.controller('InvitationsController', function ($scope, $state) {
+        $scope.isTabActive = function (sref) {
+            return $state.is(sref) || $state.includes(sref);
+        };
+    });
 }());

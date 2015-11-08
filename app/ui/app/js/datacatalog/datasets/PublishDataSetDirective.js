@@ -26,63 +26,62 @@
         ARCADIA: 'arcadia'
     });
 
-    App.directive('dPublishDataSet', ['DataTableResource', 'State', '$window', 'ngDialog', 'PlatformContextProvider',
-        function (DataTableResource, State, $window, ngDialog, PlatformContextProvider) {
-            return {
-                scope:{
-                    dataSet:"=data",
-                    mode: "@?",
-                    tool: "=?"
-                },
-                controller: ['$scope',function($scope){
-                    var publishDialog;
+    App.directive('dPublishDataSet', function (DataTableResource, State, $window, ngDialog, PlatformContextProvider) {
+        return {
+            scope: {
+                dataSet: "=data",
+                mode: "@?",
+                tool: "=?"
+            },
+            controller: ['$scope', function ($scope) {
+                var publishDialog;
 
-                    var state = new State().setDefault();
-                    $scope.state = state;
+                var state = new State().setDefault();
+                $scope.state = state;
 
-                    $scope.mode = $scope.mode || modes.UNIFIED;
-                    $scope.modes = modes;
+                $scope.mode = $scope.mode || modes.UNIFIED;
+                $scope.modes = modes;
 
-                    $scope.tool = $scope.tool || tools.ARCADIA;
-                    $scope.tools = tools;
+                $scope.tool = $scope.tool || tools.ARCADIA;
+                $scope.tools = tools;
 
-                    $scope.availableTools = [];
+                $scope.availableTools = [];
 
-                    PlatformContextProvider.getPlatformContext().then(function(data){
-                        var externalTools = data.externalTools.list;
-                        $scope.availableTools = _.pluck(_.where(externalTools, {available: true}), 'name').map(function(name) {
-                            return name.toLowerCase();
-                        });
+                PlatformContextProvider.getPlatformContext().then(function (data) {
+                    var externalTools = data.externalTools.list;
+                    $scope.availableTools = _.pluck(_.where(externalTools, {available: true}), 'name').map(function (name) {
+                        return name.toLowerCase();
                     });
+                });
 
-                    $scope.isToolAvailable = function(toolName) {
-                        return _.contains($scope.availableTools, toolName.toLowerCase());
-                    };
+                $scope.isToolAvailable = function (toolName) {
+                    return _.contains($scope.availableTools, toolName.toLowerCase());
+                };
 
-                    $scope.publish = function(tool){
-                        if(!tool) {
-                            tool = $scope.tool;
-                        }
+                $scope.publish = function (tool) {
+                    if (!tool) {
+                        tool = $scope.tool;
+                    }
 
-                        state.setPending();
-                        publishDialog = ngDialog.open(
-                            {
-                                template: "publish-modal",
-                                closeByEscape: false,
-                                closeByDocument: false
-                            });
-                        DataTableResource
-                            .withErrorMessage('Publish of the data set failed')
-                            .publish($scope.dataSet)
-                            .then(function onSucces(data) {
-                                $window.open(data[tool+'_url'], '_blank');
-                            }).catch(function onError() {
-                                state.setError();
-                                publishDialog.close();
-                            });
-                    };
-                }],
-                templateUrl: 'app/views/datacatalog/datasets/publishDataSet.html'
-            };
-        }]);
+                    state.setPending();
+                    publishDialog = ngDialog.open(
+                        {
+                            template: "publish-modal",
+                            closeByEscape: false,
+                            closeByDocument: false
+                        });
+                    DataTableResource
+                        .withErrorMessage('Publish of the data set failed')
+                        .publish($scope.dataSet)
+                        .then(function onSucces(data) {
+                            $window.open(data[tool + '_url'], '_blank');
+                        }).catch(function onError() {
+                        state.setError();
+                        publishDialog.close();
+                    });
+                };
+            }],
+            templateUrl: 'app/views/datacatalog/datasets/publishDataSet.html'
+        };
+    });
 }());

@@ -16,10 +16,10 @@
 (function () {
     "use strict";
 
-    App.factory('ToolsInstanceResource', ['Restangular', function (Restangular) {
+    App.factory('ToolsInstanceResource', function (Restangular) {
         var service = Restangular.service("tools/service_instances");
 
-        service.getToolsInstances = function(orgId, spaceId, serviceType) {
+        service.getToolsInstances = function (orgId, spaceId, serviceType) {
             return this.one().get({
                 org: orgId,
                 space: spaceId,
@@ -28,7 +28,7 @@
         };
 
         return service;
-    }]);
+    });
 
 
 }());

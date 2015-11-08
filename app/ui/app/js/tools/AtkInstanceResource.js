@@ -16,7 +16,7 @@
 (function () {
     "use strict";
 
-    App.factory('AtkInstanceResource', ['Restangular', function (Restangular) {
+    App.factory('AtkInstanceResource', function (Restangular) {
         var resource = Restangular.service("orgs");
 
         resource.getAll = function (orgId) {
@@ -24,5 +24,5 @@
         };
 
         return resource;
-    }]);
+    });
 }());

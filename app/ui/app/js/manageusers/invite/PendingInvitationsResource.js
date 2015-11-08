@@ -16,7 +16,7 @@
 (function(){
     "use strict";
 
-    App.factory('PendingInvitationsResource', ['Restangular', function(Restangular) {
+    App.factory('PendingInvitationsResource', function(Restangular) {
         var invitations = Restangular.service('invitations');
 
         invitations.resend = function(email) {
@@ -30,5 +30,5 @@
 
         return invitations;
 
-    }]);
+    });
 }());

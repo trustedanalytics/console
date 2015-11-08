@@ -16,66 +16,66 @@
 (function () {
     "use strict";
 
-    App.controller('DashboardController', ['$scope', 'targetProvider', 'State', 'OrgMetricsResource', '$timeout', 'LoadChartResource',
-        function ($scope, targetProvider, State, OrgMetricsResource, $timeout, LoadChartResource) {
+    App.controller('DashboardController', function ($scope, targetProvider, State, OrgMetricsResource, $timeout,
+        LoadChartResource) {
 
-            var state = new State().setPending(),
-                metricsTimeoutHandler,
-                loadTimeoutHandler,
-                TIMEOUT = 15 * 1000; // 15s
+        var state = new State().setPending(),
+            metricsTimeoutHandler,
+            loadTimeoutHandler,
+            TIMEOUT = 15 * 1000; // 15s
 
-            $scope.state = state;
-            $scope.loadChart = {
-                values: null,
-                state: new State().setPending()
-            };
+        $scope.state = state;
+        $scope.loadChart = {
+            values: null,
+            state: new State().setPending()
+        };
 
-            $scope.$on('targetChanged', function(){
-                state.setPending();
-                getMetrics();
-            });
-
-            $scope.$on('$destroy', function(){
-                $timeout.cancel(metricsTimeoutHandler);
-                $timeout.cancel(loadTimeoutHandler);
-            });
-
+        $scope.$on('targetChanged', function () {
+            state.setPending();
             getMetrics();
-            getLoadData();
+        });
 
-            function getMetrics() {
-                $timeout.cancel(metricsTimeoutHandler);
+        $scope.$on('$destroy', function () {
+            $timeout.cancel(metricsTimeoutHandler);
+            $timeout.cancel(loadTimeoutHandler);
+        });
 
-                var orgId = targetProvider.getOrganization().guid;
-                if(orgId) {
-                    OrgMetricsResource.getMetrics(orgId)
-                        .then(function onSuccess(data) {
-                            $scope.data = data;
-                            state.setLoaded();
-                        })
-                        .catch(function onError() {
-                            state.setError();
-                        })
-                        .finally(function () {
-                            metricsTimeoutHandler = $timeout(getMetrics, TIMEOUT);
-                        });
-                }
-            }
+        getMetrics();
+        getLoadData();
 
-            function getLoadData() {
-                $timeout.cancel(loadTimeoutHandler);
-                LoadChartResource.getChart()
+        function getMetrics() {
+            $timeout.cancel(metricsTimeoutHandler);
+
+            var orgId = targetProvider.getOrganization().guid;
+            if (orgId) {
+                OrgMetricsResource.getMetrics(orgId)
                     .then(function onSuccess(data) {
-                        $scope.loadChart.values = _.sortBy(data, 'timestamp');
-                        $scope.loadChart.state.setLoaded();
+                        $scope.data = data;
+                        state.setLoaded();
                     })
                     .catch(function onError() {
-                        $scope.loadChart.state.setError();
+                        state.setError();
                     })
-                    .finally(function() {
-                        loadTimeoutHandler = $timeout(getLoadData, TIMEOUT);
+                    .finally(function () {
+                        metricsTimeoutHandler = $timeout(getMetrics, TIMEOUT);
                     });
             }
+        }
 
-        }]);
+        function getLoadData() {
+            $timeout.cancel(loadTimeoutHandler);
+            LoadChartResource.getChart()
+                .then(function onSuccess(data) {
+                    $scope.loadChart.values = _.sortBy(data, 'timestamp');
+                    $scope.loadChart.state.setLoaded();
+                })
+                .catch(function onError() {
+                    $scope.loadChart.state.setError();
+                })
+                .finally(function () {
+                    loadTimeoutHandler = $timeout(getLoadData, TIMEOUT);
+                });
+        }
+
+    });
 }());

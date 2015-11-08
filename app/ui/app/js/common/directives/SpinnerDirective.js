@@ -16,13 +16,13 @@
 (function () {
     "use strict";
 
-    App.directive('dSpinner', [function () {
+    App.directive('dSpinner', function () {
         return {
             scope: {
                 text: '='
             },
             templateUrl: 'app/views/common/spinner.html'
         };
-    }]);
+    });
 
 }());

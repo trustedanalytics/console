@@ -17,41 +17,41 @@
     "use strict";
 
     /*jshint newcap: false*/
-    App.controller('AddOrganizationsController', ['$scope', 'OrganizationResource', 'State', 'NotificationService',
-        '$state', 'targetProvider',
-        function ($scope, OrganizationResource, State, NotificationService, $state, targetProvider) {
-            $scope.state = new State();
-            $scope.state.setPending();
-            OrganizationResource.getList().then(function(organizations) {
-                $scope.state.setLoaded();
-                $scope.organizations = organizations;
-            });
-            $scope.orgName = '';
+    App.controller('AddOrganizationsController', function ($scope, OrganizationResource, State, NotificationService,
+        $state, targetProvider) {
 
-            $scope.addOrganization = function() {
+        $scope.state = new State();
+        $scope.state.setPending();
+        OrganizationResource.getList().then(function (organizations) {
+            $scope.state.setLoaded();
+            $scope.organizations = organizations;
+        });
+        $scope.orgName = '';
 
-                var existingOrg = _.findWhere($scope.organizations, {name: $scope.orgName});
-                if(existingOrg) {
-                    NotificationService.error('Organization "'+$scope.orgName+'" already exists');
-                }
-                else {
-                    var newOrgUuid;
-                    $scope.state.setPending();
-                    OrganizationResource
-                        .withErrorMessage('Error creating organization')
-                        .createOrg($scope.orgName)
-                        .then(function(uuid) {
-                            newOrgUuid = uuid;
-                            return targetProvider.refresh();
-                        })
-                        .then(function() {
-                            NotificationService.success('Organization created');
-                            $state.go('app.manage.organizations.manage', { orgId: newOrgUuid });
-                        })
-                        .catch(function() {
-                            $scope.state.setError();
-                        });
-                }
-            };
-        }]);
+        $scope.addOrganization = function () {
+
+            var existingOrg = _.findWhere($scope.organizations, {name: $scope.orgName});
+            if (existingOrg) {
+                NotificationService.error('Organization "' + $scope.orgName + '" already exists');
+            }
+            else {
+                var newOrgUuid;
+                $scope.state.setPending();
+                OrganizationResource
+                    .withErrorMessage('Error creating organization')
+                    .createOrg($scope.orgName)
+                    .then(function (uuid) {
+                        newOrgUuid = uuid;
+                        return targetProvider.refresh();
+                    })
+                    .then(function () {
+                        NotificationService.success('Organization created');
+                        $state.go('app.manage.organizations.manage', {orgId: newOrgUuid});
+                    })
+                    .catch(function () {
+                        $scope.state.setError();
+                    });
+            }
+        };
+    });
 }());

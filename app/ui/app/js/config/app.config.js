@@ -23,7 +23,7 @@
 
         viewsBase: '/app/views/'
     })
-    .config(['$compileProvider', function ($compileProvider) {
+    .config(function ($compileProvider) {
         $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|tel|file|blob):/);
-     }]);
+     });
 }());

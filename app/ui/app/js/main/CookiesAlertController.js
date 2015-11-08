@@ -16,16 +16,15 @@
 (function () {
     "use strict";
 
-    App.controller('CookiesAlertController', ['$scope', '$cookies',
-        function($scope, $cookies) {
+    App.controller('CookiesAlertController', function ($scope, $cookies) {
 
-            $scope.cookiesAlert = function() {
-                return !$cookies.get('cookiesPolicyAccepted');
-            };
+        $scope.cookiesAlert = function () {
+            return !$cookies.get('cookiesPolicyAccepted');
+        };
 
-            var infinityTime = new Date(new Date().getFullYear() + 100, new Date().getMonth(), new Date().getDate());
-            $scope.cookiesConfirm = function () {
-                $cookies.put('cookiesPolicyAccepted', 'true', { expires: infinityTime});
-            };
-        }]);
+        var infinityTime = new Date(new Date().getFullYear() + 100, new Date().getMonth(), new Date().getDate());
+        $scope.cookiesConfirm = function () {
+            $cookies.put('cookiesPolicyAccepted', 'true', {expires: infinityTime});
+        };
+    });
 })();

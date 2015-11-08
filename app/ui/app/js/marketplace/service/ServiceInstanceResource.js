@@ -16,38 +16,38 @@
 (function () {
     "use strict";
 
-    App.factory('ServiceInstanceResource', ['Restangular', function (Restangular) {
+    App.factory('ServiceInstanceResource', function (Restangular) {
         var service = Restangular.service("service_instances");
 
-        service.createInstance = function(name, planGuid, orgGuid, spaceGuid) {
+        service.createInstance = function (name, planGuid, orgGuid, spaceGuid) {
             return this.post({
-                    name: name,
-                    service_plan_guid: planGuid,
-                    organization_guid: orgGuid,
-                    space_guid: spaceGuid,
-                    parameters: { name: name }
-                });
+                name: name,
+                service_plan_guid: planGuid,
+                organization_guid: orgGuid,
+                space_guid: spaceGuid,
+                parameters: {name: name}
+            });
         };
 
-        service.deleteInstance = function(serviceId) {
+        service.deleteInstance = function (serviceId) {
             return this.one(serviceId).remove();
         };
 
-        service.getAllByType = function(spaceId, serviceId) {
+        service.getAllByType = function (spaceId, serviceId) {
             return this.getList({
                 space: spaceId,
                 broker: serviceId
             });
         };
 
-        service.getAll = function(spaceId) {
+        service.getAll = function (spaceId) {
             return this.getList({
                 space: spaceId
             });
         };
 
         return service;
-    }]);
+    });
 
 
 }());

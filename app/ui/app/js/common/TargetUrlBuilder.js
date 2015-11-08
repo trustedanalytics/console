@@ -24,41 +24,40 @@
     IncorrectTargetException.prototype = Error.prototype;
 
 
-    App.service('targetUrlBuilder', ['targetProvider',
-        function (targetProvider) {
-            var self = this;
+    App.service('targetUrlBuilder', function (targetProvider) {
+        var self = this;
 
-            var config = {
-                useOrganization: false,
-                useService: false
-            };
-            self.useOrganization = function () {
-                config.useOrganization = true;
-                return self;
-            };
-            self.useSpace = function () {
-                config.useSpace = true;
-                return self;
-            };
-            self.get = function (path) {
-                var url = "/rest";
-                if (config.useOrganization) {
-                    if (!targetProvider.getOrganization()) {
-                        throw new IncorrectTargetException("Organization not specified");
-                    }
-                    url = url + "/organizations/" + targetProvider.getOrganization().guid;
+        var config = {
+            useOrganization: false,
+            useService: false
+        };
+        self.useOrganization = function () {
+            config.useOrganization = true;
+            return self;
+        };
+        self.useSpace = function () {
+            config.useSpace = true;
+            return self;
+        };
+        self.get = function (path) {
+            var url = "/rest";
+            if (config.useOrganization) {
+                if (!targetProvider.getOrganization()) {
+                    throw new IncorrectTargetException("Organization not specified");
                 }
-                if (config.useSpace) {
-                    if (!targetProvider.getSpace()) {
-                        throw new IncorrectTargetException("Space not specified");
-                    }
-                    url = url + "/spaces/" + targetProvider.getSpace().guid;
+                url = url + "/organizations/" + targetProvider.getOrganization().guid;
+            }
+            if (config.useSpace) {
+                if (!targetProvider.getSpace()) {
+                    throw new IncorrectTargetException("Space not specified");
                 }
-                if (typeof path === "string" && path.length > 0) {
-                    url = url + "/" + path.replace(/^\/+|\/+$/g, '');
-                }
-                return url;
-            };
-        }]);
+                url = url + "/spaces/" + targetProvider.getSpace().guid;
+            }
+            if (typeof path === "string" && path.length > 0) {
+                url = url + "/" + path.replace(/^\/+|\/+$/g, '');
+            }
+            return url;
+        };
+    });
 
 }());

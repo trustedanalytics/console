@@ -28,7 +28,7 @@
                 onRefresh: '&'
             },
             templateUrl: 'app/views/applications/application/overview.html',
-            controller: ['$scope', function($scope){
+            controller: function($scope){
                 function reloadInstances(){
                     if(!$scope.application || !$scope.instances) {
                         return;
@@ -49,7 +49,7 @@
                     reloadInstances();
                 });
 
-            }]
+            }
         };
     });
 

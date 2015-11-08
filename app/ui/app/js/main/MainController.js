@@ -16,7 +16,7 @@
 (function () {
     "use strict";
 
-    App.controller('MainController', ['$scope', 'AppState', 'AppConfig', function($scope, AppState, AppConfig) {
+    App.controller('MainController', function($scope, AppState, AppConfig) {
         $scope.appState = AppState;
         $scope.appConfig = AppConfig;
         $scope.year = new Date().getFullYear();
@@ -32,5 +32,5 @@
             'tap-to-dismiss': false,
             limit: 3
         };
-    }]);
+    });
 })();

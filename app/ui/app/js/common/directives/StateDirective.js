@@ -16,14 +16,12 @@
 (function () {
     "use strict";
 
-    App.directive('dState', [function () {
+    App.directive('dState', function () {
         return {
             scope: {
                 state: '='
             },
-            //replace: true,
             templateUrl: 'app/views/common/status.html'
         };
-    }]);
-
+    });
 }());

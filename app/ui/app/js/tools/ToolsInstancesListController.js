@@ -16,103 +16,101 @@
 (function () {
     "use strict";
 
-    App.controller('ToolsInstancesListController', ['$scope', '$location', 'targetProvider', 'State', 'NotificationService',
-        'ToolsInstanceResource', 'ServiceResource', 'ServiceInstanceResource', '$state',
-        function ($scope, $location, targetProvider, State, NotificationService, ToolsInstanceResource, ServiceResource,
-                  ServiceInstanceResource, $state) {
+    App.controller('ToolsInstancesListController', function ($scope, $location, targetProvider, State,
+        NotificationService, ToolsInstanceResource, ServiceResource, ServiceInstanceResource, $state) {
 
-            $scope.servicePlanGuid = "";
-            $scope.state = new State();
+        $scope.servicePlanGuid = "";
+        $scope.state = new State();
 
-            var SERVICE_LABEL = $location.path().split('/').pop();
-            $scope.instanceType = SERVICE_LABEL;
-            $scope.brokerName = $state.current.entityDisplayName;
+        var SERVICE_LABEL = $location.path().split('/').pop();
+        $scope.instanceType = SERVICE_LABEL;
+        $scope.brokerName = $state.current.entityDisplayName;
 
-            $scope.$on('targetChanged', onTargetChanged);
+        $scope.$on('targetChanged', onTargetChanged);
 
-            onTargetChanged();
-            setServicePlan($scope, ServiceResource, SERVICE_LABEL);
+        onTargetChanged();
+        setServicePlan($scope, ServiceResource, SERVICE_LABEL);
 
 
-            function onTargetChanged() {
-                $scope.organization = targetProvider.getOrganization();
-                $scope.space = targetProvider.getSpace();
-                getInstances($scope, ToolsInstanceResource, $scope.organization.guid, $scope.space.guid, $scope.instanceType);
-            }
+        function onTargetChanged() {
+            $scope.organization = targetProvider.getOrganization();
+            $scope.space = targetProvider.getSpace();
+            getInstances($scope, ToolsInstanceResource, $scope.organization.guid, $scope.space.guid, $scope.instanceType);
+        }
 
-            $scope.createInstance = function (name) {
-                $scope.state.setPending();
-                ServiceInstanceResource
-                    .withErrorMessage('Failed to create the instance of ' + $scope.brokerName)
-                    .createInstance(name, $scope.servicePlanGuid, $scope.organization.guid, $scope.space.guid)
-                    .then(function () {
-                        NotificationService.success('Creating an ' + $scope.brokerName +
-                            ' instance may take a while. You can try to refresh the page after few seconds.');
-                    })
-                    .finally(function () {
-                        getInstances($scope, ToolsInstanceResource, $scope.organization.guid, $scope.space.guid, $scope.instanceType);
-                        $scope.newInstanceName = "";
-                    });
-            };
-
-            $scope.deleteInstance = function (appId) {
-                NotificationService.confirm('confirm-delete')
-                    .then(function() {
-                        $scope.state.setPending();
-                        return ServiceInstanceResource
-                            .withErrorMessage('Deleting instance of ' + $scope.brokerName + ' failed')
-                            .deleteInstance(appId);
-                    })
-                    .then(function onSuccess() {
-                        NotificationService.success('Deleting instance of ' + $scope.brokerName +
-                                                    ' may take a while. You can try to refresh the page after few seconds.');
-                    })
-                    .finally(function () {
-                        getInstances($scope, ToolsInstanceResource, $scope.organization.guid, $scope.space.guid, $scope.instanceType);
-                    });
-            };
-
-            $scope.hasLogin = function (instances) {
-                return _.some(instances, function(instance) {
-                    return instance.login;
+        $scope.createInstance = function (name) {
+            $scope.state.setPending();
+            ServiceInstanceResource
+                .withErrorMessage('Failed to create the instance of ' + $scope.brokerName)
+                .createInstance(name, $scope.servicePlanGuid, $scope.organization.guid, $scope.space.guid)
+                .then(function () {
+                    NotificationService.success('Creating an ' + $scope.brokerName +
+                        ' instance may take a while. You can try to refresh the page after few seconds.');
+                })
+                .finally(function () {
+                    getInstances($scope, ToolsInstanceResource, $scope.organization.guid, $scope.space.guid, $scope.instanceType);
+                    $scope.newInstanceName = "";
                 });
-            };
+        };
 
-            $scope.hasPassword = function (instances) {
-                return _.some(instances, function(instance) {
-                    return instance.password;
+        $scope.deleteInstance = function (appId) {
+            NotificationService.confirm('confirm-delete')
+                .then(function () {
+                    $scope.state.setPending();
+                    return ServiceInstanceResource
+                        .withErrorMessage('Deleting instance of ' + $scope.brokerName + ' failed')
+                        .deleteInstance(appId);
+                })
+                .then(function onSuccess() {
+                    NotificationService.success('Deleting instance of ' + $scope.brokerName +
+                        ' may take a while. You can try to refresh the page after few seconds.');
+                })
+                .finally(function () {
+                    getInstances($scope, ToolsInstanceResource, $scope.organization.guid, $scope.space.guid, $scope.instanceType);
                 });
-            };
+        };
 
-            $scope.hasService = function (instances) {
-                return _.some(instances, function(instance) {
-                    return instance.service;
-                });
-            };
+        $scope.hasLogin = function (instances) {
+            return _.some(instances, function (instance) {
+                return instance.login;
+            });
+        };
 
-        }]);
+        $scope.hasPassword = function (instances) {
+            return _.some(instances, function (instance) {
+                return instance.password;
+            });
+        };
 
-    var checkIsObject = function(value) {
+        $scope.hasService = function (instances) {
+            return _.some(instances, function (instance) {
+                return instance.service;
+            });
+        };
+
+    });
+
+    var checkIsObject = function (value) {
         return typeof(value) === typeof({});
     };
 
-    var getInstancesFromResponse = function(apps) {
+    var getInstancesFromResponse = function (apps) {
         var result = apps.plain();
-        return _.omit(result, function(val) {
-           return !checkIsObject(val);
+        return _.omit(result, function (val) {
+            return !checkIsObject(val);
         });
     };
 
     function getInstances($scope, ToolsInstanceResource, orgId, spaceId, serviceType) {
-        if(orgId && spaceId && serviceType) {
+        if (orgId && spaceId && serviceType) {
             $scope.state.setPending();
             ToolsInstanceResource.getToolsInstances(orgId, spaceId, serviceType)
-                .then(function(response) {
+                .then(function (response) {
                     $scope.instances = getInstancesFromResponse(response);
                     $scope.anyRows = (Object.keys($scope.instances).length) ? true : false;
                     $scope.state.setLoaded();
                 })
-                .catch(function() {
+                .catch(function () {
                     $scope.state.setError();
                 });
         } else {
@@ -120,7 +118,7 @@
         }
     }
 
-    var getServicePlanGuid = function(servicePlans) {
+    var getServicePlanGuid = function (servicePlans) {
         return _.map(
             _.filter(servicePlans, function predicate(plan) {
                 return plan.entity.free;
@@ -134,7 +132,7 @@
     function setServicePlan($scope, ServiceResource, serviceLabel) {
         $scope.state.setPending();
         ServiceResource.getAllServicePlansForLabel(serviceLabel)
-            .then(function(servicePlans) {
+            .then(function (servicePlans) {
                 $scope.servicePlanGuid = getServicePlanGuid(servicePlans);
             });
     }

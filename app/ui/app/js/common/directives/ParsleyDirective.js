@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 (function () {
-    App.directive('parsley', function() {
+    App.directive('parsley', function () {
         return {
             restrict: 'AC',
-            controller: function($scope, $element) {
-                    $element.parsley();
+            controller: function ($scope, $element) {
+                $element.parsley();
             }
         };
     });

@@ -16,15 +16,14 @@
 (function () {
     "use strict";
 
-    App.factory('UserService', ['$injector', 'UserView',
-        function ($injector, UserView) {
-            return function (userViewType) {
-                if (userViewType === UserView.ORGANIZATIONS) {
-                    return $injector.get('orgUserService');
-                }
-                else if (userViewType === UserView.SPACES) {
-                    return $injector.get('spaceUserService');
-                }
-            };
-    }]);
+    App.factory('UserService', function ($injector, UserView) {
+        return function (userViewType) {
+            if (userViewType === UserView.ORGANIZATIONS) {
+                return $injector.get('orgUserService');
+            }
+            else if (userViewType === UserView.SPACES) {
+                return $injector.get('spaceUserService');
+            }
+        };
+    });
 }());

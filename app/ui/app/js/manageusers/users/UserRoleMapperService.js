@@ -16,7 +16,7 @@
 (function () {
     "use strict";
 
-    App.service('UserRoleMapperService', [function () {
+    App.service('UserRoleMapperService', function () {
         return {
             mapCheckboxesToRoles: function (user, roleCheckboxes) {
                 var userFlags = roleCheckboxes[user.guid];
@@ -45,5 +45,5 @@
                 };
             }
         };
-    }]);
+    });
 }());

@@ -16,13 +16,12 @@
 (function () {
     "use strict";
 
-    App.controller('DataCatalogController', ['$scope', '$routeParams', '$state',
-        function ($scope, $routeParams, $state) {
-            var self = this;
+    App.controller('DataCatalogController', function ($scope, $routeParams, $state) {
+        var self = this;
 
-            self.isTabActive = function(sref) {
-                return $state.is(sref) || $state.includes(sref);
-            };
+        self.isTabActive = function (sref) {
+            return $state.is(sref) || $state.includes(sref);
+        };
 
-        }]);
+    });
 }());

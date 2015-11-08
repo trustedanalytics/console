@@ -16,7 +16,7 @@
 (function () {
     "use strict";
 
-    App.factory('ServiceInstancesResource', ['Restangular', function (Restangular) {
+    App.factory('ServiceInstancesResource', function (Restangular) {
         var service = Restangular.service("service_instances");
 
         service.getSummary = function(spaceId, service_keys) {
@@ -28,7 +28,7 @@
         };
 
         return service;
-    }]);
+    });
 
 
 }());

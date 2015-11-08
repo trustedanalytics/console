@@ -16,7 +16,7 @@
 (function(){
     "use strict";
 
-    App.factory('DasResource', ['Restangular', 'targetProvider', function(Restangular, targetProvider) {
+    App.factory('DasResource', function(Restangular, targetProvider) {
         var das = Restangular.all('das').all('requests');
 
         var organization = targetProvider.getOrganization();
@@ -36,7 +36,7 @@
         };
 
         return das;
-    }]);
+    });
 }());
 
 

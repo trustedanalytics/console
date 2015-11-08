@@ -17,45 +17,44 @@
 (function () {
     "use strict";
 
-    App.controller('LatestEventsController', ['$scope', 'State', 'EventsResource', 'ngTableParams', 'targetProvider',
-        function ($scope, State, EventsResource, ngTableParams, targetProvider) {
-            function getOrgId() {
-                return (targetProvider.getOrganization() || {}).guid;
-            }
+    App.controller('LatestEventsController', function ($scope, State, EventsResource, ngTableParams, targetProvider) {
+        function getOrgId() {
+            return (targetProvider.getOrganization() || {}).guid;
+        }
 
-            var state = new State().setPending();
-            $scope.state = state;
+        var state = new State().setPending();
+        $scope.state = state;
 
-            $scope.collectData = function($defer, params) {
-                $scope.state.setPending();
+        $scope.collectData = function ($defer, params) {
+            $scope.state.setPending();
 
-                EventsResource.getPage(getOrgId(), (params.page()-1)*params.count(), params.count())
-                .then(function(response){
+            EventsResource.getPage(getOrgId(), (params.page() - 1) * params.count(), params.count())
+                .then(function (response) {
                     $scope.events = response.plain().events;
 
                     params.total(response.total);
                     $defer.resolve($scope.events);
                     $scope.state.setLoaded();
                 });
-            };
+        };
 
-            $scope.hasEvents = function() {
-                return !_.isEmpty($scope.events);
-            };
+        $scope.hasEvents = function () {
+            return !_.isEmpty($scope.events);
+        };
 
-            /*jshint newcap: false*/
-            $scope.tableParams = new ngTableParams({
-                page: 1,
-                count: 10
-            }, {
-                getData: $scope.collectData
-            });
+        /*jshint newcap: false*/
+        $scope.tableParams = new ngTableParams({
+            page: 1,
+            count: 10
+        }, {
+            getData: $scope.collectData
+        });
 
-            $scope.$on('targetChanged', function () {
-                var orgId = getOrgId();
-                if (orgId) {
-                    $scope.tableParams.reload();
-                }
-            });
-        }]);
+        $scope.$on('targetChanged', function () {
+            var orgId = getOrgId();
+            if (orgId) {
+                $scope.tableParams.reload();
+            }
+        });
+    });
 }());

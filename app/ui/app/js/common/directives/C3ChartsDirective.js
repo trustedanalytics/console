@@ -39,14 +39,14 @@
 
                 $scope.chart = c3.generate(options);
             },
-            controller: ['$scope', function($scope){
-                $scope.$watch('dataProvider', function(newValue, oldValue) {
-                    if(newValue !== oldValue) {
+            controller: function ($scope) {
+                $scope.$watch('dataProvider', function (newValue, oldValue) {
+                    if (newValue !== oldValue) {
                         $scope.chartDataOptions.json = newValue;
                         $scope.chart.load($scope.chartDataOptions);
                     }
                 });
-            }]
+            }
         };
     });
 

@@ -16,8 +16,7 @@
 (function () {
     "use strict";
 
-    App.controller('HeaderController', ['$scope', '$rootScope', '$state', 'AppState', 'UserProvider','targetProvider',
-        function($scope, $rootScope, $state, AppState, UserProvider, targetProvider) {
+    App.controller('HeaderController', function($scope, $rootScope, $state, AppState, UserProvider, targetProvider) {
         $scope.appState = AppState;
         $scope.searchControl = {};
         $scope.searchEnabled = $state.current.searchEnabled;
@@ -49,5 +48,5 @@
             $scope.appState.menuCollapsed = !$scope.appState.menuCollapsed;
             $rootScope.$broadcast("toggleMenu");
         };
-    }]);
+    });
 })();

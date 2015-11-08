@@ -59,28 +59,15 @@ app.get('/rest/config/uploader', auth.checkLoggedIn,
     }
 );
 
-app.route('/rest/*')
-    .get(
-        auth.checkLoggedIn,
-        reverseProxy.forward
-    )
-    .put(
-        auth.checkLoggedIn,
-        reverseProxy.forward
-    )
-    .post(
-        auth.checkLoggedIn,
-        reverseProxy.forward
-    )
-    .delete(
-        auth.checkLoggedIn,
-        reverseProxy.forward
-    );
+app.all('/rest/*',
+    auth.checkLoggedIn,
+    reverseProxy.forward
+);
 
 app.get('/files/*',
-        auth.checkLoggedIn,
-        reverseProxy.forward);
-
+    auth.checkLoggedIn,
+    reverseProxy.forward
+);
 
 app.get('/',
     auth.login,

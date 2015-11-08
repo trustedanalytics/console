@@ -16,7 +16,7 @@
 (function () {
     "use strict";
 
-    App.factory('AtkScoringEngineResource', ['Restangular', function (Restangular) {
+    App.factory('AtkScoringEngineResource', function (Restangular) {
         var resource = Restangular.service('atk').one('scoring-engine');
 
         resource.createInstance = function(name, atkName, servicePlanId, orgId, spaceId) {
@@ -30,7 +30,7 @@
         };
 
         return resource;
-    }]);
+    });
 
 
 }());

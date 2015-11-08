@@ -17,7 +17,7 @@
     "use strict";
 
     /*jshint newcap: false*/
-    App.service('UsersListService', ['ngTableParams', '$filter', function (ngTableParams, $filter ) {
+    App.service('UsersListService', function (ngTableParams, $filter ) {
 
         var tableData = [];
 
@@ -47,5 +47,5 @@
                     });
             }
         };
-    }]);
+    });
 }());

@@ -16,57 +16,55 @@
 (function () {
     "use strict";
 
-    App.controller('ApplicationController', ['$stateParams',
-        'State', 'ServiceInstanceResource', 'ApplicationResource', '$state',
-        'NotificationService',
-        function ($stateParams, State, ServiceInstanceResource,
-                  ApplicationResource, $state, NotificationService) {
-            var self = this,
-                appId = $stateParams.appId;
+    App.controller('ApplicationController', function ($stateParams, State, ServiceInstanceResource, ApplicationResource,
+        $state, NotificationService) {
 
-            self.appId = appId;
-            self.state = new State().setPending();
+        var self = this,
+            appId = $stateParams.appId;
 
-            self.tabs = {
-                overview: 1,
-                bindings: 2
-            };
-            self.tab = self.tabs.overview;
+        self.appId = appId;
+        self.state = new State().setPending();
 
-            self.servicesToDelete = {};
+        self.tabs = {
+            overview: 1,
+            bindings: 2
+        };
+        self.tab = self.tabs.overview;
 
-            self.isTabActive = function(sref) {
-                return $state.is(sref);
-            };
+        self.servicesToDelete = {};
 
-            /*jshint latedef: false */
+        self.isTabActive = function (sref) {
+            return $state.is(sref);
+        };
+
+        /*jshint latedef: false */
+        loadApplicationSummary();
+
+        self.refresh = function () {
+            self.state.setPending();
             loadApplicationSummary();
+        };
 
-            self.refresh = function() {
-                self.state.setPending();
-                loadApplicationSummary();
-            };
+        self.restage = function () {
+            self.state.setPending();
 
-            self.restage = function () {
-                self.state.setPending();
+            ApplicationResource
+                .withErrorMessage('Restage failed')
+                .postStatus(appId, {
+                    state: 'RESTAGING'
+                })
+                .then(function () {
+                    NotificationService.success('Restage has been scheduled');
+                })
+                .finally(function () {
+                    self.state.setLoaded();
+                });
+        };
 
-                ApplicationResource
-                    .withErrorMessage('Restage failed')
-                    .postStatus(appId, {
-                        state: 'RESTAGING'
-                    })
-                    .then(function () {
-                        NotificationService.success('Restage has been scheduled');
-                    })
-                    .finally(function () {
-                        self.state.setLoaded();
-                    });
-            };
+        self.start = function () {
+            self.state.setPending();
 
-            self.start = function() {
-                self.state.setPending();
-
-                ApplicationResource.postStatus(appId, {
+            ApplicationResource.postStatus(appId, {
                     state: 'STARTED'
                 })
                 .then(function onSuccess() {
@@ -75,15 +73,15 @@
                 .catch(function onError() {
                     NotificationService.error('Starting application failed');
                 })
-                .finally(function(){
+                .finally(function () {
                     self.state.setLoaded();
                 });
-            };
+        };
 
-            self.stop = function() {
-                self.state.setPending();
+        self.stop = function () {
+            self.state.setPending();
 
-                ApplicationResource.postStatus(appId, {
+            ApplicationResource.postStatus(appId, {
                     state: 'STOPPED'
                 })
                 .then(function onSuccess() {
@@ -92,68 +90,67 @@
                 .catch(function onError() {
                     NotificationService.error('Stopping the application failed.');
                 })
-                .finally(function(){
+                .finally(function () {
                     self.state.setLoaded();
                 });
-            };
+        };
 
-            self.delete = function () {
-                self.state.setPending();
+        self.delete = function () {
+            self.state.setPending();
 
-                ApplicationResource
-                    .withErrorMessage('Deleting application failed')
-                    .getOrphanServices(appId)
-                    .then(function onSuccess(servicesToDelete) {
-                        self.state.setLoaded();
-                        NotificationService.confirm('confirm-delete', {servicesToDelete: servicesToDelete})
-                            .then(function (cascade) {
-                                self.state.setPending();
-                                return ApplicationResource
-                                    .withErrorMessage('Deleting application failed')
-                                    .deleteApplication(appId, cascade[0]);
-                            })
-                            .then(function onSuccess() {
-                                $state.go('app.applications');
-                            })
-                            .finally(function onError() {
-                                self.state.setLoaded();
-                            });
-                    })
-                    .catch(function onError() {
-                        self.state.setError();
-                    });
-            };
+            ApplicationResource
+                .withErrorMessage('Deleting application failed')
+                .getOrphanServices(appId)
+                .then(function onSuccess(servicesToDelete) {
+                    self.state.setLoaded();
+                    NotificationService.confirm('confirm-delete', {servicesToDelete: servicesToDelete})
+                        .then(function (cascade) {
+                            self.state.setPending();
+                            return ApplicationResource
+                                .withErrorMessage('Deleting application failed')
+                                .deleteApplication(appId, cascade[0]);
+                        })
+                        .then(function onSuccess() {
+                            $state.go('app.applications');
+                        })
+                        .finally(function onError() {
+                            self.state.setLoaded();
+                        });
+                })
+                .catch(function onError() {
+                    self.state.setError();
+                });
+        };
 
-            function loadInstances() {
-                ServiceInstanceResource.getAll(self.application.space_guid)
-                    .then(function (instances) {
-                        self.instances = instances;
-                        self.state.setLoaded();
-                    })
-                    .catch(function () {
-                        self.state.setError();
-                    });
-            }
+        function loadInstances() {
+            ServiceInstanceResource.getAll(self.application.space_guid)
+                .then(function (instances) {
+                    self.instances = instances;
+                    self.state.setLoaded();
+                })
+                .catch(function () {
+                    self.state.setError();
+                });
+        }
 
-            function loadApplicationSummary() {
-                return ApplicationResource.getApplication(self.appId)
-                    .then(function onSuccess(application) {
-                        application.env = application.environment_json ?
-                            Object.keys(application.environment_json).map(function (k) {
-                                return { key: k, value: application.environment_json[k] };
-                            }) : [];
-                        self.application = application;
-                    })
-                    .then(function onSuccess() {
-                        loadInstances(self, ServiceInstanceResource);
-                    })
-                    .catch(function onError(response) {
-                        self.state.setError(response.status);
-                    });
-            }
+        function loadApplicationSummary() {
+            return ApplicationResource.getApplication(self.appId)
+                .then(function onSuccess(application) {
+                    application.env = application.environment_json ?
+                        Object.keys(application.environment_json).map(function (k) {
+                            return {key: k, value: application.environment_json[k]};
+                        }) : [];
+                    self.application = application;
+                })
+                .then(function onSuccess() {
+                    loadInstances(self, ServiceInstanceResource);
+                })
+                .catch(function onError(response) {
+                    self.state.setError(response.status);
+                });
+        }
 
-        }]);
-
+    });
 
 
 }());

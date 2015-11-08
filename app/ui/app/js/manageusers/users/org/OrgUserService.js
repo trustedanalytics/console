@@ -16,57 +16,56 @@
 (function () {
     "use strict";
 
-    App.factory('orgUserService', ['Restangular', 'targetProvider', '$q',
-        function (Restangular, targetProvider, $q) {
-            var service = Restangular.service("orgs");
+    App.factory('orgUserService', function (Restangular, targetProvider, $q) {
+        var service = Restangular.service("orgs");
 
-            function getOrgId() {
-                return (targetProvider.getOrganization() || {}).guid ;
+        function getOrgId() {
+            return (targetProvider.getOrganization() || {}).guid;
+        }
+
+        function getUsersResource() {
+            return service.one(getOrgId()).all("users");
+        }
+
+        service.getAll = function () {
+            if (getOrgId()) {
+                return getUsersResource().getList();
             }
-
-            function getUsersResource() {
-                return service.one(getOrgId()).all("users");
+            else {
+                var deferred = $q.defer();
+                deferred.reject();
+                return deferred.promise;
             }
+        };
 
-            service.getAll = function() {
-                if (getOrgId()) {
-                    return getUsersResource().getList();
-                }
-                else {
-                    var deferred = $q.defer();
-                    deferred.reject();
-                    return deferred.promise;
-                }
+        service.targetAvailable = function () {
+            return typeof getOrgId() !== 'undefined';
+        };
+
+        service.getTargetType = function () {
+            return "organizations";
+        };
+
+        service.addUser = function (user) {
+            return getUsersResource().post(user);
+        };
+
+        service.updateUserRoles = function (user) {
+            return getUsersResource().one(user.guid).customPOST({roles: user.roles});
+        };
+
+        service.getRoles = function () {
+            return {
+                "managers": "Org Manager",
+                "auditors": "Org Auditor",
+                "billing_managers": "Billing Manager"
             };
+        };
 
-            service.targetAvailable = function () {
-                return typeof getOrgId() !== 'undefined';
-            };
+        service.deleteUser = function (userId) {
+            return getUsersResource().one(userId).remove();
+        };
 
-            service.getTargetType = function () {
-                return "organizations";
-            };
-
-            service.addUser = function(user) {
-                return getUsersResource().post(user);
-            };
-
-            service.updateUserRoles = function(user) {
-                return getUsersResource().one(user.guid).customPOST({roles: user.roles});
-            };
-
-            service.getRoles = function() {
-                return {
-                    "managers": "Org Manager",
-                    "auditors": "Org Auditor",
-                    "billing_managers": "Billing Manager"
-                };
-            };
-
-            service.deleteUser = function(userId) {
-                return getUsersResource().one(userId).remove();
-            };
-
-            return service;
-        }]);
+        return service;
+    });
 }());

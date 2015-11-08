@@ -17,15 +17,15 @@
 (function () {
     'use strict';
 
-    App.directive('patternValidator', [function () {
+    App.directive('patternValidator', function () {
         return {
             restrict: 'A',
             require: 'ngModel',
-            link: function(scope, element, attr, ctrl) {
-                function validator(ngModelValue) { 
+            link: function (scope, element, attr, ctrl) {
+                function validator(ngModelValue) {
                     var regexPattern = new RegExp(attr.patternValidator);
 
-                    if(regexPattern.test(ngModelValue)) {
+                    if (regexPattern.test(ngModelValue)) {
                         ctrl.$setValidity('regexValidator', true);
                     }
                     else {
@@ -34,9 +34,10 @@
 
                     return ngModelValue;
                 }
+
                 ctrl.$parsers.push(validator);
             }
         };
-    }]);
+    });
 
 }());

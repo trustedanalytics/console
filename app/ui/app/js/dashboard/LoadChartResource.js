@@ -16,7 +16,7 @@
 (function () {
     "use strict";
 
-    App.factory('LoadChartResource', ['Restangular', function (Restangular) {
+    App.factory('LoadChartResource', function (Restangular) {
         var resource = Restangular.service("metrics").one('load-data');
 
         resource.getChart = function () {
@@ -24,5 +24,5 @@
         };
 
         return resource;
-    }]);
+    });
 }());

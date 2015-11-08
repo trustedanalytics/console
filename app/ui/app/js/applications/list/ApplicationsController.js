@@ -16,75 +16,74 @@
 (function () {
     "use strict";
 
-    App.controller('ApplicationsController', ['ApplicationResource', 'targetProvider', '$scope',
-        'ngTableParams', 'filterFilter', 'orderByFilter', '$q', 'AtkInstanceResource', 'ApplicationsTableParams',
-        function (ApplicationResource, targetProvider, $scope, ngTableParams, filterFilter,
-                  orderByFilter, $q, AtkInstanceResource, ApplicationsTableParams) {
-            var self = this;
+    App.controller('ApplicationsController', function (ApplicationResource, targetProvider, $scope, ngTableParams,
+        filterFilter, orderByFilter, $q, AtkInstanceResource, ApplicationsTableParams) {
 
-            var states = {
-                PENDING: 1,
-                LOADED: 2,
-                ERROR: 3
-            };
-            self.states = states;
+        var self = this;
 
-            self.details = [];
+        var states = {
+            PENDING: 1,
+            LOADED: 2,
+            ERROR: 3
+        };
+        self.states = states;
 
-            function getAtkInstances() {
-                return AtkInstanceResource
-                    .withErrorMessage('Failed to load ATk instances')
-                    .getAll(targetProvider.getOrganization().guid)
-                    .then(function onSuccess(response) {
-                        return response.instances;
-                    });
+        self.details = [];
+
+        function getAtkInstances() {
+            return AtkInstanceResource
+                .withErrorMessage('Failed to load ATk instances')
+                .getAll(targetProvider.getOrganization().guid)
+                .then(function onSuccess(response) {
+                    return response.instances;
+                });
+        }
+
+        function getApplications() {
+            return ApplicationResource
+                .withErrorMessage('Failed to load applications list')
+                .getAll(targetProvider.getSpace().guid)
+                .then(function (applications) {
+                    return applications;
+                });
+        }
+
+        var updateApplications = function () {
+            if (!_.isEmpty(targetProvider.getSpace())) {
+                self.state = states.PENDING;
+                $q.all([
+                    getApplications(),
+                    getAtkInstances()
+                ]).then(function (results) {
+                    self.applications = updateAppNames(results[0], results[1]);
+                    self.state = states.LOADED;
+                    $scope.tableParams.reload();
+                }).catch(function () {
+                    self.state = states.ERROR;
+                });
+
             }
+        };
+        updateApplications();
 
-            function getApplications() {
-                return ApplicationResource
-                    .withErrorMessage('Failed to load applications list')
-                    .getAll(targetProvider.getSpace().guid)
-                    .then(function(applications){
-                        return applications;
-                    });
-            }
+        $scope.tableParams = ApplicationsTableParams.getTableParams($scope, function () {
+            return self.applications;
+        });
 
-            var updateApplications = function() {
-                if(!_.isEmpty(targetProvider.getSpace())) {
-                    self.state = states.PENDING;
-                    $q.all([
-                        getApplications(),
-                        getAtkInstances()
-                    ]).then(function(results){
-                        self.applications = updateAppNames(results[0], results[1]);
-                        self.state = states.LOADED;
-                        $scope.tableParams.reload();
-                    }).catch(function(){
-                        self.state = states.ERROR;
-                    });
-
-                }
-            };
+        $scope.$on('targetChanged', function () {
             updateApplications();
+        });
 
-            $scope.tableParams = ApplicationsTableParams.getTableParams($scope, function() {
-                return self.applications;
-            });
-
-            $scope.$on('targetChanged', function(){
-                updateApplications();
-            });
-
-            self.appStates = function() {
-                var def = $q.defer();
-                def.resolve([
-                    { id: 'STARTED', title: 'STARTED'},
-                    { id: 'STARTING', title: 'STARTING'},
-                    { id: 'STOPPED', title: 'STOPPED'}
-                ]);
-                return def;
-            };
-        }]);
+        self.appStates = function () {
+            var def = $q.defer();
+            def.resolve([
+                {id: 'STARTED', title: 'STARTED'},
+                {id: 'STARTING', title: 'STARTING'},
+                {id: 'STOPPED', title: 'STOPPED'}
+            ]);
+            return def;
+        };
+    });
 
     function updateAppNames(apps, atkInstances) {
         for (var app in apps) {

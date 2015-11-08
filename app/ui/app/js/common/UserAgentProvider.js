@@ -16,7 +16,7 @@
 (function () {
     "use strict";
 
-    App.factory('userAgent', ['uaParser', function (uaParser) {
+    App.factory('userAgent', function (uaParser) {
         var linuxFamilies = ['mint', 'mageia', 'vectorlinux', 'joli', 'ubuntu', 'debian', 'suse', 'gentoo', 'arch',
             'slackware', 'fedora', 'mandriva', 'centos', 'pclinuxos', 'redhat', 'zenwalk', 'hurd', 'linux', 'gnu',
             'solaris', 'freebsd', 'netbsd', 'openbsd', 'pc-bsd', 'dragonfly', 'aix', 'unix'];
@@ -44,6 +44,6 @@
         userAgent.pkgFormat = deb.indexOf(osName) > -1 ? 'deb' : (rpm.indexOf(osName) > -1 ? 'rpm' : false);
 
         return userAgent;
-    }]);
+    });
 
 }());

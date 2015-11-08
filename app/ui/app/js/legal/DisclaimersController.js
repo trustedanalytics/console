@@ -16,21 +16,20 @@
 (function () {
     "use strict";
 
-    App.controller('DisclaimersController', ['$scope', 'PlatformContextProvider',
-        function ($scope, PlatformContextProvider) {
-            $scope.tools = {};
+    App.controller('DisclaimersController', function ($scope, PlatformContextProvider) {
+        $scope.tools = {};
 
-            PlatformContextProvider.getPlatformContext()
-                .then(function success(platformContext) {
-                    var list = platformContext.externalTools.list;
-                    $scope.tools = _.object(
-                        _.pluck(list, 'name'),
-                        _.pluck(list, 'available')
-                    );
-                });
+        PlatformContextProvider.getPlatformContext()
+            .then(function success(platformContext) {
+                var list = platformContext.externalTools.list;
+                $scope.tools = _.object(
+                    _.pluck(list, 'name'),
+                    _.pluck(list, 'available')
+                );
+            });
 
-            $scope.hasDisclaimers = function() {
-                return $scope.tools.rstudio;
-            };
-    }]);
+        $scope.hasDisclaimers = function () {
+            return $scope.tools.rstudio;
+        };
+    });
 })();

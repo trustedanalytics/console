@@ -16,13 +16,13 @@
 (function () {
     "use strict";
 
-    App.config(['$ocLazyLoadProvider', 'LazyLoadConfig', function ($ocLazyLoadProvider, LazyLoadConfig) {
+    App.config(function ($ocLazyLoadProvider, LazyLoadConfig) {
         $ocLazyLoadProvider.config({
             debug: false,
             events: true,
             modules: LazyLoadConfig.modules
         });
-    }])
+    })
     .constant('LazyLoadConfig', {
         modules: [
             {

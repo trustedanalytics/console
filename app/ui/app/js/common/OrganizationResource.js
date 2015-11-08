@@ -16,33 +16,32 @@
 (function () {
     "use strict";
 
-    App.factory('OrganizationResource', ['Restangular', function (Restangular) {
+    App.factory('OrganizationResource', function (Restangular) {
         var orgs = Restangular.service('orgs');
 
-        orgs.updateName = function(orgId, newName) {
+        orgs.updateName = function (orgId, newName) {
             return this.one(orgId).one('name')
-                .customPUT(
-                {
+                .customPUT({
                     name: newName
                 });
         };
 
-        orgs.deleteOrg = function(orgId) {
+        orgs.deleteOrg = function (orgId) {
             return this.one(orgId).remove();
         };
 
-        orgs.getSpaces = function(orgId) {
+        orgs.getSpaces = function (orgId) {
             return this.one(orgId).all("spaces").getList();
         };
 
-        orgs.createOrg = function(name) {
+        orgs.createOrg = function (name) {
             return this.post({name: name});
         };
 
         return orgs;
 
 
-    }]);
+    });
 
 
 }());

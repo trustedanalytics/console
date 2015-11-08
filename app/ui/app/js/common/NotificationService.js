@@ -16,85 +16,84 @@
 (function () {
     "use strict";
 
-    App.factory('NotificationService', ['$q', 'ngDialog', 'toaster',
-        function ($q, ngDialog, toaster) {
-            return {
-                confirm: function confirm(templateId, data) {
-                    var deferred = $q.defer();
-                    ngDialog.open(
-                        {
-                            template: templateId,
-                            controller: ['$scope', function ($scope) {
-                                $scope.data = data;
-                                $scope.confirm = function () {
-                                    deferred.resolve(arguments);
+    App.factory('NotificationService', function ($q, ngDialog, toaster) {
+        return {
+            confirm: function confirm(templateId, data) {
+                var deferred = $q.defer();
+                ngDialog.open(
+                    {
+                        template: templateId,
+                        controller: ['$scope', function ($scope) {
+                            $scope.data = data;
+                            $scope.confirm = function () {
+                                deferred.resolve(arguments);
 
-                                    $scope.closeThisDialog();
-                                };
-                                $scope.cancel = function () {
-                                    $scope.closeThisDialog();
-                                };
-                            }]
-                        });
-                    return deferred.promise;
-                },
-
-                success: function success(message, title) {
-                    toaster.pop({
-                        type: 'success',
-                        title: title,
-                        body: message,
-                        toasterId: 'top-right'
+                                $scope.closeThisDialog();
+                            };
+                            $scope.cancel = function () {
+                                $scope.closeThisDialog();
+                            };
+                        }]
                     });
-                },
+                return deferred.promise;
+            },
 
-                error: function error(message, title) {
-                    var config = {
-                        type: 'error',
-                        timeout: 0,
-                        toasterId: 'full-width'
-                    };
+            success: function success(message, title) {
+                toaster.pop({
+                    type: 'success',
+                    title: title,
+                    body: message,
+                    toasterId: 'top-right'
+                });
+            },
 
-                    if(_.isObject(message)) {
-                        config = _.extend(config, message);
-                    } else {
-                        config.body = message;
-                        config.title = title;
-                    }
+            error: function error(message, title) {
+                var config = {
+                    type: 'error',
+                    timeout: 0,
+                    toasterId: 'full-width'
+                };
 
-                    toaster.pop(config);
-                },
-
-                genericError: function(error, message) {
-                    error = _.extend({
-                        customMessage: message
-                    }, error);
-
-                    this.error({
-                        bodyOutputType: 'templateWithData',
-                        body: "{template: 'generic-error-template', data: " + angular.toJson(error) + "}"
-                    });
-                },
-
-                progress: function progress(templateId, data) {
-                    var deferred = $q.defer();
-                    ngDialog.open(
-                        {
-                            template: templateId,
-                            showClose: false,
-                            closeByEscape: false,
-                            closeByDocument: false,
-                            controller: ['$scope', function ($scope) {
-                                $scope.data = data;
-                                $scope.ok = function () {
-                                    deferred.resolve(arguments);
-                                    $scope.closeThisDialog();
-                                };
-                            }]
-                        });
-                    return deferred.promise;
+                if (_.isObject(message)) {
+                    config = _.extend(config, message);
+                } else {
+                    config.body = message;
+                    config.title = title;
                 }
-            };
-        }]);
+
+                toaster.pop(config);
+            },
+
+            genericError: function (error, message) {
+                error = _.extend({
+                    customMessage: message
+                }, error);
+
+                this.error({
+                    bodyOutputType: 'templateWithData',
+                    body: "{template: 'generic-error-template', data: " + angular.toJson(error) + "}"
+                });
+            },
+
+            progress: function progress(templateId, data) {
+                var deferred = $q.defer();
+                ngDialog.open(
+                    {
+                        template: templateId,
+                        showClose: false,
+                        closeByEscape: false,
+                        closeByDocument: false,
+                        controller: ['$scope', function ($scope) {
+                            $scope.data = data;
+                            $scope.ok = function () {
+                                deferred.resolve(arguments);
+                                $scope.closeThisDialog();
+                            };
+                        }]
+                    });
+                return deferred.promise;
+            }
+        };
+    });
 
 }());

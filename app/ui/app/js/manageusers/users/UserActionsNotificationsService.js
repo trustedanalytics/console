@@ -17,51 +17,50 @@
     "use strict";
 
     /*jshint newcap: false*/
-    App.service('UserActionsNotificationsService', ['$controller', '$q', 'NotificationService', 'UserService',
-        function ($controller, $q, NotificationService, UserService) {
+    App.service('UserActionsNotificationsService', function ($controller, $q, NotificationService, UserService) {
 
-            return {
+        return {
 
-                deleteUser: function (user, state, userViewType) {
-                    return NotificationService.confirm('confirm-delete', { userToDelete: user, userViewType: userViewType })
-                        .then(function onConfirmDelete() {
-                            state.setPending();
-                            var userId = user.guid;
-                            return UserService(userViewType).deleteUser(userId);
-                        })
-                        .then(function(){
-                            NotificationService.success('User ' + user.username + ' has been deleted');
+            deleteUser: function (user, state, userViewType) {
+                return NotificationService.confirm('confirm-delete', {userToDelete: user, userViewType: userViewType})
+                    .then(function onConfirmDelete() {
+                        state.setPending();
+                        var userId = user.guid;
+                        return UserService(userViewType).deleteUser(userId);
+                    })
+                    .then(function () {
+                        NotificationService.success('User ' + user.username + ' has been deleted');
 
-                        })
-                        .catch(function onError(response) {
-                            NotificationService.error(response.data.message || 'Error deleting user');
-                        })
-                        .finally(function () {
-                            state.setLoaded();
-                        });
+                    })
+                    .catch(function onError(response) {
+                        NotificationService.error(response.data.message || 'Error deleting user');
+                    })
+                    .finally(function () {
+                        state.setLoaded();
+                    });
 
-                },
+            },
 
-                userAdded: function (user) {
-                    NotificationService.success('User ' + user.username + ' has been added');
-                },
+            userAdded: function (user) {
+                NotificationService.success('User ' + user.username + ' has been added');
+            },
 
-                userNotAdded: function (user) {
-                    NotificationService.error('User ' + user.username + ' has not been added');
-                },
+            userNotAdded: function (user) {
+                NotificationService.error('User ' + user.username + ' has not been added');
+            },
 
-                userInvited: function (user) {
-                    NotificationService.success('User ' + user.username + ' does not exist. The user has been invited');
-                },
+            userInvited: function (user) {
+                NotificationService.success('User ' + user.username + ' does not exist. The user has been invited');
+            },
 
-                userRolesChangeFailed: function () {
-                    NotificationService.error('User role has not been updated');
-                },
+            userRolesChangeFailed: function () {
+                NotificationService.error('User role has not been updated');
+            },
 
-                userRolesChanged: function (user) {
-                    NotificationService.success(user.username + ' role has been updated');
-                }
+            userRolesChanged: function (user) {
+                NotificationService.success(user.username + ' role has been updated');
+            }
 
-            };
-        }]);
+        };
+    });
 }());

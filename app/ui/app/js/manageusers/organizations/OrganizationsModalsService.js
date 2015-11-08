@@ -17,7 +17,7 @@
     "use strict";
 
     /*jshint newcap: false*/
-    App.service('OrganizationsModalsService', ['NotificationService', function (NotificationService) {
+    App.service('OrganizationsModalsService', function (NotificationService) {
 
         return {
             onUpdateSuccess: function () {
@@ -28,22 +28,22 @@
                 NotificationService.error('Error renaming organization');
             },
 
-            onDeleteSuccess: function() {
+            onDeleteSuccess: function () {
                 NotificationService.success('Organization deleted');
             },
 
-            onDeleteError: function(error) {
+            onDeleteError: function (error) {
                 var msg = 'Error deleting organization.';
-                if(error.status === 400) {
+                if (error.status === 400) {
                     msg += ' Please make sure that the organization has no spaces in it.';
                 }
 
                 NotificationService.genericError(error.data, msg);
             },
 
-            deleteOrganization: function() {
+            deleteOrganization: function () {
                 return NotificationService.confirm('delete-confirm');
             }
         };
-    }]);
+    });
 }());

@@ -16,15 +16,13 @@
 (function () {
     "use strict";
 
-    App.factory('ServicePlanResource', ['Restangular', function (Restangular) {
+    App.factory('ServicePlanResource', function (Restangular) {
 
         var servicePlan = Restangular.service("service_plan");
 
-        servicePlan.getPlan = function(name, brokerLabel) {
+        servicePlan.getPlan = function (name, brokerLabel) {
             return this.one().get({plan: name, label: brokerLabel});
         };
         return servicePlan;
-    }]);
-
-
+    });
 }());

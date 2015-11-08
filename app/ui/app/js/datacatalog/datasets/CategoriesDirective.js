@@ -16,31 +16,30 @@
 (function () {
     "use strict";
 
-    App.directive('dCategories', ['categoriesIcons',
-        function (categoriesIcons) {
-            return {
-                scope: {
-                    onCategoryChange: '&onCategoryChange',
-                    categories: '='
-                },
+    App.directive('dCategories', function (categoriesIcons) {
+        return {
+            scope: {
+                onCategoryChange: '&onCategoryChange',
+                categories: '='
+            },
 
-                controller: ['$scope', function ($scope) {
+            controller: function ($scope) {
 
-                    if(!$scope.categories) {
-                        $scope.categories = [];
-                    }
+                if (!$scope.categories) {
+                    $scope.categories = [];
+                }
 
-                    $scope.getIcon = function(category) {
-                        return categoriesIcons[category] || categoriesIcons.other;
-                    };
+                $scope.getIcon = function (category) {
+                    return categoriesIcons[category] || categoriesIcons.other;
+                };
 
-                    $scope.changeCategory = function(category) {
-                        $scope.category = category;
-                        $scope.onCategoryChange({ category: category });
-                    };
+                $scope.changeCategory = function (category) {
+                    $scope.category = category;
+                    $scope.onCategoryChange({category: category});
+                };
 
-                }],
-                templateUrl: 'app/views/datacatalog/datasets/categories.html'
-            };
-        }]);
+            },
+            templateUrl: 'app/views/datacatalog/datasets/categories.html'
+        };
+    });
 }());

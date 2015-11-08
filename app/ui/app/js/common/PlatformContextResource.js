@@ -16,16 +16,16 @@
 (function () {
     "use strict";
 
-    App.factory('PlatformContextResource', ['Restangular', function (Restangular) {
+    App.factory('PlatformContextResource', function (Restangular) {
         var context = Restangular.service('platform_context');
 
-        context.getPlatformContext = function() {
+        context.getPlatformContext = function () {
             return this.one().get();
         };
 
         return context;
 
-    }]);
+    });
 
 
 }());

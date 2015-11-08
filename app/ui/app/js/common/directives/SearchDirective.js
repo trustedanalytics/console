@@ -16,42 +16,40 @@
 (function () {
     "use strict";
 
-    App.directive('dSearch', [function () {
+    App.directive('dSearch', function () {
         return {
             scope: {
                 control: '='
             },
 
-            controller: ['$scope', '$element', '$rootScope', '$timeout',
-                function($scope, $element, $rootScope, $timeout) {
+            controller: function ($scope, $element, $rootScope, $timeout) {
                 var input = $element.find('input');
 
-                input.on('blur', function() {
+                input.on('blur', function () {
                     $scope.control.opened = false;
                     $timeout(function () {
                         $scope.$apply();
                     });
                 });
 
-                $scope.search = function() {
+                $scope.search = function () {
                     $rootScope.$broadcast('searchChanged', $scope.value);
                 };
 
-                $rootScope.$on('$stateChangeSuccess', function() {
+                $rootScope.$on('$stateChangeSuccess', function () {
                     $scope.value = '';
                     $scope.search();
                 });
 
-                $scope.$watch('control', function(newValue) {
-                    if(newValue.opened) {
+                $scope.$watch('control', function (newValue) {
+                    if (newValue.opened) {
                         input.focus();
                     } else {
                         input.blur();
                     }
                 }, true);
-            }],
+            },
             templateUrl: 'app/views/common/search.html'
         };
-    }]);
-
+    });
 }());

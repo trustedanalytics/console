@@ -16,7 +16,7 @@
 (function () {
     "use strict";
 
-    App.factory('DataSetResource', ['Restangular', 'targetProvider', function (Restangular, targetProvider) {
+    App.factory('DataSetResource', function (Restangular, targetProvider) {
         var datasets = Restangular.service('datasets');
 
         var organisation = targetProvider.getOrganization();
@@ -39,6 +39,6 @@
 
         return datasets;
 
-    }]);
+    });
 }());
 

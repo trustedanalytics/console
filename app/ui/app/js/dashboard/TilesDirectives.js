@@ -16,7 +16,7 @@
 (function () {
     "use strict";
 
-    App.directive('dTileSmallWhiteNumeric', [function () {
+    App.directive('dTileSmallWhiteNumeric', function () {
         return {
             scope: {
                 number: '=',
@@ -24,9 +24,9 @@
             },
             templateUrl: 'app/views/dashboard/tile-small-white-numeric.html'
         };
-    }]);
+    });
 
-    App.directive('dTileBlueNumeric', [function () {
+    App.directive('dTileBlueNumeric', function () {
         return {
             scope: {
                 number: '=',
@@ -36,9 +36,9 @@
             },
             templateUrl: 'app/views/dashboard/tile-blue-numeric.html'
         };
-    }]);
+    });
 
-    App.directive('dTileProgress', [function () {
+    App.directive('dTileProgress', function () {
         return {
             scope: {
                 value: '=',
@@ -46,16 +46,16 @@
             },
             templateUrl: 'app/views/dashboard/tile-progress.html'
         };
-    }]);
+    });
 
 
-    App.directive('dTileNews', [function () {
+    App.directive('dTileNews', function () {
         return {
             scope: {
                 events: '='
             },
             templateUrl: 'app/views/dashboard/tile-news.html'
         };
-    }]);
+    });
 
 })();

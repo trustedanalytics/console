@@ -16,7 +16,7 @@
 (function () {
     "use strict";
 
-    App.factory('LatencyChartResource', ['Restangular', function (Restangular) {
+    App.factory('LatencyChartResource', function (Restangular) {
         var resource = Restangular.service('metrics').one('latency-histograms');
 
         resource.getChart = function () {
@@ -24,5 +24,5 @@
         };
 
         return resource;
-    }]);
+    });
 }());

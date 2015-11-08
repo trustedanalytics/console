@@ -16,33 +16,32 @@
 (function () {
     "use strict";
 
-    App.factory('PlatformContextProvider', ['PlatformContextResource', '$q', '$cookies',
-        function (PlatformContextResource, $q, $cookies) {
-            var PLATFORM_CONTEXT_KEY = "platform-context";
+    App.factory('PlatformContextProvider', function (PlatformContextResource, $q, $cookies) {
+        var PLATFORM_CONTEXT_KEY = "platform-context";
 
-            var platformContext = null;
-            return {
-                getPlatformContext: function() {
-                    if(!platformContext) {
-                        platformContext = $cookies.getObject(PLATFORM_CONTEXT_KEY);
-                    }
-
-                    if(platformContext) {
-                        var deferred = $q.defer();
-                        deferred.resolve(platformContext);
-                        return deferred.promise;
-                    } else {
-                        return PlatformContextResource
-                            .withErrorMessage("Error while fetching platform context")
-                            .getPlatformContext()
-                            .then(function success(data) {
-                                platformContext = data.plain();
-                                $cookies.putObject(PLATFORM_CONTEXT_KEY, platformContext);
-                                return platformContext;
-                            });
-                    }
+        var platformContext = null;
+        return {
+            getPlatformContext: function () {
+                if (!platformContext) {
+                    platformContext = $cookies.getObject(PLATFORM_CONTEXT_KEY);
                 }
-            };
-        }]);
+
+                if (platformContext) {
+                    var deferred = $q.defer();
+                    deferred.resolve(platformContext);
+                    return deferred.promise;
+                } else {
+                    return PlatformContextResource
+                        .withErrorMessage("Error while fetching platform context")
+                        .getPlatformContext()
+                        .then(function success(data) {
+                            platformContext = data.plain();
+                            $cookies.putObject(PLATFORM_CONTEXT_KEY, platformContext);
+                            return platformContext;
+                        });
+                }
+            }
+        };
+    });
 
 }());

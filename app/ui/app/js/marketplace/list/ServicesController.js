@@ -16,72 +16,71 @@
 (function () {
     "use strict";
 
-    App.controller('ServicesController', ['$http', 'serviceExtractor',
-        'targetUrlBuilder', '$scope', 'State', 'targetProvider', 'ServiceResource',
-        function ($http, serviceExtractor, targetUrlBuilder, $scope, State,
-                  targetProvider, ServiceResource) {
-            var self = this,
-                searchHandler = null,
-                state = new State();
+    App.controller('ServicesController', function ($http, serviceExtractor, targetUrlBuilder, $scope, State,
+        targetProvider, ServiceResource) {
 
-            self.state = state;
+        var self = this,
+            searchHandler = null,
+            state = new State();
 
-            self.isSpaceSet = function () {
-                return !_.isEmpty(targetProvider.getSpace());
-            };
+        self.state = state;
 
-            self.updateServices = function () {
+        self.isSpaceSet = function () {
+            return !_.isEmpty(targetProvider.getSpace());
+        };
 
-                self.state.setPending();
+        self.updateServices = function () {
 
-                if(self.isSpaceSet()) {
-                    ServiceResource
-                        .withErrorMessage('Failed to retrieve services list')
-                        .getListBySpace(targetProvider.getSpace().guid)
-                        .then(function (data) {
-                            data = data || {};
-                            self.services = serviceExtractor.extract(data);
-                            self.state.setLoaded();
-                            self.space = targetProvider.getSpace();
-                        })
-                        .catch(function () {
-                            self.state.setError();
-                        });
-                }
-                else {
-                    self.space = null;
-                    self.services = [];
-                    self.state.setLoaded();
-                }
-            };
+            self.state.setPending();
 
+            if (self.isSpaceSet()) {
+                ServiceResource
+                    .withErrorMessage('Failed to retrieve services list')
+                    .getListBySpace(targetProvider.getSpace().guid)
+                    .then(function (data) {
+                        data = data || {};
+                        self.services = serviceExtractor.extract(data);
+                        self.state.setLoaded();
+                        self.space = targetProvider.getSpace();
+                    })
+                    .catch(function () {
+                        self.state.setError();
+                    });
+            }
+            else {
+                self.space = null;
+                self.services = [];
+                self.state.setLoaded();
+            }
+        };
+
+        self.updateServices();
+
+        $scope.$on('targetChanged', function () {
             self.updateServices();
+        });
 
-            $scope.$on('targetChanged', function () {
-                self.updateServices();
-            });
+        searchHandler = $scope.$on('searchChanged', function (eventName, searchText) {
+            $scope.searchText = searchText;
+        });
 
-            searchHandler = $scope.$on('searchChanged', function (eventName, searchText) {
-                $scope.searchText = searchText;
-            });
+        $scope.$on('$destroy', function () {
+            if (searchHandler) {
+                searchHandler();
+            }
+        });
 
-            $scope.$on('$destroy', function () {
-                if (searchHandler) {
-                    searchHandler();
-                }
-            });
+        self.filterService = function (service) {
+            return isServiceMatching(service, $scope.searchText);
+        };
 
-            self.filterService = function (service) {
-                return isServiceMatching(service, $scope.searchText);
-            };
+    });
 
-        }]);
-
-    function contains (str, searchText) {
+    function contains(str, searchText) {
         return str.toLowerCase().indexOf(searchText) > -1;
     }
 
-    function isServiceMatching (service, searchText) {
+    function isServiceMatching(service, searchText) {
         if (!searchText) {
             return true;
         }

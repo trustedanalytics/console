@@ -16,7 +16,7 @@
 (function () {
     "use strict";
 
-    App.factory('PlatformResource', ['Restangular', function (Restangular) {
+    App.factory('PlatformResource', function (Restangular) {
 
         var resource = Restangular.service("platform").one("summary");
         resource.getSummary = function(){
@@ -28,5 +28,5 @@
         };
         return resource;
 
-    }]);
+    });
 }());

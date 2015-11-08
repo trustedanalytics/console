@@ -16,7 +16,7 @@
 (function () {
     "use strict";
 
-    App.factory('UploadResource', ['Restangular', function (Restangular) {
+    App.factory('UploadResource', function (Restangular) {
         var resource = Restangular.service("config").one("uploader");
 
         resource.getUploadEnvs = function () {
@@ -24,5 +24,5 @@
         };
 
         return resource;
-    }]);
+    });
 }());

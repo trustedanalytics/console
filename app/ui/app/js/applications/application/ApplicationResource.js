@@ -16,42 +16,41 @@
 (function () {
     "use strict";
 
-    App.factory('ApplicationResource', ['Restangular',
-        function (Restangular) {
-            var service = Restangular.service("apps");
+    App.factory('ApplicationResource', function (Restangular) {
+        var service = Restangular.service("apps");
 
-            service.deleteApplication = function (id, cascade) {
-                return this.one(id).remove({cascade: cascade});
-            };
+        service.deleteApplication = function (id, cascade) {
+            return this.one(id).remove({cascade: cascade});
+        };
 
-            service.getAll = function(spaceId){
-                return this.getList({ space: spaceId });
-            };
+        service.getAll = function (spaceId) {
+            return this.getList({space: spaceId});
+        };
 
-            service.getAllByServiceType = function(spaceId, serviceLabel){
-                return this.getList({ space: spaceId, service_label: serviceLabel});
-            };
+        service.getAllByServiceType = function (spaceId, serviceLabel) {
+            return this.getList({space: spaceId, service_label: serviceLabel});
+        };
 
-            service.getApplication = function (id) {
-                return this.one(id).get();
-            };
+        service.getApplication = function (id) {
+            return this.one(id).get();
+        };
 
-            service.postStatus = function(appId, status) {
-                return this.one(appId).all("status").post(status);
-            };
+        service.postStatus = function (appId, status) {
+            return this.one(appId).all("status").post(status);
+        };
 
-            service.createBinding = function (appId, serviceId) {
-                return this.one(appId).all("service_bindings").post({service_instance_guid: serviceId});
-            };
+        service.createBinding = function (appId, serviceId) {
+            return this.one(appId).all("service_bindings").post({service_instance_guid: serviceId});
+        };
 
-            service.getAllBindings = function(appId) {
-                return this.one(appId).all("service_bindings").customGET("");
-            };
+        service.getAllBindings = function (appId) {
+            return this.one(appId).all("service_bindings").customGET("");
+        };
 
-            service.getOrphanServices = function(appId) {
-                return this.one(appId).all("orphan_services").customGET("");
-            };
+        service.getOrphanServices = function (appId) {
+            return this.one(appId).all("orphan_services").customGET("");
+        };
 
-            return service;
-        }]);
+        return service;
+    });
 }());

@@ -16,37 +16,37 @@
 (function () {
     "use strict";
 
-    App.controller('PlatformDashboardController', ['$scope', 'State', 'PlatformResource', 'NotificationService', '$state',
-        function ($scope, State, PlatformResource, NotificationService, $state) {
+    App.controller('PlatformDashboardController', function ($scope, State, PlatformResource, NotificationService,
+        $state) {
 
-            var state = new State().setPending();
-            $scope.state = state;
+        var state = new State().setPending();
+        $scope.state = state;
 
-            PlatformResource.getSummary()
-                .then(function(response){
-                    $scope.response = response;
-                    $scope.controllerSummary = response.controllerSummary;
-                    $scope.componentSummary = response.componentSummary;
+        PlatformResource.getSummary()
+            .then(function (response) {
+                $scope.response = response;
+                $scope.controllerSummary = response.controllerSummary;
+                $scope.componentSummary = response.componentSummary;
+                $scope.state = state.setLoaded();
+            }).catch(function onError() {
+            state.setError();
+        });
+
+        var self = this;
+        self.isTabActive = function (sref) {
+            return $state.is(sref) || $state.includes(sref);
+        };
+
+        $scope.onRefresh = function () {
+            $scope.state = state.setPending();
+            PlatformResource.refreshCache()
+                .then(function () {
                     $scope.state = state.setLoaded();
+                    NotificationService.success('Please wait a few minutes for refresh state');
                 }).catch(function onError() {
-                    state.setError();
-                });
+                state.setError();
+            });
+        };
 
-            var self = this;
-            self.isTabActive = function(sref) {
-                return $state.is(sref) || $state.includes(sref);
-            };
-
-            $scope.onRefresh = function(){
-                $scope.state = state.setPending();
-                PlatformResource.refreshCache()
-                    .then(function(){
-                        $scope.state = state.setLoaded();
-                        NotificationService.success('Please wait a few minutes for refresh state');
-                    }).catch(function onError() {
-                        state.setError();
-                    });
-            };
-
-        }]);
+    });
 }());

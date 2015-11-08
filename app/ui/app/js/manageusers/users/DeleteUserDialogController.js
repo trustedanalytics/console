@@ -17,20 +17,19 @@
     "use strict";
 
     /*jshint newcap: false*/
-    App.controller('DeleteUserDialogController', ['$scope', 'UserService', '$q', 'NotificationService',
-        function ($scope, UserService, $q, NotificationService) {
-            $scope.userToDelete =  $scope.ngDialogData.user;
-            $scope.confirmDelete = function () {
-                $scope.ngDialogData.state.setPending();
-                UserService($scope.ngDialogData.userViewType).deleteUser($scope.userToDelete.guid)
-                    .then($scope.closeThisDialog())
-                    .then( $scope.ngDialogData.successCallback, errorDeleting)
-                    .finally( $scope.ngDialogData.state.setLoaded);
+    App.controller('DeleteUserDialogController', function ($scope, UserService, $q, NotificationService) {
+        $scope.userToDelete = $scope.ngDialogData.user;
+        $scope.confirmDelete = function () {
+            $scope.ngDialogData.state.setPending();
+            UserService($scope.ngDialogData.userViewType).deleteUser($scope.userToDelete.guid)
+                .then($scope.closeThisDialog())
+                .then($scope.ngDialogData.successCallback, errorDeleting)
+                .finally($scope.ngDialogData.state.setLoaded);
 
-            };
+        };
 
-            function errorDeleting(responseDetails) {
-                NotificationService.error(responseDetails.data.message || 'Error deleting user');
-            }
-        }]);
+        function errorDeleting(responseDetails) {
+            NotificationService.error(responseDetails.data.message || 'Error deleting user');
+        }
+    });
 }());
