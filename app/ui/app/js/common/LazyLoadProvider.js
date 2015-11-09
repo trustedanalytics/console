@@ -18,7 +18,7 @@ App.provider('LazyLoad', function () {
 
     this.load = function (libs) {
         return {
-            lazyLoad: function ($ocLazyLoad, $q, LazyLoadConfig) {
+            lazyLoad: /*@ngInject*/ function ($ocLazyLoad, $q, LazyLoadConfig) {
                 var promises = libs.map(function (lib) {
                     var module = _.findWhere(LazyLoadConfig.modules, {name: lib});
                     var standalone = _.findWhere(LazyLoadConfig.standalones, {name: lib}) || {};

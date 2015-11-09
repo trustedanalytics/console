@@ -23,7 +23,7 @@
                 ngDialog.open(
                     {
                         template: templateId,
-                        controller: ['$scope', function ($scope) {
+                        controller: /*@ngInject*/ function ($scope) {
                             $scope.data = data;
                             $scope.confirm = function () {
                                 deferred.resolve(arguments);
@@ -33,7 +33,7 @@
                             $scope.cancel = function () {
                                 $scope.closeThisDialog();
                             };
-                        }]
+                        }
                     });
                 return deferred.promise;
             },
