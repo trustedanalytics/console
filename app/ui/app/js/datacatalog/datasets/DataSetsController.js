@@ -17,7 +17,7 @@
     "use strict";
 
     App.controller('DataSetsController', function ($scope, DataSetResource, $routeParams, ngTableParams, State,
-        $cookies, PlatformContextProvider) {
+                                                   $cookies, PlatformContextProvider) {
 
         var TOOL_KEY = 'datacatalog_tool',
             DEFAULT_TOOL = 'arcadia',
@@ -60,17 +60,9 @@
 
         $scope.availableTools = [];
 
-        PlatformContextProvider.getPlatformContext().then(function (data) {
-            var externalTools = data.externalTools.list;
-            $scope.availableTools = _.pluck(_.where(externalTools, {available: true}), 'name').map(function (name) {
-                return name.toLowerCase();
-            });
-
-            if (!_.contains($scope.availableTools, $scope.tool)) {
-                $scope.tool = _.contains($scope.availableTools, DEFAULT_TOOL) ?
-                    DEFAULT_TOOL :
-                    _.first($scope.availableTools);
-            }
+        loadPlatformContext(PlatformContextProvider, $scope.tool).then(function(data){
+            $scope.availableTools = data.availableTools;
+            $scope.tool = data.tool;
         });
 
         $scope.isToolAvailable = function (toolName) {
@@ -79,40 +71,9 @@
 
         /*jshint newcap: true*/
 
-        function prepareQuery() {
-            var filters = [];
-            if (category) {
-                filters.push({"category": [category]});
-            }
-            if ($scope.created.from || $scope.created.to) {
-                var creationTime = [-1, -1];
-                if ($scope.created.from) {
-                    creationTime[0] = $scope.created.from;
-                }
-                if ($scope.created.to) {
-                    creationTime[1] = $scope.created.to;
-                    creationTime[1].setHours(23, 59, 59);
-                }
-                filters.push({
-                    creationTime: creationTime
-                });
-            }
-            if ($scope.format.value) {
-                filters.push({
-                    format: [$scope.format.value.toLowerCase()]
-                });
-            }
-            return {
-                "query": searchText,
-                "filters": filters,
-                "size": $scope.pagination.pageSize,
-                "from": ($scope.pagination.currentPage - 1) * $scope.pagination.pageSize
-            };
-        }
-
         $scope.search = function () {
             state.value = state.values.PENDING;
-            var query = prepareQuery();
+            var query = prepareQuery(category, $scope.created, $scope.format.value, $scope.pagination, searchText);
             DataSetResource
                 .withErrorMessage('Failed to get the data sets')
                 .getByQuery(query)
@@ -121,9 +82,9 @@
                     preparePagination();
                     state.value = state.values.LOADED;
                 }).catch(function () {
-                populate({});
-                $scope.state.setError();
-            });
+                    populate({});
+                    $scope.state.setError();
+                });
         };
 
         function populate(data) {
@@ -150,7 +111,6 @@
             }
         });
 
-
         $scope.changePage = function (pageNo) {
             $scope.pagination.currentPage = pageNo;
             $scope.search();
@@ -171,7 +131,6 @@
         };
 
         $scope.search();
-
     });
 
     function getFormatIcon(format) {
@@ -182,5 +141,58 @@
         };
 
         return knownFormats[(format || '').toLowerCase()] || 'question';
+    }
+
+    function prepareQuery(category, created, formatValue, pagination, _searchText) {
+        var filters = [];
+        if (category) {
+            filters.push({"category": [category]});
+        }
+        if (created.from || created.to) {
+            var creationTime = [-1, -1];
+            if (created.from) {
+                creationTime[0] = created.from;
+            }
+            if (created.to) {
+                creationTime[1] = created.to;
+                creationTime[1].setHours(23, 59, 59);
+            }
+            filters.push({
+                creationTime: creationTime
+            });
+        }
+        if (formatValue) {
+            filters.push({
+                format: [formatValue.toLowerCase()]
+            });
+        }
+        return {
+            "query": _searchText,
+            "filters": filters,
+            "size": pagination.pageSize,
+            "from": (pagination.currentPage - 1) * pagination.pageSize
+        };
+    }
+
+    function loadPlatformContext (platformCtxProvider, tool) {
+        return platformCtxProvider.getPlatformContext()
+            .then(function onSuccess(data) {
+                var DEFAULT_TOOL = 'arcadia';
+                var externalTools = data.externalTools.list;
+                var availableTools = _.pluck(_.where(externalTools, {available: true}), 'name').map(function (name) {
+                    return name.toLowerCase();
+                });
+
+                if (!_.contains(availableTools, tool)) {
+                    tool = _.contains(availableTools, DEFAULT_TOOL) ?
+                        DEFAULT_TOOL :
+                        _.first(availableTools);
+                }
+
+                return {
+                    availableTools: availableTools,
+                    tool: tool
+                };
+            });
     }
 }());

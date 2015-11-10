@@ -67,10 +67,9 @@ describe("Unit: ApplicationController", function () {
 
     it('getApplication error 404, set state error not found', function () {
         var deferred = $q.defer();
-        applicationResource.getApplication = sinon.stub().returns(deferred.promise);
+        applicationResource.getApplication = sinon.stub().returns(deferred.promise)
         deferred.reject({ status: 404 });
         createController();
-
         $rootScope.$digest();
 
         expect(controller.state.value, 'state').to.be.equal(state.values.NOT_FOUND);
@@ -114,13 +113,13 @@ describe("Unit: ApplicationController", function () {
         getSampleInstances();
         var deferredInstances = $q.defer();
         serviceInstanceResource.getAll = sinon.stub().returns(deferredInstances.promise);
-        deferredInstances.reject();
+        deferredInstances.reject({ status: 404 });
 
         createController();
 
         $rootScope.$digest();
 
-        expect(controller.state.value, 'state').to.be.equal(state.values.ERROR);
+        expect(controller.state.isError(), 'state').to.be.true;
     });
 
     it('restage, set restage status', function(){
@@ -164,9 +163,9 @@ describe("Unit: ApplicationController", function () {
 
     it('start, notifications service called with success', function(){
         var deferredStatus = $q.defer();
-            applicationResource.postStatus = sinon.stub().returns(deferredStatus.promise);
-            notificationService.success = sinon.stub();
-            application = { guid: APP_ID };
+        applicationResource.postStatus = sinon.stub().returns(deferredStatus.promise);
+        notificationService.success = sinon.stub();
+        application = { guid: APP_ID };
 
         createAndInitializeController(application);
 
@@ -180,9 +179,9 @@ describe("Unit: ApplicationController", function () {
 
     it('start, set error status if something crashes', function(){
         var deferredStatus = $q.defer();
-            applicationResource.postStatus = sinon.stub().returns(deferredStatus.promise);
-            notificationService.error = sinon.stub();
-            application = { guid: APP_ID };
+        applicationResource.postStatus = sinon.stub().returns(deferredStatus.promise);
+        notificationService.error = sinon.stub();
+        application = { guid: APP_ID };
 
         createAndInitializeController(application);
 
@@ -196,9 +195,9 @@ describe("Unit: ApplicationController", function () {
 
     it('stop, notifications service called with success', function(){
         var deferredStatus = $q.defer();
-            applicationResource.postStatus = sinon.stub().returns(deferredStatus.promise);
-            notificationService.success = sinon.stub();
-            application = { guid: APP_ID };
+        applicationResource.postStatus = sinon.stub().returns(deferredStatus.promise);
+        notificationService.success = sinon.stub();
+        application = { guid: APP_ID };
 
         createAndInitializeController(application);
 
@@ -212,9 +211,9 @@ describe("Unit: ApplicationController", function () {
 
     it('stop, set error status if something crashes', function(){
         var deferredStatus = $q.defer();
-            applicationResource.postStatus = sinon.stub().returns(deferredStatus.promise);
-            notificationService.error = sinon.stub();
-            application = { guid: APP_ID };
+        applicationResource.postStatus = sinon.stub().returns(deferredStatus.promise);
+        notificationService.error = sinon.stub();
+        application = { guid: APP_ID };
 
         createAndInitializeController(application);
 

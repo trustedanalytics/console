@@ -17,7 +17,7 @@
     "use strict";
 
     App.controller('ApplicationController', function ($stateParams, State, ServiceInstanceResource, ApplicationResource,
-        $state, NotificationService) {
+                                                      $state, NotificationService, $q) {
 
         var self = this,
             appId = $stateParams.appId;
@@ -38,11 +38,20 @@
         };
 
         /*jshint latedef: false */
-        loadApplicationSummary();
+        loadApplicationSummary(ApplicationResource, self.appId, ServiceInstanceResource, self.state, $q)
+            .then(function(data){
+                self.instances = data.instances;
+                self.application = data.application;
+            });
+
 
         self.refresh = function () {
             self.state.setPending();
-            loadApplicationSummary();
+            loadApplicationSummary(ApplicationResource, self.appId, ServiceInstanceResource, self.state, $q)
+                .then(function(data){
+                    self.instances = data.instances;
+                    self.application = data.application;
+                });
         };
 
         self.restage = function () {
@@ -65,8 +74,8 @@
             self.state.setPending();
 
             ApplicationResource.postStatus(appId, {
-                    state: 'STARTED'
-                })
+                state: 'STARTED'
+            })
                 .then(function onSuccess() {
                     NotificationService.success('Starting application has been scheduled.');
                 })
@@ -82,8 +91,8 @@
             self.state.setPending();
 
             ApplicationResource.postStatus(appId, {
-                    state: 'STOPPED'
-                })
+                state: 'STOPPED'
+            })
                 .then(function onSuccess() {
                     NotificationService.success('Stopping the application has been scheduled.');
                 })
@@ -122,35 +131,41 @@
                 });
         };
 
-        function loadInstances() {
-            ServiceInstanceResource.getAll(self.application.space_guid)
-                .then(function (instances) {
-                    self.instances = instances;
-                    self.state.setLoaded();
-                })
-                .catch(function () {
-                    self.state.setError();
-                });
-        }
-
-        function loadApplicationSummary() {
-            return ApplicationResource.getApplication(self.appId)
-                .then(function onSuccess(application) {
-                    application.env = application.environment_json ?
-                        Object.keys(application.environment_json).map(function (k) {
-                            return {key: k, value: application.environment_json[k]};
-                        }) : [];
-                    self.application = application;
-                })
-                .then(function onSuccess() {
-                    loadInstances(self, ServiceInstanceResource);
-                })
-                .catch(function onError(response) {
-                    self.state.setError(response.status);
-                });
-        }
-
     });
 
+    function loadInstances(serviceInstanceResource, spaceGuid, state) {
+        return serviceInstanceResource.getAll(spaceGuid)
+            .then(function(instances) {
+                state.setLoaded();
+                return instances;
+            });
+    }
 
+    function loadApplicationSummary(applicationResource, appId, serviceInstanceResource, state, $q) {
+        var application, instances;
+        return applicationResource.getApplication(appId)
+            .then(function onSuccess(_application_) {
+                application = _application_;
+                application.env = application.environment_json ?
+                    Object.keys(application.environment_json).map(function (k) {
+                        return { key: k, value: application.environment_json[k] };
+                    }) : [];
+            })
+            .then(function onSuccess() {
+                return loadInstances(serviceInstanceResource, application.space_guid, state);
+            })
+            .then(function(_instances_) {
+                instances = _instances_;
+            })
+            .then(function() {
+                return {
+                    application: application,
+                    instances: instances
+                };
+            })
+            .catch(function onError(response) {
+                state.setError(response.status);
+                return $q.reject();
+            });
+    }
 }());

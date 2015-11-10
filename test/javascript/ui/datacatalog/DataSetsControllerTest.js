@@ -24,6 +24,7 @@ describe("Unit: DataSetsController", function() {
         dataSetResource,
         q,
         platformContextProvider,
+        cookies,
 
         DEFAULT_TOOL_NAME = 'arcadia';
 
@@ -49,6 +50,11 @@ describe("Unit: DataSetsController", function() {
             }
         };
 
+        cookies = {
+            get: sinon.stub(),
+            put: sinon.stub()
+        };
+
         getSUT($injector);
         state = scope.state;
     }));
@@ -57,7 +63,8 @@ describe("Unit: DataSetsController", function() {
         return controller = $injector.get('$controller')('DataSetsController', {
             $scope: scope,
             DataSetResource: dataSetResource,
-            PlatformContextProvider: platformContextProvider
+            PlatformContextProvider: platformContextProvider,
+            $cookies: cookies
         });
     }
 
@@ -210,9 +217,9 @@ describe("Unit: DataSetsController", function() {
             deferred.resolve(sample_data);
             return deferred.promise;
         });
+        cookies.get = sinon.stub().returns(toolName);
 
         getSUT($injector);
-        scope.tool = toolName;
         rootScope.$apply();
 
         expect(scope.availableTools.length).to.be.equal(2);
