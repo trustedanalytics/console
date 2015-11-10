@@ -70,10 +70,12 @@
                     "tool": "rstudio"
                 }, {
                     "text": "H2O",
-                    "sref": "app.h2o"
+                    "sref": "app.h2o",
+                    "tool": "h2o"
                 }, {
                     "text": "GearPump",
-                    "sref": "app.gearpump"
+                    "sref": "app.gearpump", 
+                    "tool": "gearpump"
                 }
             ]
         }, {
