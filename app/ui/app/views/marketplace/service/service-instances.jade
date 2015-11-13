@@ -37,7 +37,7 @@
         tbody
             tr(ng-repeat="instance in ctrl.instances | orderBy: 'name'")
                 td {{ instance.name }}
-                td {{ instance.service_plan }}
+                td {{ instance.service_plan.name }}
                 td
                     a.app-bound(ng-repeat='app in instance.bound_apps', ui-sref='app.application({ appId: app.guid })') {{ app.name }}
                 td
