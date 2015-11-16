@@ -209,7 +209,10 @@ describe("Unit: DataSetsController", function() {
 
     it('current tool is available, leave current tool', inject(function($injector){
         var toolName = "currenttool";
-        var sample_data = {"externalTools": {"list":[{name:'othertool1',available:true}, {name:'othertool2',available:false}, {name:toolName,available:true}]}};
+        var sample_data = {"externalTools":{"others":[{name:'othertool1',available:true},{name:'othertool2',available:false},
+            {name:'othertool3',available:true}],"visualizations":[{name:'vistool1',available:true},{name:'vistool2',available:false},
+            {name:toolName,available:true}]}};
+
         sample_data.plain = function(){ return this; };
 
         platformContextProvider.getPlatformContext = sinon.spy(function() {
@@ -221,13 +224,13 @@ describe("Unit: DataSetsController", function() {
 
         getSUT($injector);
         rootScope.$apply();
-
-        expect(scope.availableTools.length).to.be.equal(2);
         expect(scope.tool).to.be.equal(toolName);
     }));
 
     it('current tool not available but default is, set default tool', inject(function($injector){
-        var sample_data = {"externalTools": {"list":[{name:'othertool2',available:false}, {name:'othertool1',available:true}, {name:DEFAULT_TOOL_NAME,available:true}]}};
+        var sample_data = {"externalTools":{"others":[{name:'othertool1',available:true},{name:'othertool2',available:false},
+            {name:'othertool3',available:true}],"visualizations":[{name:'vistool1',available:true},{name:'vistool2',available:false},
+            {name:DEFAULT_TOOL_NAME,available:true}]}};
         sample_data.plain = function(){return this;};
 
         platformContextProvider.getPlatformContext = sinon.spy(function() {
@@ -243,7 +246,9 @@ describe("Unit: DataSetsController", function() {
     }));
 
     it('neither current nor default tool available, set first available tool on the list', inject(function($injector){
-        var sample_data = {"externalTools": {"list":[{name:'othertool1',available:false}, {name:'othertool2',available:true}, {name:'othertool3',available:true}]}};
+        var sample_data = {"externalTools":{"others":[{name:'othertool1',available:true},{name:'othertool2',available:false},
+            {name:'othertool3',available:true}],"visualizations":[{name:'vistool1',available:false},{name:DEFAULT_TOOL_NAME,available:false},
+            {name:'vistool3',available:true}]}};
         sample_data.plain = function(){return this;};
 
         platformContextProvider.getPlatformContext = sinon.spy(function() {
@@ -255,7 +260,7 @@ describe("Unit: DataSetsController", function() {
         getSUT($injector);
         scope.tool = 'notexistingtool';
         rootScope.$apply();
-        expect(scope.tool).to.be.equal('othertool2');
+        expect(scope.tool).to.be.equal('vistool3');
     }));
 
     function findFilter(filters, name){

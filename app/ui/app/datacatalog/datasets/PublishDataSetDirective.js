@@ -45,17 +45,17 @@
                 $scope.tool = $scope.tool || tools.ARCADIA;
                 $scope.tools = tools;
 
-                $scope.availableTools = [];
+                $scope.availableVisualizationsTools =[];
 
                 PlatformContextProvider.getPlatformContext().then(function (data) {
-                    var externalTools = data.externalTools.list;
-                    $scope.availableTools = _.pluck(_.where(externalTools, {available: true}), 'name').map(function (name) {
+                    var externalTools = data.externalTools;
+                    $scope.availableVisualizationsTools = _.pluck(_.where(externalTools.visualizations, {available: true}), 'name').map(function (name) {
                         return name.toLowerCase();
                     });
                 });
 
                 $scope.isToolAvailable = function (toolName) {
-                    return _.contains($scope.availableTools, toolName.toLowerCase());
+                    return _.contains($scope.availableVisualizationsTools, toolName.toLowerCase());
                 };
 
                 $scope.publish = function (tool) {

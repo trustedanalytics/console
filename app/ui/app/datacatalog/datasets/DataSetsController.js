@@ -58,15 +58,15 @@
             $scope.pagination.pages = ngTable.generatePagesArray($scope.pagination.currentPage, $scope.pagination.total, $scope.pagination.numPerPage);
         }
 
-        $scope.availableTools = [];
+        $scope.availableVisualizationsTools =[];
 
         loadPlatformContext(PlatformContextProvider, $scope.tool).then(function(data){
-            $scope.availableTools = data.availableTools;
+            $scope.availableVisualizationsTools = data.availableVisualizations;
             $scope.tool = data.tool;
         });
 
-        $scope.isToolAvailable = function (toolName) {
-            return _.contains($scope.availableTools, toolName.toLowerCase());
+        $scope.isVisualizationToolAvailable = function (toolName) {
+            return _.contains($scope.availableVisualizationsTools, toolName.toLowerCase());
         };
 
         /*jshint newcap: true*/
@@ -178,19 +178,20 @@
         return platformCtxProvider.getPlatformContext()
             .then(function onSuccess(data) {
                 var DEFAULT_TOOL = 'arcadia';
-                var externalTools = data.externalTools.list;
-                var availableTools = _.pluck(_.where(externalTools, {available: true}), 'name').map(function (name) {
+                var externalTools = data.externalTools;
+
+                var availableVisualizationsTools = _.pluck(_.where(externalTools.visualizations, {available: true}), 'name').map(function (name) {
                     return name.toLowerCase();
                 });
 
-                if (!_.contains(availableTools, tool)) {
-                    tool = _.contains(availableTools, DEFAULT_TOOL) ?
+                if (!_.contains(availableVisualizationsTools, tool)) {
+                    tool = _.contains(availableVisualizationsTools, DEFAULT_TOOL) ?
                         DEFAULT_TOOL :
-                        _.first(availableTools);
+                        _.first(availableVisualizationsTools);
                 }
 
                 return {
-                    availableTools: availableTools,
+                    availableVisualizations: availableVisualizationsTools,
                     tool: tool
                 };
             });
