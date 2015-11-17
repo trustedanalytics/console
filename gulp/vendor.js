@@ -44,18 +44,18 @@ gulp.task('vendor:base:styles', function () {
 // copy file from bower folder into the app vendor folder
 gulp.task('vendor:app', function () {
 
-    var jsFilter = plugins.filter('**/*.js');
-    var cssFilter = plugins.filter('**/*.css');
+    var jsFilter = plugins.filter('**/*.js', {restore: true});
+    var cssFilter = plugins.filter('**/*.css', {restore: true});
     var taskConfig = config.vendor;
 
     return gulp.src(utils.getSrc(taskConfig), { base: utils.getBase(taskConfig) })
         .pipe(plugins.plumber())
         .pipe(jsFilter)
         .pipe(plugins.uglify())
-        .pipe(jsFilter.restore())
+        .pipe(jsFilter.restore)
         .pipe(cssFilter)
         .pipe(plugins.minifyCss({ rebase: false }))
-        .pipe(cssFilter.restore())
+        .pipe(cssFilter.restore)
         .pipe(gulp.dest(utils.getDest(taskConfig)));
 
 });
