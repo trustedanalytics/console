@@ -19,6 +19,7 @@ var gulp        = require('gulp'),
     path        = require('path'),
     gulpsync    = require('gulp-sync')(gulp),
     utils       = require('./utils'),
+    Karma       = require('karma').Server,
 
     plugins     = require('gulp-load-plugins')(),
     config      = require('./config');
@@ -40,13 +41,11 @@ gulp.task('test:server', function() {
         .pipe(plugins.mocha());
 });
 
-gulp.task('test:ui', function() {
-    return gulp.src([])
-        .pipe(plugins.plumber())
-        .pipe(plugins.karma({
-            configFile: path.join(config.testsDir, 'karma.conf.js'),
-            action: 'run'
-        }));
+gulp.task('test:ui', function(done) {
+    new Karma({
+        configFile: path.join(__dirname, '..', config.testsDir, 'ui/karma.conf.js'),
+        singleRun: true
+    }, done).start();
 });
 
 
