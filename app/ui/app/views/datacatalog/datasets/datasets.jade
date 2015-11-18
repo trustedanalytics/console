@@ -38,14 +38,14 @@ h3
                 div
                     span from:
                     .input-group
-                        input.form-control(type='text', datepicker-popup="yyyy-MM-dd", ng-model='created.from', is-open='fromOpened')
+                        input.form-control(type='text', uib-datepicker-popup="yyyy-MM-dd", ng-model='created.from', is-open='fromOpened')
                         span.input-group-btn
                             button.btn.btn-default(type='button', ng-click='openFrom($event)')
                                 em.fa.fa-calendar
                 div
                     span to:
                     .input-group
-                        input.form-control(type='text', datepicker-popup="yyyy-MM-dd", ng-model='created.to', is-open='toOpened')
+                        input.form-control(type='text', uib-datepicker-popup="yyyy-MM-dd", ng-model='created.to', is-open='toOpened')
                         span.input-group-btn
                             button.btn.btn-default(type='button', ng-click='openTo($event)')
                                 em.fa.fa-calendar

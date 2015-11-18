@@ -13,8 +13,8 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 //-
-.btn-group(dropdown='', is-open='targetCtrl.organization.listIsOpen')
-    button.btn.btn-default.org-button(type='button', dropdown-toggle="", ng-disabled="!targetCtrl.organization.available.length")
+.btn-group(uib-dropdown='' is-open='targetCtrl.organization.listIsOpen')
+    button.btn.btn-default.org-button(type='button', uib-dropdown-toggle="", ng-disabled="!targetCtrl.organization.available.length")
         | {{ targetCtrl.organization.selected.name }}
         span.caret
 
@@ -23,8 +23,8 @@
             a(ng-click='targetCtrl.organization.set(org, $event)') {{ org.name }}
 
 
-.btn-group(dropdown='', is-open='targetCtrl.targetSpace.listIsOpen', ng-if='!hideSpace')
-    button.btn.btn-default.space-button(type='button', dropdown-toggle="", ng-disabled="!targetCtrl.targetSpace.available.length")
+.btn-group(uib-dropdown='' is-open='targetCtrl.targetSpace.listIsOpen', ng-if='!hideSpace')
+    button.btn.btn-default.space-button(type='button', uib-dropdown-toggle="", ng-disabled="!targetCtrl.targetSpace.available.length")
         | {{ targetCtrl.targetSpace.selected.name }}
         span.caret
 

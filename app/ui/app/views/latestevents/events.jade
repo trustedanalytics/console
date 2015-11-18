@@ -19,7 +19,7 @@ h3
 
 .events(ng-controller='LatestEventsController')
     .panel
-        button.btn.btn-default(type='button', dropdown-toggle="", ng-disabled="state.isPending()")
+        button.btn.btn-default(type='button', uib-dropdown-toggle="", ng-disabled="state.isPending()")
         | {{ targetCtrl.organization.selected.name }}
 
         d-spinner(ng-show="state.isPending()")

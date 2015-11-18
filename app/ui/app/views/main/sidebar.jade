@@ -28,7 +28,7 @@ menu(ng-controller="MenuController")
                     em(ng-class="item.icon")
                     span {{ item.text }}
 
-                ul.nav.sidebar-subnav(ng-if="item.items" collapse="item.collapse")
+                ul.nav.sidebar-subnav(ng-if="item.items" uib-collapse="item.collapse")
                     include ./submenu.jade
-                ul.nav.sidebar-subnav.nav-floating(ng-if="item.items" collapse="item.collapse || initial")
+                ul.nav.sidebar-subnav.nav-floating(ng-if="item.items" uib-collapse="item.collapse || initial")
                     include ./submenu.jade
