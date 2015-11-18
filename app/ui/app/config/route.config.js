@@ -20,6 +20,7 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
     $sceProvider.enabled(false);
 
     $urlRouterProvider.when('/app/datacatalog', '/app/datacatalog/datasets');
+    $urlRouterProvider.when('/app/modelcatalog', '/app/modelcatalog/h2omodels');
     $urlRouterProvider.when('/app/services', '/app/services/marketplace');
     $urlRouterProvider.when('/app/platformdashboard', '/app/platformdashboard/summary');
     $urlRouterProvider.otherwise('/app/dashboard');
@@ -197,6 +198,24 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
             controllerAs: 'ctrl',
             templateUrl: getViewPath('datacatalog/transfers/upload.html'),
             resolve: LazyLoadProvider.load(['file-upload'])
+        })
+        .state('app.modelcatalog', {
+            url: '/modelcatalog',
+            controller: 'ModelCatalogController',
+            controllerAs: 'ctrl',
+            templateUrl: getViewPath('modelcatalog/modelcatalog.html')
+        })
+        .state('app.modelcatalog.h2o', {
+            url: '/h2omodels',
+            title: 'H2O models',
+            controller: 'H2OModelsController',
+            controllerAs: 'ctrl',
+            templateUrl: getViewPath('modelcatalog/h2o/h2omodels.html')
+        })
+        .state('app.modelcatalog.atk', {
+            url: '/atkmodels',
+            title: 'ATK models',
+            templateUrl: getViewPath('modelcatalog/atk/atkmodels.html')
         })
         .state('app.manage', {
             url: '/manage',

@@ -20,6 +20,7 @@ applications:
       - hdfs-uploader
       - service-exposer
       - platform-operations
+      - model-catalog
     env:
       NPM_CONFIG_PRODUCTION: true
       VERSION: dev

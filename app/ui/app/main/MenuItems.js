@@ -35,6 +35,10 @@
             "sref": "app.datacatalog",
             "icon": "icon-folder-alt"
         }, {
+            "text": "Model catalog",
+            "sref": "app.modelcatalog",
+            "icon": "icon-folder-alt"
+        }, {
             "text": "Applications",
             "sref": "app.applications",
             "icon": "icon-grid"
@@ -63,7 +67,7 @@
                     "sref": "app.datatools"
                 },  {
                     "text": "IPython",
-                    "sref": "app.ipython",
+                    "sref": "app.ipython"
                 },  {
                     "text": "RStudio®",
                     "sref": "app.rstudio",
