@@ -43,7 +43,7 @@ module.exports = function (config) {
             'bower_components/angular-sanitize/angular-sanitize.js',
             'bower_components/angular-resource/angular-resource.js',
             'bower_components/ua-parser-js/dist/ua-parser.min.js',
-            'bower_components/ng-table/ng-table.js',
+            'bower_components/ng-table/dist/ng-table.js',
             'bower_components/ngstorage/ngStorage.js',
             'bower_components/ngDialog/js/ngDialog.js',
             'bower_components/angularjs-toaster/toaster.js',
