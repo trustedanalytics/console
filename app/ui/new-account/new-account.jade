@@ -1,0 +1,100 @@
+//
+   Copyright (c) 2015 Intel Corporation
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+//-
+doctype html
+html(ng-app='newAccountApp')
+    head
+        title Create Trusted Analytics account
+        script(type='text/javascript', src='https://code.jquery.com/jquery-2.1.3.min.js')
+        script(type='text/javascript', src='https://code.angularjs.org/1.2.28/angular.min.js')
+        script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js')
+        script(type='text/javascript', src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js')
+
+        script(type='text/javascript', src='/new-account/new-account.js')
+
+        link(type='text/css', rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css')
+        link(type='text/css', rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css')
+
+        link(type='text/css', rel='stylesheet', href='/new-account/new-account.css')
+
+        base(href='/')
+
+
+    body(ng-controller='newAccountController')
+        .new-account(ng-switch='status')
+            .logo
+                img(src='/new-account/img/logo.png')
+
+            div(ng-if='status == statuses.CREATED')
+                h3 Account created
+                p
+                    | Thank you
+                    = ' '
+                    b {{ user.email }}
+                p
+                    | Your account has been created. You can now&nbsp;
+                    a.login-link(href='/', target='_self') login
+
+            div(ng-if='status == statuses.INCORRECT_CODE')
+                h3 Invalid security code
+                | Your link is incorrect or has already expired.
+
+            .form(ng-if='status == statuses.DEFAULT')
+                h3 You have been invited to join Trusted Analytics platform
+                div
+                    form(ng-submit='createUser()')
+                        .row(title="{{ user.email }}")
+                            | {{ user.email }}
+                        .row
+                            input(type='password', ng-model='user.password', placeholder='Password', required='', ng-model-options="{ updateOn: 'blur' }")
+                            .error(ng-hide='validators.passwordLength()') Password needs to have at least 6 characters
+
+                        .row
+                            input(type='password', ng-model='user.passwordRepetition', placeholder='Repeat password', ng-model-options="{ updateOn: 'blur' }", required='')
+                            .error(ng-hide='validators.passwordMatch()') Passwords don&apos;t match
+
+                        .row(ng-if='!hideorg')
+                            input(type='text', ng-model='user.org', placeholder='Organization name', ng-model-options="{ updateOn: 'blur' }", required='!hideorg' ng-trim="false")
+                            .error(ng-hide='validators.orgNameDoesntBeginWithWhitespace()') Organization name cannot start from whitespace
+                            .error(ng-hide='!orgError') {{ orgError }}
+                        .row.tos
+                            label
+                                input(type='checkbox', name='agree', required='required')
+                                span I agree to the
+                                    = ' '
+                                    a(href='', ng-click='showTerms()') Terms of Service
+                                    .modal.fade(id='termsAndConditionsModal', tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+                                        .modal-dialog.modal-lg
+                                            .modal-content(class='panel-{{infoType}}')
+                                                .modal-header.panel-heading
+                                                    | {{heading}}
+                                                .modal-body
+                                                    ng-include(src="'/new-account/termsAndConditions.html'")
+                                                .modal-footer
+                                                    button.btn.btn-default(type='button', data-dismiss='modal') close
+
+                        .submit-button
+                            button(type='submit') Create account
+
+            div(ng-if='status == statuses.PROCESSING')
+                .spinner
+                    div {{ text || "Loading... Please wait" }}
+                    .bullets
+                        .bullet(ng-repeat='i in [1,2,3,4]')
+
+            div(ng-if='status == statuses.ERROR')
+                h3 Error occurred
+                p Error while creating a new account.
+                p {{ errorMessage }}

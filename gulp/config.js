@@ -26,61 +26,61 @@ module.exports = {
     js: {
         app: {
             src: [
-                'app/js/_init.js',
-                'app/js/**/*.js'
+                'app/_init.js',
+                'app/**/*.js'
             ],
-            dest: 'app/js/app.js'
+            dest: 'app/app.js'
         },
 
         vendorBase: {
             src: require('../vendor.base.json'),
-            dest: 'app/js/base.js',
+            dest: 'app/base.js',
             base: '../..'
         },
 
         newAccount: {
-            src: 'new-account/js/*.js',
-            dest: 'new-account/js/new-account.js'
+            src: 'new-account/**/*.js',
+            dest: 'new-account/new-account.js'
         }
     },
 
     styles: {
         app: {
-            src: 'app/scss/app.scss',
-            base: 'app/scss',
-            dest: 'app/css',
-            watch: 'app/scss/**/*.scss',
+            src: 'app/styles/app.scss',
+            base: 'app/styles',
+            dest: 'app',
+            watch: 'app/styles/**/*.scss',
             compassModule: 'app'
         },
 
         newAccount: {
-            src: 'new-account/scss/new-account.scss',
-            base: 'new-account/scss',
-            dest: 'new-account/css',
-            watch: 'new-account/scss/**/*.scss',
+            src: 'new-account/styles/new-account.scss',
+            base: 'new-account/styles',
+            dest: 'new-account',
+            watch: 'new-account/styles/**/*.scss',
             compassModule: 'new-account'
         },
 
         vendorBase: {
             src: require('../vendor.base.json'),
-            dest: 'app/css/vendor.css',
+            dest: 'app/vendor.css',
             base: '../..'
         },
     },
 
     templates: {
         app: {
-            src: 'app/views/index.jade',
-            base: 'app/views'
+            src: 'app/index.jade',
+            base: 'app'
         },
 
         views: {
-            src: 'app/views/**/*.jade'
+            src: 'app/**/*.jade'
         },
 
         newAccount: {
-            src: 'new-account/jade/*.jade',
-            base: 'new-account/jade',
+            src: 'new-account/**/*.jade',
+            base: 'new-account',
             dest: 'new-account'
         }
     },

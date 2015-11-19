@@ -77,7 +77,7 @@ module.exports = {
     getCompassOpts: function(taskConfig) {
         return {
             project: path.join(__dirname, '..', config.srcDir, taskConfig.compassModule),
-            sass: 'scss',
+            sass: 'styles',
             css: path.join(__dirname, '..', config.destDir, taskConfig.dest),
             image: path.join(config.srcDir, taskConfig.compassModule + '/img')
         };
