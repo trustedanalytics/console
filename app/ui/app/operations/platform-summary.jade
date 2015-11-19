@@ -14,29 +14,30 @@
    limitations under the License.
 //-
 .summarypanel
-   .col-lg-12
+   .row
       .col-lg-12.time
          button.btn.btn-primary.fa-refresh.app-refresher(ng-click='onRefresh()') Trigger fetching data
          p {{ response.timestamp | date: 'yyyy-MM-dd h:mm:ss a' }}
-      d-tile-blue-numeric(number="controllerSummary.appCount", text="'Applications'").col-lg-4.tile-height-large
-      d-tile-blue-numeric(number="controllerSummary.serviceCount", text="'Services'").col-lg-4.tile-height-large
-      d-tile-blue-numeric(number="controllerSummary.buildpackCount", text="'Buildpacks'").col-lg-4.tile-height-large
-      d-tile-blue-numeric(number="controllerSummary.orgCount", text="'Organizations'").col-lg-4.tile-height-large
-      d-tile-blue-numeric(number="controllerSummary.spaceCount", text="'Spaces'").col-lg-4.tile-height-large
-      d-tile-blue-numeric(number="controllerSummary.userCount", text="'Users'").col-lg-4.tile-height-large
-   .col-lg-12
-      .col-lg-4
+      d-tile-blue-numeric(number="controllerSummary.appCount", text="'Applications'").col-lg-4.col-sm-12.tile-height-large
+      d-tile-blue-numeric(number="controllerSummary.serviceCount", text="'Services'").col-lg-4.col-sm-12.tile-height-large
+      d-tile-blue-numeric(number="controllerSummary.buildpackCount", text="'Buildpacks'").col-lg-4.col-sm-12.tile-height-large
+      d-tile-blue-numeric(number="controllerSummary.orgCount", text="'Organizations'").col-lg-4.col-sm-12.tile-height-large
+      d-tile-blue-numeric(number="controllerSummary.spaceCount", text="'Spaces'").col-lg-4.col-sm-12.tile-height-large
+      d-tile-blue-numeric(number="controllerSummary.userCount", text="'Users'").col-lg-4.col-sm-12.tile-height-large
+
+      .col-lg-4.col-sm-12
          d-tile-blue-numeric(number="componentSummary.componentMetrics.length", text="'Droplet Executions Agents'").tile-height-large
          d-tile-blue-numeric(number="componentSummary.reservableStagers", text="'Reservable stagers'").tile-height-large
          d-tile-blue-numeric(float="componentSummary.memUsedInMb/1024", text="'Memory'", unit="'GB'").tile-height-large
-      .col-lg-8
-         table.buildpacks
-            thead
-               th Name
-               th Version
-               th Enabled
-            tbody
-               tr(ng-repeat="buildpack in controllerSummary.buildpacks" ng-class="{even: $even, odd: $odd}")
-                  td {{ buildpack.entity.name }}
-                  td {{ buildpack.entity.filename }}
-                  td(ng-class="{'fa-check': buildpack.entity.enabled, 'fa-cross': !buildpack.entity.enabled}")
+      .col-lg-8.col-sm-12
+         .table-responsive
+            table.table.buildpacks
+               thead
+                  th Name
+                  th Version
+                  th Enabled
+               tbody
+                  tr(ng-repeat="buildpack in controllerSummary.buildpacks" ng-class-even="'even'" ng-class-odd="'odd'")
+                     td {{ buildpack.entity.name }}
+                     td {{ buildpack.entity.filename }}
+                     td(ng-class="{'fa-check': buildpack.entity.enabled, 'fa-cross': !buildpack.entity.enabled}")

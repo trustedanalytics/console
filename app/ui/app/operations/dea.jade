@@ -14,18 +14,19 @@
    limitations under the License.
 //-
 .deapanel
-   table.dea
-      thead
-         th UUID
-         th Host
-         th Uptime
-         th Memory
-         th Reservable stagers
-      tbody
-         tr(ng-repeat="dea in componentSummary.componentMetrics" ng-class="{even: $even, odd: $odd}")
-            td {{dea.uuid}}
-            td {{dea.host}}
-            td {{dea.uptime}}
-            td
-               progressbar.memory(value='dea.memUsedBytes/(dea.memUsedBytes + dea.memFreeBytes) * 100')
-            td {{dea.reservableStagers}}
+   .table-responsive
+      table.table
+         thead
+            th UUID
+            th Host
+            th Uptime
+            th Memory
+            th Reservable stagers
+         tbody
+            tr(ng-repeat="dea in componentSummary.componentMetrics" ng-class-even="'even'" ng-class-odd="'odd'")
+               td {{dea.uuid}}
+               td {{dea.host}}
+               td {{dea.uptime}}
+               td
+                  progressbar.memory(value='dea.memUsedBytes/(dea.memUsedBytes + dea.memFreeBytes) * 100')
+               td {{dea.reservableStagers}}

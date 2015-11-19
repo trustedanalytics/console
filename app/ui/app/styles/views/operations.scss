@@ -27,15 +27,9 @@ $dashboard-red: #DD1031;
 
 .platfromdashboard {
 
-  .panel {
-    padding: 25px 20px;
-  }
-
   .summarypanel {
     background-color: #fff;
     padding: 30px;
-    min-width: 1000px;
-    height: 900px;
 
     .widget {
 
@@ -54,15 +48,14 @@ $dashboard-red: #DD1031;
         .number {
           font-size: 45px;
           text-align: right;
-          width: 1px;
+          width: auto;
           white-space: nowrap;
         }
 
-        .float{
+        .float {
           font-size: 45px;
           text-align: right;
-          white-space: nowrap;
-          width: 1px;
+          width: auto;
         }
 
       }
@@ -82,12 +75,6 @@ $dashboard-red: #DD1031;
 
     }
 
-    .tile-height-small {
-      &.widget, .widget {
-        height: $dashboard-tile-height-small;
-      }
-    }
-
     .tile-height-large {
       &.widget, .widget {
         height: $dashboard-tile-height-large;
@@ -102,42 +89,11 @@ $dashboard-red: #DD1031;
           padding-left: 0;
         }
 
-        .float{
+        .float {
           padding-right: 40px;
           padding-left: 0;
         }
       }
-    }
-
-    .buildpacks {
-      color: #595959;
-      width: 100%;
-
-    }
-
-    th {
-      line-height: 45px;
-      padding-left: 10px;
-      font-size: 24px;
-      font-weight: lighter;
-    }
-
-    td {
-      line-height: 40px;
-      border-bottom: 1px solid #808080;
-      padding-left: 10px;
-    }
-
-    tbody {
-      height: 70px;
-    }
-
-    .odd {
-      background: #fff;
-    }
-
-    .even {
-      background: #F8F8F8;
     }
 
     .fa-check {
@@ -162,31 +118,6 @@ $dashboard-red: #DD1031;
     min-width: 100%;
     height: 100%;
 
-    th {
-      line-height: 35px;
-      padding-left: 10px;
-      font-size: 24px;
-      font-weight: lighter;
-    }
-
-    td {
-      line-height: 30px;
-      border-bottom: 1px solid #808080;
-      padding-left: 10px;
-    }
-
-    tbody {
-      height: 60px;
-    }
-
-    .odd {
-      background: #fff;
-    }
-
-    .even {
-      background: #F8F8F8;
-    }
-
     .dea {
       color: #595959;
       width: 100%;
@@ -199,10 +130,18 @@ $dashboard-red: #DD1031;
     }
 
     .memory {
-      margin: 10px 0;
+      margin: 0;
       width: 250px;
     }
 
+  }
+
+  .odd {
+    background: #fff;
+  }
+
+  .even {
+    background: #F8F8F8;
   }
 
 }
