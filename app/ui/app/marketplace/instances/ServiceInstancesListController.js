@@ -17,7 +17,7 @@
     "use strict";
 
     App.controller('ServiceInstancesListController', function ($scope, State, targetProvider, ServiceInstancesResource,
-        jsonFilter, blobFilter) {
+        ServiceKeysResource, NotificationService, jsonFilter, blobFilter) {
 
         var state = new State().setPending();
         $scope.state = state;
@@ -38,6 +38,39 @@
         $scope.removeExport = function (key) {
             $scope.exports = _.without($scope.exports, key);
             refreshVcapConfiguraton();
+        };
+
+        $scope.hasKeys = function(instance) {
+            return !_.isEmpty(instance.service_keys);
+        };
+
+        $scope.isExported = function(key) {
+            return _.contains($scope.exports, key);
+        };
+
+        $scope.addKey = function(keyName, instance) {
+            state.setPending();
+            ServiceKeysResource
+                .withErrorMessage('Adding new service key failed. Check that the service broker supports that feature.')
+                .addKey(keyName, instance.guid)
+                .then(function() {
+                    NotificationService.success("Service key has been added");
+                    refreshContent();
+                });
+        };
+
+        $scope.deleteKey = function(key) {
+            NotificationService.confirm('delete-key-confirm')
+                .then(function() {
+                    state.setPending();
+                    ServiceKeysResource
+                        .withErrorMessage('Removing service key failed')
+                        .deleteKey(key.guid)
+                        .then(function() {
+                            NotificationService.success("Service key has been deleted");
+                            refreshContent();
+                        });
+                });
         };
 
         function refreshContent() {

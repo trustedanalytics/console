@@ -372,27 +372,50 @@
       }
 
       .instance {
-        margin-bottom: 5px;
+        margin-bottom: 10px;
 
         > .name {
-          font-weight: bold;
+          span {
+            font-weight: bold;
+          }
+          a {
+            margin-left: 10px;
+          }
         }
 
-        .key, .no-key {
+        .key, .add-key {
           margin-left: 20px;
         }
 
-        a.export-add, a.export-remove {
+        .new-key {
+          .btn {
+            padding: 2px 10px;
+            vertical-align: middle;
+          }
+
+          input {
+            padding: 1px 5px;
+            vertical-align: middle;
+          }
+
+          a {
+            margin-left: 10px;
+            font-size: 13px;
+          }
+        }
+
+        a.export-add, a.export-remove, a.delete-key, a.add-key {
           font-size: 13px;
           margin-left: 10px;
+          text-decoration: none;
+        }
+
+        a.delete-key {
+          color: $color-red;
         }
 
         a.export-remove {
           color: $color-red;
-        }
-
-        .no-key {
-          color: #999;
         }
       }
     }

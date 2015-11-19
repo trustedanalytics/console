@@ -20,6 +20,7 @@ describe("Unit: ServiceInstancesListController", function () {
         scope,
         targetProvider,
         ServiceInstancesResource,
+        ServiceKeysResource,
         NotificationService,
         state,
         $q,
@@ -44,8 +45,16 @@ describe("Unit: ServiceInstancesListController", function () {
             getSummary: sinon.stub().returns($q.defer().promise)
         };
 
+        ServiceKeysResource = {
+            withErrorMessage: sinon.stub().returnsThis(),
+            addKey: sinon.stub().returns($q.defer().promise),
+            deleteKey: sinon.stub().returns($q.defer().promise)
+        };
+
         NotificationService = {
-            error: sinon.stub()
+            error: sinon.stub(),
+            success: sinon.stub(),
+            confirm: sinon.stub().returns($q.defer().promise)
         };
 
         createController = function() {
@@ -55,6 +64,7 @@ describe("Unit: ServiceInstancesListController", function () {
                 State: State,
                 targetProvider: targetProvider,
                 ServiceInstancesResource: ServiceInstancesResource,
+                ServiceKeysResource: ServiceKeysResource,
                 NotificationService: NotificationService,
                 blobFilter: sinon.stub()
             });
@@ -137,6 +147,77 @@ describe("Unit: ServiceInstancesListController", function () {
         scope.$apply();
 
         expect(scope.state.isLoaded(), 'loaded').to.be.true;
+    });
+
+    it('addKey, post new resource', function() {
+        createController();
+        scope.addKey('banana', {guid: 'test-guid'});
+
+        expect(ServiceKeysResource.addKey).to.be.called;
+        expect(ServiceKeysResource.addKey).to.be.calledWith('banana', 'test-guid');
+        expect(scope.state.isPending(), 'pending').to.be.ok;
+    });
+
+    it('addKey, failed, do not refresh instances list', function() {
+        var deferred = $q.defer();
+        ServiceKeysResource.addKey = sinon.stub().returns(deferred.promise);
+
+        createController();
+        scope.addKey('banana', {guid: 'test-guid'});
+        deferred.reject();
+        scope.$apply();
+
+        expect(ServiceInstancesResource.getSummary).to.be.calledOnce;
+    });
+
+    it('addKey, success, refresh instances list', function() {
+        var deferred = $q.defer();
+        ServiceKeysResource.addKey = sinon.stub().returns(deferred.promise);
+
+        createController();
+        scope.addKey('banana', {guid: 'test-guid'});
+        deferred.resolve();
+        scope.$apply();
+
+        expect(ServiceInstancesResource.getSummary).to.be.calledTwice;
+    });
+
+    it('deleteKey, show confirmation dialog', function() {
+        createController();
+        scope.deleteKey({guid: 'test-guid'});
+
+        expect(NotificationService.confirm).to.be.called;
+    });
+
+    it('deleteKey, confirmed, delete key resource', function() {
+        var deferred = $q.defer();
+        NotificationService.confirm = sinon.stub().returns(deferred.promise);
+
+        createController();
+        scope.state.setLoaded();
+
+        scope.deleteKey({guid: 'test-guid'});
+        deferred.resolve();
+        scope.$apply();
+
+        expect(ServiceKeysResource.deleteKey).to.be.called;
+        expect(ServiceKeysResource.deleteKey).to.be.calledWith('test-guid');
+        expect(scope.state.isPending(), 'pending').to.be.ok;
+    });
+
+    it('deleteKey, confirmed and success, refresh instances', function() {
+        var confirmDeferred = $q.defer();
+        NotificationService.confirm = sinon.stub().returns(confirmDeferred.promise);
+        var deleteDeferred = $q.defer();
+        ServiceKeysResource.deleteKey = sinon.stub().returns(deleteDeferred.promise);
+
+        createController();
+        scope.deleteKey({guid: 'test-guid'});
+        confirmDeferred.resolve();
+        deleteDeferred.resolve();
+        scope.$apply();
+
+        expect(ServiceInstancesResource.getSummary).to.be.calledTwice;
     });
 
     function getSampleKeys() {

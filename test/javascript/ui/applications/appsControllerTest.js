@@ -63,7 +63,6 @@ describe("Unit: AppsController", function () {
     }));
 
     it('should not be null', function () {
-        console.log(createController());
         createController();
         expect(controller).not.to.be.null;
     });
