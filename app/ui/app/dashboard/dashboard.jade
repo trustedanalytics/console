@@ -15,6 +15,10 @@
 //-
 d-spinner(ng-show='state.isPending()')
 
+.dashboard.error-state(ng-show='state.isError()')
+    d-target-selector.target-selector.pull-right(hide-space="true")
+    .error Error loading metrics
+
 .dashboard.row(d-visible="state.isLoaded()")
     .category-title.clearfix
         d-target-selector.target-selector.pull-right(hide-space="true")
@@ -42,6 +46,4 @@ d-spinner(ng-show='state.isPending()')
 
         d-tile-news(events="data.latestEvents")
 
-.dashboard(ng-show='state.isError()')
-  d-target-selector.target-selector.pull-right(hide-space="true")
-  .error Error loading metrics
+

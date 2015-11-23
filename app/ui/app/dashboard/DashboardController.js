@@ -64,7 +64,8 @@
 
         function getLoadData() {
             $timeout.cancel(loadTimeoutHandler);
-            LoadChartResource.getChart()
+            LoadChartResource.supressGenericError()
+                .getChart()
                 .then(function onSuccess(data) {
                     $scope.loadChart.values = _.sortBy(data, 'timestamp');
                     $scope.loadChart.state.setLoaded();

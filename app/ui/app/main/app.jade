@@ -32,8 +32,9 @@ section
         | Error occured
       .toast-message
         span(ng-if='toaster.data.customMessage')
-          | {{ toaster.data.customMessage }}:
-          = ' '
+          | {{ toaster.data.customMessage }}
+        span(ng-if='toaster.data.customMessage && toaster.data.message')
+          = ': '
         span(ng-if='toaster.data.message')
           | {{ toaster.data.message }}
       .toast-details(ng-if='toaster.data.timestamp')

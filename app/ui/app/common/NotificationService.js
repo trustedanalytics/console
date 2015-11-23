@@ -65,6 +65,10 @@
             },
 
             genericError: function (error, message) {
+                if(_.isString(error) && !message) {
+                    message = error;
+                    error = {};
+                }
                 error = _.extend({
                     customMessage: message
                 }, error);

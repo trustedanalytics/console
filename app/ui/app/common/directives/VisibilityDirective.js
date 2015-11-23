@@ -22,7 +22,7 @@
             restrict: 'A',
             link: function ($scope, $element, $attrs) {
                 $scope.$watch($attrs.dVisible, function (value) {
-                    $element.css('visibility', value ? 'visible' : 'hidden');
+                    $element.toggleClass('visibility-hidden', !value);
                 });
             }
         };

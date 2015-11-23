@@ -27,6 +27,11 @@ $dashboard-red: #DD1031;
 
 .dashboard {
 
+  &.visibility-hidden {
+    height: 1px;
+    overflow: hidden;
+  }
+
   .error {
     text-align: center;
     padding-top: 20px;

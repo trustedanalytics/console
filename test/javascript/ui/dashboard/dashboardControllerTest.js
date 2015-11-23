@@ -39,6 +39,7 @@ describe("Unit: DashboardController", function () {
         };
 
         LoadChartResource = {
+            supressGenericError: sinon.stub().returnsThis(),
             getChart: sinon.stub().returns($q.defer().promise)
         };
 
