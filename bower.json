@@ -5,17 +5,17 @@
   "license": "Apache-2.0",
   "private": true,
   "dependencies": {
-    "angular": "1.4.7",
-    "angular-animate": "1.4.7",
+    "angular": "1.4.8",
+    "angular-animate": "1.4.8",
     "angular-bootstrap": "0.14.3",
-    "angular-cookies": "1.4.7",
+    "angular-cookies": "1.4.8",
     "angular-ellipsis": "0.1.6",
     "angular-file-upload": "2.2.0",
-    "angular-messages": "1.4.7",
-    "angular-mocks": "1.4.7",
-    "angular-resource": "1.4.7",
-    "angular-route": "1.4.7",
-    "angular-sanitize": "1.4.7",
+    "angular-messages": "1.4.8",
+    "angular-mocks": "1.4.8",
+    "angular-resource": "1.4.8",
+    "angular-route": "1.4.8",
+    "angular-sanitize": "1.4.8",
     "angular-ui-router": "0.2.15",
     "angular-xeditable": "0.1.9",
     "angularjs-toaster": "0.4.16",
@@ -36,7 +36,7 @@
     "underscore": "1.8.3"
   },
   "resolutions": {
-    "angular": "1.4.7",
+    "angular": "1.4.8",
     "d3": "3.5.9"
   }
 }
