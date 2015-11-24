@@ -56,6 +56,9 @@
                 .then(function() {
                     NotificationService.success("Service key has been added");
                     refreshContent();
+                })
+                .catch(function() {
+                    state.setLoaded();
                 });
         };
 
@@ -69,6 +72,9 @@
                         .then(function() {
                             NotificationService.success("Service key has been deleted");
                             refreshContent();
+                        })
+                        .catch(function() {
+                            state.setLoaded();
                         });
                 });
         };

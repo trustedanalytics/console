@@ -168,6 +168,7 @@ describe("Unit: ServiceInstancesListController", function () {
         scope.$apply();
 
         expect(ServiceInstancesResource.getSummary).to.be.calledOnce;
+        expect(scope.state.isLoaded(), 'loaded').to.be.ok;
     });
 
     it('addKey, success, refresh instances list', function() {
