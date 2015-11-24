@@ -224,6 +224,32 @@
       color: #FF4136;
       font-size: 13px;
     }
+
+    .extra-params {
+      .header {
+        margin-top: 10px;
+      }
+
+      .param {
+        margin: 5px 0;
+
+        .key {
+          display: inline-block;
+          margin-right: 5px;
+          width: 200px;
+        }
+
+        .value {
+          display: inline-block;
+          margin-left: 5px;
+          width: 300px;
+        }
+
+        a {
+          margin-left: 10px;
+        }
+      }
+    }
   }
 
   .instances {

@@ -19,13 +19,16 @@
     App.factory('ServiceInstanceResource', function (Restangular) {
         var service = Restangular.service("service_instances");
 
-        service.createInstance = function (name, planGuid, orgGuid, spaceGuid) {
+        service.createInstance = function (name, planGuid, orgGuid, spaceGuid, params) {
+            var parameters = _.extend({}, params, {
+                name: name
+            });
             return this.post({
                 name: name,
                 service_plan_guid: planGuid,
                 organization_guid: orgGuid,
                 space_guid: spaceGuid,
-                parameters: {name: name}
+                parameters: parameters
             });
         };
 

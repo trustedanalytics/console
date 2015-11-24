@@ -174,4 +174,25 @@ describe("Unit: ServiceController", function () {
         expect(notification).to.be.called;
         expect(controller.newInstanceState.value).to.be.equals(state.values.ERROR);
     });
+
+    it('addExtraParam, create one element array', function () {
+        createController();
+
+        controller.addExtraParam();
+
+        expect(controller.newInstance.params).to.be.deep.equal([{key:null,value:null}]);
+    });
+
+    it('addExtraParam, twice, create two element array', function () {
+        createController();
+
+        controller.addExtraParam();
+        controller.newInstance.params[0].key = "test";
+        controller.newInstance.params[0].value = "banana";
+        controller.addExtraParam();
+
+        expect(controller.newInstance.params.length).to.equal(2);
+        expect(controller.newInstance.params[0]).to.be.deep.equal({key:'test', value:'banana'});
+        expect(controller.newInstance.params[1]).to.be.deep.equal({key:null, value:null});
+    });
 });

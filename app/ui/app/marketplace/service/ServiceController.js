@@ -30,6 +30,13 @@
         self.state = new State().setPending();
         self.deleteState = new State().setLoaded();
         self.newInstanceState = new State().setDefault();
+        initNewInstance();
+
+        function initNewInstance() {
+            self.newInstance = {
+                params: []
+            };
+        }
 
         self.organization = function () {
             return targetProvider.getOrganization();
@@ -51,12 +58,14 @@
                         self.newInstance.name,
                         plan.guid,
                         targetProvider.getOrganization().guid,
-                        targetProvider.getSpace().guid
+                        targetProvider.getSpace().guid,
+                        transformParams(self.newInstance.params)
                     )
                     .then(function () {
                         self.newInstanceState.setDefault();
                         NotificationService.success('Instance has been created');
                         $scope.$broadcast('instanceCreated');
+                        initNewInstance();
                     })
                     .catch(function (error) {
                         if (self.service.name === ATK_SERVICE_NAME && error.status >= 500) {
@@ -77,6 +86,14 @@
             self.selectedPlan = plan;
             self.newInstanceState.setDefault();
         };
+
+        self.addExtraParam = function () {
+            self.newInstance.params.push({key:null, value:null});
+        };
+
+        self.removeExtraParam = function (param) {
+            self.newInstance.params = _.without(self.newInstance.params, param);
+        };
     });
 
     function getServiceData(self, id, Service, serviceExtractor) {
@@ -91,6 +108,15 @@
             .catch(function (status) {
                 self.state.setError(status);
             });
+    }
+
+    function transformParams(list) {
+        // omit params with empty keys or empty values
+        var filtered = _.filter(list, function (param) {
+            return param.key && param.value;
+        });
+        // transform list of params to object structure
+        return _.object(_.pluck(filtered, 'key'), _.pluck(filtered, 'value'));
     }
 
 }());

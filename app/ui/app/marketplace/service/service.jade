@@ -65,6 +65,14 @@
                                 div(ng-messages="marketplaceNewInstance.instanceName.$error")
                                     span.validationMessage(ng-message="regexValidator")
                                         | Allowed characters: [letters, numbers, _, -, .]
+                                .extra-params
+                                    .header(ng-if="ctrl.newInstance.params.length") Extra service parameters:
+                                    .param(ng-repeat="param in ctrl.newInstance.params")
+                                        input.form-control.key(ng-model="param.key" placeholder="key")
+                                        | :
+                                        input.form-control.value(ng-model="param.value" placeholder="value")
+                                        a(ng-click="ctrl.removeExtraParam(param)") Remove
+                                    a(ng-click="ctrl.addExtraParam()") + Add an extra parameter
                             d-spinner(text="'Creating new instance... Please wait'", ng-if='ctrl.newInstanceState.isPending()')
 
         d-service-instances(service-id='ctrl.serviceId', service-name='ctrl.service.name')
