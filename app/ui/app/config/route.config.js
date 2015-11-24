@@ -103,14 +103,14 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
         .state('app.application.overview', {
             url: '/overview',
             title: 'Application',
-            templateUrl: getViewPath('applications/application/overview.html')
+            templateUrl: getViewPath('applications/application/overview/overview.html')
         })
         .state('app.application.bindings', {
             url: '/bindings',
             title: 'Application',
             controller: 'ApplicationBindingsController',
             controllerAs: 'bindCtrl',
-            templateUrl: getViewPath('applications/application/bindings.html')
+            templateUrl: getViewPath('applications/application/bindings/bindings.html')
         })
         .state('app.appcli', {
             url: '/tools',

@@ -27,7 +27,7 @@
                 onStop: '&',
                 onRefresh: '&'
             },
-            templateUrl: 'app/applications/application/overview.html',
+            templateUrl: 'app/applications/application/overview/overview.html',
             controller: function($scope){
                 function reloadInstances(){
                     if(!$scope.application || !$scope.instances) {
