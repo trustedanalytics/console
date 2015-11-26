@@ -1,0 +1,7 @@
+language: node_js
+node_js:
+- '0.12'
+before_install:
+  - gem install compass
+script: 
+   node ./node_modules/gulp/bin/gulp.js build
