@@ -17,9 +17,6 @@ $dashboard-text-blue: $text-color-blue;
 $dashboard-text-white: #fff;
 $dashboard-text-gray: $text-color-gray;
 $dashboard-text-gray-darker: #53565b;
-$dashboard-tile-height-small: 96px;
-$dashboard-tile-height-large: 147px;
-$dashboard-tile-margin: 20px;
 
 $dashboard-orange: #F4B92F;
 $dashboard-green: #A6CC43;
@@ -27,26 +24,9 @@ $dashboard-red: #DD1031;
 
 .dashboard {
 
-  &.visibility-hidden {
-    height: 1px;
-    overflow: hidden;
-  }
-
-  .error {
-    text-align: center;
-    padding-top: 20px;
-  }
-
   .category-title {
-    padding: 0 15px 15px;
     font-size: 30px;
     font-weight: lighter;
-    widows: 100%;
-    clear: both;
-  }
-
-  .left-col {
-    clear: left;
   }
 
   .widget {
@@ -55,19 +35,13 @@ $dashboard-red: #DD1031;
       background-color: $intel-blue;
       color: $dashboard-text-white;
       font-weight: lighter;
-      border: none;
 
       .text {
         font-size: 24px;
-        padding-left: 25px;
-        width: auto;
       }
 
       .number {
         font-size: 45px;
-        text-align: right;
-        width: 1px;
-        white-space: nowrap;
       }
 
     }
@@ -75,71 +49,28 @@ $dashboard-red: #DD1031;
     &.white-tile-small {
       background-color: #fff;
 
-      .row {
-        table-layout: auto;
-      }
-
       .number {
-        width: 50%;
         font-size: 35px;
         font-weight: lighter;
         color: $dashboard-text-blue;
-        text-align: center;
-        padding-left: 3px;
-        padding-right: 3px;
         letter-spacing: -1px;
       }
 
       .text {
-        width: 50%;
-        padding-left: 0;
-        padding-right: 10px;
         font-size: 13px;
         color: $dashboard-text-gray;
       }
     }
 
-    &.numeric-tile > div {
-      width: 100%;
-      height: 100%;
-      display: table;
-
-      > div {
-        display: table-cell;
-        vertical-align: middle;
-        float: none;
-      }
-
-    }
-
     &.tile-chart {
-      height: $dashboard-tile-height-small * 3 + $dashboard-tile-margin * 2;
-      padding: 25px;
-      position: relative;
 
       .title {
         color: $dashboard-text-gray;
         font-size: 18px;
       }
-
-      .chart {
-        position: absolute;
-        top: 50px;
-        bottom: 25px;
-        left: 25px;
-        right: 25px;
-
-        > * {
-          display: block;
-          width: 100%;
-          height: 100%;
-        }
-      }
     }
 
     &.tile-news {
-      padding: 30px 40px;
-      max-height: 100%;
 
       .title {
         font-size: 24px;
@@ -150,14 +81,6 @@ $dashboard-red: #DD1031;
       tr {
         color: $dashboard-text-gray-darker;
         font-size: 14px;
-
-        > td:nth-child(1) {
-          width: 210px;
-        }
-
-        > td:nth-child(2) {
-          width: 160px; 
-        }
       }
 
       tr:nth-child(even) {
@@ -167,7 +90,6 @@ $dashboard-red: #DD1031;
 
     &.tile-progress {
       background-color: #fff;
-      padding: 25px;
 
       .value {
         font-size: 45px;
@@ -180,37 +102,12 @@ $dashboard-red: #DD1031;
         color: $dashboard-text-gray-darker;
       }
 
-      .progress {
-        margin-top: 15px;
-      }
     }
 
     .progress {
       background-color: #B2B9BF;
     }
 
-  }
-
-  .tile-height-small {
-    &.widget, .widget {
-      height: $dashboard-tile-height-small;
-    }
-  }
-
-  .tile-height-large {
-    &.widget, .widget {
-      height: $dashboard-tile-height-large;
-    }
-
-    .blue-tile {
-      .text {
-        padding-left: 40px;
-      }
-      .number {
-        padding-right: 40px;
-        padding-left: 0;
-      }
-    }
   }
 
   .dashboard-orange {
@@ -233,11 +130,4 @@ $dashboard-red: #DD1031;
       background-color: $dashboard-red;
     }
   }
-
-  d-spinner {
-    position: absolute;
-    left: 0;
-    right: 0;
-  }
-
 }

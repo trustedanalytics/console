@@ -47,9 +47,9 @@ module.exports = {
     styles: {
         app: {
             src: 'app/styles/app.scss',
-            base: 'app/styles',
+            base: 'app',
             dest: 'app',
-            watch: 'app/styles/**/*.scss',
+            watch: 'app/**/*.scss',
             compassModule: 'app'
         },
 

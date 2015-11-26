@@ -26,13 +26,13 @@
 @import "main/sidebar";
 @import "main/spinner";
 
-@import "views/marketplace";
-@import "views/applications";
-@import "views/tools";
-@import "views/datacatalog";
-@import "views/manageusers";
-@import "views/latestevents";
-@import "views/operations";
+@import "../applications/applications";
+@import "../tools/tools";
+@import "../datacatalog/datacatalog";
+@import "../dashboard/dashboard";
+@import "../manageusers/manageusers";
+@import "../latestevents/latestevents";
+@import "../operations/operations";
 
 @import "themes/intel/intel-theme";
 
