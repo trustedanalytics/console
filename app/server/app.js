@@ -13,15 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-var express = require('express');
-var path = require('path');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var favicon = require('serve-favicon');
+var express = require('express'),
+    path = require('path'),
+    logger = require('morgan'),
+    cookieParser = require('cookie-parser'),
+    favicon = require('serve-favicon'),
+    compression = require('compression'),
 
-var auth = require('./auth/auth');
-var reverseProxy = require('./reverse-proxy');
-var config = require('./config/config');
+    auth = require('./auth/auth'),
+    reverseProxy = require('./reverse-proxy'),
+    config = require('./config/config');
 
 var app = express();
 
@@ -31,8 +32,9 @@ var staticFilesDir = path.join(baseDir, 'target/app/ui');
 
 app.use(logger('dev'));
 app.use(cookieParser());
-
+app.use(compression());
 app.use(favicon(path.join(staticFilesDir, 'app/img/favicon.png')));
+app.disable('x-powered-by');
 
 auth.init(app);
 
