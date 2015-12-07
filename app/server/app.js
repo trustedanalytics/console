@@ -19,6 +19,7 @@ var express = require('express'),
     cookieParser = require('cookie-parser'),
     favicon = require('serve-favicon'),
     compression = require('compression'),
+    timeout = require('connect-timeout'),
 
     auth = require('./auth/auth'),
     reverseProxy = require('./reverse-proxy'),
@@ -31,13 +32,14 @@ var staticFilesDir = path.join(baseDir, 'target/app/ui');
 
 
 app.use(logger('dev'));
+app.use(timeout(config.get('timeout')));
 app.use(cookieParser());
+app.use(timeoutHandler);
 app.use(compression());
 app.use(favicon(path.join(staticFilesDir, 'app/img/favicon.png')));
 app.disable('x-powered-by');
 
 auth.init(app);
-
 
 app.get('/new-account',
     function(req, res) {
@@ -81,5 +83,17 @@ app.get('/**',
     express.static(staticFilesDir)
 );
 
+app.use(timeoutHandler);
+
+
+function timeoutHandler(err, req, res, next){
+    if (req.timedout) {
+        console.error("Server timeout", err);
+        res.status(503);
+        res.send("Server timeout");
+        return;
+    }
+    next();
+}
 
 module.exports = app;

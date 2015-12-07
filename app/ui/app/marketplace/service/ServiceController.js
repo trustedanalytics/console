@@ -20,10 +20,10 @@
     App.controller('ServiceController', function (ServiceResource, serviceExtractor, NotificationService, $stateParams,
         targetProvider, $scope, ServiceInstanceResource, State) {
 
+        var GATEWAY_TIMEOUT_ERROR = 504;
+
         var self = this,
             id = $stateParams.serviceId;
-
-        var ATK_SERVICE_NAME = "atk";
 
         self.serviceId = id;
 
@@ -68,9 +68,9 @@
                         initNewInstance();
                     })
                     .catch(function (error) {
-                        if (self.service.name === ATK_SERVICE_NAME && error.status >= 500) {
+                        if (error.status === GATEWAY_TIMEOUT_ERROR) {
                             self.newInstanceState.setDefault();
-                            NotificationService.success("Creating an ATK instance may take a while. You can try to refresh the page after a minute or two.", "Task scheduled");
+                            NotificationService.success("Creating an instance may take a while. Please refresh the page after a minute or two.", "Task scheduled");
                         }
                         else {
                             self.newInstanceState.setError();

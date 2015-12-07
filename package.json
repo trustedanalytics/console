@@ -2,10 +2,11 @@
   "name": "console",
   "author": "Intel Corporation",
   "license": "Apache-2.0",
-  "version": "0.4.96",
+  "version": "0.4.97",
   "private": true,
   "dependencies": {
     "compression": "1.6.0",
+    "connect-timeout": "1.7.0",
     "cookie-parser": "1.4.0",
     "crypto": "0.0.3",
     "debug": "2.2.0",

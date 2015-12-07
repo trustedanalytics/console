@@ -59,7 +59,9 @@ function init(app) {
 
 function login(req, res, next) {
     if(!req.user) {
-        req.session.destroy();
+        if(req.session) {
+            req.session.destroy();
+        }
         req.logout();
         strategy.reset();
         res.redirect('/oauth');

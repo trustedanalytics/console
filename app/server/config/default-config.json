@@ -1,5 +1,5 @@
 {
-    "timeout": 3600000,
+    "timeout": 30000,
     "uploader_config": {
         "file_size_limit": 500,
         "file_black_list_types": ["application/pdf", "application/x-msdownload"]

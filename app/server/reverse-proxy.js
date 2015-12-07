@@ -13,14 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-var request = require('request');
-var _ = require('underscore');
-var url = require('url');
-var util = require('util');
-var localServices = require('./config/local-services');
-var serviceMapping = require('./config/service-mapping');
-var config = require('./config/config');
-var httpException = require('./utils/http-exception');
+var request = require('request'),
+    _ = require('underscore'),
+    url = require('url'),
+    util = require('util'),
+
+    localServices = require('./config/local-services'),
+    serviceMapping = require('./config/service-mapping'),
+    config = require('./config/config'),
+    httpException = require('./utils/http-exception'),
+    gatewayErrors = require('./gateway-errors');
 
 
 function getHost(serviceName) {
@@ -62,10 +64,14 @@ function forwardRequest(req, res) {
     }
     req.headers['x-forwarded-host'] = req.headers['host'];
 
+    var timeout = service.timeout || config.get('timeout');
+
+    req.clearTimeout();
+
     req.pipe(request({
             url: targetUrl,
             method: req.method,
-            timeout: config.get('timeout')
+            timeout: timeout
         },
         handleProxyError(res, service.name, path)
     )).pipe(res);
@@ -73,17 +79,13 @@ function forwardRequest(req, res) {
 
 
 function handleProxyError(res, serviceName, path) {
-    return function(error) {
-        var message;
-        if(error) {
-            if(error.code === 'ECONNREFUSED') {
-                message = util.format("Connection refused to service %s, path %s", serviceName, path);
-                httpException.throw(res, 500, "Connection refused", message);
-            } else {
-                message = util.format('Error while proxying request to service %s, path %s', serviceName, path);
-                httpException.throw(res, 500, "Error occured", message, error);
-            }
+    return function(httpError) {
+        if(!httpError) {
+            return;
         }
+
+        var error = gatewayErrors.getError(httpError.code);
+        httpException.throw(res, error.code, error.title, util.format(error.description, serviceName, path), httpError);
     };
 }
 

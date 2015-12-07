@@ -22,7 +22,7 @@
         var self = this,
             id = $scope.serviceId;
 
-        var ATK_SERVICE_NAME = "atk";
+        var GATEWAY_TIMEOUT_ERROR = 504;
 
         var state = new State();
         self.state = state;
@@ -69,14 +69,13 @@
                     updateInstances();
                 })
                 .catch(function (error) {
-                    if (error.status === 500 && $scope.serviceName === ATK_SERVICE_NAME) {
-                        self.deleteState.setDefault();
-                        NotificationService.success("Deleting an ATK instance may take a while. You can try to refresh the page after in a minute or two.", "Task scheduled");
+                    if (error.status === GATEWAY_TIMEOUT_ERROR) {
+                        NotificationService.success("Deleting an instance may take a while. Please refresh the page after a minute or two.", "Task scheduled");
                     }
                     else {
-                        self.deleteState.setDefault();
                         NotificationService.genericError(error.data, 'Error while deleting the instance');
                     }
+                    self.deleteState.setDefault();
                 });
         };
 
