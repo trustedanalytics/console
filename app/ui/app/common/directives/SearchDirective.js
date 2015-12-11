@@ -16,13 +16,20 @@
 (function () {
     "use strict";
 
+    App.value('SearchCause', {
+        VALUE_CHANGED: 'VALUE_CHANGED',
+        URL_CHANGED: 'URL_CHANGED'
+    });
+
     App.directive('dSearch', function () {
         return {
             scope: {
                 control: '='
             },
 
-            controller: function ($scope, $element, $rootScope, $timeout) {
+            controller: function ($scope, $element, $rootScope, $timeout, SearchCause) {
+                $scope.SearchCause = SearchCause;
+
                 var input = $element.find('input');
 
                 input.on('blur', function () {
@@ -32,13 +39,13 @@
                     });
                 });
 
-                $scope.search = function () {
-                    $rootScope.$broadcast('searchChanged', $scope.value);
+                $scope.search = function (cause) {
+                    $rootScope.$broadcast('searchChanged', $scope.value, cause);
                 };
 
                 $rootScope.$on('$stateChangeSuccess', function () {
                     $scope.value = '';
-                    $scope.search();
+                    $scope.search(SearchCause.URL_CHANGED);
                 });
 
                 $scope.$watch('control', function (newValue) {

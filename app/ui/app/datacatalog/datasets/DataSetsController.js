@@ -17,7 +17,7 @@
     "use strict";
 
     App.controller('DataSetsController', function ($scope, DataSetResource, $routeParams, ngTableParams, State,
-                                                   $cookies, PlatformContextProvider) {
+                                                   $cookies, PlatformContextProvider, SearchCause) {
 
         var TOOL_KEY = 'datacatalog_tool',
             DEFAULT_TOOL = 'arcadia',
@@ -95,10 +95,11 @@
             $scope.pagination.numPerPage = Math.min($scope.pagination.total, $scope.pagination.pageSize);
         }
 
-        $scope.$on('searchChanged', function (eventName, _searchText) {
-            searchText = _searchText;
-            $scope.changePage(1);
-
+        $scope.$on('searchChanged', function (eventName, _searchText, cause) {
+            if(_searchText !== searchText && cause !== SearchCause.URL_CHANGED) {
+                searchText = _searchText;
+                $scope.changePage(1);
+            }
         });
 
         $scope.$on('targetChanged', function () {
@@ -128,9 +129,7 @@
             $event.preventDefault();
             $event.stopPropagation();
             $scope.toOpened = true;
-        };
-
-        $scope.search();
+        }; 
     });
 
     function getFormatIcon(format) {
