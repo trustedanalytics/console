@@ -51,11 +51,7 @@
         };
 
         function getAllModels() {
-            var result = [];
-            $scope.instances.forEach(function (item) {
-                result = _.flatten(item.models, true);
-            });
-            return result;
+            return _.flatten(_.pluck($scope.instances, "models"), true);
         }
 
         $scope.tableParams = ModelsTableParams.getTableParams($scope, function () {
