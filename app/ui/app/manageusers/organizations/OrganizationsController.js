@@ -17,9 +17,19 @@
     "use strict";
 
     /*jshint newcap: false*/
-    App.controller('OrganizationsController', function ($scope, $state) {
+    App.controller('OrganizationsController', function ($scope, $state, UserProvider) {
+        $scope.isAdmin = {};
+
         $scope.isTabActive = function (sref) {
             return $state.is(sref) || $state.includes(sref);
         };
+
+        UserProvider.getUser(function (user) {
+            $scope.isAdmin = isAdmin(user);
+        });
     });
+
+    function isAdmin(user) {
+        return (user || {}).role === "ADMIN";
+    }
 }());

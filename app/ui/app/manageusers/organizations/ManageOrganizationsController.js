@@ -19,7 +19,7 @@
     /*jshint newcap: false*/
     App.controller('ManageOrganizationsController', function ($scope, OrganizationResource, $stateParams, State,
         editableOptions, editableThemes, targetProvider, $state, OrganizationsModalsService, SpaceResource,
-        NotificationService) {
+        NotificationService, UserProvider) {
 
         editableOptions.theme = 'bs3';
 
@@ -30,6 +30,7 @@
             '<span class="fa fa-times text-muted"></span>' +
             '</button>';
         $scope.organizations = [];
+        $scope.isAdmin = {};
         $scope.state = new State();
 
         var shownOrgUuid = $stateParams.orgId || null;
@@ -46,6 +47,10 @@
                 $scope.current = _.first($scope.organizations);
             }
         };
+
+        UserProvider.getUser(function (user) {
+            $scope.isAdmin = isAdmin(user);
+        });
 
         $scope.redirectTo = function (whereTo) {
             targetProvider.setOrganization($scope.current);
@@ -133,9 +138,9 @@
         });
 
         function refreshOrganizations(organizations) {
-            $scope.organizations = organizations.sort(function (org1, org2) {
+            $scope.organizations = visibleOrganizations(organizations).sort(function (org1, org2) {
                 return org1.name.localeCompare(org2.name);
-            });
+            }); 
             if ($scope.current) {
                 $scope.showOrg($scope.current.guid);
             }
@@ -161,4 +166,14 @@
             $scope.current = targetProvider.getOrganization();
         };
     });
+
+    function visibleOrganizations(organizations) {
+        return _.filter(organizations, function (org) {
+            return org.manager;
+        });
+    }
+
+    function isAdmin(user) {
+        return (user || {}).role === "ADMIN";
+    }
 }());

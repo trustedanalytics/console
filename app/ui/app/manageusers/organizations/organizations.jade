@@ -20,7 +20,7 @@ h3
 ul.nav.nav-tabs
     li(role='presentation', ng-class='{active: isTabActive("app.manage.organizations.manage")}')
         a(ui-sref='app.manage.organizations.manage') Organizations List
-    li(role='presentation', ng-class='{active: isTabActive("app.manage.organizations.add")}')
+    li(role='presentation', ng-class='{active: isTabActive("app.manage.organizations.add")}', ng-if='isAdmin')
         a(ui-sref='app.manage.organizations.add')
             em.icon-plus
             | &nbsp;Add organization

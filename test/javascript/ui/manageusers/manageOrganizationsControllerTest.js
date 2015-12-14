@@ -24,15 +24,20 @@ describe("Unit: ManageOrganizationsController", function () {
     var SpaceResource;
     var notificationService;
     var targetProvider;
+    var UserProvider;
+    var currentUser;
 
     var orgs = [
         {
             guid: "2345",
-            name: "org2"
+            name: "org2",
+            manager: true,
+            spaces: [ {name:"space1"}, {name: "space2"}]
         },
         {
             guid: "1234",
             name: "org1",
+            manager: false,
             spaces: [ { name: "space1" }, { name: "space2" } ]
         }
     ];
@@ -65,6 +70,14 @@ describe("Unit: ManageOrganizationsController", function () {
             error: sinon.stub(),
             success: sinon.stub()
         };
+
+        currentUser = {
+            "email": "email@email"
+        };
+
+        UserProvider = {
+            getUser: sinon.stub().returns(currentUser)
+        }
     }));
 
     function getSut() {
@@ -79,7 +92,8 @@ describe("Unit: ManageOrganizationsController", function () {
             OrganizationsModalsService: OrganizationsModalsService,
             targetProvider: targetProvider,
             NotificationService: notificationService,
-            SpaceResource: SpaceResource
+            SpaceResource: SpaceResource,
+            UserProvider: UserProvider
         });
     }
 
@@ -103,8 +117,8 @@ describe("Unit: ManageOrganizationsController", function () {
     it('should load organizations on init', function() {
         createAndInitSut();
         expect(scope.state.isLoaded()).to.be.true;
-        expect(scope.organizations).to.be.deep.equal(orgs);
-        expect(scope.current.guid).to.be.equals("1234");
+        expect(scope.organizations.length).to.be.equals(1);
+        expect(scope.current.guid).to.be.equals("2345");
     });
 
     it('should set current org for the proper one on showOrg function call', function() {

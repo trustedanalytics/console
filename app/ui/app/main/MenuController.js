@@ -19,10 +19,11 @@
 
         $scope.menuItems = MenuItems;
         $scope.access = {};
-        $scope.access.manager = isManager(targetProvider.getOrganization());
+        $scope.access.currentOrgManager = isCurrentOrgManager(targetProvider.getOrganization());
         $scope.selected = null;
-
         $scope.tools = [];
+        $scope.organizations = targetProvider.getOrganizations();
+
         getExternalTools(PlatformContextProvider, $scope);
 
         var itemValidators = [
@@ -50,9 +51,14 @@
             });
         };
 
-        $rootScope.$on('targetChanged', function () {
-            $scope.access.manager = isManager(targetProvider.getOrganization());
+        $scope.$on('targetChanged', function () {
+            $scope.access.currentOrgManager = isCurrentOrgManager(targetProvider.getOrganization());
         });
+
+        $scope.$watchCollection('organizations', function(orgs) {
+            $scope.access.anyOrgManager = isAnyOrgManager(orgs);
+        });
+
 
         UserProvider.getUser(function (user) {
             $scope.access.admin = isAdmin(user);
@@ -126,8 +132,14 @@
         return (user || {}).role === "ADMIN";
     }
 
-    function isManager(organization) {
+    function isCurrentOrgManager(organization) {
         return (organization || {}).manager;
+    }
+
+    function isAnyOrgManager(organizations) {
+        return _.some(organizations, function(org) {
+            return org.manager;
+        });
     }
 
     function getExternalTools(PlatformContextProvider, $scope) {

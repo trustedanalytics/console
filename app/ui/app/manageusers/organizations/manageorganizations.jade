@@ -48,7 +48,7 @@
                                 input.new-space(type="text" placeholder="New space name..." ng-model='spaceName', required='')
                                 button.btn.btn-primary(ng-click="addSpace()" ng-disabled="!spaceName")
                                     | Add space
-                .delete-button
+                .delete-button(ng-if="isAdmin")
                     button.btn.btn-danger(ng-click="deleteOrganization(org.guid)")
                         | Delete organization
 
