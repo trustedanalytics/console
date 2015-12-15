@@ -2,6 +2,6 @@
     "timeout": 3600000,
     "uploader_config": {
         "file_size_limit": 500,
-        "file_allowed_types": ["text/csv", "application/vnd.ms-excel", "text/plain", "application/json"]
+        "file_black_list_types": ["application/pdf", "application/x-msdownload"]
     }
 }

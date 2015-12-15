@@ -26,7 +26,7 @@
         $scope.state = new State().setPending();
         $scope.uploadFormData = self.getInitData();
         $scope.fileSizeLimit = 0;
-        $scope.fileAllowedTypes = [];
+        $scope.fileBlackListTypes = [];
 
         $scope.input = "link";
 

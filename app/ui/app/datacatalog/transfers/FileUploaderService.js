@@ -20,10 +20,10 @@
     App.factory('FileUploaderService', function (targetProvider, FileUploader, NotificationService, UploadResource) {
 
         var fileSizeLimit = null;
-        var fileAllowedTypes = [];
+        var fileBlackListTypes = [];
         var uploadEnvsPromise = UploadResource.getUploadEnvs().then(function onSuccess(configData) {
             fileSizeLimit = configData.file_size_limit;
-            fileAllowedTypes = configData.file_allowed_types;
+            fileBlackListTypes = configData.file_black_list_types;
         });
 
         return {
@@ -52,9 +52,12 @@
                     },
                         {
                             name: 'typeFilter',
-                            onError: 'Selected file have unsupported type',
                             fn: function (item) {
-                                return fileAllowedTypes.indexOf(item.type) !== -1;
+                                if(_.contains(fileBlackListTypes, item.type)) {
+                                    NotificationService.warning('Selected file may be not supported by analytics tools. ' +
+                                        'Please make sure you want to proceed with the upload.');
+                                }
+                                return true;
                             }
                         }],
 

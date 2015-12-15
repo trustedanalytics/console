@@ -47,6 +47,15 @@
                 });
             },
 
+            warning: function warning(message, title) {
+                toaster.pop({
+                    type: 'warning',
+                    title: title,
+                    body: message,
+                    toasterId: 'top-right'
+                });
+            },
+
             error: function error(message, title) {
                 var config = {
                     type: 'error',
