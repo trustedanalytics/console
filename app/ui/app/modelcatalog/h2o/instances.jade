@@ -37,14 +37,14 @@
             tbody
                 tr(ng-init="showPass = false")
                     td {{ instance.name }}
-                    td {{instance.login}}
+                    td {{ instance.login }}
                     td
                         input(type="text", class="form-control",
                         ng-disabled="!showPass", readonly=true, ng-value="showPass ? instance.password : '****************'")
                         button(type="button", class="btn btn-sm", ng-class="!showPass ? 'btn-success' : 'btn-warning'"
                         ng-click="showPass = !showPass") {{ !showPass ? 'Show' : 'Hide' }}
                     td
-                        a(href='{{ instance.hostname}}', target="_blank")
+                        a(href='{{ instance.hostname | ensureProtocol }} ', target="_blank")
                             | {{ instance.hostname }}
 
 

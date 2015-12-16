@@ -39,8 +39,8 @@
 
         var chosenInstance;
 
-        $scope.onInstanceChange = function (i) {
-            chosenInstance = i;
+        $scope.onInstanceChange = function (instance) {
+            chosenInstance = instance;
             if (!chosenInstance) {
                 $scope.filteredModels = getAllModels();
             }
