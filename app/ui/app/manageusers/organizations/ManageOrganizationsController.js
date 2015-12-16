@@ -119,7 +119,7 @@
                 })
                 .then(function (organizations) {
                     refreshOrganizations(organizations);
-                    NotificationService.success("Space removed");
+                    NotificationService.success("Space deletion scheduled. Please try to refresh page after a while.");
                 })
                 .finally(function () {
                     $scope.state.setLoaded();
