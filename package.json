@@ -2,7 +2,7 @@
   "name": "console",
   "author": "Intel Corporation",
   "license": "Apache-2.0",
-  "version": "0.4.92",
+  "version": "0.4.93",
   "private": true,
   "dependencies": {
     "compression": "1.6.0",
@@ -31,7 +31,6 @@
     "gulp-filter": "3.0.1",
     "gulp-jade": "1.1.0",
     "gulp-jshint": "2.0.0",
-    "gulp-karma": "0.0.5",
     "gulp-load-plugins": "1.1.0",
     "gulp-minify-css": "1.2.1",
     "gulp-mocha": "2.2.0",
