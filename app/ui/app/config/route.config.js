@@ -157,7 +157,7 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
             url: '/gearpump',
             title: 'GearPump',
             entityDisplayName: 'GearPump',
-            controller: 'GearPumpController',
+            controller: 'ToolsInstancesListController',
             templateUrl: getViewPath('tools/toolsInstancesList.html'),
             resolve: LazyLoadProvider.load(['ngMessages'])
         })

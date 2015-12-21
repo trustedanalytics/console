@@ -78,7 +78,7 @@
                     "tool": "h2o"
                 }, {
                     "text": "GearPump",
-                    "sref": "app.gearpump", 
+                    "sref": "app.gearpump",
                     "tool": "gearpump"
                 }
             ]
