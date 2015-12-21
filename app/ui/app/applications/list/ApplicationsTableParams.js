@@ -17,7 +17,7 @@
     "use strict";
 
     /*jshint newcap: false*/
-    App.factory('ApplicationsTableParams', function (ngTableParams, filterFilter, orderByFilter) {
+    App.factory('ApplicationsTableParams', function (ngTableParams, $filter) {
 
         return {
             getTableParams: function ($scope, dataCallback) {
@@ -31,9 +31,10 @@
                     $scope: $scope,
 
                     getData: function ($defer, params) {
-                        var orderedData = params.sorting() ?
-                            filterFilter(dataCallback(), params.filter()) :
-                            orderByFilter(dataCallback(), params.orderBy());
+                        var data = dataCallback();
+                        var orderedData = _.some(_.values(params.filter())) ?
+                            $filter('filter')(data, params.filter()) :
+                            $filter('orderBy')(data, params.orderBy());
                         params.total(orderedData.length);
                         $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
                     }

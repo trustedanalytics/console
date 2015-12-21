@@ -17,7 +17,7 @@
     "use strict";
 
     App.controller('ApplicationsController', function (ApplicationResource, targetProvider, $scope, ngTableParams,
-        filterFilter, orderByFilter, $q, AtkInstanceResource, ApplicationsTableParams) {
+        $q, AtkInstanceResource, ApplicationsTableParams) {
 
         var self = this;
 
