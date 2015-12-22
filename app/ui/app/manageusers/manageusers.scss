@@ -121,15 +121,20 @@
   }
 
   .new-space-form > input {
-      height: 33px;
-      vertical-align: middle;
-      padding: 5px;
+    height: 33px;
+    vertical-align: middle;
+    padding: 5px;
   }
+}
+
+.pending-buttons {
+  white-space: nowrap;
 }
 
 .user-list {
   > tbody > tr > td {
     vertical-align: middle;
+    word-break: break-word;
   }
 
   > thead th {
