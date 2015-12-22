@@ -13,7 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 //-
-button.btn.btn-primary(type='button', data-ng-click='publish()', ng-if="mode === modes.UNIFIED && availableTools.length > 0")
+button.btn.btn-primary(type='button', data-ng-click='publish()', ng-if="mode === modes.UNIFIED && availableVisualizationsTools.length")
     em.fa-plus
     | View
 button.btn.btn-primary(type='button', data-ng-click='publish(tools.HUE)', ng-if="mode === modes.SEPARATE && isToolAvailable('Hue')")
