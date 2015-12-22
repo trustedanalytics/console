@@ -69,6 +69,7 @@
 
 .content .org-title {
   padding-bottom: 30px;
+  word-wrap: break-word;
 }
 
 .buttons {
@@ -89,6 +90,17 @@
   }
 
 }
+
+.nav.nav-pills > li > a {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nav.nav-pills > li > a:hover {
+  overflow: visible;
+  word-wrap: break-word;
+}
+
 .nav.nav-pills > li.active > a {
   background-color: $btn-primary-color;
 }
