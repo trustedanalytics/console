@@ -17,8 +17,7 @@
     "use strict";
 
     App.controller('DataToolsController', function ($scope, $http, targetProvider, AtkInstanceResource, State,
-        NotificationService, serviceExtractor, ServiceResource, ServiceInstanceResource, AtkScoringEngineResource,
-        ApplicationResource) {
+        NotificationService, serviceExtractor, ServiceResource, ServiceInstanceResource, ApplicationResource) {
 
         var state = new State().setPending();
         var clientState = new State().setPending();
@@ -56,25 +55,6 @@
                     getAtkInstances($scope, targetProvider.getOrganization(), AtkInstanceResource);
                 });
             $scope.newInstanceName = null;
-        };
-
-        $scope.createScoringEngine = function (instanceName, instanceUri) {
-            if ($scope.scoringEnginePlanGuid) {
-                var atkName = instanceUri.split('.')[0];
-                NotificationService.success("Creating an scoring engine may take a while.", "Task scheduled");
-                AtkScoringEngineResource.createInstance(
-                    instanceName,
-                    atkName,
-                    $scope.scoringEnginePlanGuid,
-                    targetProvider.getOrganization().guid,
-                    targetProvider.getSpace().guid
-                    )
-                    .catch (function (error) {
-                        if (error.status !== 500) {
-                            NotificationService.error("Error while creating an scoring engine");
-                        }
-                    });
-            }
         };
 
         $scope.deleteInstance = function (instanceName, instanceGuid, serviceGuid) {
@@ -115,7 +95,6 @@
             .then(function onSuccess(response) {
                 $scope.instances = response.instances;
                 $scope.servicePlanGuid = response.service_plan_guid;
-                $scope.scoringEnginePlanGuid = response.se_service_plan_guid;
                 $scope.state.setLoaded();
             });
     }
