@@ -21,8 +21,12 @@ h3
 
     d-spinner(ng-show='state.isPending()')
 
+    div(ng-if='!services.length')
+        | You have no service instances
+
     div(ng-show='state.isLoaded()' ng-init="exportMode = false")
-        a.btn.btn-primary.pull-right.turn-export-on(ng-hide="exportMode" ng-click="exportMode = true") Export keys
+
+        a.btn.btn-primary.pull-right.turn-export-on(ng-hide='exportMode' ng-show='services.length' ng-click="exportMode = true") Export keys
         a.btn.btn-default.pull-right.turn-export-off(ng-show="exportMode" ng-click="exportMode = false") Cancel export
         .service-item(ng-repeat="service in services | orderBy: 'displayName'")
             .img
