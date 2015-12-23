@@ -30,7 +30,7 @@
             '<span class="fa fa-times text-muted"></span>' +
             '</button>';
         $scope.organizations = [];
-        $scope.isAdmin = {};
+        $scope.isAdmin = false;
         $scope.state = new State();
 
         var shownOrgUuid = $stateParams.orgId || null;
@@ -138,7 +138,8 @@
         });
 
         function refreshOrganizations(organizations) {
-            $scope.organizations = visibleOrganizations(organizations).sort(function (org1, org2) {
+            var visibleOrganizations = $scope.isAdmin ? organizations : filterManagedOrganizations(organizations);
+            $scope.organizations = visibleOrganizations.sort(function (org1, org2) {
                 return org1.name.localeCompare(org2.name);
             }); 
             if ($scope.current) {
@@ -167,7 +168,7 @@
         };
     });
 
-    function visibleOrganizations(organizations) {
+    function filterManagedOrganizations(organizations) {
         return _.filter(organizations, function (org) {
             return org.manager;
         });
