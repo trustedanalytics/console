@@ -21,7 +21,7 @@
 
         PlatformContextProvider.getPlatformContext()
             .then(function success(platformContext) {
-                var list = platformContext.externalTools.list;
+                var list = platformContext.external_tools.list;
                 $scope.tools = _.object(
                     _.pluck(list, 'name'),
                     _.pluck(list, 'available')

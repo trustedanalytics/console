@@ -14,8 +14,8 @@
    limitations under the License.
 //-
 h3 Tools
-
-.tools
+d-spinner(ng-hide="state.isLoaded()")
+.tools(ng-show="state.isLoaded()")
     .panel
         h3 What the CLI is?
         | Cloud Foundry CLI is the official command line client for Cloud Foundry. For more
@@ -23,22 +23,21 @@ h3 Tools
         = ' '
         a(href='http://docs.cloudfoundry.org/devguide/#cf', target="_blank") cf documentation
 
-    .panel
+    .panel(ng-init="listVisible = false")
         h3 Download and install
 
-        .download-button(ng-if='ctrl.currentPackage')
-            a.btn.btn-primary(class='fa-{{ ctrl.currentPackage.os }}', href='{{ ctrl.currentPackage.url }}')
-                | {{ ctrl.currentPackage.name }}
-            a.toggle-list(ng-hide='ctrl.listShown', ng-click='ctrl.listShown = true')
+        .download-button(ng-show='currentPackage')
+            a.btn.btn-primary(class='fa-{{ currentPackage.os }}', href='{{ currentPackageUrl }}')
+                | {{ currentPackage.name }}
+            a.toggle-list(ng-hide='listVisible', ng-click='listVisible = true')
                 | Show list of all installers
-            a.toggle-list(ng-show='ctrl.listShown', ng-click='ctrl.listShown = false')
+            a.toggle-list(ng-show='listVisible', ng-click='listVisible = false')
                 | Hide list of all installers
 
-        .cli-list(ng-show='(ctrl.listShown || !ctrl.currentPackage)')
-            div(ng-repeat="cli in ctrl.clis | orderBy : 'order'")
-                a(ng-show="{{ cli.url != ctrl.currentPackage.url }}" ng-href='{{ cli.url }}', class='fa-{{ cli.os }}') {{ cli.name }}
+        .cli-list(ng-show='listVisible')
+            div(ng-repeat="cli in clis")
+                a(ng-show="getCliUrl(cli) !== currentPackageUrl" ng-href='{{ getCliUrl(cli) }}', class='fa-{{ cli.os }}') {{ cli.name }}
 
     .panel
         h3 Getting started   
-     
         ng-include(src='"/app/tools/cf.html"')

@@ -16,16 +16,10 @@
 (function () {
     "use strict";
 
-    App.factory('PlatformContextProvider', function (PlatformContextResource, $q, $cookies) {
-        var PLATFORM_CONTEXT_KEY = "platform-context";
-
+    App.factory('PlatformContextProvider', function (PlatformContextResource, $q) {
         var platformContext = null;
         return {
             getPlatformContext: function () {
-                if (!platformContext) {
-                    platformContext = $cookies.getObject(PLATFORM_CONTEXT_KEY);
-                }
-
                 if (platformContext) {
                     var deferred = $q.defer();
                     deferred.resolve(platformContext);
@@ -36,7 +30,6 @@
                         .getPlatformContext()
                         .then(function success(data) {
                             platformContext = data.plain();
-                            $cookies.putObject(PLATFORM_CONTEXT_KEY, platformContext);
                             return platformContext;
                         });
                 }

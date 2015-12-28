@@ -16,86 +16,61 @@
 (function () {
     "use strict";
 
-    App.controller('ToolsController', function (userAgent, NotificationService, PlatformContextProvider) {
-        var self = this;
+    App.controller('ToolsController', function ($scope, userAgent, CliConfiguration, PlatformContextProvider, State) {
+        var baseUrl = '',
+            cliVersion = 'latest',
+            architectureSymbol = getArchitectureSymbol(userAgent),
+            state = new State().setPending();
 
-        var clis = {
-                windowsX64: {
-                    name: 'Windows 64 bit',
-                    url: 'https://cli.run.pivotal.io/stable?release=windows64&source=github',
-                    os: 'windows',
-                    order: 1
-                },
-                windowsX86: {
-                    name: 'Windows 32 bit',
-                    url: 'https://cli.run.pivotal.io/stable?release=windows32&source=github',
-                    os: 'windows',
-                    order: 2
-                },
-                osxX64: {
-                    name: 'Mac OS X 64 bit',
-                    url: 'https://cli.run.pivotal.io/stable?release=macosx64&source=github',
-                    os: 'apple',
-                    order: 3
-                },
-                debX64: {
-                    name: 'Linux 64 bit (.deb)',
-                    url: 'https://cli.run.pivotal.io/stable?release=debian64&source=github',
-                    os: 'linux',
-                    order: 4
-                },
-                debX86: {
-                    name: 'Linux 32 bit (.deb)',
-                    url: 'https://cli.run.pivotal.io/stable?release=debian32&source=github',
-                    os: 'linux',
-                    order: 5
-                },
-                rpmX64: {
-                    name: 'Linux 64 bit (.rpm)',
-                    url: 'https://cli.run.pivotal.io/stable?release=redhat64&source=github',
-                    os: 'linux',
-                    order: 6
-                },
-                rpmX86: {
-                    name: 'Linux 32 bit (.rpm)',
-                    url: 'https://cli.run.pivotal.io/stable?release=redhat32&source=github',
-                    os: 'linux',
-                    order: 7
-                }
-            },
-            is64Bit = function () {
-                return (userAgent.cpu || {}).architecture === 'amd64';
-            },
-            currentPackage = false;
-
-        switch (userAgent.family) {
-            case 'windows':
-                currentPackage = is64Bit() ? clis.windowsX64 : clis.windowsX86;
-                break;
-            case 'linux':
-                if (userAgent.pkgFormat === 'deb') {
-                    currentPackage = is64Bit() ? clis.debX64 : clis.debX86;
-                } else if (userAgent.pkgFormat === 'rpm') {
-                    currentPackage = is64Bit() ? clis.rpmX64 : clis.rpmX86;
-                }
-                break;
-            case 'osx':
-                currentPackage = clis.osxX64;
-                break;
-            default:
-                currentPackage = false;
-        }
-
-        self.currentPackage = currentPackage;
+        $scope.state = state;
+        $scope.clis = _.values(CliConfiguration);
+        $scope.currentPackage = getCurrentPackage();
 
         PlatformContextProvider
             .getPlatformContext()
             .then(function onSuccess(platformContext) {
+                cliVersion = platformContext.cli_version || 'latest';
+                baseUrl = platformContext.cli_url || '';
                 // get the endpoint address, remove trailing / if present
-                self.apiEndpoint = platformContext.apiEndpoint.replace(/\/$/, '');
+                $scope.apiEndpoint = platformContext.api_endpoint.replace(/\/$/, '');
+            })
+            .then(function() {
+                $scope.currentPackageUrl = $scope.getCliUrl($scope.currentPackage);
+                state.setLoaded();
             });
 
-        self.clis = clis;
+        $scope.getCliUrl = function(cli) {
+            return getCliUrl(cli, baseUrl, cliVersion);
+        };
+
+
+        function getCurrentPackage() {
+            switch (userAgent.family) {
+                case 'windows':
+                    return CliConfiguration[userAgent.family + architectureSymbol];
+                case 'linux':
+                    return CliConfiguration[userAgent.pkgFormat + architectureSymbol];
+                case 'osx':
+                    return CliConfiguration.osxX64;
+                default:
+                    return null;
+            }
+        }
 
     });
+
+    function getCliUrl(cliInfo, baseUrl, cliVersion) {
+        return baseUrl
+            .replace('{RELEASE}', cliInfo.release)
+            .replace('{VERSION}', cliVersion);
+    }
+
+
+    function getArchitectureSymbol(userAgent) {
+        return is64Bit(userAgent) ? 'X64' : 'X86';
+    }
+
+    function is64Bit(userAgent) {
+        return (userAgent.cpu || {}).architecture === 'amd64';
+    }
 }());

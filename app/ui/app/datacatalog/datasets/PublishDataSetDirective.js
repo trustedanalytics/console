@@ -48,7 +48,7 @@
                 $scope.availableVisualizationsTools =[];
 
                 PlatformContextProvider.getPlatformContext().then(function (data) {
-                    var externalTools = data.externalTools;
+                    var externalTools = data.external_tools;
                     $scope.availableVisualizationsTools = _.pluck(_.where(externalTools.visualizations, {available: true}), 'name').map(function (name) {
                         return name.toLowerCase();
                     });

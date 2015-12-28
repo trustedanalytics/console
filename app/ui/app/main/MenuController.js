@@ -146,8 +146,8 @@
         PlatformContextProvider
             .getPlatformContext()
             .then(function (platformContext) {
-                var externalTools = platformContext.externalTools;
-                $scope.tools = _.union(externalTools.others,externalTools.visualizations);
+                var externalTools = platformContext.external_tools;
+                $scope.tools = _.union(externalTools.others, externalTools.visualizations);
             });
     }
 })();

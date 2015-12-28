@@ -16,24 +16,17 @@
 describe("Unit: PlatformContextProvider", function() {
 
     var sut,
-        cookies,
         platformContextResource,
         rootScope;
 
     var PLATFORM_CONTEXT_DEFAULT = Object.freeze({
-        apiEndpoint: "http://api.example.com",
+        api_endpoint: "http://api.example.com",
         plain: function() { return this; }
     });
 
     beforeEach(module('app'));
 
     beforeEach(module(function($provide){
-        cookies = {
-            getObject: sinon.stub(),
-            putObject: sinon.stub()
-        };
-        $provide.value('$cookies', cookies);
-
         platformContextResource = {
             getPlatformContext: sinon.stub(),
             withErrorMessage: function() { return this; }
@@ -46,9 +39,7 @@ describe("Unit: PlatformContextProvider", function() {
         sut = PlatformContextProvider;
     }));
 
-    it('getPlatformContext, no cookie entry, query resource and return value', inject(function($q){
-        cookies.getObject = sinon.stub().returns(undefined);
-
+    it('getPlatformContext, query resource and return value', inject(function($q){
         platformContextResource.getPlatformContext = sinon.spy(function() {
             var deferred = $q.defer();
             deferred.resolve(PLATFORM_CONTEXT_DEFAULT);
@@ -63,20 +54,6 @@ describe("Unit: PlatformContextProvider", function() {
         rootScope.$apply();
 
         expect(platformContextResource.getPlatformContext).to.be.called;
-        expect(result).to.be.equal(PLATFORM_CONTEXT_DEFAULT);
-    }));
-
-    it('getPlatformContext, exists in cookie, return value and do not query resource', inject(function(){
-        cookies.getObject = sinon.stub().returns(PLATFORM_CONTEXT_DEFAULT);
-
-        var result = null;
-        sut.getPlatformContext()
-            .then(function(data){
-                result = data;
-            });
-        rootScope.$apply();
-
-        expect(platformContextResource.getPlatformContext).not.to.be.called;
         expect(result).to.be.equal(PLATFORM_CONTEXT_DEFAULT);
     }));
 

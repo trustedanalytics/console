@@ -177,7 +177,7 @@
         return platformCtxProvider.getPlatformContext()
             .then(function onSuccess(data) {
                 var DEFAULT_TOOL = 'arcadia';
-                var externalTools = data.externalTools;
+                var externalTools = data.external_tools;
 
                 var availableVisualizationsTools = _.pluck(_.where(externalTools.visualizations, {available: true}), 'name').map(function (name) {
                     return name.toLowerCase();

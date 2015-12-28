@@ -209,7 +209,7 @@ describe("Unit: DataSetsController", function() {
 
     it('current tool is available, leave current tool', inject(function($injector){
         var toolName = "currenttool";
-        var sample_data = {"externalTools":{"others":[{name:'othertool1',available:true},{name:'othertool2',available:false},
+        var sample_data = {"external_tools":{"others":[{name:'othertool1',available:true},{name:'othertool2',available:false},
             {name:'othertool3',available:true}],"visualizations":[{name:'vistool1',available:true},{name:'vistool2',available:false},
             {name:toolName,available:true}]}};
 
@@ -228,7 +228,7 @@ describe("Unit: DataSetsController", function() {
     }));
 
     it('current tool not available but default is, set default tool', inject(function($injector){
-        var sample_data = {"externalTools":{"others":[{name:'othertool1',available:true},{name:'othertool2',available:false},
+        var sample_data = {"external_tools":{"others":[{name:'othertool1',available:true},{name:'othertool2',available:false},
             {name:'othertool3',available:true}],"visualizations":[{name:'vistool1',available:true},{name:'vistool2',available:false},
             {name:DEFAULT_TOOL_NAME,available:true}]}};
         sample_data.plain = function(){return this;};
@@ -246,7 +246,7 @@ describe("Unit: DataSetsController", function() {
     }));
 
     it('neither current nor default tool available, set first available tool on the list', inject(function($injector){
-        var sample_data = {"externalTools":{"others":[{name:'othertool1',available:true},{name:'othertool2',available:false},
+        var sample_data = {"external_tools":{"others":[{name:'othertool1',available:true},{name:'othertool2',available:false},
             {name:'othertool3',available:true}],"visualizations":[{name:'vistool1',available:false},{name:DEFAULT_TOOL_NAME,available:false},
             {name:'vistool3',available:true}]}};
         sample_data.plain = function(){return this;};
