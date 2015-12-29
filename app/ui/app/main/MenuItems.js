@@ -63,7 +63,7 @@
             "icon": "icon-wrench",
             "items": [
                  {
-                    "text": "ATK",
+                    "text": "TAP Analytics Toolkit",
                     "sref": "app.datatools"
                 },  {
                     "text": "IPython",

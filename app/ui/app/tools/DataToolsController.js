@@ -42,7 +42,7 @@
         }
 
         $scope.createInstance = function (name) {
-            NotificationService.success("Creating an ATK instance may take a while. You can try to refresh the page after in a minute or two.", "Task scheduled");
+            NotificationService.success("Creating an TAP Analytics Toolkit instance may take a while. You can try to refresh the page after in a minute or two.", "Task scheduled");
             ServiceInstanceResource
                 .supressGenericError()
                 .createInstance(
@@ -71,7 +71,7 @@
                         })
                         .catch(function (error) {
                             if (error.status === 500) {
-                                NotificationService.success("Deleting an ATK instance may take a while. You can try to refresh the page after in a minute or two.", "Task scheduled");
+                                NotificationService.success("Deleting an TAP Analytics Toolkit instance may take a while. You can try to refresh the page after in a minute or two.", "Task scheduled");
                             }
                             else {
                                 NotificationService.genericError(error.data, 'Error while deleting the application');

@@ -214,7 +214,7 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
         })
         .state('app.modelcatalog.atk', {
             url: '/atkmodels',
-            title: 'ATK models',
+            title: 'TAP Analytics Toolkit models',
             templateUrl: getViewPath('modelcatalog/atk/atkmodels.html')
         })
         .state('app.manage', {

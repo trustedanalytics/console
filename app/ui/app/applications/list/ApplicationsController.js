@@ -32,7 +32,7 @@
 
         function getAtkInstances() {
             return AtkInstanceResource
-                .withErrorMessage('Failed to load ATk instances')
+                .withErrorMessage('Failed to load TAP Analytics Toolkit instances')
                 .getAll(targetProvider.getOrganization().guid)
                 .then(function onSuccess(response) {
                     return response.instances;
