@@ -42,9 +42,6 @@ h3
                 td
                     a(ui-sref='app.application({ appId: app.guid })') See details &raquo;
 
-        div(ng-if='ctrl.applications.length && !ctrl.dataPrepared.length')
-            | No results found
-
         div(ng-if='!ctrl.applications.length')
             | You have no applications
 
