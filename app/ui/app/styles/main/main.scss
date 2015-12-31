@@ -63,7 +63,7 @@ a {
     right: 0;
     bottom: 0;
     height: $footer-height;
-    line-height: $footer-height;
+    line-height: $footer-height - $footer-border-thickness;
     padding: 0 20px;
 
     > p {
