@@ -45,6 +45,7 @@ h3
                 form(ng-submit='createInstance(newInstanceName)')
                     input.form-control(type='text', required='', placeholder='Instance name', ng-model='newInstanceName')
                     button.btn.btn-primary(type='submit') Create new instance
+            d-spinner(text="'Creating new instance... Please wait'", ng-if='newInstanceState.isPending()')
 
         .panel.panel-warning.notice
             .panel-heading Note

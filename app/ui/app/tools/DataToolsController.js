@@ -19,12 +19,15 @@
     App.controller('DataToolsController', function ($scope, $http, targetProvider, AtkInstanceResource, State,
         NotificationService, serviceExtractor, ServiceResource, ServiceInstanceResource, ApplicationResource) {
 
+        var GATEWAY_TIMEOUT_ERROR = 504;
         var state = new State().setPending();
         var clientState = new State().setPending();
         var deleteState = new State().setLoaded();
+        var newInstanceState = new State().setDefault();
         $scope.state = state;
         $scope.clientState = clientState;
         $scope.deleteState = deleteState;
+        $scope.newInstanceState = newInstanceState;
 
         var org = targetProvider.getOrganization();
         $scope.organization = org;
@@ -42,7 +45,7 @@
         }
 
         $scope.createInstance = function (name) {
-            NotificationService.success("Creating an TAP Analytics Toolkit instance may take a while. You can try to refresh the page after in a minute or two.", "Task scheduled");
+            $scope.newInstanceState.setPending();
             ServiceInstanceResource
                 .supressGenericError()
                 .createInstance(
@@ -52,7 +55,19 @@
                     targetProvider.getSpace().guid
                 )
                 .then(function onSuccess() {
+                    $scope.newInstanceState.setDefault();
+                    notifySuccessInstanceCreation(NotificationService);
                     getAtkInstances($scope, targetProvider.getOrganization(), AtkInstanceResource);
+                })
+                .catch(function(error) {
+                    if(error.status === GATEWAY_TIMEOUT_ERROR) {
+                        notifySuccessInstanceCreation(NotificationService);
+                    } else {
+                        NotificationService.genericError(error.data, 'Error creating new service instance');
+                    }
+                })
+                .finally(function () {
+                    $scope.newInstanceState.setDefault();
                 });
             $scope.newInstanceName = null;
         };
@@ -97,5 +112,10 @@
                 $scope.servicePlanGuid = response.service_plan_guid;
                 $scope.state.setLoaded();
             });
+    }
+
+    function notifySuccessInstanceCreation(notificationService) {
+        notificationService.success("Creating an TAP Analytics Toolkit instance may take a while. You can try to " +
+        "refresh the page after in a minute or two.", "Task scheduled");
     }
 }());
