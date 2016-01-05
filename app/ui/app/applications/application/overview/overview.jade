@@ -65,13 +65,13 @@ div
         tr
             td Detected buildpack:
             td {{ application.detected_buildpack }}
-        tr
+        tr(ng-if="application.command")
             td Start command:
             td
                 a(ng-hide='startCommandVisible', ng-click='startCommandVisible = true') Show data
                 a(ng-show='startCommandVisible', ng-click='startCommandVisible = false') Hide data
                 div(ng-show='startCommandVisible')
-                    | {{ application.detected_start_command }}
+                    | {{ application.command }}
         tr
             td Environment:
             td
