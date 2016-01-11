@@ -2,7 +2,7 @@
   "name": "console",
   "author": "Intel Corporation",
   "license": "Apache-2.0",
-  "version": "0.4.116",
+  "version": "0.4.117",
   "private": true,
   "dependencies": {
     "compression": "1.6.0",
@@ -43,7 +43,7 @@
     "gulp-using": "0.0.1",
     "gulp-util": "3.0.7",
     "jshint": "2.8.0",
-    "karma": "0.13.15",
+    "karma": "0.13.19",
     "karma-chrome-launcher": "0.2.1",
     "karma-coverage": "0.5.3",
     "karma-firefox-launcher": "0.1.7",
