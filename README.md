@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/trustedanalytics/console.svg)](https://gemnasium.com/trustedanalytics/console)
+[![Build Status](https://travis-ci.org/trustedanalytics/console.svg)](https://travis-ci.org/trustedanalytics/console)
 [![Dependency Status](https://gemnasium.com/trustedanalytics/console.svg)](https://gemnasium.com/trustedanalytics/console)
 [![Code Climate](https://codeclimate.com/github/trustedanalytics/console/badges/gpa.svg)](https://codeclimate.com/github/trustedanalytics/console)
 
