@@ -42,9 +42,13 @@ h3
                 .no-instances(ng-hide='instances.length') 
                     | No instances found
             div
-                form(ng-submit='createInstance(newInstanceName)')
-                    input.form-control(type='text', required='', placeholder='Instance name', ng-model='newInstanceName')
-                    button.btn.btn-primary(type='submit') Create new instance
+                form(name="newInstance", ng-submit='createInstance(newInstanceName)')
+                    input.form-control(name="instanceName" type='text', required='', placeholder='Instance name',
+                    ng-model='newInstanceName', pattern-validator="^[a-zA-Z][a-zA-Z0-9-_\.]*")
+                    button.btn.btn-primary(type='submit', ng-disabled='!newInstance.instanceName.$valid')
+                        | Create new instance
+                    div(ng-if="!newInstance.instanceName.$valid && newInstanceName.length")
+                        span.validationMessage Allowed characters: [letters, numbers, _, -, .]
             d-spinner(text="'Creating new instance... Please wait'", ng-if='newInstanceState.isPending()')
 
         .panel.panel-warning.notice
