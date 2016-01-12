@@ -72,6 +72,14 @@
             }
         };
 
+        $scope.inputChange = function() {
+            if($scope.uploadFormData.input.type === 'local') {
+                $scope.uploadFormData.link = "";
+            } else {
+                $scope.uploadFormData.filename = "";
+            }
+        };
+
         $scope.getIcon = function (category) {
             return categoriesIcons[category] || categoriesIcons.other;
         };

@@ -29,6 +29,7 @@
                     .radio(ng-repeat="option in uploadFormData.uploadTypes" ng-init="uploadFormData.input = uploadFormData.uploadTypes[0]")
                         label
                             input(type='radio', name='uploadType', ng-value='option',
+                                ng-change="inputChange()",
                                 ng-model="uploadFormData.input" ng-selected="option === uploadFormData.input")
                             span.fa.fa-circle
                             | {{ option.text }}
@@ -36,12 +37,14 @@
             .form-group(ng-if="uploadFormData.input.type === 'link'")
                 label.col-sm-2.control-label(for='link') {{ uploadFormData.input.text }}
                 .col-sm-10
-                    input#link.form-control(type='text', name="fileName", placeholder='place link...', data-ng-model='uploadFormData.link', pattern-validator="^(http|https|ftp|hdfs)://.*$", required)
+                    input#link.form-control(type='text', name="fileName", placeholder='place link...',
+                    data-ng-model='uploadFormData.link', pattern-validator="^(http|https|ftp|hdfs)://.*$", required)
 
             .form-group(ng-if="uploadFormData.input.type === 'local'")
                 label.col-sm-2.control-label(for='file') {{ uploadFormData.input.text }}
                 .col-sm-10
-                    input.btn.btn-primary(type='file', nv-file-select, uploader="uploader", name='upfile', data-ng-model='inputFile', required)
+                    input.btn.btn-primary(type='file', nv-file-select, uploader="uploader", name='upfile', required,
+                    data-ng-model='uploadFormData.filename', file-valid)
 
             .form-group
                 label.col-sm-2.control-label(for='title') Title
@@ -69,8 +72,8 @@
 
             .form-group
                 .col-sm-offset-2.col-sm-10
-                    input.btn.btn-primary(type='submit', value='Upload', ng-disabled="(!uploadForm.fileName.$valid && uploadFormData.input.type === 'link') || inputFile.length")
-
+                    input.btn.btn-primary(type='submit', value='Upload',
+                        ng-disabled="uploadForm.$invalid")
 
 script(type="text/ng-template", id="progress-upload")
     .ngdialog-message.clearfix

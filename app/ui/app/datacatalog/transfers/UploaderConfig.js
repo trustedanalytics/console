@@ -21,6 +21,7 @@
         return {
             category: "other",
             public: false,
+            filename: "",
             link: "",
             title: "",
             input: "",
