@@ -44,7 +44,7 @@ script(type="text/ng-template", id="confirm-delete")
         p
             | Do you really want to delete the application?
         .checkbox
-            label(ng-if="data.servicesToDelete.length")
+            label(ng-show="data.servicesToDelete.length")
                 input(type='checkbox', name='cascade', ng-model="cascade")
                 span.fa.fa-check
                 |  Delete all services bound to this, that are not used by other applications:
