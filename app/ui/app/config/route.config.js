@@ -114,6 +114,12 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
             controllerAs: 'bindCtrl',
             templateUrl: getViewPath('applications/application/bindings/bindings.html')
         })
+        .state('app.application.register', {
+            url: '/register',
+            title: 'Application',
+            controller: 'ApplicationRegisterController',
+            templateUrl: getViewPath('applications/application/register/register.html')
+        })
         .state('app.appcli', {
             url: '/tools',
             title: 'Tools',

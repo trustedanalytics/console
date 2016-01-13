@@ -58,6 +58,9 @@
 },{
   "path": "/rest/service_bindings",
   "name": "servicecatalog"
+},{
+  "path": "/rest/marketplace/application",
+  "name": "servicecatalog"
 }, {
   "path": "/rest/orgs/[^/]+/metrics",
   "name": "metrics-provider"

@@ -1,0 +1,57 @@
+//
+   Copyright (c) 2015 Intel Corporation
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+//-
+.application-register
+
+   d-spinner(ng-if='state.isPending()')
+
+   .clearfix(ng-if='state.isLoaded()')
+      form.form-horizontal(name="uploadForm" data-ng-submit='submitRegister()')
+         .form-group
+            label.col-sm-2.control-label(for='uniq') Name
+            .col-sm-10
+               input#uniq.form-control(type='text', placeholder='Name...', data-ng-model='service.name', required)
+
+         .form-group
+            label.col-sm-2.control-label(for='name') Display name
+            .col-sm-10
+               input#name.form-control(type='text', placeholder='Display name...', data-ng-model='service.metadata.displayName')
+
+         .form-group
+            label.col-sm-2.control-label(for='file') Icon
+            .col-sm-10
+               input.btn.btn-primary(type='file', name='upfile', image-reader, accept="image/*")
+
+         .form-group
+            label.col-sm-2.control-label(for='description') Description
+            .col-sm-10
+               textarea#description.form-control(rows=5,placeholder='Description...', data-ng-model='service.description', required)
+
+         .form-group
+            .col-sm-2
+            .col-sm-2
+               input#uniq.form-control(type='text', placeholder='tag name...', data-ng-model='tag')
+            .col-sm-8
+               input.btn.btn-primary(type='button', value='Add tag', ng-click='addTag(tag)')
+
+         .form-group(ng-if='service.tags.length')
+            label.col-sm-2.control-label(for='uniq') Tags list
+            .tags.col-sm-10
+               span.label.label-tag(data-ng-repeat='tag in service.tags')
+                  | {{ tag }}
+
+         .form-group
+            .col-sm-offset-2.col-sm-10
+               input.btn.btn-primary(type='submit', value='Register')

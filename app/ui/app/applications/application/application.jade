@@ -23,6 +23,8 @@
                 a(ui-sref='app.application({appid: appCtrl.appId})') Overview
             li(ui-sref-active='active')
                 a(ui-sref='app.application.bindings({appid: appCtrl.appId})') Bindings
+            li(ui-sref-active='active')
+                a(ui-sref='app.application.register({appid: appCtrl.appId})') Register in marketplace
 
     .tabcontent
         ui-view
