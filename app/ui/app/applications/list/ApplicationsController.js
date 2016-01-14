@@ -83,6 +83,10 @@
             ]);
             return def;
         };
+
+        self.checkStatusProblem = function (app) {
+            return app.running_instances === 0 && app.state === 'STARTED';
+        };
     });
 
     function updateAppNames(apps, atkInstances) {
