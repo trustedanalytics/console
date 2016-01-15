@@ -84,7 +84,8 @@
   "name": "latest-events-service"
 }, {
   "path": "/rest/upload",
-  "name": "hdfs-uploader"
+  "name": "hdfs-uploader",
+  "timeout": 3600000
 }, {
   "path": "/rest/platform/summary",
   "name": "platform-operations"
