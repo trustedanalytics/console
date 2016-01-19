@@ -36,6 +36,7 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
             url: '/platformdashboard',
             title: 'Platform Dashboard',
             controller: 'PlatformDashboardController',
+            controllerAs: 'ctrl',
             templateUrl: getViewPath('operations/platform-dashboard.html')
         })
         .state('app.platformdashboard.summary', {

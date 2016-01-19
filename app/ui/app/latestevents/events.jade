@@ -17,7 +17,7 @@ h3
     d-target-selector.pull-right(hide-space="true")
     | Latest events
 
-.events(ng-controller='LatestEventsController')
+.events
     .panel
         button.btn.btn-default(type='button', uib-dropdown-toggle="", ng-disabled="state.isPending()")
         | {{ targetCtrl.organization.selected.name }}
