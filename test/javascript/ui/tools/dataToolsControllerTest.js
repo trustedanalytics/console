@@ -176,7 +176,7 @@ describe("Unit: DataToolsController", function () {
             post.organization_guid, post.space_guid), 'call create service with proper arguments').to.be.ok;
     });
 
-    it('createNewInstance, success, set pending and load atk instances', function () {
+    it('createNewInstance, success, load atk instances', function () {
         var name = "fakeinstance";
         loadAtkInstances();
 
@@ -188,7 +188,6 @@ describe("Unit: DataToolsController", function () {
 
         scope.createInstance(name);
         scope.$apply();
-        expect(scope.state.value).to.be.equal(state.values.PENDING);
         expect(atkInstancesResource.getAll.called).to.be.ok;
     });
 

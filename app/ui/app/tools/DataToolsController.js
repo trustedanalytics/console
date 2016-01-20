@@ -16,8 +16,9 @@
 (function () {
     "use strict";
 
-    App.controller('DataToolsController', function ($scope, $http, targetProvider, AtkInstanceResource, State,
-        NotificationService, serviceExtractor, ServiceResource, ServiceInstanceResource, ApplicationResource) {
+    App.controller('DataToolsController', function ($scope, $http, $q, targetProvider, AtkInstanceResource, State,
+        NotificationService, serviceExtractor, ServiceResource, ServiceInstanceResource, ApplicationResource,
+        spaceUserService, UserProvider) {
 
         var GATEWAY_TIMEOUT_ERROR = 504;
         var state = new State().setPending();
@@ -34,15 +35,10 @@
 
         $scope.$on('targetChanged', function () {
             org = targetProvider.getOrganization();
-            if (org.guid) {
-                getAtkInstances($scope, org, AtkInstanceResource);
-            }
+            initializeInstances($scope, $q, org, AtkInstanceResource, spaceUserService, NotificationService, UserProvider);
         });
 
-        if (org.guid) {
-            $scope.state.setPending();
-            getAtkInstances($scope, org, AtkInstanceResource);
-        }
+        initializeInstances($scope, $q, org, AtkInstanceResource, spaceUserService, NotificationService, UserProvider);
 
         $scope.createInstance = function (name) {
             $scope.newInstanceState.setPending();
@@ -57,6 +53,7 @@
                 .then(function onSuccess() {
                     $scope.newInstanceState.setDefault();
                     notifySuccessInstanceCreation(NotificationService);
+                    $scope.state.setPending();
                     getAtkInstances($scope, targetProvider.getOrganization(), AtkInstanceResource);
                 })
                 .catch(function(error) {
@@ -67,6 +64,7 @@
                     }
                 })
                 .finally(function () {
+                    $scope.state.setLoaded();
                     $scope.newInstanceState.setDefault();
                 });
             $scope.newInstanceName = null;
@@ -82,7 +80,11 @@
                         .deleteApplication(instanceGuid, true)
                         .then(function () {
                             NotificationService.success('Application has been deleted');
-                            getAtkInstances($scope, targetProvider.getOrganization(), AtkInstanceResource);
+                            $scope.state.setPending();
+                            getAtkInstances($scope, targetProvider.getOrganization(), AtkInstanceResource)
+                                .then(function() {
+                                    $scope.state.setLoaded();
+                                });
                         })
                         .catch(function (error) {
                             if (error.status === 500) {
@@ -93,24 +95,67 @@
                             }
                         })
                         .finally(function () {
+                            $scope.state.setLoaded();
                             $scope.deleteState.setDefault();
                         });
                 });
         };
+
         $scope.deleteService = function (serviceGuid) {
             ServiceInstanceResource.deleteInstance(serviceGuid);
         };
     });
 
+    function initializeInstances($scope, $q, org, AtkInstanceResource, spaceUserService, NotificationService, UserProvider) {
+        if (org.guid) {
+            $scope.state.setPending();
+            getAtkInstances($scope, org, AtkInstanceResource)
+                .then(function() {
+                    return canCurrentUserCreateInstance($scope, $q, org, spaceUserService, UserProvider);
+                })
+                .then(function(canCreate) {
+                    if (canCreate) {
+                        var defaultInstanceName = "atk-" + org.name;
+                        confirmCreatingImmediateInstance($scope, NotificationService, defaultInstanceName);
+                    }
+                    $scope.state.setLoaded();
+                });
+        }
+    }
 
     function getAtkInstances($scope, org, AtkInstanceResource) {
         $scope.state.setPending();
         $scope.deleteState.setDefault();
-        AtkInstanceResource.getAll(org.guid)
+        return AtkInstanceResource.getAll(org.guid)
             .then(function onSuccess(response) {
                 $scope.instances = response.instances;
                 $scope.servicePlanGuid = response.service_plan_guid;
-                $scope.state.setLoaded();
+            });
+    }
+
+    function canCurrentUserCreateInstance($scope, $q, org, spaceUserService, UserProvider) {
+        var deferred = $q.defer();
+        if (org.guid && org.name && !$scope.instances) {
+            $scope.state.setPending();
+            if(UserProvider.isAdmin()) {
+                deferred.resolve(true);
+            } else {
+                spaceUserService.getSpaceUser()
+                    .then(function(currentUser) {
+                        deferred.resolve(isSpaceDeveloper(currentUser));
+                    })
+                    .catch(deferred.reject);
+            }
+        } else {
+            deferred.resolve(false);
+        }
+        return deferred.promise;
+    }
+
+    function confirmCreatingImmediateInstance($scope, NotificationService, defaultInstanceName) {
+        NotificationService.confirm('confirm-creating-instance', {instanceToCreate: defaultInstanceName})
+            .then(function (instanceToCreate) {
+                $scope.createInstance(instanceToCreate[0]);
             });
     }
 
@@ -118,4 +163,12 @@
         notificationService.success("Creating an TAP Analytics Toolkit instance may take a while. You can try to " +
         "refresh the page after in a minute or two.", "Task scheduled");
     }
+
+    function isSpaceDeveloper(user) {
+        if (user && _.contains(user.roles, "developers")) {
+            return true;
+        }
+        return false;
+    }
+
 }());

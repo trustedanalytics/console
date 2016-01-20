@@ -42,6 +42,10 @@
             return service.one("current").one("password").customPUT(data);
         };
 
+        service.isAdmin = function () {
+            return (user || {}).role === 'ADMIN';
+        };
+
         function doCallbacks(userData) {
             user = userData;
             callbacks.forEach(function (callback) {

@@ -68,3 +68,11 @@ h3
             .pull-right
                 button.btn.btn-primary(type='button', ng-click='confirm(true)') Delete
                 button.btn.btn-default(type='button', ng-click="cancel()") Cancel
+
+    script(type="text/ng-template", id="confirm-creating-instance")
+        .ngdialog-message.clearfix
+            p
+                | No ATK instances found. Do you want to create a new ATK instance?
+            .pull-right
+                button.btn.btn-primary(type='button', ng-click='confirm(data.instanceToCreate)') Yes
+                button.btn.btn-primary(type='button', ng-click='cancel()') No

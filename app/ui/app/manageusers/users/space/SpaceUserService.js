@@ -16,7 +16,7 @@
 (function () {
     "use strict";
 
-    App.factory('spaceUserService', function (Restangular, targetProvider, $q) {
+    App.factory('spaceUserService', function (Restangular, targetProvider, $q, UserProvider) {
         var service = Restangular.service("spaces");
 
         function getSpaceId() {
@@ -34,13 +34,30 @@
         service.getAll = function () {
             if (getSpaceId()) {
                 return getUsersResource().getList();
-
             }
             else {
                 var deferred = $q.defer();
                 deferred.reject();
                 return deferred.promise;
             }
+        };
+
+        service.getSpaceUser = function() {
+            var deferred = $q.defer();
+            var spaceId = getSpaceId();
+            UserProvider.getUser(function(user) {
+                if (spaceId) {
+                    service.one(spaceId).customGET("users", {username: user.email})
+                        .then(function(users) {
+                            deferred.resolve(_.first(users));
+                        })
+                        .catch(deferred.reject);
+                }
+                else {
+                    deferred.reject("Space not set");
+                }
+            });
+            return deferred.promise;
         };
 
         service.targetAvailable = function () {
