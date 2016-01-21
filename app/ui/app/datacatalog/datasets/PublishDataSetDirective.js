@@ -75,10 +75,13 @@
                         .publish($scope.dataSet)
                         .then(function onSucces(data) {
                             $window.open(data[tool + '_url'], '_blank');
-                        }).catch(function onError() {
-                        state.setError();
-                        publishDialog.close();
-                    });
+                        })
+                        .catch(function onError() {
+                            state.setError();
+                        })
+                        .finally(function() {
+                            publishDialog.close();
+                        });
                 };
             }],
             templateUrl: 'app/datacatalog/datasets/publishDataSet.html'
