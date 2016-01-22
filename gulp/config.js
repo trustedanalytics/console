@@ -102,6 +102,12 @@ module.exports = {
             src: 'new-account/static/**',
             base: 'new-account/static',
             dest: 'new-account'
+        },
+
+        bootstrapGlyphicons: {
+            src: '../../bower_components/bootstrap-sass/assets/fonts/**/*',
+            base: '../../bower_components/bootstrap-sass/assets/fonts/bootstrap',
+            dest: 'fonts/bootstrap'
         }
     }
 };

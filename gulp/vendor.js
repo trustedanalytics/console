@@ -26,7 +26,7 @@ var gulp        = require('gulp'),
 gulp.task('vendor', gulpsync.sync(['vendor:bower', 'vendor:compile']));
 
 
-gulp.task('vendor:compile', ['vendor:base:scripts', 'vendor:base:styles', 'vendor:app']);
+gulp.task('vendor:compile', ['vendor:base:scripts', 'vendor:base:styles', 'vendor:app', 'vendor:glyphicons']);
 
 
 gulp.task('vendor:bower', function(){
@@ -39,6 +39,10 @@ gulp.task('vendor:base:scripts', function () {
 
 gulp.task('vendor:base:styles', function () {
     return utils.compileCss(config.styles.vendorBase);
+});
+
+gulp.task('vendor:glyphicons', function (){
+    return utils.copyStatic(config.static.bootstrapGlyphicons);
 });
 
 // copy file from bower folder into the app vendor folder
