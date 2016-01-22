@@ -28,13 +28,13 @@ h3
 
         a.btn.btn-primary.pull-right.turn-export-on(ng-hide='exportMode' ng-show='services.length' ng-click="exportMode = true") Export keys
         a.btn.btn-default.pull-right.turn-export-off(ng-show="exportMode" ng-click="exportMode = false") Cancel export
-        .service-item(ng-repeat="service in services | orderBy: 'displayName'")
+        .service-item(ng-repeat="service in services | orderBy: 'displayName || label'")
             .img
                 img(ng-src='{{ service.imageUrl }}', alt='{{ service.name }}', ng-if='service.imageUrl')
                 .placeholder(ng-if='!service.imageUrl')
                     span.icons.icon-settings
             .service-content
-                .name {{ service.displayName }}
+                .name {{service.displayName || service.label }}
                 .instances
                     .instance(ng-repeat="instance in service.instances" ng-init="formVisible = false")
 
