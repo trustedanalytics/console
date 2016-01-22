@@ -24,7 +24,7 @@
         $scope.tools = [];
         $scope.organizations = targetProvider.getOrganizations();
 
-        getExternalTools(PlatformContextProvider, $scope);
+        getExternalTools(PlatformContextProvider, targetProvider, MenuItems, $scope);
 
         var itemValidators = [
             function access(item) {
@@ -103,6 +103,22 @@
         };
     });
 
+    function addExternalToolsToMenuItems(externalTools, MenuItems) {
+        var dataScienceMenu = _.findWhere(MenuItems, {id: "datascience"});
+        var toolsFromContext = _.pluck(_.where(externalTools, {available: true}), 'name');
+        var toolsFromMenuItems = _.compact(_.pluck(dataScienceMenu.items, 'tool'));
+        var diff = _.difference(toolsFromContext, toolsFromMenuItems);
+        dataScienceMenu.items = dataScienceMenu.items.concat(_.map(diff, getToolObject));
+    }
+
+    function getToolObject(toolName) {
+        return {
+            "text": toolName,
+            "sref": "app." + toolName,
+            "tool": toolName
+        };
+    }
+
     function hasAccess(accessRestrictions, accessGranted) {
         return !accessRestrictions || _.some(accessRestrictions, function (accessName) {
                 return accessGranted[accessName];
@@ -125,12 +141,18 @@
         return (organization || {}).manager;
     }
 
-    function getExternalTools(PlatformContextProvider, $scope) {
+    function isAnyOrgManager(organizations) {
+        return _.some(organizations, function(org) {
+            return org.manager;
+        });
+    }
+
+    function getExternalTools(PlatformContextProvider, targetProvider, MenuItems, $scope) {
         PlatformContextProvider
-            .getPlatformContext()
-            .then(function (platformContext) {
-                var externalTools = platformContext.external_tools;
-                $scope.tools = _.union(externalTools.others, externalTools.visualizations);
+            .getExternalTools(targetProvider.getSpace().guid)
+            .then(function (externalTools) {
+                $scope.tools = externalTools;
+                addExternalToolsToMenuItems(externalTools, MenuItems);
             });
     }
 })();

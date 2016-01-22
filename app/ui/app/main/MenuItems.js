@@ -60,14 +60,16 @@
             "sref": "app.appcli"
         },{
             "text": "Data Science",
+            "id": "datascience",
             "icon": "icon-wrench",
             "items": [
-                 {
+                {
                     "text": "TAP Analytics Toolkit",
                     "sref": "app.datatools"
                 },  {
                     "text": "IPython",
-                    "sref": "app.ipython"
+                    "sref": "app.ipython",
+                    "tool": 'ipython'
                 },  {
                     "text": "RStudio®",
                     "sref": "app.rstudio",

@@ -16,8 +16,9 @@
 (function () {
     "use strict";
 
-    App.factory('PlatformContextProvider', function (PlatformContextResource, $q) {
+    App.factory('PlatformContextProvider', function (PlatformContextResource, ExternalToolResource, $q) {
         var platformContext = null;
+        var externalTools = null;
         return {
             getPlatformContext: function () {
                 if (platformContext) {
@@ -31,6 +32,21 @@
                         .then(function success(data) {
                             platformContext = data.plain();
                             return platformContext;
+                        });
+                }
+            },
+            getExternalTools: function (space) {
+                if (externalTools) {
+                    var deferred = $q.defer();
+                    deferred.resolve(externalTools);
+                    return deferred.promise;
+                } else {
+                    return ExternalToolResource
+                        .withErrorMessage("Error while fetching platform context")
+                        .getExternalTools(space)
+                        .then(function success(data) {
+                            externalTools = data.plain();
+                            return externalTools;
                         });
                 }
             }

@@ -80,6 +80,9 @@
   "path": "/rest/platform_context",
   "name": "platformcontext"
 }, {
+  "path": "/rest/external_tools",
+  "name": "platformcontext"
+}, {
   "path": "/rest/orgs",
   "name": "user-management"
 }, {
