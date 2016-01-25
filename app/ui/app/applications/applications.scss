@@ -19,6 +19,13 @@
     color: #ff0000;
   }
 
+  //Prevent from expanding drop-down list in other place
+  .table thead tr div div select:hover {
+    option {
+      max-width: 100%;
+    }
+  }
+
   .details {
     display: none;
 
@@ -45,6 +52,7 @@
 }
 
 .application {
+
 
   .table td:first-child {
     font-weight: bold;
