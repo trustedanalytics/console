@@ -70,14 +70,18 @@
                             closeByEscape: false,
                             closeByDocument: false
                         });
+
+                    var windowId = $window.open('#/app/loading', '_blank');
+
                     DataTableResource
                         .withErrorMessage('Publish of the data set failed')
                         .publish($scope.dataSet)
                         .then(function onSucces(data) {
-                            $window.open(data[tool + '_url'], '_blank');
+                            windowId.location.href = data[tool + '_url'];
                         })
                         .catch(function onError() {
                             state.setError();
+                            windowId.close();
                         })
                         .finally(function() {
                             publishDialog.close();

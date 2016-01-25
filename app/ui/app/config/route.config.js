@@ -307,6 +307,11 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
             title: 'Disclaimers',
             controller: 'DisclaimersController',
             templateUrl: getViewPath('legal/disclaimers.html')
+        })
+        .state('app.loading', {
+            url: '/loading',
+            title: 'Loading data',
+            templateUrl: getViewPath('main/loading.html')
         });
 
     function getViewPath(path) {
