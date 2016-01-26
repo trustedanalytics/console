@@ -19,7 +19,8 @@
             .clearfix
                 label.col-sm-2.control-label(for='add-username') Email:
                 .col-sm-4
-                    input#add-username.form-control(name='user_email', type='email', ng-model='userToAdd.username', required='')
+                    input#add-username.form-control(name='user_email', ng-model='userToAdd.username',
+                    required='', email-validator)
             .clearfix
                 label.col-sm-2.control-label(for='add-role') Role: 
                 .col-sm-4
@@ -28,5 +29,6 @@
 
         .form-group
             .col-sm-offset-2.col-sm-10
-                input.btn.btn-primary(type='submit', value='Add user', ng-disabled="!state.isLoaded() || !add_user_form.$valid")
+                input.btn.btn-primary(type='submit', value='Add user',
+                ng-disabled="!state.isLoaded() || !add_user_form.user_email.$valid")
 
