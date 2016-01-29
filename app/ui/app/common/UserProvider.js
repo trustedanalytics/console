@@ -46,6 +46,12 @@
             return (user || {}).role === 'ADMIN';
         };
 
+        service.isAnyOrgManager = function(organizations) {
+            return _.some(organizations, function(org) {
+                return org.manager;
+            });
+        };
+        
         function doCallbacks(userData) {
             user = userData;
             callbacks.forEach(function (callback) {

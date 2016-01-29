@@ -20,7 +20,9 @@
         return {
             scope: {
                 number: '=',
-                text: '='
+                text: '=',
+                link: '@',
+                linkEnabled: '='
             },
             templateUrl: 'app/dashboard/tile-small-white-numeric.html'
         };
@@ -32,7 +34,8 @@
                 number: '=',
                 float: '=?',
                 text: '=',
-                unit: '=?'
+                unit: '=?',
+                link: '@'
             },
             templateUrl: 'app/dashboard/tile-blue-numeric.html',
             controller: function($scope) {
@@ -57,10 +60,10 @@
     App.directive('dTileNews', function () {
         return {
             scope: {
-                events: '='
+                events: '=',
+                link: '@'
             },
             templateUrl: 'app/dashboard/tile-news.html'
         };
     });
-
 })();

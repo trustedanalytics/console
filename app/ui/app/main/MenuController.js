@@ -56,7 +56,7 @@
         });
 
         $scope.$watchCollection('organizations', function(orgs) {
-            $scope.access.anyOrgManager = isAnyOrgManager(orgs);
+            $scope.access.anyOrgManager = UserProvider.isAnyOrgManager(orgs);
         });
 
 
@@ -134,12 +134,6 @@
 
     function isCurrentOrgManager(organization) {
         return (organization || {}).manager;
-    }
-
-    function isAnyOrgManager(organizations) {
-        return _.some(organizations, function(org) {
-            return org.manager;
-        });
     }
 
     function getExternalTools(PlatformContextProvider, $scope) {

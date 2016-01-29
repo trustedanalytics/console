@@ -17,7 +17,7 @@
     "use strict";
 
     App.controller('DashboardController', function ($scope, targetProvider, State, OrgMetricsResource, $timeout,
-        LoadChartResource) {
+        LoadChartResource, UserProvider) {
 
         var state = new State().setPending(),
             metricsTimeoutHandler,
@@ -29,6 +29,7 @@
             values: null,
             state: new State().setPending()
         };
+        $scope.organizations = targetProvider.getOrganizations();
 
         $scope.$on('targetChanged', function () {
             state.setPending();
@@ -39,9 +40,21 @@
             $timeout.cancel(metricsTimeoutHandler);
             $timeout.cancel(loadTimeoutHandler);
         });
+        $scope.canManageUsers = function() {
+            return $scope.anyOrgManager || $scope.admin;
+        };
+
+        UserProvider.getUser(function (user) {
+            $scope.admin = isAdmin(user);
+        });
+
 
         getMetrics();
         getLoadData();
+
+        $scope.$watchCollection('organizations', function(orgs) {
+            $scope.anyOrgManager = UserProvider.isAnyOrgManager(orgs);
+        });
 
         function getMetrics() {
             $timeout.cancel(metricsTimeoutHandler);
@@ -79,4 +92,8 @@
         }
 
     });
+
+    function isAdmin(user) {
+        return (user || {}).role === "ADMIN";
+    }
 }());

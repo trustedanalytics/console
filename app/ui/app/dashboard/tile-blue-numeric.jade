@@ -14,10 +14,11 @@
    limitations under the License.
 //-
 .panel.widget.blue-tile.numeric-tile
-    div
-        .col-xs-6.text
-            | {{ text }}
-        .col-xs-6.number(ng-show='isVisible(number)')
-            | {{ number }}
-        .col-xs-12.float(ng-show='isVisible(float)')
-            | {{float | number: 2}} {{ unit }}
+    a(ng-href="{{link}}")
+       div
+           .col-xs-6.text
+               | {{ text }}
+           .col-xs-6.number(ng-show='isVisible(number)')
+               | {{ number }}
+           .col-xs-12.float(ng-show='isVisible(float)')
+               | {{float | number: 2}} {{ unit }}

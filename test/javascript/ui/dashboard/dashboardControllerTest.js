@@ -35,7 +35,9 @@ describe("Unit: DashboardController", function () {
         $q = _$q_;
 
         targetProvider = {
-            getOrganization: sinon.stub().returns({ guid: 'o1' })
+            getOrganization: sinon.stub().returns({ guid: 'o1' }),
+            getOrganizations: sinon.stub()
+
         };
 
         LoadChartResource = {

@@ -23,27 +23,33 @@ d-spinner(ng-show='state.isPending()')
     .category-title.clearfix
         d-target-selector.target-selector.pull-right(hide-space="true")
         | Health & metrics
-    
-    d-tile-small-white-numeric(number="data.appsRunning", text="'Applications running'").col-lg-4.col-md-6.col-sm-6
-    d-tile-small-white-numeric(number="data.appsDown", text="'Applications down'").col-lg-4.col-md-6.col-sm-6
-    d-tile-small-white-numeric(number="data.totalUsers", text="'Users count'").col-lg-4.col-md-6.col-sm-6
-    d-tile-load-chart(chart-data="loadChart.values" state="loadChart.state" parent-state="state").col-lg-12.col-md-12.col-sm-12
 
+    d-tile-small-white-numeric(number="data.appsRunning", text="'Applications running'", link="#/app/applications").col-lg-4.col-md-6.col-sm-6
+    d-tile-small-white-numeric(number="data.appsDown", text="'Applications down'",
+      link="#/app/applications").col-lg-4.col-md-6.col-sm-6
+    d-tile-small-white-numeric(number="data.totalUsers", text="'Users count'",
+      link="#/app/manage/orgusers", link-enabled="canManageUsers()").col-lg-4.col-md-6.col-sm-6
+    d-tile-load-chart(chart-data="loadChart.values", state="loadChart.state", parent-state="state",
+      tile-cursor).col-lg-12.col-md-12.col-sm-12
 
     .category-title.clearfix Quotas
     d-tile-progress(value="data.memoryUsage | percent", title="'Memory usage'").col-lg-4.col-sm-6
-    d-tile-blue-numeric(number="data.serviceUsage", text="'Service usage'").col-lg-4.col-sm-6.tile-height-large
-    d-tile-blue-numeric(number="data.domainsUsage", text="'Domains usage'").col-lg-4.col-sm-6.tile-height-large
+    d-tile-blue-numeric(number="data.serviceUsage", text="'Service usage'",
+      link="#/app/services/instances").col-lg-4.col-sm-6.tile-height-large
+    d-tile-blue-numeric(number="data.domainsUsage", text="'Domains usage'",
+      link="#/app/applications").col-lg-4.col-sm-6.tile-height-large
 
     .col-md-4.left-col
         .category-title Data
-        d-tile-blue-numeric(number="data.datasetCount", text="'Datasets count'").tile-height-small
-        d-tile-blue-numeric(number="data.privateDatasets", text="'Private datasets'").tile-height-small
-        d-tile-blue-numeric(number="data.publicDatasets", text="'Public datasets'").tile-height-small
+        d-tile-blue-numeric(number="data.datasetCount", text="'Datasets count'",
+            link="#/app/datacatalog/datasets").tile-height-small
+        d-tile-blue-numeric(number="data.privateDatasets", text="'Private datasets'",
+            link="#/app/datacatalog/datasets").tile-height-small
+        d-tile-blue-numeric(number="data.publicDatasets", text="'Public datasets'",
+            link="#/app/datacatalog/datasets").tile-height-small
 
     .col-md-8
         .category-title Other
-
-        d-tile-news(events="data.latestEvents")
+        d-tile-news(events="data.latestEvents", link="#/app/events")
 
 
