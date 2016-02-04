@@ -62,6 +62,10 @@ $header-item-active: $header-item;
         font-size: 19px;
         vertical-align: middle;
       }
+
+      > span {
+        margin-left: 12px;
+      }
     }
 
   }
