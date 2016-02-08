@@ -31,28 +31,41 @@
         color: $sidebar-item-color;
 
         &:focus, &:hover {
-          color: $sidebar-item-color-active;
-          background-color: $sidebar-item-bg-active;
+          color: $text-color;
+          background-color: $sidebar-item-bg-hover;
         }
 
         > em {
           color: $sidebar-icon-color;
         }
-      }
 
-      // Active item state
-      &.active,
-      &.open {
+        > i {
+          margin-left: 8px;
+        }
 
-        > a {
-          background-color: $sidebar-item-bg-active;
-          color: $sidebar-item-color-active;
+        &:focus {
+          outline: none;
+        }
+
+        // Active item state
+        &.active,
+        &.open {
+          background-color: $sidebar-bg-active;
+          color: $sidebar-icon-color-active;
 
           > em {
             color: $sidebar-icon-color-active;
           }
         }
+        &.active.expand {
+          background-color: $sidebar-bg-expand;
+          color: $text-color;
+           > em {
+             color: $icon-color;
+           }
+        }
       }
+
     }
   }
 
@@ -78,11 +91,19 @@
         color: $sidebar-item-color-active;
         background-color: $sidebar-bg;
       }
+
+
     }
 
-    &.active > a {
-      color: $sidebar-icon-color-active;
+    > a:hover {
+      color: $text-color;
+      background-color: $sidebar-item-bg-hover;
     }
+
+    > a.active {
+      color: $sidebar-icon-color-active;
+      background-color: $sidebar-bg-active;
+      }
   }
 
 }

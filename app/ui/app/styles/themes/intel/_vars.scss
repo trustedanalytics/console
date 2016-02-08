@@ -17,8 +17,12 @@ $intel-blue: #0076c7;
 
 $body-background-color: #0062a8;
 
-$sidebar-item-color-active: #98defe;
+$sidebar-item-color-active: #89e4ff;
+$sidebar-item-bg-hover: #67a7de;
+$sidebar-bg-active: #0064aa;
+$sidebar-bg-expand: #0076c7;
 $text-color: #fff;
+$icon-color: #fff;
 $font-family: 'Intel Clear W';
 
 $text-color-blue: #2f72be;
@@ -33,10 +37,9 @@ $header-item-border: #174E8F;
 $sidebar-bg: $intel-blue;
 $sidebar-open-bg: $sidebar-bg;
 $sidebar-item-color: #fff;
-$sidebar-item-color-active: #98defe;
-$sidebar-item-bg-active: $sidebar-bg;
+$sidebar-item-bg-active: $sidebar-bg-active;
 
-$sidebar-icon-color: $sidebar-item-color-active;
+$sidebar-icon-color: $icon-color;
 $sidebar-icon-color-active: $sidebar-item-color-active;
 $sidebar-heading-color: $sidebar-item-color-active;
 

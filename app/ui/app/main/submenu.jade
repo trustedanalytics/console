@@ -14,6 +14,6 @@
    limitations under the License.
 //-
 li.sidebar-subnav-header {{ item.text }}
-li(ng-repeat='subitem in item.items' ng-class="{ active: isActive(subitem) }" ng-if="isVisible(subitem)")
-    a(ng-href="{{ getHref(subitem.sref) }}" ng-click="clickOnSubmenu(item, $event)")
+li(ng-repeat='subitem in item.items' ng-if="isVisible(subitem)")
+    a(ng-href="{{ getHref(subitem.sref) }}" ng-click="clickOnSubmenu(item, $event)" ng-class="{ active: isActive(subitem) }")
         span {{ subitem.text }}

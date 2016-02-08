@@ -20,13 +20,15 @@ menu(ng-controller="MenuController")
                 span Main navigation
 
             li(ng-if="isVisible(item)" ng-repeat='item in menuItems'
-                ng-class="{ active: isActive(item) }"
                 ng-init="item.collapse = !isActive(item); initSelected(item); collapse=item.collapse; initial = true" )
                 a(ng-href="{{ getHref(item.sref) }}" title="{{ item.text }}"
-                    ng-click="clickOnMenu(item, $event); initial = false")
+                    ng-click="clickOnMenu(item, $event); initial = false"
+                    ng-class="{ active: isActive(item), expand: item.items.length }")
 
                     em(ng-class="item.icon")
                     span {{ item.text }}
+                    i.fa.fa-angle-down(ng-show="item.items.length && item.collapse && !appState.menuCollapsed")
+                    i.fa.fa-angle-up(ng-show="item.items.length && !item.collapse && !appState.menuCollapsed")
 
                 ul.nav.sidebar-subnav(ng-if="item.items" uib-collapse="item.collapse")
                     include ./submenu.jade
