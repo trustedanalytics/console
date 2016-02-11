@@ -19,6 +19,8 @@
     App.controller('ToolsInstancesListController', function ($scope, $location, targetProvider, State,
         NotificationService, ToolsInstanceResource, ServiceResource, ServiceInstanceResource, $state) {
 
+        var GATEWAY_TIMEOUT_ERROR = 504;
+
         $scope.servicePlanGuid = "";
         $scope.state = new State();
 
@@ -41,11 +43,19 @@
         $scope.createInstance = function (name) {
             $scope.state.setPending();
             ServiceInstanceResource
-                .withErrorMessage('Failed to create the instance of ' + $scope.brokerName)
+                .supressGenericError()
                 .createInstance(name, $scope.servicePlanGuid, $scope.organization.guid, $scope.space.guid)
                 .then(function () {
                     NotificationService.success('Creating an ' + $scope.brokerName +
                         ' instance may take a while. You can try to refresh the page after few seconds.');
+                })
+                .catch(function (error) {
+                    if (error.status === GATEWAY_TIMEOUT_ERROR) {
+                        NotificationService.success("Creating an instance may take a while. Please refresh the page after a minute or two.", "Task scheduled");
+                    }
+                    else {
+                        NotificationService.genericError(error.data, 'Failed to create the instance of ' + $scope.brokerName);
+                    }
                 })
                 .finally(function () {
                     getInstances($scope, ToolsInstanceResource, $scope.organization.guid, $scope.space.guid, $scope.instanceType);
