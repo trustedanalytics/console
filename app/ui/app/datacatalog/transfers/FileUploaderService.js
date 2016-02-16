@@ -28,11 +28,12 @@
 
         return {
 
-            createFileUploader: function (formData) {
+            createFileUploader: function (formDataGetter) {
                 var MEGA_BYTE_SIZE = 1024 * 1024;
                 var uploader = new FileUploader({
                     url: "/rest/upload/" + targetProvider.getOrganization().guid,
                     onBeforeUploadItem: function (item) {
+                        var formData = formDataGetter();
                         item.formData.push({
                             orgUUID: targetProvider.getOrganization().guid,
                             category: formData.category,

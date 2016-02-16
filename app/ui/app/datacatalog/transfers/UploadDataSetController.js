@@ -36,9 +36,9 @@
             $scope.uploader.clearQueue();
         };
 
-        FileUploaderService.createFileUploader(
-            $scope.uploadFormData
-        ).then(function (uploader) {
+        FileUploaderService.createFileUploader(function() {
+            return $scope.uploadFormData;
+        }).then(function (uploader) {
             $scope.uploader = uploader;
             $scope.state.setLoaded();
         });
