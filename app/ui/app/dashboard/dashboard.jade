@@ -29,8 +29,8 @@ d-spinner(ng-show='state.isPending()')
       link="#/app/applications").col-lg-4.col-md-6.col-sm-6
     d-tile-small-white-numeric(number="data.totalUsers", text="'Users count'",
       link="#/app/manage/orgusers", link-enabled="canManageUsers()").col-lg-4.col-md-6.col-sm-6
-    d-tile-load-chart(chart-data="loadChart.values", state="loadChart.state", parent-state="state",
-      tile-cursor).col-lg-12.col-md-12.col-sm-12
+    d-tile-load-chart(chart-data="loadChart.values", state="loadChart.state",
+      parent-state="state",).col-lg-12.col-md-12.col-sm-12
 
     .category-title.clearfix Quotas
     d-tile-progress(value="data.memoryUsage | percent", title="'Memory usage'").col-lg-4.col-sm-6

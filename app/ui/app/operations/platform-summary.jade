@@ -18,12 +18,17 @@
       .col-lg-12.time
          button.btn.btn-primary.fa-refresh.app-refresher(ng-click='onRefresh()') Trigger fetching data
          p {{ response.timestamp | date: 'yyyy-MM-dd h:mm:ss a' }}
-      d-tile-blue-numeric(number="controllerSummary.appCount", text="'Applications'").col-lg-4.col-sm-12.tile-height-large
-      d-tile-blue-numeric(number="controllerSummary.serviceCount", text="'Services'").col-lg-4.col-sm-12.tile-height-large
+      d-tile-blue-numeric(number="controllerSummary.appCount", text="'Applications'",
+         link="#/app/applications").col-lg-4.col-sm-12.tile-height-large
+      d-tile-blue-numeric(number="controllerSummary.serviceCount", text="'Services'",
+         link="#/app/services/instances").col-lg-4.col-sm-12.tile-height-large
       d-tile-blue-numeric(number="controllerSummary.buildpackCount", text="'Buildpacks'").col-lg-4.col-sm-12.tile-height-large
-      d-tile-blue-numeric(number="controllerSummary.orgCount", text="'Organizations'").col-lg-4.col-sm-12.tile-height-large
-      d-tile-blue-numeric(number="controllerSummary.spaceCount", text="'Spaces'").col-lg-4.col-sm-12.tile-height-large
-      d-tile-blue-numeric(number="controllerSummary.userCount", text="'Users'").col-lg-4.col-sm-12.tile-height-large
+      d-tile-blue-numeric(number="controllerSummary.orgCount", text="'Organizations'",
+         link="#/app/manage/organizations/manageorganizations/").col-lg-4.col-sm-12.tile-height-large
+      d-tile-blue-numeric(number="controllerSummary.spaceCount", text="'Spaces'",
+         link="#/app/manage/organizations/manageorganizations/").col-lg-4.col-sm-12.tile-height-large
+      d-tile-blue-numeric(number="controllerSummary.userCount", text="'Users'",
+         link="#/app/manage/orgusers").col-lg-4.col-sm-12.tile-height-large
 
       .col-lg-4.col-sm-12
          d-tile-blue-numeric(number="componentSummary.componentMetrics.length", text="'Droplet Executions Agents'").tile-height-large
