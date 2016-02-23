@@ -28,14 +28,19 @@
     border-left: 1px solid $header-item-border;
   }
 
-  .navbar-nav > li > a {
-    color: $header-item;
+  .navbar-nav {
+    > li {
+      color: $header-user-email-color;
 
-    &:hover, &:focus {
-      background-color: $header-item-active-color;
-      color: $header-item;
+      > a {
+        color: $header-item;
+
+        &:hover, &:focus {
+          background-color: $header-item-active-color;
+          color: $header-item;
+        }
+      }
     }
-
   }
 
 }

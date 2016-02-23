@@ -47,27 +47,29 @@ $header-item-active: $header-item;
   }
 
   .navbar-nav {
-    > li > a {
-      float: left;
-      color: $header-item;
+    > li {
       line-height: $header-height;
       padding-top: 0;
       padding-bottom: 0;
 
-      &:hover, &:focus {
-        color: $header-item-active;
-      }
+      > a {
+        float: left;
+        color: $header-item;
 
-      > em {
-        font-size: 19px;
-        vertical-align: middle;
-      }
+        &:hover, &:focus {
+          color: $header-item-active;
+        }
 
-      > span {
-        margin-left: 12px;
+        > em {
+          font-size: 19px;
+          vertical-align: middle;
+        }
+
+        > span {
+          margin-left: 12px;
+        }
       }
     }
-
   }
 
   .navbar-content {
@@ -89,6 +91,9 @@ $header-item-active: $header-item;
     top: 0;
     right: 0;
     min-width: 450px;
+    li:first-child {
+      padding: 0 24px;
+    }
     a {
       padding: 0 24px;
       height: 55px;

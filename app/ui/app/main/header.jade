@@ -27,6 +27,7 @@ header(ng-controller='HeaderController')
                         em.fa.fa-navicon
 
             ul.nav.navbar-nav.navbar-right
+                li {{user.email}}
                 li
                     a(ui-sref="app.latestevents")
                         em.icon-book-open
@@ -34,7 +35,7 @@ header(ng-controller='HeaderController')
                     a(ng-click="showSearch()")
                         em.icon-magnifier
                 li
-                    a(ng-bind='user.email', ui-sref='app.changepassword')
+                    a(ui-sref='app.changepassword') Account Settings
                 li
                     a(ng-click="onLogout()" href='/logout')
                         em.icon-lock-open
