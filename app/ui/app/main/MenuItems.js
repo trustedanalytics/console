@@ -105,6 +105,10 @@
                 }
             ],
             "access": ["admin", "anyOrgManager"]
+        }, {
+            "text": "Event Log",
+            "sref": "app.latestevents",
+            "icon": "icon-book-open"
         }
     ]);
 })();

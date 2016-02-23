@@ -28,9 +28,6 @@ header(ng-controller='HeaderController')
 
             ul.nav.navbar-nav.navbar-right
                 li {{user.email}}
-                li
-                    a(ui-sref="app.latestevents")
-                        em.icon-book-open
                 li(ng-show="searchEnabled")
                     a(ng-click="showSearch()")
                         em.icon-magnifier

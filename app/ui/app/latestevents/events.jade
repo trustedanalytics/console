@@ -15,7 +15,7 @@
 //-
 h3
     d-target-selector.pull-right(hide-space="true")
-    | Latest events
+    | Event Log
 
 .events
     .panel
@@ -24,7 +24,7 @@ h3
 
         d-spinner(ng-show="state.isPending()")
         div(ng-show="state.isLoaded()")
-            h4(ng-hide ="hasEvents()") No latest events...
+            h4(ng-hide ="hasEvents()") Event Log is empty...
             table.table.list-group(ng-table='tableParams' ng-show="hasEvents()")
                 thead
                     th Time
