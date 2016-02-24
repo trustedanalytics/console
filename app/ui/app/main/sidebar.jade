@@ -16,9 +16,6 @@
 menu(ng-controller="MenuController")
     nav.sidebar
         ul.nav
-            li.nav-heading
-                span Main navigation
-
             li(ng-if="isVisible(item)" ng-repeat='item in menuItems'
                 ng-init="item.collapse = !isActive(item); initSelected(item); collapse=item.collapse; initial = true" )
                 a(ng-href="{{ getHref(item.sref) }}" title="{{ item.text }}"

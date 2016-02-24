@@ -16,14 +16,7 @@
 .sidebar {
   background-color: $sidebar-bg;
 
-  .nav-heading {
-    color: $sidebar-heading-color;
-    font-size: 20px;
-    font-weight: lighter;
-  }
-
   > .nav {
-    background: url('/app/img/dienamic-strip.png') no-repeat;
     padding-top: 11px;
 
     > li {
@@ -65,7 +58,6 @@
            }
         }
       }
-
     }
   }
 
@@ -91,8 +83,6 @@
         color: $sidebar-item-color-active;
         background-color: $sidebar-bg;
       }
-
-
     }
 
     > a:hover {
@@ -105,5 +95,4 @@
       background-color: $sidebar-bg-active;
       }
   }
-
 }

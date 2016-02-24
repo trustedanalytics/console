@@ -34,6 +34,8 @@ $header-item-active: $header-item;
       line-height: $header-height;
 
       > img {
+        width: 67px;
+        height: 35px;
         display: inline-block;
         vertical-align: middle;
 
