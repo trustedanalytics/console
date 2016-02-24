@@ -25,12 +25,12 @@ html(lang="en", ng-app="app")
     link(rel='shortcut icon' href='/favicon.ico')
 
     link(rel='stylesheet', href='app/app.css')
-    link(rel='stylesheet', href='app/vendor.css')
+    link(rel='stylesheet', href='app/vendor.css') 
 
     script(src='app/base.js')
     script(src='app/app.js')
 
 
-  body(ng-class="{ 'menu-collapsed' : appState.menuCollapsed }" ng-controller="MainController")
+  body(ng-controller="MainController")
 
     .wrapper(ui-view="")

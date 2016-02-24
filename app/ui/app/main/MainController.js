@@ -16,8 +16,7 @@
 (function () {
     "use strict";
 
-    App.controller('MainController', function($scope, AppState, AppConfig) {
-        $scope.appState = AppState;
+    App.controller('MainController', function($scope, AppConfig) {
         $scope.appConfig = AppConfig;
         $scope.year = new Date().getFullYear();
         $scope.infoConfig = {

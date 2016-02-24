@@ -70,7 +70,7 @@
 
         $scope.toggleCollapse = function () {
             for (var i = 0; i < $scope.menuItems.length; i++) {
-                if ($scope.menuItems[i] === $scope.selected && !$scope.appState.menuCollapsed) {
+                if ($scope.menuItems[i] === $scope.selected) {
                     $scope.menuItems[i].collapse = false;
                 } else {
                     $scope.menuItems[i].collapse = true;
@@ -82,15 +82,11 @@
             for (var i = 0; i < $scope.menuItems.length; i++) {
                 if ($scope.menuItems[i] === item) {
                     $scope.menuItems[i].collapse = !$scope.menuItems[i].collapse;
-                } else if ($scope.menuItems[i] !== $scope.selected || $scope.appState.menuCollapsed) {
+                } else if ($scope.menuItems[i] !== $scope.selected) {
                     $scope.menuItems[i].collapse = true;
                 }
             }
         };
-
-        $rootScope.$on('toggleMenu', function () {
-            $scope.toggleCollapse();
-        });
 
         $scope.clickOnMenu = function (item, event) {
             if (!item.hasOwnProperty("items")) {
@@ -104,13 +100,6 @@
             $scope.selected = item;
             $scope.toggleCollapse();
             event.stopPropagation();
-        };
-
-        $window.onclick = function () {
-            if ($scope.appState.menuCollapsed) {
-                $scope.toggleCollapse();
-                $scope.$apply();
-            }
         };
     });
 

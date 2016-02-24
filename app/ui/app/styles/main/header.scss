@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 $brand-width: $menu-width;
-$brand-width-collapsed: $menu-collapsed-width;
 
 $header-item: #fff;
 $header-item-active: $header-item;
@@ -43,7 +42,6 @@ $header-item-active: $header-item;
         }
       }
     }
-
   }
 
   .navbar-nav {
@@ -75,12 +73,6 @@ $header-item-active: $header-item;
   .navbar-content {
     padding: 0;
     border-bottom: 2px solid rgba(0,0,0,.2);
-  }
-
-  .navbar-left {
-    position: absolute;
-    top: 0;
-    left: $brand-width;
   }
 
   .navbar-right {
@@ -130,39 +122,5 @@ $header-item-active: $header-item;
       color: #c1c1c1;
       font-size: 1.6em;
     }
-  }
-
-}
-
-.menu-collapsed {
-  .navbar-content {
-    margin-left: $brand-width-collapsed;
-  }
-
-  .navbar {
-    margin-bottom: 0;
-
-    .navbar-header {
-      width: $brand-width-collapsed;
-
-      > img {
-        display: none;
-
-        &.simple {
-          display: inline-block;
-        }
-      }
-    }
-
-    .navbar-left {
-      position: absolute;
-      top: 0;
-      left: $brand-width-collapsed;
-    }
-
-    .navbar-header {
-      width: $brand-width-collapsed;
-    }
-
   }
 }

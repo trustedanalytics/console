@@ -27,8 +27,8 @@ menu(ng-controller="MenuController")
 
                     em(ng-class="item.icon")
                     span {{ item.text }}
-                    i.fa.fa-angle-down(ng-show="item.items.length && item.collapse && !appState.menuCollapsed")
-                    i.fa.fa-angle-up(ng-show="item.items.length && !item.collapse && !appState.menuCollapsed")
+                    i.fa.fa-angle-down(ng-show="item.items.length && item.collapse")
+                    i.fa.fa-angle-up(ng-show="item.items.length && !item.collapse")
 
                 ul.nav.sidebar-subnav(ng-if="item.items" uib-collapse="item.collapse")
                     include ./submenu.jade

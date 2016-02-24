@@ -16,8 +16,7 @@
 (function () {
     "use strict";
 
-    App.controller('HeaderController', function($scope, $rootScope, $state, AppState, UserProvider, targetProvider) {
-        $scope.appState = AppState;
+    App.controller('HeaderController', function($scope, $rootScope, $state, UserProvider, targetProvider) {
         $scope.searchControl = {};
         $scope.searchEnabled = $state.current.searchEnabled;
 
@@ -42,11 +41,6 @@
 
         $scope.onLogout = function(){
             targetProvider.clear();
-        };
-
-        $scope.toggleMenu = function() {
-            $scope.appState.menuCollapsed = !$scope.appState.menuCollapsed;
-            $rootScope.$broadcast("toggleMenu");
         };
     });
 })();
