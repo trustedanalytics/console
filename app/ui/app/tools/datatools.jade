@@ -20,15 +20,15 @@ h3
 .tools
 
     .panel.instances
-        h3(ng-show="organization.guid") List of TAP Analytics Toolkit instances in {{ organization.name }} organization
+        h3(ng-show="organization.guid") Installed Instances
         d-spinner(ng-show="state.isPending()")
         div(ng-show="state.isLoaded()")
             .instances-table
                 table.table.list-group(ng-show='instances.length')
                     thead
-                        th TAP Analytics Toolkit server name
-                        th TAP Analytics Toolkit server state
-                        th TAP Analytics Toolkit server URL
+                        th Instance name
+                        th State
+                        th URL
                         th Delete
                     tbody
                         tr(ng-repeat="instance in instances | orderBy : 'name'")
