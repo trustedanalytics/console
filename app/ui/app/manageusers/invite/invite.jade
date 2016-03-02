@@ -18,12 +18,14 @@ d-spinner(ng-show='state.isPending()')
 
 .panel.send-invitation
 
-    form(data-ng-submit='sendInvitation()', ng-show='state.isDefault()')
+    form(name="invite_user_form" data-ng-submit='sendInvitation()', ng-show='state.isDefault()')
         .description Sending an invitation will allow invited person to create a new organization
             | and become its manager.
         .form
-            input.form-control(type='email', name='email', ng-model='email', placeholder='Enter e-mail')
-            input.btn.btn-primary(type='submit', value='Send invitation')
+            input.form-control(type='email', name='email', ng-model='email', placeholder='Enter e-mail',
+            email-validator, required)
+            input.btn.btn-primary(type='submit', value='Send invitation',
+               ng-disabled='!invite_user_form.email.$valid')
 
     div(ng-show='state.isError() || invitationState == "ERROR"')
         .description Error while sending an invitation to {{ email }}

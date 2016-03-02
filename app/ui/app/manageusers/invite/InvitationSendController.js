@@ -42,7 +42,7 @@
                 if (errorCode === 403) {
                     $scope.details = "You do not have permission to invite new users";
                 } else {
-                    $scope.details = response.error || response.message;
+                    $scope.details = response.message || response.error;
                 }
                 $scope.state.setError();
                 NotificationService.error($scope.details);

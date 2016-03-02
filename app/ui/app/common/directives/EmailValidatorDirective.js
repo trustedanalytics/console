@@ -32,7 +32,7 @@
             require: 'ngModel',
             link: function (scope, element, attr, ctrl) {
                 function validator(ngModelValue) {
-                    var emailRegex = new RegExp("^[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@" +
+                    var emailRegex = new RegExp("^[a-z0-9!#$%&'*+=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+=?^_`{|}~-]+)*@" +
                     "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$");
 
                     var user = ngModelValue.substring(0, ngModelValue.indexOf('@'));
@@ -41,7 +41,6 @@
                     if (emailRegex.test(ngModelValue) && user.length <= MAX_NUMBER_OF_CHARACTERS_IN_LOCAL_PART &&
                         domain.length <= MAX_NUMBER_OF_CHARACTERS_IN_DOMAIN_PART &&
                         ngModelValue.length <= MAX_NUMBER_OF_CHARACTERS_IN_EMAIL_IN_TOTAL) {
-
                         ctrl.$setValidity('emailValidator', true);
                     } else {
                         ctrl.$setValidity('emailValidator', false);
