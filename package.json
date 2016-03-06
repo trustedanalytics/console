@@ -2,7 +2,7 @@
   "name": "console",
   "author": "Intel Corporation",
   "license": "Apache-2.0",
-  "version": "0.4.145",
+  "version": "0.4.146",
   "private": true,
   "dependencies": {
     "compression": "1.6.0",
@@ -48,10 +48,10 @@
     "karma-coverage": "0.5.3",
     "karma-firefox-launcher": "0.1.7",
     "karma-mocha": "0.2.1",
-    "karma-phantomjs-launcher": "0.2.1",
+    "karma-phantomjs-launcher": "1.0.0",
     "karma-sinon-chai": "1.1.0",
     "mocha": "2.3.4",
-    "phantomjs": "1.9.18",
+    "phantomjs-prebuilt": "2.1.4",
     "proxyquire": "1.7.3"
   },
   "scripts": {

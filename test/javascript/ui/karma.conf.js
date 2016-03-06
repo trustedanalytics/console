@@ -30,7 +30,7 @@ module.exports = function (config) {
 
         // list of files / patterns to load in the browser
         files: [
-            '../../../bower_components/jquery/dist/jquery.js',
+            'bower_components/jquery/dist/jquery.js',
             'bower_components/underscore/underscore.js',
             'bower_components/angular/angular.js',
             'bower_components/angular-route/angular-route.js',
@@ -50,7 +50,6 @@ module.exports = function (config) {
             'bower_components/restangular/dist/restangular.js',
             'bower_components/angular-mocks/angular-mocks.js',
 
-            'app/ui/*.js',
             'app/ui/**/*.js',
 
             'test/javascript/ui/*.js',
