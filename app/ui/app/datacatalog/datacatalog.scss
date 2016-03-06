@@ -215,6 +215,10 @@
             width:auto;
           }
 
+          div[uib-datepicker-popup-wrap] {
+            float: left;
+          }
+
           span {
             width:auto;
             padding: 0 5px;
