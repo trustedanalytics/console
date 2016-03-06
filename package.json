@@ -2,7 +2,7 @@
   "name": "console",
   "author": "Intel Corporation",
   "license": "Apache-2.0",
-  "version": "0.4.146",
+  "version": "0.4.147",
   "private": true,
   "dependencies": {
     "compression": "1.6.0",
@@ -17,7 +17,7 @@
     "morgan": "1.6.1",
     "passport": "0.3.2",
     "passport-cloudfoundry": "rajaraodv/passport-cloudfoundry",
-    "request": "2.67.0",
+    "request": "2.69.0",
     "require-dir": "0.3.0",
     "serve-favicon": "2.3.0",
     "underscore": "1.8.3"
