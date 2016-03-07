@@ -64,14 +64,17 @@ describe("Unit: DataToolsController", function () {
 
         serviceInstanceResource = {
             save: function() {},
-            supressGenericError: function() {
-                return this;
-            }
+            supressGenericError: sinon.stub().returnsThis(),
+            withErrorMessage: sinon.stub().returnsThis(),
+            deleteInstance: sinon.stub().returns($q.defer().promise)
         };
 
         notificationService = {
             success: function() {},
-            error: function(){}
+            error: function(){},
+            confirm: function() {
+                return $q.defer().promise;
+            }
         };
 
         createController = function() {
@@ -189,6 +192,57 @@ describe("Unit: DataToolsController", function () {
         scope.createInstance(name);
         scope.$apply();
         expect(atkInstancesResource.getAll.called).to.be.ok;
+    });
+
+    it('deleteInstance, show confirmation dialog', function () {
+        var notificationConfirmed = sinon.spy(notificationService, 'confirm');
+        scope.deleteInstance();
+        expect(notificationConfirmed.called).to.be.true;
+    });
+
+    it('deleteInstance, dialog confirmed, set states on pending', function() {
+        var confirmedDeferred = $q.defer();
+        notificationService.confirm = function() {
+            return confirmedDeferred.promise;
+        };
+        confirmedDeferred.resolve();
+        scope.deleteInstance();
+        scope.$digest();
+        expect(scope.deleteState.value).to.be.equals(scope.deleteState.values.PENDING);
+        expect(scope.state.value).to.be.equals(scope.state.values.PENDING);
+    });
+
+    it('deleteInstance, success, load atk instances', function() {
+        var confirmedDeferred = $q.defer();
+        var deleteDeferred = $q.defer();
+        var successSpied = sinon.spy(notificationService, 'success');
+        serviceInstanceResource.deleteInstance = sinon.stub().returns(deleteDeferred.promise);
+        notificationService.confirm = function() {
+            return confirmedDeferred.promise;
+        };
+        confirmedDeferred.resolve();
+        deleteDeferred.resolve();
+        loadAtkInstances();
+        scope.deleteInstance();
+        scope.$digest();
+        expect(successSpied.called).to.be.true;
+        expect(scope.deleteState.value).to.be.equals(scope.deleteState.values.DEFAULT);
+        expect(scope.state.value).to.be.equals(scope.state.values.LOADED);
+    });
+
+    it('deleteInstance, error, set state on loaded and deleteState on default', function() {
+        var confirmedDeferred = $q.defer();
+        var deleteDeferred = $q.defer();
+        notificationService.confirm = function() {
+            return confirmedDeferred.promise;
+        };
+        serviceInstanceResource.deleteInstance = sinon.stub().returns(deleteDeferred.promise);
+        confirmedDeferred.resolve();
+        deleteDeferred.reject();
+        scope.deleteInstance();
+        scope.$digest();
+        expect(scope.deleteState.value).to.be.equals(scope.deleteState.values.DEFAULT);
+        expect(scope.state.value).to.be.equals(scope.state.values.LOADED);
     });
 
     function loadAtkInstances() {

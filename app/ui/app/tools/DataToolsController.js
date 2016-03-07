@@ -73,36 +73,20 @@
         $scope.deleteInstance = function (instanceName, instanceGuid, serviceGuid) {
             NotificationService.confirm('confirm-delete', {instanceToDelete: instanceName})
                 .then(function () {
+                    $scope.state.setPending();
                     $scope.deleteState.setPending();
-                    $scope.deleteService(serviceGuid);
-                    ApplicationResource
-                        .supressGenericError()
-                        .deleteApplication(instanceGuid, true)
-                        .then(function () {
+                    ServiceInstanceResource
+                        .withErrorMessage('Error while deleting a service instance')
+                        .deleteInstance(serviceGuid)
+                        .then(function() {
                             NotificationService.success('Application has been deleted');
-                            $scope.state.setPending();
-                            getAtkInstances($scope, targetProvider.getOrganization(), AtkInstanceResource)
-                                .then(function() {
-                                    $scope.state.setLoaded();
-                                });
+                            return getAtkInstances($scope, targetProvider.getOrganization(), AtkInstanceResource);
                         })
-                        .catch(function (error) {
-                            if (error.status === 500) {
-                                NotificationService.success("Deleting an TAP Analytics Toolkit instance may take a while. You can try to refresh the page after in a minute or two.", "Task scheduled");
-                            }
-                            else {
-                                NotificationService.genericError(error.data, 'Error while deleting the application');
-                            }
-                        })
-                        .finally(function () {
+                        .finally(function() {
                             $scope.state.setLoaded();
                             $scope.deleteState.setDefault();
                         });
                 });
-        };
-
-        $scope.deleteService = function (serviceGuid) {
-            ServiceInstanceResource.deleteInstance(serviceGuid);
         };
     });
 
