@@ -13,16 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-(function () {
-    "use strict";
 
-    App.factory('UploadResource', function (Restangular) {
-        var resource = Restangular.service("config").one("uploader");
+var express = require('express'),
+    config = require('./config');
 
-        resource.getUploadEnvs = function () {
-            return this.get();
-        };
+var configRouter = function() {
+    var router = express.Router();
+    router.get('/session', function(req, res) {
+            res.send(config.get("SESSION_CONFIG"));
+        }
+    );
 
-        return resource;
-    });
-}());
+    router.get('/uploader', function(req, res) {
+            res.send(config.get("UPLOADER_CONFIG"));
+        }
+    );
+    return router;
+};
+
+module.exports = configRouter;

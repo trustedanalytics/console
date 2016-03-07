@@ -13,7 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/* jshint unused: false */
-var App = angular.module('app', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCookies', 'ngSanitize',
-    'ngResource', 'ngTable', 'ngDialog', 'ui.bootstrap', 'ui.router', 'oc.lazyLoad', 'toaster',
-    'restangular', 'ngIdle']);
+(function () {
+    "use strict";
+
+    App.factory('ConfigResource', function (Restangular) {
+        var resource = Restangular.service("config");
+
+        resource.getUploadEnvs = function () {
+            return this.one("uploader").get();
+        };
+
+        resource.getIdleConfig = function () {
+            return this.one("session").get();
+        };
+
+        return resource;
+    });
+}());

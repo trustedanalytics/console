@@ -74,6 +74,6 @@ function checkLoggedIn(req, res, next) {
     if (req.user) {
         next();
     } else {
-        res.sendStatus(401);
+        res.status(401).send('session_expired');
     }
 }

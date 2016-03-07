@@ -16,7 +16,7 @@
 (function () {
     "use strict";
 
-    App.controller('MainController', function($scope, AppConfig) {
+    App.controller('MainController', function($scope, AppConfig, targetProvider, NotificationService, $window, Idle, Keepalive, ConfigResource, $http) {
         $scope.appConfig = AppConfig;
         $scope.year = new Date().getFullYear();
         $scope.infoConfig = {
@@ -31,5 +31,21 @@
             'tap-to-dismiss': false,
             limit: 3
         };
+
+        ConfigResource.getIdleConfig().then(function onSuccess(configData) {
+            Idle.setIdle(configData.idle_time);
+            Keepalive.setInterval(configData.keepalive_time);
+            Idle.watch();
+        });
+
+        $scope.$on('IdleStart', function() {
+            targetProvider.clear();
+            $http.get('/logout');
+            NotificationService.info('confirm-logout')
+                .then(function () {
+                    $window.location.href = '/logout';
+                });
+        });
+
     });
 })();

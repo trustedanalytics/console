@@ -105,6 +105,19 @@
                         }]
                     });
                 return deferred.promise;
+            },
+
+            info: function info(templateId) {
+                var dialog = ngDialog.open(
+                    {
+                        template: templateId,
+                        controller: /*@ngInject*/ function ($scope) {
+                            $scope.confirm = function () {
+                                $scope.closeThisDialog();
+                            };
+                        }
+                    });
+                return dialog.closePromise;
             }
         };
     });

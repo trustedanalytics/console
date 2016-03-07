@@ -17,11 +17,11 @@
 (function () {
     "use strict";
 
-    App.factory('FileUploaderService', function (targetProvider, FileUploader, NotificationService, UploadResource) {
+    App.factory('FileUploaderService', function (targetProvider, FileUploader, NotificationService, ConfigResource) {
 
         var fileSizeLimit = null;
         var fileBlackListTypes = [];
-        var uploadEnvsPromise = UploadResource.getUploadEnvs().then(function onSuccess(configData) {
+        var uploadEnvsPromise = ConfigResource.getUploadEnvs().then(function onSuccess(configData) {
             fileSizeLimit = configData.file_size_limit;
             fileBlackListTypes = configData.file_black_list_types;
         });

@@ -28,12 +28,22 @@
         $httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
 
         //detecting session timeout
-        $httpProvider.interceptors.push(function($q, $window) {
+        $httpProvider.interceptors.push(function($q, $window, $injector) {
+            var notificationPromise = null;
             return {
                 'responseError': function(response) {
                     if(response.status === 401) {
                         //probably session expired. Reload the whole page so it is redirected to login form.
-                        $window.location.reload();
+                        if(response.data === 'session_expired') {
+
+                            if(notificationPromise === null) {
+                                var notificationService = $injector.get('NotificationService');
+                                notificationPromise = notificationService.info('confirm-logout');
+                                notificationPromise.then(function () {
+                                        $window.location.href = '/logout';
+                                    });
+                            }
+                        }
                     }
                     return $q.reject(response);
                  }

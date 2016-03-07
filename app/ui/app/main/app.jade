@@ -41,3 +41,9 @@ section
         | ID: {{ toaster.data.timestamp }}
 
   .content-wrapper(ui-view="")
+
+script(type="text/ng-template", id="confirm-logout")
+    .ngdialog-message.clearfix
+        p Your session expired. Click OK to login again.
+        .pull-right
+            button.btn.btn-primary(type='button', ng-click='confirm()') OK

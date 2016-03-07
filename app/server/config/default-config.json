@@ -3,5 +3,9 @@
     "uploader_config": {
         "file_size_limit": 500,
         "file_black_list_types": ["application/pdf", "application/x-msdownload"]
+    },
+    "session_config" : {
+        "idle_time": 1800,
+        "keepalive_time": 5
     }
 }

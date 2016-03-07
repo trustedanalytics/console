@@ -23,7 +23,8 @@ var express = require('express'),
 
     auth = require('./auth/auth'),
     reverseProxy = require('./reverse-proxy'),
-    config = require('./config/config');
+    config = require('./config/config'),
+    configRouter = require('./config/config-router')();
 
 var app = express();
 
@@ -57,11 +58,7 @@ app.get('/rest/registrations/*',
 app.post('/rest/registrations',
     reverseProxy.forward);
 
-app.get('/rest/config/uploader', auth.checkLoggedIn,
-    function(req, res) {
-        res.send(config.get("UPLOADER_CONFIG"));
-    }
-);
+app.use('/rest/config', auth.checkLoggedIn, configRouter);
 
 app.all('/rest/*',
     auth.checkLoggedIn,
