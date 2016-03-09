@@ -17,9 +17,14 @@
 var gulp        = require('gulp'),
     config      = require('./config'),
     utils      = require('./utils'),
+    path        = require('path'),
 
     plugins     = require('gulp-load-plugins')();
 // @formatter:on
+
+gulp.task('new-account:dependencies', function() {
+    return utils.injectDep(config.inject.newAccount, 'new-account');
+});
 
 
 gulp.task('new-account:scripts', function () {
@@ -61,9 +66,9 @@ gulp.task('new-account', [
     'new-account:scripts',
     'new-account:styles',
     'new-account:templates',
-    'new-account:static',
+    'new-account:dependencies',
+    'new-account:static'
 ], function () {
-
     plugins.util.log(plugins.util.colors.cyan('************'));
     plugins.util.log(plugins.util.colors.cyan('* New account compiled *'));
     plugins.util.log(plugins.util.colors.cyan('************'));

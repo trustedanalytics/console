@@ -2,7 +2,7 @@
   "name": "console",
   "author": "Intel Corporation",
   "license": "Apache-2.0",
-  "version": "0.4.149",
+  "version": "0.4.150",
   "private": true,
   "dependencies": {
     "compression": "1.6.1",
@@ -23,6 +23,7 @@
     "underscore": "1.8.3"
   },
   "devDependencies": {
+    "chai": "3.5.0",
     "del": "2.2.0",
     "gulp": "3.9.1",
     "gulp-bower": "0.0.13",
@@ -30,6 +31,8 @@
     "gulp-compass": "2.1.0",
     "gulp-concat": "2.6.0",
     "gulp-filter": "4.0.0",
+    "gulp-if": "2.0.0",
+    "gulp-inject": "3.0.0",
     "gulp-jade": "1.1.0",
     "gulp-jshint": "2.0.0",
     "gulp-load-plugins": "1.2.0",
@@ -40,6 +43,7 @@
     "gulp-sourcemaps": "1.6.0",
     "gulp-sync": "0.1.4",
     "gulp-uglify": "1.5.3",
+    "gulp-useref": "3.0.7",
     "gulp-using": "0.1.0",
     "gulp-util": "3.0.7",
     "jshint": "2.9.1",
@@ -50,6 +54,7 @@
     "karma-mocha": "0.2.2",
     "karma-phantomjs-launcher": "1.0.0",
     "karma-sinon-chai": "1.2.0",
+    "main-bower-files": "2.11.1",
     "mocha": "2.4.5",
     "phantomjs-prebuilt": "2.1.4",
     "proxyquire": "1.7.4"

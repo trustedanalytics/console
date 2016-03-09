@@ -65,7 +65,7 @@ module.exports = {
             src: require('../vendor.base.json'),
             dest: 'app/vendor.css',
             base: '../..'
-        },
+        }
     },
 
     templates: {
@@ -89,6 +89,13 @@ module.exports = {
         src: require('../vendor.json'),
         dest: 'vendor',
         base: '../../bower_components'
+    },
+
+    inject: {
+        newAccount: {
+            base: 'new-account/new-account.jade',
+            dest: 'new-account'
+        }
     },
 
     static: {

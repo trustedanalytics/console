@@ -16,6 +16,7 @@
 var gulp        = require('gulp'),
     path        = require('path'),
     _           = require('underscore'),
+    bowerFiles     = require('main-bower-files'),
 
     plugins     = require('gulp-load-plugins')(),
     config      = require('./config');
@@ -81,5 +82,19 @@ module.exports = {
             css: path.join(__dirname, '..', config.destDir, taskConfig.dest),
             image: path.join(config.srcDir, taskConfig.compassModule + '/img')
         };
+    },
+
+    injectDep: function(taskConfig, bowerGroup) {
+        return gulp.src( this.getBase(taskConfig))
+            .pipe(plugins.plumber())
+            .pipe(plugins.jade({pretty: true}))
+            .pipe(plugins.inject(gulp.src(bowerFiles({group: bowerGroup}), {read: false}), {name: 'bower'}))
+            .pipe(plugins.useref({
+                searchPath: './',
+                base: './app/ui/'
+            }))
+            .pipe(plugins.if('*.js', plugins.uglify()))
+            .pipe(plugins.if('*.css', plugins.minifyCss()))
+            .pipe(gulp.dest(this.getDest(taskConfig)));
     }
 };
