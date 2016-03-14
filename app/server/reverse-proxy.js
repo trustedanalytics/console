@@ -25,16 +25,30 @@ var request = require('request'),
     gatewayErrors = require('./gateway-errors');
 
 
-function getHost(serviceName) {
-    var service = config.getUserProvidedSerice(serviceName);
+function getHost(service, path) {
     var host = null;
-    if(service) {
-        host = service.host;
-    } else {
-        host = localServices[serviceName];
-        console.info('Using default url for service %s: %s', serviceName, host);
+
+    if(!service) {
+        host = localServices[service.name];
+        console.info('Using default url for service %s: %s', service.name, host);
+        return host;
     }
-    return host;
+
+    if(service.domainRewrite) {
+        var domain = config.getDomain();
+        var parameters = path.match(service.path);
+        var subdomain = parameters[1];
+        var endpoint = parameters[2];
+
+        host = "http://" + subdomain + "." + domain;
+        if(endpoint) {
+            host += (service.endpoint ? service.endpoint : "") + "/" + endpoint;
+        }
+        return host;
+    }
+
+    var userProvidedService = config.getUserProvidedSerice(service.name);
+    return userProvidedService.host;
 }
 
 function getServiceName(requestUrl) {
@@ -51,13 +65,13 @@ function forwardRequest(req, res) {
         return;
     }
 
-    var host = getHost(service.name);
+    var host = getHost(service, path);
     if(!host) {
         throw404(res, util.format("No route found for service  %s", JSON.stringify(service)));
         return;
     }
 
-    var targetUrl = url.resolve(host, path);
+    var targetUrl = service.domainRewrite ? host : url.resolve(host, path);
 
     if(req.user && req.user.accessToken) {
         req.headers['Authorization'] = 'bearer ' + req.user.accessToken;
