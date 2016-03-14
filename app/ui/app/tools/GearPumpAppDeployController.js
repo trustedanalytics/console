@@ -48,8 +48,7 @@
                 })
                 .then(function() {
                     if($scope.uploader.spawnedAppId) {
-                        $window.open('https://' + $scope.gpUiData.hostname + '/#/apps/streamingapp/'
-                                        + $scope.uploader.spawnedAppId, '_blank');
+                        $window.open('https://' + $scope.gpUiData.hostname + '/#/apps/streamingapp/' + $scope.uploader.spawnedAppId, '_blank');
                     }
                     $scope.clearForm();
                     $scope.state.setLoaded();
@@ -65,7 +64,7 @@
             $scope.uploader.errorMessage = '';
             $scope.uploader.spawnedAppId = '';
             $scope.uploader.clearQueue();
-        }
+        };
     });
 
 
@@ -89,7 +88,7 @@
             alias: "jar",
             queueLimit: 2,
             onBeforeUploadItem: function (item) {
-                item.formData.push(Object());
+                item.formData.push(Object({}));
                 item.timeStart = Date.now();
                 item.prevProgress = 0;
                 item.uploadedSize = 0;
@@ -107,10 +106,10 @@
                     item.speed = null;
                 }
             },
-            onSuccessItem: function (item, response, status, headers) {
+            onSuccessItem: function (item, response) {
                 this.spawnedAppId = response.appId;
             },
-            onErrorItem: function (item, response, status, headers) {
+            onErrorItem: function (item, response) {
                 this.errorMessage = response;
             }
         });

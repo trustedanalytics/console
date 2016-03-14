@@ -27,10 +27,10 @@ h3
                    th Instance Name
                    th(ng-if="hasLogin(instances)") App Login
                    th.passCol(ng-if="hasPassword(instances)") App Password
-                   th(ng-if="hasDeployer(brokerName)") Deploy App
                    th
                       span(ng-if="!hasService(instances)") App Url
                       span(ng-if="hasService(instances)") Dashboard Url
+                   th(ng-if="hasDeployer(brokerName)") Deploy App
                    th Delete
                 tbody
                    tr(ng-repeat="(name, instance) in instances" ng-init="showPass = false")
