@@ -27,6 +27,7 @@ h3
                    th Instance Name
                    th(ng-if="hasLogin(instances)") App Login
                    th.passCol(ng-if="hasPassword(instances)") App Password
+                   th(ng-if="hasDeployer(brokerName)") Deploy App
                    th
                       span(ng-if="!hasService(instances)") App Url
                       span(ng-if="hasService(instances)") Dashboard Url
@@ -48,6 +49,9 @@ h3
                          a(ng-if='instance.hostname || instance.dashboard_url', href='{{ (instance.hostname || instance.dashboard_url) | ensureHttps }}', target="_blank")
                             | {{ instance.hostname || 'Go to dashboard' }}
                          span(ng-if='!instance.hostname && !instance.dashboard_url') -
+                      td(ng-if="hasDeployer(brokerName)")
+                         a(ui-sref=" app.gearpumpappdeploy({ instanceId: instance.name || name })")
+                            | Deploy application
                       td
                          a.delete(ng-click='deleteInstance(instance.guid)')
              .no-instances(ng-hide="anyRows")

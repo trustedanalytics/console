@@ -98,6 +98,10 @@
             });
         };
 
+        $scope.hasDeployer = function (brokerName) {
+            return brokerName === "GearPump";
+        };
+
     });
 
     var checkIsObject = function (value) {
