@@ -120,7 +120,9 @@
 
         function getGenericInterceptor(message) {
             return function genericInterceptor(response) {
-                NotificationService.genericError(response.data, message);
+                if(response.data !== 'session_expired') {
+                    NotificationService.genericError(response.data, message);
+                }
                 return true;
             };
         }
