@@ -27,12 +27,14 @@ h3
                 table.table.list-group(ng-show='instances.length')
                     thead
                         th Instance name
+                        th Creator
                         th State
                         th URL
                         th Delete
                     tbody
                         tr(ng-repeat="instance in instances | orderBy : 'name'")
                             td {{ instance.name }}
+                            td {{ instance.metadata.creator_name }}
                             td
                                 d-state(state="instance.state")
                             td
