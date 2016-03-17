@@ -59,7 +59,6 @@ describe("Unit: AppsController", function () {
 
     it('init, set state pending and request for applications', function () {
         createController();
-console.log($scope.state);
         expect($scope.state.isPending(), 'pending').to.be.true;
         expect(applicationResource.getAll).to.be.calledOnce;
     });

@@ -14,10 +14,10 @@
    limitations under the License.
 //-
 h3
-    d-target-selector.pull-right(managed-only)
+    target-selector.pull-right(managed-only)
     | Users in {{ targetType }}
 
-d-spinner(ng-show='state.isPending()')
+spinner(ng-show='state.isPending()')
 
 ul.nav.nav-tabs(ng-init='tab=1', ng-hide='state.isPending()')
     li(role='presentation', ng-class='{active:tab === 1}')

@@ -14,18 +14,18 @@
    limitations under the License.
 //-
 .panel.widget.tile-news
-    a(ng-href="{{link}}")
+    a(ng-href="{{ $ctrl.link }}")
        .title
            | Event Log
-       h4(ng-hide ="events.length>0") Event Log is empty...
-       .table-responsive.table-bordered(ng-show="events.length>0")
+       h4(ng-hide ="$ctrl.events.length > 0") Event Log is empty...
+       .table-responsive.table-bordered(ng-show="$ctrl.events.length > 0")
            table.table
                thead
                    th Time
                    th Category
                    th Message
                tbody
-                   tr(ng-repeat="event in events")
+                   tr(ng-repeat="event in $ctrl.events")
                        td {{ event.timestamp | date : "yyyy-MM-dd 'at' HH:mm" }}
                        td {{ event.category }}
                        td {{ event.message }}

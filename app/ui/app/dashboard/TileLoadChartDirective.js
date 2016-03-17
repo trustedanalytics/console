@@ -14,41 +14,38 @@
  * limitations under the License.
  */
 (function() {
-    App.directive('dTileLoadChart', function () {
-        return {
-            scope: {
-                chartData: '=',
-                state: '=',
-                parentState: '='
-            },
-            templateUrl: 'app/dashboard/tile-load-chart.html',
-            controller: ['$scope',
-            function ($scope) {
-                $scope.options = {
-                    axis: {
-                        x: {
-                            type: 'timeseries',
-                            tick: {
-                                format: '%H:%M',
-                            }
+    App.component('tileLoadChart', {
+        bindings: {
+            chartData: '<',
+            state: '<',
+            parentState: '<'
+        },
+        templateUrl: 'app/dashboard/tile-load-chart.html',
+        controller: function () {
+            this.options = {
+                axis: {
+                    x: {
+                        type: 'timeseries',
+                        tick: {
+                            format: '%H:%M',
                         }
-                    },
-                    grid: {
-                        x: {
-                            show: true
-                        },
-                        y: {
-                            show: true
-                        }
-                    },
-                    point: {
-                        show: false
-                    },
-                    legend: {
-                        show: false
                     }
-                };
-            }]
-        };
+                },
+                grid: {
+                    x: {
+                        show: true
+                    },
+                    y: {
+                        show: true
+                    }
+                },
+                point: {
+                    show: false
+                },
+                legend: {
+                    show: false
+                }
+            };
+        }
     });
 })();

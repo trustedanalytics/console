@@ -17,7 +17,7 @@
     .header
         | Running instances in space {{ ctrl.organization().name }}/{{ ctrl.space().name }}
 
-    d-spinner(ng-show='ctrl.instancesState.isPending() || ctrl.deleteState.isPending()')
+    spinner(ng-show='ctrl.instancesState.isPending() || ctrl.deleteState.isPending()')
 
     .panel.panel-danger(ng-show='ctrl.instancesState.isError()')
         .panel-body Error while downloading service instances list

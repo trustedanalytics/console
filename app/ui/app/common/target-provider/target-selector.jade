@@ -13,21 +13,21 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 //-
-.btn-group(uib-dropdown='' is-open='targetCtrl.organization.listIsOpen')
-    button.btn.btn-default.org-button(type='button', uib-dropdown-toggle="", ng-disabled="!targetCtrl.organization.available.length")
-        | {{ targetCtrl.organization.selected.name }}
+.btn-group(uib-dropdown='' is-open='organization.listIsOpen')
+    button.btn.btn-default.org-button(type='button', uib-dropdown-toggle="", ng-disabled="!organization.available.length")
+        | {{ organization.selected.name }}
         span.caret
 
     ul.dropdown-menu.dropdown-menu-right.animated.fadeInUpShort(role='menu')
-        li(ng-repeat='org in targetCtrl.organization.available')
-            a(ng-click='targetCtrl.organization.set(org, $event)') {{ org.name }}
+        li(ng-repeat='org in organization.available')
+            a(ng-click='organization.set(org, $event)') {{ org.name }}
 
 
-.btn-group(uib-dropdown='' is-open='targetCtrl.targetSpace.listIsOpen', ng-if='!hideSpace')
-    button.btn.btn-default.space-button(type='button', uib-dropdown-toggle="", ng-disabled="!targetCtrl.targetSpace.available.length")
-        | {{ targetCtrl.targetSpace.selected.name }}
+.btn-group(uib-dropdown='' is-open='targetSpace.listIsOpen', ng-if='!$ctrl.hideSpace')
+    button.btn.btn-default.space-button(type='button', uib-dropdown-toggle="", ng-disabled="!targetSpace.available.length")
+        | {{ targetSpace.selected.name }}
         span.caret
 
     ul(aria-labelledby='spaceDropdown', role='menu').dropdown-menu.dropdown-menu-right.animated.fadeInUpShort
-        li(ng-repeat='space in targetCtrl.targetSpace.available')
-            a(ng-click='targetCtrl.targetSpace.set(space, $event)') {{ space.name }}
+        li(ng-repeat='space in targetSpace.available')
+            a(ng-click='targetSpace.set(space, $event)') {{ space.name }}

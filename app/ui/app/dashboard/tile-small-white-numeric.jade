@@ -14,9 +14,9 @@
    limitations under the License.
 //-
 .panel.widget.white-tile-small.tile-height-small.numeric-tile
-      a(ng-href="{{(linkEnabled || linkEnabled === undefined) ? link : ''}}")
+      a(ng-href="{{ ($ctrl.linkEnabled || $ctrl.linkEnabled === undefined) ? $ctrl.link : ''}}")
          div 
             .col-sd-12.number
-               | {{ number }}
+               | {{ $ctrl.number }}
             .col-sd-12.text
-               | {{ text  }}
+               | {{ $ctrl.text }}

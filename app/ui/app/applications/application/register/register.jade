@@ -15,7 +15,7 @@
 //-
 .application-register
 
-   d-spinner(ng-if='state.isPending()')
+   spinner(ng-if='state.isPending()')
 
    .clearfix(ng-if='state.isLoaded()')
       form.form-horizontal(name="uploadForm" data-ng-submit='submitRegister()')

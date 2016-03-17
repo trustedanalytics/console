@@ -16,7 +16,7 @@
 .addorganization
     h3
         | Add organization
-    d-spinner(ng-show='state.isPending()')
+    spinner(ng-show='state.isPending()')
     div(ng-show='!state.isPending()')
         form.form-horizontal(data-ng-submit='addOrganization()', validate-form='', novalidate='')
             .form-group

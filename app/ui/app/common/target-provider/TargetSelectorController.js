@@ -17,12 +17,10 @@
     "use strict";
 
     App.controller('TargetSelectorController', function (targetProvider, $scope, UserProvider) {
-        var self = this;
 
-        //variable can contain two values: 'managed-only' or '', !!converts them be boolean values
-        var requiresManagerRole = !!$scope.managedOnly;
+        var requiresManagerRole = this.managedOnly;
 
-        self.organization = {
+        $scope.organization = {
             selected: targetProvider.getOrganization(),
             available: targetProvider.getOrganizations(),
             set: function (org) {
@@ -31,7 +29,7 @@
             }
         };
 
-        self.targetSpace = {
+        $scope.targetSpace = {
             selected: targetProvider.getSpace(),
             available: targetProvider.getSpaces(),
             set: function (space) {
@@ -41,40 +39,32 @@
 
         $scope.organizations = targetProvider.getOrganizations();
 
-        var sortOrgAndSpacesByName = function (items) {
-            return _.sortBy(items, 'name');
-        };
-
         $scope.$watch('selectedOrg', function () {
-            self.targetSpace.available = sortOrgAndSpacesByName(self.organization.selected.spaces);
+            $scope.targetSpace.available = sortOrgAndSpacesByName($scope.organization.selected.spaces);
         });
 
         $scope.$watchCollection('organizations', function () {
-            //this handler should run only when organization list is loaded - should not act while returned list is still empty
-            if (!_.isEmpty($scope.organizations)) {
-                UserProvider.getUser(function (user) {
-                    self.organization.available = sortOrgAndSpacesByName($scope.organizations);
-                    if (user.role !== 'ADMIN' && requiresManagerRole) {
-                        self.organization.available = _.where($scope.organizations, {manager: true});
-                    }
 
-                    if (!_.findWhere(self.organization.available, {guid: self.organization.selected.guid})) {
-                        self.organization.selected = self.organization.available[0];
-                        targetProvider.setOrganization(self.organization.selected);
-                    }
-                });
+            //this handler should run only when organization list is loaded - should not act while returned list is still empty
+            if(_.isEmpty($scope.organizations)) {
+                return;
             }
+
+            UserProvider.getUser(function (user) {
+                $scope.organization.available = sortOrgAndSpacesByName($scope.organizations);
+                if (user.role !== 'ADMIN' && requiresManagerRole) {
+                    $scope.organization.available = _.where($scope.organizations, {manager: true});
+                }
+
+                if (!_.findWhere($scope.organization.available, {guid: $scope.organization.selected.guid})) {
+                    $scope.organization.selected = $scope.organization.available[0];
+                    targetProvider.setOrganization($scope.organization.selected);
+                }
+            });
         });
     });
 
-    App.directive('dTargetSelector', function () {
-        return {
-            scope: {
-                hideSpace: '=',
-                managedOnly: '@'
-            },
-            controller: 'TargetSelectorController as targetCtrl',
-            templateUrl: 'app/common/target-provider/target-selector.html'
-        };
-    });
+    function sortOrgAndSpacesByName(items) {
+        return _.sortBy(items, 'name');
+    }
 }());

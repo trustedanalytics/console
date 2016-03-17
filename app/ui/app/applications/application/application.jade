@@ -15,29 +15,29 @@
 //-
 .application
 
-    h3(ng-bind='appCtrl.application.name')
+    h3(ng-bind='application.name')
 
-    div(ng-show='true || appCtrl.state.isLoaded()')
+    div(ng-show='true || state.isLoaded()')
         ul.nav.nav-tabs
-            li(ng-class='{active: appCtrl.isTabActive("app.application")}')
-                a(ui-sref='app.application({appid: appCtrl.appId})') Overview
+            li(ng-class='{active: isTabActive("app.application")}')
+                a(ui-sref='app.application({appid: appId})') Overview
             li(ui-sref-active='active')
-                a(ui-sref='app.application.bindings({appid: appCtrl.appId})') Bindings
+                a(ui-sref='app.application.bindings({appid: appId})') Bindings
             li(ui-sref-active='active')
-                a(ui-sref='app.application.register({appid: appCtrl.appId})') Register in marketplace
+                a(ui-sref='app.application.register({appid: appId})') Register in marketplace
 
     .tabcontent
         ui-view
-            d-spinner(ng-show='appCtrl.state.isPending()')
-            d-application-overview(application='appCtrl.application', instances='appCtrl.instances',
-                ng-show='appCtrl.state.isLoaded()', on-delete='appCtrl.delete()', on-restage='appCtrl.restage()',
-                on-start='appCtrl.start()', on-stop='appCtrl.stop()', on-refresh='appCtrl.refresh()')
+            spinner(ng-show='state.isPending()')
+            application-overview(application='application', instances='instances',
+                ng-show='state.isLoaded()', on-delete='delete()', on-restage='restage()',
+                on-start='start()', on-stop='stop()', on-refresh='refresh()')
 
-    .panel.panel-danger(ng-if='appCtrl.state.is(appCtrl.state.values.NOT_FOUND)')
+    .panel.panel-danger(ng-if='state.is(state.values.NOT_FOUND)')
         .panel-body
             | Application not found
 
-    .panel.panel-danger(ng-if='appCtrl.state.isGenericError()')
+    .panel.panel-danger(ng-if='state.isGenericError()')
         .panel-body
             | Error while downloading application details
 

@@ -17,7 +17,7 @@
     h3
         | Deploy application on GearPump instance {{ gpInstanceName }}
 
-    d-spinner(ng-show='state.isPending()')
+    spinner(ng-show='state.isPending()')
 
     div(ng-show='state.isLoaded()')
         .panel.tabcontent

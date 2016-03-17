@@ -13,6 +13,6 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 //-
-em.fa.fa-check(title='Running', class='state {{ state.toLowerCase() }}', ng-if='state.toLowerCase() == "started"' )
-em.fa.fa-stop(title='Stopped', class='state {{ state.toLowerCase() }}', ng-if='state.toLowerCase() == "stopped"')
-em.fa.fa-refresh(title='Starting', class='state {{ state.toLowerCase() }}', ng-if='state.toLowerCase() == "starting"')
+em.fa.fa-check(title='Running', class='state {{ $ctrl.state.toLowerCase() }}', ng-if='$ctrl.state.toLowerCase() == "started"' )
+em.fa.fa-stop(title='Stopped', class='state {{ $ctrl.state.toLowerCase() }}', ng-if='$ctrl.state.toLowerCase() == "stopped"')
+em.fa.fa-refresh(title='Starting', class='state {{ $ctrl.state.toLowerCase() }}', ng-if='$ctrl.state.toLowerCase() == "starting"')

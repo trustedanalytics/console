@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/* jshint -W030 */
 describe("Unit: TargetSelectorController", function() {
     var allOrgs = [
         {
@@ -55,42 +56,48 @@ describe("Unit: TargetSelectorController", function() {
 
     }));
 
-    function getSUT() {
+    function getSUT(parameters) {
+
         return $controller('TargetSelectorController', {
             targetProvider: targetProvider,
             $scope: scope,
             UserProvider: UserProvider
-        });
+        }, parameters);
     }
 
     it('should return all organizations if managedOnly attribute is not set', function() {
-        var sut = getSUT();
-        expect(sut.organization.selected).to.be.deep.equals(allOrgs[0]);
-        expect(sut.organization.available).to.be.deep.equals(allOrgs);
+        getSUT();
+        scope.$digest();
+
+        expect(scope.organization.selected).to.be.deep.equals(allOrgs[0]);
+        expect(scope.organization.available).to.be.deep.equals(allOrgs);
         expect(targetProvider.getSpace.called).to.be.true;
         expect(targetProvider.getSpaces.called).to.be.true;
     });
 
     it('should return managed organizations if managedOnly attribute is set', function() {
-        scope.managedOnly = 'managed-only';
+        getSUT({
+            managedOnly: 'managed-only'
+        });
 
-        var sut = getSUT();
         scope.$digest();
-        expect(sut.organization.selected).to.be.deep.equals(allOrgs[0]);
-        expect(sut.organization.available).to.be.deep.equals(_.where(allOrgs, {manager:true}));
+
+        expect(scope.organization.selected, 'selected').to.be.deep.equals(allOrgs[0]);
+        expect(scope.organization.available, 'available').to.be.deep.equals(_.where(allOrgs, {manager:true}));
     });
 
 
     it('should return all organizations if managedOnly attribute is set but user is admin', function() {
-        scope.managedOnly = 'managed-only';
-
         UserProvider.getUser = function(callback){
             callback({role: 'ADMIN'});
         };
 
-        var sut = getSUT();
+        getSUT({
+            managedOnly: 'managed-only'
+        });
         scope.$digest();
-        expect(sut.organization.selected).to.be.deep.equals(allOrgs[0]);
-        expect(sut.organization.available).to.be.deep.equals(allOrgs);
+
+        expect(scope.organization.selected).to.be.deep.equals(allOrgs[0]);
+        expect(scope.organization.available).to.be.deep.equals(allOrgs);
     });
 });

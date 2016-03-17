@@ -15,11 +15,11 @@
 //-
 .service
 
-    d-spinner(ng-show='ctrl.state.isPending()')
+    spinner(ng-show='ctrl.state.isPending()')
 
     div(ng-show='ctrl.state.isLoaded()')
         h3
-            d-target-selector.pull-right
+            target-selector.pull-right
             | {{ ctrl.service.name }}
             small {{ ctrl.service.provider }}
 
@@ -73,7 +73,7 @@
                                         input.form-control.value(ng-model="param.value" placeholder="value")
                                         a(ng-click="ctrl.removeExtraParam(param)") Remove
                                     a(ng-click="ctrl.addExtraParam()") + Add an extra parameter
-                            d-spinner(text="'Creating new instance... Please wait'", ng-if='ctrl.newInstanceState.isPending()')
+                            spinner(text="'Creating new instance... Please wait'", ng-if='ctrl.newInstanceState.isPending()')
 
         d-service-instances(service-id='ctrl.serviceId', service-name='ctrl.service.name')
 

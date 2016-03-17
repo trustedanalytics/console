@@ -14,10 +14,10 @@
    limitations under the License.
 //-
 h3
-    d-target-selector.target-selector.pull-right(hide-space="true")
+    target-selector.target-selector.pull-right(hide-space="true")
     | Models on H2O instances
 
-d-spinner(ng-show='state.isPending()')
+spinner(ng-show='state.isPending()')
 
 div(ng-if='state.isLoaded()')
     d-instances(instances='instances' on-instance-change='onInstanceChange(instance)')

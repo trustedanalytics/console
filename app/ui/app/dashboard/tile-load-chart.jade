@@ -16,8 +16,8 @@
 .panel.widget.tile-chart
     .title
         | Throughput (req/s)
-    d-spinner(ng-show='state.isPending()')
-    .error(ng-show='state.isError()')
+    spinner(ng-show='$ctrl.state.isPending()')
+    .error(ng-show='$ctrl.state.isError()')
         | Error loading chart data
-    .chart(d-visible='state.isLoaded() && parentState.isLoaded()')
-        c3-chart(options='options', data='chartData')
+    .chart(d-visible='$ctrl.state.isLoaded() && $ctrl.parentState.isLoaded()')
+        c3-chart(options='$ctrl.options', data='$ctrl.chartData')

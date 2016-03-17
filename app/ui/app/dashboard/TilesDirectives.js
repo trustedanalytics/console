@@ -16,54 +16,46 @@
 (function () {
     "use strict";
 
-    App.directive('dTileSmallWhiteNumeric', function () {
-        return {
-            scope: {
-                number: '=',
-                text: '=',
-                link: '@',
-                linkEnabled: '='
-            },
-            templateUrl: 'app/dashboard/tile-small-white-numeric.html'
-        };
+    App.component('tileSmallWhiteNumeric', {
+        bindings: {
+            number: '<',
+            text: '<',
+            link: '@',
+            linkEnabled: '<'
+        },
+        templateUrl: 'app/dashboard/tile-small-white-numeric.html'
     });
 
-    App.directive('dTileBlueNumeric', function () {
-        return {
-            scope: {
-                number: '=',
-                float: '=?',
-                text: '=',
-                unit: '=?',
-                link: '@'
-            },
-            templateUrl: 'app/dashboard/tile-blue-numeric.html',
-            controller: function($scope) {
-                $scope.isVisible = function(data) {
-                    return angular.isNumber(data) || (angular.isString(data) && data.length);
-                };
-            }
-        };
+    App.component('tileBlueNumeric', {
+        bindings: {
+            number: '<',
+            float: '<?',
+            text: '<',
+            unit: '<?',
+            link: '@'
+        },
+        templateUrl: 'app/dashboard/tile-blue-numeric.html',
+        controller: function() {
+            this.isVisible = function(data) {
+                return angular.isNumber(data) || (angular.isString(data) && data.length);
+            };
+        }
     });
 
-    App.directive('dTileProgress', function () {
-        return {
-            scope: {
-                value: '=',
-                title: '='
-            },
-            templateUrl: 'app/dashboard/tile-progress.html'
-        };
+    App.component('tileProgress', {
+        bindings: {
+            value: '<',
+            title: '<'
+        },
+        templateUrl: 'app/dashboard/tile-progress.html'
     });
 
 
-    App.directive('dTileNews', function () {
-        return {
-            scope: {
-                events: '=',
-                link: '@'
-            },
-            templateUrl: 'app/dashboard/tile-news.html'
-        };
+    App.component('tileNews', {
+        bindings: {
+            events: '<',
+            link: '@'
+        },
+        templateUrl: 'app/dashboard/tile-news.html'
     });
 })();

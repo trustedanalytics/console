@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/*jshint -W030 */
 describe("Unit: ApplicationBindingsController", function () {
 
     var controller,
@@ -23,6 +24,7 @@ describe("Unit: ApplicationBindingsController", function () {
         _state,
         notificationService,
         $rootScope,
+        $scope,
         $q,
         SAMPLE_APPLICATION = Object.freeze({ guid: 'a1', space_guid: 's1' }),
         SAMPLE_BINDINGS = [
@@ -45,6 +47,7 @@ describe("Unit: ApplicationBindingsController", function () {
             error: function(){}
         };
         $rootScope = _$rootScope_;
+        $scope = $rootScope.$new();
         $q =_$q_;
 
         $stateParams.appId = SAMPLE_APPLICATION.guid;
@@ -60,7 +63,7 @@ describe("Unit: ApplicationBindingsController", function () {
 
         createController = function () {
             controller = $controller('ApplicationBindingsController', {
-                $scope: $rootScope.$new(),
+                $scope: $scope,
                 NotificationService: notificationService
             });
         };
@@ -76,7 +79,7 @@ describe("Unit: ApplicationBindingsController", function () {
         applicationResource.getAllBindings = sinon.stub().returns(deferred.promise);
         createController();
 
-        expect(controller.state.value, 'state').to.be.equal(_state.values.PENDING);
+        expect($scope.state.value, 'state').to.be.equal(_state.values.PENDING);
         expect(applicationResource.getAllBindings.calledWith(SAMPLE_APPLICATION.guid)).to.be.true;
     });
 
@@ -86,9 +89,9 @@ describe("Unit: ApplicationBindingsController", function () {
         deferred.resolve(SAMPLE_BINDINGS);
 
         createController();
-        expect(controller.state.value, 'state').to.be.equal(_state.values.PENDING);
+        expect($scope.state.value, 'state').to.be.equal(_state.values.PENDING);
         $rootScope.$digest();
-        expect(controller.bindings).to.be.deep.equal(SAMPLE_BINDINGS);
+        expect($scope.bindings).to.be.deep.equal(SAMPLE_BINDINGS);
 
     });
 
@@ -99,19 +102,23 @@ describe("Unit: ApplicationBindingsController", function () {
 
         createController();
         $rootScope.$digest();
-        expect(controller.state.value, 'state').to.be.equal(_state.values.ERROR);
+        expect($scope.state.value, 'state').to.be.equal(_state.values.ERROR);
     });
 
     it('setApplication, set application', function () {
-        controller.setApplication(SAMPLE_APPLICATION);
+        createController();
 
-        expect(controller.application, 'application').to.be.deep.equal(SAMPLE_APPLICATION);
+        $scope.setApplication(SAMPLE_APPLICATION);
+
+        expect($scope.application, 'application').to.be.deep.equal(SAMPLE_APPLICATION);
     });
 
     it('setInstances, set services', function () {
-        controller.setInstances(SAMPLE_INSTANCES);
+        createController();
 
-        expect(controller.services).to.be.deep.equal(SAMPLE_INSTANCES);
+        $scope.setInstances(SAMPLE_INSTANCES);
+
+        expect($scope.services).to.be.deep.equal(SAMPLE_INSTANCES);
     });
 
     it('setApplication, got application, bindings and services, set status loaded', function () {
@@ -120,19 +127,19 @@ describe("Unit: ApplicationBindingsController", function () {
         deferred.resolve(SAMPLE_BINDINGS);
 
         createController();
-        controller.setApplication(SAMPLE_APPLICATION);
-        controller.setInstances(SAMPLE_INSTANCES);
+        $scope.setApplication(SAMPLE_APPLICATION);
+        $scope.setInstances(SAMPLE_INSTANCES);
 
         $rootScope.$digest();
 
-        expect(controller.state.value, 'state').to.be.equal(_state.values.LOADED);
-        expect(controller.servicesBound, 'bound services').to.be.deep.equal([ SAMPLE_INSTANCES[1], SAMPLE_INSTANCES[2] ]);
-        expect(controller.servicesAvailable, 'available services').to.be.deep.equal([ SAMPLE_INSTANCES[0] ]);
+        expect($scope.state.value, 'state').to.be.equal(_state.values.LOADED);
+        expect($scope.servicesBound, 'bound services').to.be.deep.equal([ SAMPLE_INSTANCES[1], SAMPLE_INSTANCES[2] ]);
+        expect($scope.servicesAvailable, 'available services').to.be.deep.equal([ SAMPLE_INSTANCES[0] ]);
     });
 
     it('bindService, no application set do not create binding', function () {
         createController();
-        controller.bindService({ guid: 's1' });
+        $scope.bindService({ guid: 's1' });
 
         expect( applicationResource.createBinding.called).to.be.false;
     });
@@ -149,11 +156,11 @@ describe("Unit: ApplicationBindingsController", function () {
         deferred.resolve();
 
         createController();
-        controller.setApplication(SAMPLE_APPLICATION);
+        $scope.setApplication(SAMPLE_APPLICATION);
 
-        controller.bindService(service);
+        $scope.bindService(service);
         $rootScope.$digest();
-        expect(controller.state.value, 'state').to.be.equal(_state.values.PENDING);
+        expect($scope.state.value, 'state').to.be.equal(_state.values.PENDING);
         expect(applicationResource.createBinding.calledWith(SAMPLE_APPLICATION.guid, service.guid), 'called with args').to.be.true;
     });
 
@@ -168,8 +175,8 @@ describe("Unit: ApplicationBindingsController", function () {
 
         createController();
 
-        controller.setApplication(SAMPLE_APPLICATION);
-        controller.bindService({ guid: 's1' });
+        $scope.setApplication(SAMPLE_APPLICATION);
+        $scope.bindService({ guid: 's1' });
         $rootScope.$digest();
 
         expect(applicationResource.getAllBindings.called).to.be.true;
@@ -179,15 +186,15 @@ describe("Unit: ApplicationBindingsController", function () {
         var deleteBindingSpied = sinon.spy(serviceBindingResource, 'deleteBinding');
 
         createController();
-        controller.bindings = getSampleBindings();
+        $scope.bindings = getSampleBindings();
 
-        controller.unbindService({ guid: 's1' });
+        $scope.unbindService({ guid: 's1' });
 
         expect(deleteBindingSpied.called).to.be.false;
     });
 
     it('unbindService, delete binding set status pending', function () {
-        controller.bindings = getSampleBindings();
+        $scope.bindings = getSampleBindings();
         var deferredAll = $q.defer();
         applicationResource.getAllBindings = sinon.stub().returns(deferredAll.promise);
         deferredAll.resolve(SAMPLE_BINDINGS);
@@ -198,12 +205,12 @@ describe("Unit: ApplicationBindingsController", function () {
 
         createController();
 
-        controller.setApplication(SAMPLE_APPLICATION);
-        controller.state.value = _state.values.LOADED;
+        $scope.setApplication(SAMPLE_APPLICATION);
+        $scope.state.value = _state.values.LOADED;
 
-        controller.unbindService({ guid: 's1' });
+        $scope.unbindService({ guid: 's1' });
 
-        expect(controller.state.value, 'state').to.be.equal(_state.values.PENDING);
+        expect($scope.state.value, 'state').to.be.equal(_state.values.PENDING);
     });
 
     it('unbindService success, get bindings', function () {
@@ -217,12 +224,12 @@ describe("Unit: ApplicationBindingsController", function () {
 
         createController();
 
-        controller.bindings = getSampleBindings();
+        $scope.bindings = getSampleBindings();
 
-        controller.setApplication(SAMPLE_APPLICATION);
+        $scope.setApplication(SAMPLE_APPLICATION);
 
-        controller.unbindService({ guid: 's1' });
-        expect(controller.state.value, 'state').to.be.equal(_state.values.PENDING);
+        $scope.unbindService({ guid: 's1' });
+        expect($scope.state.value, 'state').to.be.equal(_state.values.PENDING);
         $rootScope.$digest();
         expect(serviceBindingResource.deleteBinding.called).to.be.true;
     });
@@ -238,11 +245,11 @@ describe("Unit: ApplicationBindingsController", function () {
         deferred.reject();
         createController();
 
-        controller.bindings = getSampleBindings();
-        controller.setApplication(SAMPLE_APPLICATION);
+        $scope.bindings = getSampleBindings();
+        $scope.setApplication(SAMPLE_APPLICATION);
         var errorSpied = sinon.spy(notificationService, 'error');
 
-        controller.unbindService({ guid: 's1' });
+        $scope.unbindService({ guid: 's1' });
 
         $rootScope.$digest();
 

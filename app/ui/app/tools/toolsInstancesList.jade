@@ -14,12 +14,12 @@
    limitations under the License.
 //-
 h3
-   d-target-selector.pull-right
+   target-selector.pull-right
    | {{ brokerName }}
 .tools
    .panel.instances
       h3(ng-show="organization.guid") List of {{ brokerName }} instances {{ organization.name }} organization
-      d-spinner(ng-show="state.isPending()")
+      spinner(ng-show="state.isPending()")
       div(ng-show="state.isLoaded()")
          .instances-table
              table.table.list-group(ng-show="anyRows")

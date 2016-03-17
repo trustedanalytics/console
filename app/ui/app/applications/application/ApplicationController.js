@@ -16,46 +16,45 @@
 (function () {
     "use strict";
 
-    App.controller('ApplicationController', function ($stateParams, State, ServiceInstanceResource, ApplicationResource,
+    App.controller('ApplicationController', function ($scope, $stateParams, State, ServiceInstanceResource, ApplicationResource,
                                                       $state, NotificationService, $q) {
 
-        var self = this,
-            appId = $stateParams.appId;
+        var appId = $stateParams.appId;
 
-        self.appId = appId;
-        self.state = new State().setPending();
+        $scope.appId = appId;
+        $scope.state = new State().setPending();
 
-        self.tabs = {
+        $scope.tabs = {
             overview: 1,
             bindings: 2
         };
-        self.tab = self.tabs.overview;
+        $scope.tab = $scope.tabs.overview;
 
-        self.servicesToDelete = {};
+        $scope.servicesToDelete = {};
 
-        self.isTabActive = function (sref) {
+        $scope.isTabActive = function (sref) {
             return $state.is(sref);
         };
 
         /*jshint latedef: false */
-        loadApplicationSummary(ApplicationResource, self.appId, ServiceInstanceResource, self.state, $q)
+        loadApplicationSummary(ApplicationResource, $scope.appId, ServiceInstanceResource, $scope.state, $q)
             .then(function(data){
-                self.instances = data.instances;
-                self.application = data.application;
+                $scope.instances = data.instances;
+                $scope.application = data.application;
             });
 
 
-        self.refresh = function () {
-            self.state.setPending();
-            loadApplicationSummary(ApplicationResource, self.appId, ServiceInstanceResource, self.state, $q)
+        $scope.refresh = function () {
+            $scope.state.setPending();
+            loadApplicationSummary(ApplicationResource, $scope.appId, ServiceInstanceResource, $scope.state, $q)
                 .then(function(data){
-                    self.instances = data.instances;
-                    self.application = data.application;
+                    $scope.instances = data.instances;
+                    $scope.application = data.application;
                 });
         };
 
-        self.restage = function () {
-            self.state.setPending();
+        $scope.restage = function () {
+            $scope.state.setPending();
 
             ApplicationResource
                 .withErrorMessage('Restage failed')
@@ -66,12 +65,12 @@
                     NotificationService.success('Restage has been scheduled');
                 })
                 .finally(function () {
-                    self.state.setLoaded();
+                    $scope.state.setLoaded();
                 });
         };
 
-        self.start = function () {
-            self.state.setPending();
+        $scope.start = function () {
+            $scope.state.setPending();
 
             ApplicationResource.postStatus(appId, {
                 state: 'STARTED'
@@ -83,12 +82,12 @@
                     NotificationService.error('Starting application failed');
                 })
                 .finally(function () {
-                    self.state.setLoaded();
+                    $scope.state.setLoaded();
                 });
         };
 
-        self.stop = function () {
-            self.state.setPending();
+        $scope.stop = function () {
+            $scope.state.setPending();
 
             ApplicationResource.postStatus(appId, {
                 state: 'STOPPED'
@@ -100,21 +99,21 @@
                     NotificationService.error('Stopping the application failed.');
                 })
                 .finally(function () {
-                    self.state.setLoaded();
+                    $scope.state.setLoaded();
                 });
         };
 
-        self.delete = function () {
-            self.state.setPending();
+        $scope.delete = function () {
+            $scope.state.setPending();
 
             ApplicationResource
                 .withErrorMessage('Deleting application failed')
                 .getOrphanServices(appId)
                 .then(function onSuccess(servicesToDelete) {
-                    self.state.setLoaded();
+                    $scope.state.setLoaded();
                     NotificationService.confirm('confirm-delete', {servicesToDelete: servicesToDelete})
                         .then(function (cascade) {
-                            self.state.setPending();
+                            $scope.state.setPending();
                             return ApplicationResource
                                 .withErrorMessage('Deleting application failed')
                                 .deleteApplication(appId, cascade[0]);
@@ -123,11 +122,11 @@
                             $state.go('app.applications');
                         })
                         .finally(function onError() {
-                            self.state.setLoaded();
+                            $scope.state.setLoaded();
                         });
                 })
                 .catch(function onError() {
-                    self.state.setError();
+                    $scope.state.setError();
                 });
         };
 

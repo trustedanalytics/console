@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/*jshint -W030 */
 describe("Unit: ApplicationController", function () {
 
     var controller,
@@ -22,9 +23,8 @@ describe("Unit: ApplicationController", function () {
         notificationService,
         state,
         $q,
-        $rootScope,
         $state,
-        scope,
+        $scope,
         APP_ID = "app-guid";
 
     beforeEach(module('app'));
@@ -35,20 +35,19 @@ describe("Unit: ApplicationController", function () {
 
     beforeEach(inject(function ($controller, ApplicationResource,
                                 ServiceInstanceResource, $routeParams,
-                                State, _$q_, _$rootScope_, _$state_) {
+                                State, _$q_, $rootScope, _$state_) {
         state = new State();
         serviceInstanceResource = ServiceInstanceResource;
         applicationResource = ApplicationResource;
         notificationService = {};
         $q = _$q_;
-        $rootScope = _$rootScope_;
-        scope = $rootScope.$new();
+        $scope = $rootScope.$new();
         $state = _$state_;
         createController = function () {
             controller = $controller('ApplicationController', {
                 $stateParams: {appId: APP_ID},
                 NotificationService: notificationService,
-                $scope: scope
+                $scope: $scope
             });
         };
 
@@ -64,7 +63,7 @@ describe("Unit: ApplicationController", function () {
 
         createController();
 
-        expect(controller.state.value, 'state').to.be.equal(state.values.PENDING);
+        expect($scope.state.value, 'state').to.be.equal(state.values.PENDING);
         expect(getApplicationSpied.called, 'getApplication called').to.be.true;
         expect(getApplicationSpied.calledWith(APP_ID), 'getApplication calledWith').to.be.true;
     });
@@ -74,9 +73,9 @@ describe("Unit: ApplicationController", function () {
         applicationResource.getApplication = sinon.stub().returns(deferred.promise)
         deferred.reject({ status: 404 });
         createController();
-        $rootScope.$digest();
+        $scope.$digest();
 
-        expect(controller.state.value, 'state').to.be.equal(state.values.NOT_FOUND);
+        expect($scope.state.value, 'state').to.be.equal(state.values.NOT_FOUND);
     });
 
     it('getApplication error unknown, set state error', function () {
@@ -85,18 +84,18 @@ describe("Unit: ApplicationController", function () {
         deferred.reject({ status: 500 });
 
         createController();
-        $rootScope.$digest();
+        $scope.$digest();
 
-        expect(controller.state.value, 'state').to.be.equal(state.values.ERROR);
+        expect($scope.state.value, 'state').to.be.equal(state.values.ERROR);
     });
 
     it('getApplication success, set application and download instances', function () {
         var application = { guid: 'a1'};
         createAndInitializeController(application);
-        $rootScope.$digest();
+        $scope.$digest();
 
-        expect(controller.application, 'application').to.be.deep.equal(application);
-        expect(controller.state.value, 'state').to.be.equal(state.values.LOADED);
+        expect($scope.application, 'application').to.be.deep.equal(application);
+        expect($scope.state.value, 'state').to.be.equal(state.values.LOADED);
         expect(serviceInstanceResource.getAll.called).to.be.true;
     });
 
@@ -104,8 +103,8 @@ describe("Unit: ApplicationController", function () {
         var application = { guid: 'a1'};
         var instances = getSampleInstances();
         createAndInitializeController(application, instances);
-        expect(controller.instances, 'instances').to.deep.be.equal(instances);
-        expect(controller.state.value, 'state').to.be.equal(state.values.LOADED);
+        expect($scope.instances, 'instances').to.deep.be.equal(instances);
+        expect($scope.state.value, 'state').to.be.equal(state.values.LOADED);
     });
 
     it('getApplication success but get instances error, set state error', function () {
@@ -121,9 +120,9 @@ describe("Unit: ApplicationController", function () {
 
         createController();
 
-        $rootScope.$digest();
+        $scope.$digest();
 
-        expect(controller.state.isError(), 'state').to.be.true;
+        expect($scope.state.isError(), 'state').to.be.true;
     });
 
     it('restage, set restage status', function(){
@@ -135,10 +134,10 @@ describe("Unit: ApplicationController", function () {
 
         createAndInitializeController(application);
 
-        controller.restage();
+        $scope.restage();
 
         deferredStatus.resolve();
-        $rootScope.$digest();
+        $scope.$digest();
         expect(applicationResource.postStatus.calledWith(APP_ID, {state: 'RESTAGING'})).to.be.true;
     });
 
@@ -153,12 +152,12 @@ describe("Unit: ApplicationController", function () {
         $state.go = sinon.stub();
         createAndInitializeController();
 
-        controller.delete();
+        $scope.delete();
         deferredConfirm.resolve(arguments);
         deferredDelete.resolve();
         deferredOrphanServices.resolve();
 
-        scope.$digest();
+        $scope.$digest();
 
         expect(applicationResource.getOrphanServices.calledWith(APP_ID)).to.be.true;
         expect(applicationResource.deleteApplication.calledWith(APP_ID)).to.be.true;
@@ -173,10 +172,10 @@ describe("Unit: ApplicationController", function () {
 
         createAndInitializeController(application);
 
-        controller.start();
+        $scope.start();
 
         deferredStatus.resolve();
-        $rootScope.$digest();
+        $scope.$digest();
         expect(applicationResource.postStatus.calledWith(APP_ID, {state: "STARTED"})).to.be.true;
         expect(notificationService.success.calledOnce).to.be.true;
     });
@@ -189,10 +188,10 @@ describe("Unit: ApplicationController", function () {
 
         createAndInitializeController(application);
 
-        controller.start();
+        $scope.start();
 
         deferredStatus.reject();
-        $rootScope.$digest();
+        $scope.$digest();
         expect(applicationResource.postStatus.calledWith(APP_ID, {state: "STARTED"})).to.be.true;
         expect(notificationService.error.calledOnce).to.be.true;
     });
@@ -205,10 +204,10 @@ describe("Unit: ApplicationController", function () {
 
         createAndInitializeController(application);
 
-        controller.stop();
+        $scope.stop();
 
         deferredStatus.resolve();
-        $rootScope.$digest();
+        $scope.$digest();
         expect(applicationResource.postStatus.calledWith(APP_ID, {state: "STOPPED"})).to.be.true;
         expect(notificationService.success.calledOnce).to.be.true;
     });
@@ -221,10 +220,10 @@ describe("Unit: ApplicationController", function () {
 
         createAndInitializeController(application);
 
-        controller.stop();
+        $scope.stop();
 
         deferredStatus.reject();
-        $rootScope.$digest();
+        $scope.$digest();
         expect(applicationResource.postStatus.calledWith(APP_ID, {state: "STOPPED"})).to.be.true;
         expect(notificationService.error.calledOnce).to.be.true;
     });
@@ -264,7 +263,7 @@ describe("Unit: ApplicationController", function () {
         deferredInstances.resolve(instances);
 
         createController();
-        $rootScope.$digest();
+        $scope.$digest();
     }
 
 });

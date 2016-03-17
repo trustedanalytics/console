@@ -15,7 +15,7 @@
 //-
 .content
     .content-wrapper
-        d-spinner(ng-show='state.isPending()')
+        spinner(ng-show='state.isPending()')
         .row
             .col-lg-6.org-list(ng-init='setCurrentOrg()' ng-show='state.isLoaded()')
                 ul.nav.nav-stacked.nav-pills

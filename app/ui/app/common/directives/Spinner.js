@@ -16,13 +16,11 @@
 (function () {
     "use strict";
 
-    App.directive('dSpinner', function () {
-        return {
-            scope: {
-                text: '='
-            },
-            templateUrl: 'app/common/spinner.html'
-        };
+    App.component('spinner', {
+        bindings: {
+            text: '<'
+        },
+        templateUrl: 'app/common/spinner.html'
     });
 
 }());

@@ -13,9 +13,10 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 //-
-.panel.widget.tile-progress.tile-height-large(ng-class='{"dashboard-green":value<30, "dashboard-orange":(value>=30 && value<80), "dashboard-red":value >= 80}')
+.panel.widget.tile-progress.tile-height-large(ng-class='{"dashboard-green":$ctrl.value<30,' +
+    '"dashboard-orange":($ctrl.value>=30 && $ctrl.value<80), "dashboard-red":$ctrl.value >= 80}')
     .value
-        | {{ value }}%
+        | {{ $ctrl.value }}%
     .title
-        | {{ title }}
-    uib-progressbar.progress-xs(value='value')
+        | {{ $ctrl.title }}
+    uib-progressbar.progress-xs(value='$ctrl.value')

@@ -15,10 +15,10 @@
 //-
 .uploaddataset
     h3
-        d-target-selector.pull-right(hide-space="true")
+        target-selector.pull-right(hide-space="true")
         | Upload a data set
 
-    d-spinner(ng-show='state.isPending()')
+    spinner(ng-show='state.isPending()')
 
     div(ng-show='state.value != state.values.PENDING ')
 

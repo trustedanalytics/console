@@ -14,14 +14,14 @@
    limitations under the License.
 //-
 h3
-    d-target-selector.pull-right
+    target-selector.pull-right
     | TAP Analytics Toolkit
 
 .tools
 
     .panel.instances
         h3(ng-show="organization.guid") Installed Instances
-        d-spinner(ng-show="state.isPending()")
+        spinner(ng-show="state.isPending()")
         div(ng-show="state.isLoaded()")
             .instances-table
                 table.table.list-group(ng-show='instances.length')
@@ -36,7 +36,7 @@ h3
                             td {{ instance.name }}
                             td {{ instance.metadata.creator_name }}
                             td
-                                d-state(state="instance.state")
+                                app-state(state="instance.state")
                             td
                                 a(ng-href="{{ instance.url | ensureProtocol }}", target="_blank") {{ instance.url }}
                             td
@@ -51,7 +51,7 @@ h3
                         | Create new instance
                     div(ng-if="!newInstance.instanceName.$valid && newInstanceName.length")
                         span.validationMessage Allowed characters: [letters, numbers, _, -, .]
-            d-spinner(text="'Creating new instance... Please wait'", ng-if='newInstanceState.isPending()')
+            spinner(text="'Creating new instance... Please wait'", ng-if='newInstanceState.isPending()')
 
         .panel.panel-warning.notice
             .panel-heading Note

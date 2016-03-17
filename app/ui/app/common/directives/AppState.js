@@ -16,12 +16,10 @@
 (function () {
     "use strict";
 
-    App.directive('dState', function () {
-        return {
-            scope: {
-                state: '='
-            },
-            templateUrl: 'app/common/status.html'
-        };
+    App.component('appState', {
+        bindings: {
+            state: '<'
+        },
+        templateUrl: 'app/common/directives/app-state.html'
     });
 }());

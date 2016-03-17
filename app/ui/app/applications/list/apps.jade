@@ -14,12 +14,12 @@
    limitations under the License.
 //-
 h3
-    d-target-selector.pull-right
+    target-selector.pull-right
     | Applications
 
 .applications.content
 
-    d-spinner(ng-if='state.isPending()')
+    spinner(ng-if='state.isPending()')
 
     .table(ng-if='state.isLoaded()')
         table.table(ng-show='applications.length > 0', ng-table='tableParams', show-filter='true')
@@ -28,7 +28,7 @@ h3
                     | {{ app.name }}
 
                 td.status(data-title="'Status'", sortable="'state'", filter="{ 'state': 'select' }", filter-data='appStates()')
-                    d-state(state="app.state")
+                    app-state(state="app.state")
 
                 td(data-title="'Instances'", sortable="'running_instances'")
                     | {{ app.running_instances }}

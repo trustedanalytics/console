@@ -19,97 +19,96 @@
     App.controller('ApplicationBindingsController', function ($scope, ApplicationResource, ServiceBindingResource,
             applicationBindingExtractor, State, $stateParams, NotificationService) {
 
-            var self = this,
-                appId = $stateParams.appId;
+            var appId = $stateParams.appId;
 
             var state = new State().setPending();
-            self.state = state;
-            self.appId = appId;
+            $scope.state = state;
+            $scope.appId = appId;
 
-            self.loadBindings = function () {
-                loadBindings(self, ApplicationResource, applicationBindingExtractor);
+            $scope.loadBindings = function () {
+                loadBindings($scope, ApplicationResource, applicationBindingExtractor);
             };
 
-            self.setApplication = function (application) {
-                self.application = application;
-                updateInstances(self);
+            $scope.setApplication = function (application) {
+                $scope.application = application;
+                updateInstances($scope);
             };
 
-            $scope.$watch('appCtrl.application', function (application) {
-                self.setApplication(application);
+            $scope.$watch('$parent.application', function (application) {
+                $scope.setApplication(application);
             });
 
-            self.setInstances = function (instances) {
-                self.services = instances;
-                updateInstances(self);
+            $scope.setInstances = function (instances) {
+                $scope.services = instances;
+                updateInstances($scope);
             };
 
-            $scope.$watch('appCtrl.instances', function (instances) {
-                self.setInstances(instances);
+            $scope.$watch('$parent.instances', function (instances) {
+                $scope.setInstances(instances);
             });
 
-            self.bindService = function (service) {
-                if (!self.application) {
+            $scope.bindService = function (service) {
+                if (!$scope.application) {
                     return;
                 }
                 state.value = state.values.PENDING;
                 ApplicationResource
                     .withErrorMessage('Failed to bind the service')
-                    .createBinding(self.application.guid, service.guid)
+                    .createBinding($scope.application.guid, service.guid)
                     .then(function () {
                         NotificationService.success('Service has been bound');
                     })
                     .finally(function () {
-                        self.loadBindings();
+                        $scope.loadBindings();
                     });
             };
 
-            self.unbindService = function (service) {
-                if (!self.application) {
+            $scope.unbindService = function (service) {
+                if (!$scope.application) {
                     return;
                 }
                 state.value = state.values.PENDING;
-                var binding = _.findWhere(self.bindings, {service_instance_guid: service.guid});
+                var binding = _.findWhere($scope.bindings, {service_instance_guid: service.guid});
                 if (binding) {
                     ServiceBindingResource.deleteBinding(binding.guid)
                         .then(function () {
                             NotificationService.success('Service has been unbound');
-                            self.loadBindings();
+                            $scope.loadBindings();
                         })
                         .catch(function () {
                             NotificationService.error('Failed to bind the service');
-                            self.loadBindings();
+                            $scope.loadBindings();
                         });
                 }
             };
 
-            self.loadBindings();
+            $scope.loadBindings();
         }
     );
 
-    function updateInstances(self) {
-        if (!self.application || !self.services || !self.bindings) {
+    function updateInstances($scope) {
+        if (!$scope.application || !$scope.services || !$scope.bindings) {
             return;
         }
 
-        var bounderServiceIds = _.pluck(self.bindings, 'service_instance_guid');
+        var bounderServiceIds = _.pluck($scope.bindings, 'service_instance_guid');
 
-        self.servicesBound = self.services.filter(function (s) {
+        $scope.servicesBound = $scope.services.filter(function (s) {
             return _.contains(bounderServiceIds, s.guid);
         });
-        self.servicesAvailable = _.difference(self.services, self.servicesBound);
+        $scope.servicesAvailable = _.difference($scope.services, $scope.servicesBound);
 
-        self.state.value = self.state.values.LOADED;
+        $scope.state.value = $scope.state.values.LOADED;
     }
 
-    function loadBindings(self, ApplicationResource, applicationBindingExtractor) {
-        ApplicationResource.getAllBindings(self.appId)
+    function loadBindings($scope, ApplicationResource, applicationBindingExtractor) {
+        return ApplicationResource.getAllBindings($scope.appId)
             .then(function onSuccess(bindings) {
-                self.bindings = applicationBindingExtractor.extract(bindings);
-                updateInstances(self);
+                $scope.bindings = applicationBindingExtractor.extract(bindings);
+                updateInstances($scope);
             })
             .catch(function onError() {
-                self.state.setError();
+                $scope.state.setError();
             });
     }
 }());

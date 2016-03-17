@@ -14,7 +14,7 @@
    limitations under the License.
 //-
 h3
-    d-target-selector.target-selector.pull-right(hide-space="true")
+    target-selector.target-selector.pull-right(hide-space="true")
     span(ng-show="state.isLoaded()") Found {{ pagination.total }} datasets
     span(ng-show="!state.isLoaded()") &nbsp;
 
@@ -73,7 +73,7 @@ d-categories(on-category-change='onCategoryChange(category)', categories='catego
             form(data-ng-submit='search()')
                 input.form-control(type='text', placeholder='Search', data-ng-model='textToFind')
 
-d-spinner(ng-show='state.isPending()')
+spinner(ng-show='state.isPending()')
 
 div(ng-show='state.isLoaded() || state.isError()')
     d-panel-info(ng-show='state.isPostError()', heading='Publish failed', type='danger')
