@@ -17,27 +17,10 @@
     "use strict";
 
     App.controller('ApplicationsController', function (ApplicationResource, targetProvider, $scope, ngTableParams,
-        $q, AtkInstanceResource, ApplicationsTableParams) {
+        $q, AtkInstanceResource, ApplicationsTableParams, State) {
 
-        var self = this;
-
-        var states = {
-            PENDING: 1,
-            LOADED: 2,
-            ERROR: 3
-        };
-        self.states = states;
-
-        self.details = [];
-
-        function getAtkInstances() {
-            return AtkInstanceResource
-                .withErrorMessage('Failed to load TAP Analytics Toolkit instances')
-                .getAll(targetProvider.getOrganization().guid)
-                .then(function onSuccess(response) {
-                    return response.instances;
-                });
-        }
+        $scope.state = new State().setPending();
+        $scope.details = [];
 
         function getApplications() {
             return ApplicationResource
@@ -49,32 +32,31 @@
         }
 
         var updateApplications = function () {
-            if (!_.isEmpty(targetProvider.getSpace())) {
-                self.state = states.PENDING;
-                $q.all([
-                    getApplications(),
-                    getAtkInstances()
-                ]).then(function (results) {
-                    self.applications = updateAppNames(results[0], results[1]);
-                    self.state = states.LOADED;
+            if (_.isEmpty(targetProvider.getSpace())) {
+                return;
+            }
+
+            $scope.state.setPending();
+            getApplications()
+                .then(function (applications) {
+                    $scope.applications = applications;
+                    $scope.state.setLoaded();
                     $scope.tableParams.reload();
                 }).catch(function () {
-                    self.state = states.ERROR;
+                    $scope.state.setError();
                 });
-
-            }
         };
         updateApplications();
 
         $scope.tableParams = ApplicationsTableParams.getTableParams($scope, function () {
-            return self.applications;
+            return $scope.applications;
         });
 
         $scope.$on('targetChanged', function () {
             updateApplications();
         });
 
-        self.appStates = function () {
+        $scope.appStates = function () {
             var def = $q.defer();
             def.resolve([
                 {id: 'STARTED', title: 'STARTED'},
@@ -84,28 +66,9 @@
             return def;
         };
 
-        self.checkStatusProblem = function (app) {
+        $scope.checkStatusProblem = function (app) {
             return app.running_instances === 0 && app.state === 'STARTED';
         };
     });
 
-    function updateAppNames(apps, atkInstances) {
-        for (var app in apps) {
-            if (apps.hasOwnProperty(app)) {
-                for (var atk in atkInstances) {
-                    if (atkInstances.hasOwnProperty(atk) && apps[app] && apps[app].urls) {
-                        if (apps[app].urls[0] === atkInstances[atk].url) {
-                            apps[app].name = atkInstances[atk].name;
-                            break;
-                        }
-                        if (atkInstances[atk].scoring_engine &&
-                            apps[app].urls[0] === atkInstances[atk].scoring_engine.url) {
-                            apps[app].name = atkInstances[atk].scoring_engine.name;
-                        }
-                    }
-                }
-            }
-        }
-        return apps;
-    }
 }());

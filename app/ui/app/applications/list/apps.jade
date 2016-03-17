@@ -19,15 +19,15 @@ h3
 
 .applications.content
 
-    d-spinner(ng-if='ctrl.state === ctrl.states.PENDING')
+    d-spinner(ng-if='state.isPending()')
 
-    .table(ng-if='ctrl.state === ctrl.states.LOADED')
-        table.table(ng-show='ctrl.applications.length > 0', ng-table='tableParams', show-filter='true')
-            tr(ng-repeat='app in $data', ng-class="{ 'details-visible':  ctrl.detailsVisible(app)}")
-                td(data-title="'Name'", sortable="'name'", filter="{ 'name': 'text' }", ng-class="{'status-problem': ctrl.checkStatusProblem(app)}")
+    .table(ng-if='state.isLoaded()')
+        table.table(ng-show='applications.length > 0', ng-table='tableParams', show-filter='true')
+            tr(ng-repeat='app in $data', ng-class="{ 'details-visible':  detailsVisible(app)}")
+                td(data-title="'Name'", sortable="'name'", filter="{ 'name': 'text' }", ng-class="{'status-problem': checkStatusProblem(app)}")
                     | {{ app.name }}
 
-                td.status(data-title="'Status'", sortable="'state'", filter="{ 'state': 'select' }", filter-data='ctrl.appStates()')
+                td.status(data-title="'Status'", sortable="'state'", filter="{ 'state': 'select' }", filter-data='appStates()')
                     d-state(state="app.state")
 
                 td(data-title="'Instances'", sortable="'running_instances'")
@@ -42,9 +42,9 @@ h3
                 td
                     a(ui-sref='app.application({ appId: app.guid })') See details &raquo;
 
-        div(ng-if='!ctrl.applications.length')
+        div(ng-if='!applications.length')
             | You have no applications
 
-    .panel.panel-danger(ng-if='ctrl.state === ctrl.states.ERROR')
+    .panel.panel-danger(ng-if='state.isError()')
         .panel-body
             | Error while downloading application list

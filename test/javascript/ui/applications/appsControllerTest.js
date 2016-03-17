@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/*jshint -W030 */
 describe("Unit: AppsController", function () {
 
     var controller,
@@ -20,6 +21,7 @@ describe("Unit: AppsController", function () {
         applicationResource,
         atkInstanceResource,
         $rootScope,
+        $scope,
         $q,
         _targetProvider,
         space = { guid: 's1', name: 'space1'},
@@ -30,31 +32,19 @@ describe("Unit: AppsController", function () {
     beforeEach(inject(function ($controller, TestHelpers, _$rootScope_, _$q_) {
         $rootScope = _$rootScope_;
         $q = _$q_;
+        $scope = $rootScope.$new();
         _targetProvider = (new TestHelpers()).stubTargetProvider({});
         _targetProvider.space = space;
         _targetProvider.org = org;
 
         applicationResource = {
-            getAll: function() {
-                var deferred = $q.defer();
-                deferred.resolve();
-                return deferred.promise;
-            },
-            withErrorMessage: function() {
-                return this;
-            }
-        };
-        atkInstanceResource = {
             getAll: sinon.stub().returns($q.defer().promise),
-            withErrorMessage: function() {
-                return this;
-            }
+            withErrorMessage: sinon.stub().returnsThis()
         };
-
         createController = function () {
             controller = $controller('ApplicationsController', {
                 targetProvider: _targetProvider,
-                $scope: $rootScope.$new(),
+                $scope: $scope,
                 AtkInstanceResource: atkInstanceResource,
                 ApplicationResource: applicationResource
             });
@@ -69,9 +59,9 @@ describe("Unit: AppsController", function () {
 
     it('init, set state pending and request for applications', function () {
         createController();
-
-        expect(controller.state, 'controller state').to.be.equal(controller.states.PENDING);
-        expect(atkInstanceResource.getAll.calledOnce, 'getAtkInstances called').to.be.true;
+console.log($scope.state);
+        expect($scope.state.isPending(), 'pending').to.be.true;
+        expect(applicationResource.getAll).to.be.calledOnce;
     });
 
     it('init, empty space, do not request for applications', function () {
@@ -79,42 +69,24 @@ describe("Unit: AppsController", function () {
 
         createController();
 
-        expect(applicationResource.getAll.called).to.be.not.ok;
+        expect(applicationResource.getAll).to.be.not.called;
     });
 
     it('on targetChanged, get applications', function () {
         createController();
         $rootScope.$broadcast('targetChanged');
 
-        expect(atkInstanceResource.getAll.called).to.be.true;
-    });
-
-
-    it('getAtkInstance error, set state error', function () {
-        var deferred = $q.defer();
-        deferred.reject();
-        atkInstanceResource.getAll = sinon.stub().returns(deferred.promise);
-        createController();
-        $rootScope.$digest();
-
-        expect(atkInstanceResource.calledOnce).to.be.equal.true;
-        expect(controller.state, 'state').to.be.equal(controller.states.ERROR);
+        expect(applicationResource.getAll).to.be.called;
     });
 
     it('getApplication error, set state error', function () {
         var deferred = $q.defer();
-        atkInstanceResource.getAll = function() {
-            var deferred = $q.defer();
-            deferred.reject();
-            return deferred.promise;
-        };
         applicationResource.getAll = sinon.stub().returns(deferred.promise);
         deferred.reject();
         createController();
         $rootScope.$digest();
 
-        expect(atkInstanceResource.calledOnce).to.be.equal.true;
-        expect(controller.state, 'state').to.be.equal(controller.states.ERROR);
+        expect($scope.state.isError(), 'error state').to.be.true;
     });
 
 });
