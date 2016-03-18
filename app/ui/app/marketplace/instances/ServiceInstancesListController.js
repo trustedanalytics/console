@@ -17,7 +17,7 @@
     "use strict";
 
     App.controller('ServiceInstancesListController', function ($scope, State, targetProvider, ServiceInstancesResource,
-        ServiceKeysResource, NotificationService, jsonFilter, blobFilter) {
+        ServiceKeysResource, NotificationService, jsonFilter, blobFilter, ServiceInstancesMapper) {
 
         var state = new State().setPending();
         $scope.state = state;
@@ -32,12 +32,12 @@
 
         $scope.addExport = function (key) {
             $scope.exports.push(key);
-            refreshVcapConfiguraton();
+            refreshVcapConfiguraton(ServiceInstancesMapper);
         };
 
         $scope.removeExport = function (key) {
             $scope.exports = _.without($scope.exports, key);
-            refreshVcapConfiguraton();
+            refreshVcapConfiguraton(ServiceInstancesMapper);
         };
 
         $scope.hasKeys = function(instance) {
@@ -96,8 +96,8 @@
             }
         }
 
-        function refreshVcapConfiguraton() {
-            $scope.vcap = getVcapConfiguration($scope.services, $scope.exports);
+        function refreshVcapConfiguraton(ServiceInstancesMapper) {
+            $scope.vcap = ServiceInstancesMapper.getVcapConfiguration($scope.services, $scope.exports);
             $scope.file = blobFilter(jsonFilter($scope.vcap));
         }
     });
@@ -108,31 +108,6 @@
             var merged = _.extend({}, service, extra);
             return merged;
         });
-    }
-
-    function getVcapConfiguration(services, keys) {
-        return _.reduce(_.map(keys, _.partial(getVcapForKey, services)), function (memo, vcap) {
-            if (memo[vcap.label]) {
-                memo[vcap.label].push(vcap);
-            } else {
-                memo[vcap.label] = [vcap];
-            }
-            return memo;
-        }, {});
-    }
-
-    function getVcapForKey(services, key) {
-        var service = _.find(services, function (s) {
-            return _.findWhere(s.instances, {guid: key.service_instance_guid});
-        });
-        var instance = _.findWhere(service.instances, {guid: key.service_instance_guid});
-        return {
-            label: service.label,
-            name: instance.name,
-            plan: instance.service_plan.name,
-            tags: service.tags,
-            credentials: key.credentials
-        };
     }
 
     function succeededInstances(services) {

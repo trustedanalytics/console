@@ -177,7 +177,7 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
             title: 'GearPump App Deploy',
             controller: 'GearPumpAppDeployController',
             templateUrl: getViewPath('tools/gearpumpappdeploy.html'),
-            resolve: LazyLoadProvider.load(['file-upload'])
+            resolve: LazyLoadProvider.load(['ng-file-upload'])
         })
         .state('app.datacatalog', {
             url: '/datacatalog',

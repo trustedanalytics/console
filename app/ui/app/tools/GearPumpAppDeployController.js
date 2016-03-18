@@ -16,54 +16,140 @@
 (function () {
     "use strict";
 
-    App.controller('GearPumpAppDeployController', function ($scope, $window, $location, targetProvider,
-        FileUploader, State, NotificationService, GearPumpAppDeployResource, ToolsInstanceResource) {
+    App.controller('GearPumpAppDeployController', function ($scope, $window, $location, targetProvider, Upload, State, ServiceInstancesMapper,
+        NotificationService, GearPumpAppDeployResource, ToolsInstanceResource, ServiceKeysResource, ServiceInstancesResource) {
 
-        $scope.state = new State();
+        var GP_SERVICES_WHITE_LIST = ['hbase', 'kafka', 'zookeeper', 'hdfs'];
+
+        var appArguments = {};
+
+        $scope.uploadFormData = {};
+        $scope.uploadData = {};
+        $scope.usersParameters = [];
+        $scope.state = new State().setPending();
+        $scope.instancesState = new State().setPending();
         $scope.gpInstanceName = $location.path().split('/').pop();
 
         getGPInstanceCredentialsPromise(ToolsInstanceResource, targetProvider.getOrganization().guid, targetProvider.getSpace().guid, $scope.gpInstanceName)
             .then(function(creds) {
-                if(!creds) {
-                    $scope.state.setError();
-                } else {
+                if(creds) {
                     $scope.gpUiData = creds;
                     $scope.uiInstanceName = creds.hostname.split(".").slice(0, 1)[0];
                     $scope.state.setLoaded();
+                } else {
+                    $scope.state.setError();
                 }
             });
 
-        $scope.uploader = createFileUploader(FileUploader, function() {
-            return $scope.uiInstanceName;
-        }, function() {
-            return $scope.uploadFormData ? $scope.uploadFormData.appArguments : "";
+        getServicesInstancesPromise(ServiceInstancesResource, targetProvider)
+            .then(function success(data) {
+                $scope.services = filterServices(data, GP_SERVICES_WHITE_LIST);
+                $scope.instancesState.setLoaded();
+            });
+
+        $scope.$watchCollection('usersParameters', function () {
+            $scope.usersArgumentsChange();
         });
+
+        $scope.instanceCheckboxChange = function (instanceGuid, serviceLabel, instanceName) {
+            if($scope.uploadFormData.instances[instanceGuid]) {
+                $scope.instancesState.setPending();
+                $scope.setAppArguments(instanceGuid, serviceLabel)
+                    .then(function success() {
+                        $scope.uploadFormData.appResultantArguments = angular.toJson(appArguments);
+                    })
+                    .catch(function() {
+                        $scope.uploadFormData.instances[instanceGuid] = false;
+                    })
+                    .finally(function() {
+                        $scope.instancesState.setLoaded();
+                    });
+            } else {
+                appArguments[serviceLabel] = _.filter(appArguments[serviceLabel], function(value) {
+                    return value.name !== instanceName;
+                });
+                if(_.isEmpty(appArguments[serviceLabel])) {
+                    delete appArguments[serviceLabel];
+                }
+                $scope.uploadFormData.appResultantArguments = angular.toJson(appArguments);
+            }
+        };
+
+        $scope.setAppArguments = function (instanceGuid, serviceLabel){
+            var keyName = 'gp-app-creds-' + $scope.gpInstanceName + '-' + Math.floor(Math.random()*100);
+            return ServiceKeysResource
+                .withErrorMessage('Adding new service key failed. Check that the service broker supports that feature.')
+                .addKey(keyName, instanceGuid)
+                .then(function() {
+                    return getServicesInstancesPromise(ServiceInstancesResource, targetProvider);
+                })
+                .then(function success(data) {
+                    $scope.services = filterServices(data, GP_SERVICES_WHITE_LIST);
+                    var key = findKeyForInstance(instanceGuid, keyName, data);
+
+                    if(!appArguments[serviceLabel]) {
+                        appArguments[serviceLabel] = [];
+                    }
+                    appArguments[serviceLabel].push(ServiceInstancesMapper.getVcapForKey($scope.services, key));
+
+                    return ServiceKeysResource
+                        .withErrorMessage('Removing service key failed')
+                        .deleteKey(key.guid);
+                });
+        };
+
+        $scope.usersArgumentsChange = function () {
+            appArguments.usersArgs = _.chain($scope.usersParameters)
+                .filter(function (parameter) {
+                    return parameter.key;
+                })
+                .map(function(element) {
+                    return [element.key, element.value];
+                })
+                .object()
+                .value();
+
+            if(angular.equals(appArguments.usersArgs, {})) {
+                delete appArguments.usersArgs;
+            }
+            $scope.uploadFormData.appResultantArguments = angular.toJson(appArguments);
+        };
+
+        $scope.addExtraParam = function () {
+            $scope.usersParameters.push({key:null, value:null});
+        };
+
+        $scope.removeExtraParam = function (param) {
+            $scope.usersParameters = _.without($scope.usersParameters, param);
+        };
 
         $scope.deployGPApp = function() {
             $scope.state.setPending();
             getGPTokenPromise(GearPumpAppDeployResource, $scope.uiInstanceName, $scope.gpUiData.login, $scope.gpUiData.password)
                 .then(function() {
-                    $scope.uploader.queue[0].upload();
-                    return NotificationService.progress('progress-upload', {uploader: $scope.uploader});
-                })
-                .then(function() {
-                    if($scope.uploader.spawnedAppId) {
-                        $window.open('https://' + $scope.gpUiData.hostname + '/#/apps/streamingapp/' + $scope.uploader.spawnedAppId, '_blank');
+                    var uriArguments;
+                    if ($scope.uploadFormData && $scope.uploadFormData.appResultantArguments) {
+                        uriArguments = encodeURI($scope.uploadFormData.appResultantArguments);
                     }
+
+                    var uploader = uploadFiles(Upload, $scope.uploadFormData.jarFile, $scope.uploadFormData.configFile,
+                        $scope.uiInstanceName, uriArguments);
+
+                    return NotificationService.progress('progress-upload', uploader);
+                }).finally(function() {
                     $scope.clearForm();
                     $scope.state.setLoaded();
-                }).catch(function onError() {
-                    $scope.state.setError();
                 });
         };
 
         $scope.clearForm = function() {
             $scope.uploadFormData.filename = '';
             angular.element("input[name='upfile']").val(null);
-            $scope.uploadFormData.appArguments = '';
-            $scope.uploader.errorMessage = '';
-            $scope.uploader.spawnedAppId = '';
-            $scope.uploader.clearQueue();
+            $scope.uploadFormData.appResultantArguments = '';
+            $scope.uploadFormData.usersArguments = '';
+            $scope.uploadFormData.instances = {};
+            $scope.usersParameters = [];
+            appArguments = {};
         };
     });
 
@@ -80,38 +166,54 @@
         return GearPumpAppDeployResource.getGPToken(gpInstance, username, password);
     }
 
-    function createFileUploader(FileUploader, getUiInstance, urlArguments) {
-        var MEGA_BYTE_SIZE = 1024 * 1024;
+    function uploadFiles(Upload, jarFile, configFile, uiInstance, urlArguments) {
         var urlBase = ["/rest/gearpump/", "/api/v1.0/master/submitapp", "?args="];
+        var uploaderData = {};
 
-        return new FileUploader({
-            alias: "jar",
-            queueLimit: 2,
-            onBeforeUploadItem: function (item) {
-                item.formData.push(Object({}));
-                item.timeStart = Date.now();
-                item.prevProgress = 0;
-                item.uploadedSize = 0;
-                item.url = urlBase[0] + getUiInstance() + urlBase[1] + (urlArguments() ? urlBase[2] + urlArguments() : "");
-            },
-            onProgressItem: function (item, progress) {
-                var time = Date.now() - item.timeStart;
-                item.uploadedSize = progress * item.file.size / 100;
-                var speed = (item.uploadedSize / MEGA_BYTE_SIZE) / (time / 1000);
-                item.speed = speed.toFixed(1);
-                item.timeLeft = ((item.file.size - item.uploadedSize) / MEGA_BYTE_SIZE) / speed;
-
-                if (_.isNaN(item.timeLeft) || !_.isFinite(item.timeLeft)) {
-                    item.timeLeft = 0;
-                    item.speed = null;
-                }
-            },
-            onSuccessItem: function (item, response) {
-                this.spawnedAppId = response.appId;
-            },
-            onErrorItem: function (item, response) {
-                this.errorMessage = response;
+        Upload.upload({
+            url: urlBase[0] + uiInstance + urlBase[1] + (urlArguments ? urlBase[2] + urlArguments : ""),
+            data: {
+                jar: jarFile,
+                conf: configFile
             }
+        })
+        .then(function (response) {
+            uploaderData.response = response.data;
+            uploaderData.status = response.status;
+        }, function (response) {
+            uploaderData.error = response.status + ': ' + response.data;
+        }, function (evt) {
+            uploaderData.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
         });
+
+        return uploaderData;
+    }
+
+    function getServicesInstancesPromise(ServiceInstancesResource, targetProvider) {
+        if (targetProvider.getSpace().guid) {
+            return ServiceInstancesResource
+                .withErrorMessage('Error loading service keys')
+                .getSummary(targetProvider.getSpace().guid, true);
+        }
+    }
+
+    function filterServices(data, whiteList) {
+        var mapped = _.map(data, function (service) {
+            var extra = JSON.parse(service.extra || '{}');
+            return _.extend({}, service, extra);
+        });
+
+        return _.filter(mapped, function (service) {
+            return _.contains(whiteList, service.label);
+        });
+    }
+
+    function findKeyForInstance(instanceGuid, keyName, data) {
+        var instance = _.chain(data)
+            .pluck('instances')
+            .flatten(true)
+            .findWhere({guid: instanceGuid})
+            .value();
+        return _.findWhere(instance.service_keys, {name: keyName});
     }
 }());

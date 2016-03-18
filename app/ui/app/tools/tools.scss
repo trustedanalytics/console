@@ -154,3 +154,25 @@
     white-space: normal;
   }
 }
+
+.gearpumpappdeploy {
+  .extra-params {
+    .param {
+      margin: 5px 0;
+    }
+
+    .param .key, .param .value {
+      display: inline-block;
+      margin-right: 5px;
+    }
+
+    .param .key {
+      width: 200px;
+    }
+
+    .param .value {
+      width: 300px;
+      margin-left: 5px;
+    }
+  }
+}

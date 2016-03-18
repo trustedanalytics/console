@@ -21,46 +21,71 @@
 
     div(ng-show='state.isLoaded()')
         .panel.tabcontent
-            h4 Application will be launched immediately, after the JAR file is uploaded.
-            hr
             form.form-horizontal(name="uploadForm" data-ng-submit='deployGPApp()')
+                h4 Upload files
                 .form-group
-                    label.col-sm-2.control-label(for='link') Application JAR
+                    label.col-sm-2.control-label Application JAR
                     .col-sm-10
-                        input.btn.btn-primary(type='file', nv-file-select, uploader="uploader", name='upfile', required,
-                        data-ng-model='uploadFormData.filename', file-valid, accept=".jar")
+                        input.btn.btn-primary(type='file', nv-file-select, ngf-select, name='upfile', required,
+                        data-ng-model='uploadFormData.jarFile', file-valid, accept=".jar")
                 .form-group
-                    label.col-sm-2.control-label(for='link') Arguments
+                    label.col-sm-2.control-label Config file
                     .col-sm-10
-                        input#link.form-control(type='text', name="arguments", placeholder='place arguments...',
-                        data-ng-model='uploadFormData.appArguments')
+                        input.btn.btn-primary(type='file', nv-file-select, ngf-select, name='upfile',
+                        data-ng-model='uploadFormData.configFile', file-valid, accept=".conf")
+
+                h4 Send instances' credentials to application
+                spinner(ng-show='instancesState.isPending()')
+                .form-group(ng-show='instancesState.isLoaded()', ng-repeat="service in services | orderBy: 'displayName || label'")
+                    label.col-sm-2.control-label {{ service.displayName || service.label }}
+                    .col-sm-10
+                        .checkbox.c-checkbox(ng-repeat="instance in service.instances | orderBy: 'name'")
+                            label
+                                input#public(type="checkbox",
+                                ng-model="uploadFormData.instances[instance.guid]",
+                                ng-change="instanceCheckboxChange(instance.guid, service.label, instance.name)",
+                                value="{{ instance.guid }}")
+                                span.fa.fa-check
+                                | {{ instance.name }}
+                h4 Parameters
+                .form-group
+                    label.col-sm-2.control-label Extra parameters
+                    .col-sm-10
+                        .extra-params
+                            .param(ng-repeat="param in usersParameters")
+                                input.form-control.key(ng-model="param.key", placeholder="key", ng-change="usersArgumentsChange()")
+                                | :
+                                input.form-control.value(ng-model="param.value", placeholder="value", ng-change="usersArgumentsChange()")
+                                a(ng-click="removeExtraParam(param)") Remove
+                            a(ng-click="addExtraParam()") + Add an extra parameter
+                .form-group
+                    label.col-sm-2.control-label Resultant arguments
+                    .col-sm-10
+                        pre
+                            code
+                                | {{ uploadFormData.appResultantArguments }}
                 .form-group
                     .col-sm-offset-2.col-sm-10
                         input.btn.btn-primary(type='submit', value='Deploy', ng-disabled="uploadForm.$invalid")
+            hr
+            | Application will be launched immediately, after the JAR file is uploaded.
 
     div(ng-show='state.isError()')
         .panel.panel-danger
             .panel-body
-                | GearPump instance with name {{ gpInstanceName }} does not exist.
+                | The Error occurred. GearPump instance with name {{ gpInstanceName }} may not exist.
 
 script(type="text/ng-template", id="progress-upload")
     .ngdialog-message.clearfix
-        div(ng-repeat="file in data.uploader.queue")
-            div(ng-if="file.isUploading")
-                div
-                    p.text-center
-                        | Uploading file
-                    .progress
-                        .progress-bar(ng-style="{ 'width': file.progress + '%' }")
-                    div
-                        span.col-sm-7.text-left
-                            | Uploading speed: {{ file.speed ? file.speed : '-' }} MB/s
-                        span.col-sm-5.text-right
-                            | Time left: {{ file.timeLeft ? (file.timeLeft | presentTimeFilter | date:'HH:mm:ss') : '-' }}
-                button.btn.btn-warning.pull-right(type='button', ng-click="file.cancel(); ok()") Cancel
-            p(ng-if="file.isSuccess")
-                | Upload finished successfully!
-            p(ng-if="file.isError")
-                | Upload finished with error!
+        div(ng-if="!data.response && !data.error")
+            p.text-center
+                | Uploading file
+            .progress
+                .progress-bar(ng-style="{ 'width': data.progress + '%' }")
+        div(ng-if="data.response && !data.error")
+            p Upload finished successfully!
+        div(ng-if="data.error")
+            p Upload finished with error:
+            div.list {{ data.error }}
 
-        button.btn.btn-default(ng-if="!data.uploader.isUploading" type='button', ng-click="ok()") OK
+        button.btn.btn-default(ng-if="data.response || data.error" type='button', ng-click="ok()") OK

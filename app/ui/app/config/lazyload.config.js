@@ -63,6 +63,9 @@
             }, {
                 name: 'file-upload',
                 files: ['vendor/angular-file-upload/dist/angular-file-upload.min.js']
+            }, {
+                name: 'ng-file-upload',
+                files: ['vendor/ng-file-upload/ng-file-upload.min.js']
             }
         ]
     });
