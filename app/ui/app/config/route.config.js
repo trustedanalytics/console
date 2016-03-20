@@ -30,7 +30,11 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
             url: '/app',
             abstract: true,
             templateUrl: getViewPath('main/app.html'),
-            resolve: LazyLoadProvider.load(['icons'])
+            resolve: _.extend(LazyLoadProvider.load(['icons']), {
+                orgs: /*@ngInject*/ function (targetProvider) {
+                    return targetProvider.refresh();
+                }
+            })
         })
         .state('app.platformdashboard', {
             url: '/platformdashboard',

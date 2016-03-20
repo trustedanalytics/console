@@ -19,8 +19,8 @@
     App.factory('ExternalToolResource', function (Restangular) {
         var tools = Restangular.service('external_tools');
 
-        tools.getExternalTools = function (space) {
-            return this.one().customGET("", {space: space});
+        tools.getExternalTools = function (org) {
+            return this.one().customGET("", {org: org});
         };
 
         return tools;

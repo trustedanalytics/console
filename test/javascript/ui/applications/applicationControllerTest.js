@@ -29,6 +29,10 @@ describe("Unit: ApplicationController", function () {
 
     beforeEach(module('app'));
 
+    beforeEach(inject(function(targetProvider) {
+       targetProvider.refresh = sinon.stub().returns([]);
+    }));
+
     beforeEach(inject(function ($controller, ApplicationResource,
                                 ServiceInstanceResource, $routeParams,
                                 State, _$q_, _$rootScope_, _$state_) {

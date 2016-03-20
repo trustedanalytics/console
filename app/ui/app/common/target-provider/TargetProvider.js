@@ -57,6 +57,7 @@
                     if (orgChanged || spaceChanged) {
                         $rootScope.$broadcast('targetChanged');
                     }
+                    empty = false;
                     return organizations;
                 });
         };
