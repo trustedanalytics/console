@@ -17,6 +17,7 @@
 
 @import "../../../../bower_components/angularjs-toaster/toaster";
 @import "../../../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap";
+@import "../../../../bower_components/sass-flex-mixin/_flexbox";
 
 @import "_vars";
 @import "main/main";
@@ -38,6 +39,11 @@
 
 @import "themes/intel/intel-theme";
 
+@media screen and (max-width: 768px) {
+  .page-box {
+    flex-direction: column;
+  }
+}
 
 d-target-selector > div {
   display: inline-block;

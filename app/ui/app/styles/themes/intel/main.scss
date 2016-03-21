@@ -19,11 +19,11 @@ body {
   background-color: $body-background-color;
 }
 
-.wrapper > menu {
+.wrapper .main-content > nav {
   background-color: $sidebar-bg;
 }
 
-.wrapper > footer {
+.wrapper .main-content > footer {
   border-top: $footer-border-thickness solid $footer-border-color;
 }
 

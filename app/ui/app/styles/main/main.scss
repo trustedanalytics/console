@@ -26,70 +26,71 @@ a {
 
 .wrapper {
   position: relative;
-  min-height: 100%;
+  @include flexbox;
+  @include flex-direction(column);
+  height: 100vh;
   overflow-x: hidden;
 
-  > menu {
-    position: fixed;
-    top: $header-height;
-    left: 0;
-    bottom: 0;
-    width: $menu-width;
-    padding: 0;
-    margin: 0;
-    z-index: 9999;
-
-    > .nav-floating {
-      margin-left: $menu-collapsed-width;
-      z-index: 1000;
-      display: block;
-      height: auto !important;
-    }
+  footer,
+  header {
+    @include flex-shrink(0);
   }
 
-  > header {
-    position: fixed;
-    width: 100%;
-    z-index: 100;
-  }
+  .page-box {
+    @include flexbox;
+    @include flex(1 0 auto);
 
-  > section {
-    margin: $header-height 0 $footer-height $menu-width;
-  }
+    .main-content {
+      @include flexbox;
+      @include flex-direction(column);
+      @include flex(1 1 auto);
 
-  > footer {
-    position: absolute;
-    left: $menu-width;
-    right: 0;
-    bottom: 0;
-    height: $footer-height;
-    line-height: $footer-height - $footer-border-thickness;
-    padding: 0 20px;
+      > section {
+        @include flex(1 0 auto);
 
-    > p {
-      margin: 0;
-      vertical-align: middle;
-    }
+        .content-wrapper {
+          padding: $content-padding;
 
-    > a {
-      color: #ffffff;
-      padding-left: 25px;
-    }
-  }
+          h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
 
-  .content-wrapper {
-    padding: $content-padding;
+            > small {
+              display: block;
+              font-size: 12px;
+            }
+          }
+        }
+      }
 
-    h3 {
-      margin-top: 0;
-      margin-bottom: 20px;
+      > nav {
+        width: $menu-width;
+        padding: 0;
+        margin: 0;
 
-      > small {
-        display: block;
-        font-size: 12px;
+        > .nav-floating {
+          margin-left: $menu-collapsed-width;
+        }
+      }
+
+      > footer {
+        line-height: $footer-height - $footer-border-thickness;
+        padding: 0 20px;
+
+        > p {
+          margin: 0;
+          vertical-align: middle;
+        }
+
+        > a {
+          color: #ffffff;
+          padding-left: 25px;
+        }
       }
     }
   }
+
+
 }
 
 .menu-collapsed {

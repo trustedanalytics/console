@@ -16,31 +16,30 @@
 include ./header.jade
 include ./cookiesalert.jade
 
-include ./footer.jade
+.page-box
+    include ./sidebar.jade
+    .main-content
+        section
+          toaster-container(toaster-options="infoConfig")
+          toaster-container.full-width(toaster-options="errorConfig")
+          script#generic-error-template(type="text/ng-template")
+            .generic-error
+              .toast-title(ng-if='toaster.data.status')
+                | {{ toaster.data.error }} ({{ toaster.data.status }})
+              .toast-title(ng-if='!toaster.data.status')
+                | Error occured
+              .toast-message
+                span(ng-if='toaster.data.customMessage')
+                  | {{ toaster.data.customMessage }}
+                span(ng-if='toaster.data.customMessage && toaster.data.message')
+                  = ': '
+                span(ng-if='toaster.data.message')
+                  | {{ toaster.data.message }}
+              .toast-details(ng-if='toaster.data.timestamp')
+                | ID: {{ toaster.data.timestamp }}
 
-include ./sidebar.jade
-
-section
-
-  toaster-container(toaster-options="infoConfig")
-  toaster-container.full-width(toaster-options="errorConfig")
-  script#generic-error-template(type="text/ng-template")
-    .generic-error
-      .toast-title(ng-if='toaster.data.status')
-        | {{ toaster.data.error }} ({{ toaster.data.status }})
-      .toast-title(ng-if='!toaster.data.status')
-        | Error occured
-      .toast-message
-        span(ng-if='toaster.data.customMessage')
-          | {{ toaster.data.customMessage }}
-        span(ng-if='toaster.data.customMessage && toaster.data.message')
-          = ': '
-        span(ng-if='toaster.data.message')
-          | {{ toaster.data.message }}
-      .toast-details(ng-if='toaster.data.timestamp')
-        | ID: {{ toaster.data.timestamp }}
-
-  .content-wrapper(ui-view="")
+          .content-wrapper(ui-view="")
+        include ./footer.jade
 
 script(type="text/ng-template", id="confirm-logout")
     .ngdialog-message.clearfix
