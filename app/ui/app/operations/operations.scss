@@ -156,3 +156,31 @@ $dashboard-red: #DD1031;
   }
 
 }
+
+.platfromtests {
+
+  .table thead tr div div select:hover {
+    option {
+      max-width: 100%;
+    }
+  }
+
+  .ng-table-pager {
+    text-align: center;
+  }
+
+  .ng-table-pagination:empty {
+    margin: 0;
+  }
+
+  .result-title {
+    padding-left: 15px;
+    margin-left: 10px;
+  }
+
+  ul {
+    list-style-type: none;
+    padding-left: 10px;
+  }
+
+}

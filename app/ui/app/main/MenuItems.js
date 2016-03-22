@@ -22,6 +22,10 @@
                 {
                     "text": "Platform Dashboard",
                     "sref": "app.platformdashboard"
+                },
+                {
+                    "text": "Platform Tests",
+                    "sref": "app.platformtests"
                 }
             ],
             "access": ["admin"]

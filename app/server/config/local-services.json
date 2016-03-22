@@ -12,5 +12,6 @@
   "latest-events-service": "http://localhost:9993",
   "hdfs-uploader": "http://localhost:9998",
   "platform-operations": "http://localhost:9997",
-  "model-catalog": "http://localhost:9994"
+  "model-catalog": "http://localhost:9994",
+  "platform-tests": "http://localhost:5500"
 }

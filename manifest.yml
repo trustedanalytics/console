@@ -24,6 +24,7 @@ applications:
       - h2o-model-publisher
       - platform-snapshot
       - workflow-scheduler
+      - platform-tests
     env:
       NPM_CONFIG_PRODUCTION: true
       VERSION: dev

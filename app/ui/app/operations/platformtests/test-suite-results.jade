@@ -1,0 +1,45 @@
+//
+   Copyright (c) 2015 Intel Corporation
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+//-
+spinner(ng-show='state.isPending()')
+button.btn.btn-primary.fa-refresh.pull-right(ng-click='updateResults()') Refresh
+div(ng-show='state.isLoaded()')
+   h3
+      d-test-state(state="results.state")
+      span.result-title
+         | ID: {{results.suiteId}}
+   uib-progressbar(value="results.progress")
+      | {{results.testsFinished}} / {{results.testsAll}}
+   uib-accordion(close-others='false')
+      uib-accordion-group(ng-repeat='test in results.tests' is-open="status.open")
+         uib-accordion-heading
+            d-test-state(state="test.result")
+            span.result-title
+               | {{test.name}}
+            i.pull-right.glyphicon(ng-class="{'glyphicon-chevron-down' : status.open, 'glyphicon-chevron-right': !status.open}")
+         p
+            | Id: {{test.id}}
+         p
+            | Order: {{test.order}}
+         p
+            | Components:
+            ul
+               li(ng-repeat='component in test.components')
+                  | {{component}}
+         p(ng-show='test.stacktrace')
+            | Stacktrace:
+            p
+               code
+                  | {{test.stacktrace}}
