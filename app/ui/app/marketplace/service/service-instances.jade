@@ -32,6 +32,7 @@
                 th Name
                 th Plan
                 th Apps bound
+                th State
                 th
                 th Delete
         tbody
@@ -40,6 +41,7 @@
                 td {{ instance.service_plan.name }}
                 td
                     a.app-bound(ng-repeat='app in instance.bound_apps', ui-sref='app.application({ appId: app.guid })') {{ app.name }}
+                td(class="state-{{instance.last_operation.state}}")  {{instance.last_operation.state}}
                 td
                     a(ng-if='instance.dashboard_url', ng-href='{{ instance.dashboard_url }}', target="_blank") Go to dashboard &raquo;
                 td

@@ -190,9 +190,12 @@ describe("Unit: ServiceInstancesController", function () {
 
     function getServiceInstances() {
         return [
-            {"guid":"3a4eb3e4-2654-4b47-8430-3f808ad171e0","name":"test1","service_plan":"shared","bounded_apps":0},
-            {"guid":"36d4d970-bbcf-456e-ac35-f00b81a33f16","name":"security-codes-db","service_plan":"free","bounded_apps":2},
-            {"guid":"68ec22a2-56fe-4aa9-b591-9c694f194721","name":"pancho-kafka","service_plan":"shared","bounded_apps":3}
+            {"guid":"3a4eb3e4-2654-4b47-8430-3f808ad171e0","name":"test1","service_plan":"shared","bounded_apps":0,
+                last_operation: {state: "succeded"}},
+            {"guid":"36d4d970-bbcf-456e-ac35-f00b81a33f16","name":"security-codes-db","service_plan":"free","bounded_apps":2,
+                last_operation: {state: "succeded"}},
+            {"guid":"68ec22a2-56fe-4aa9-b591-9c694f194721","name":"pancho-kafka","service_plan":"shared","bounded_apps":3,
+                last_operation: {state: "succeded"}}
         ];
     }
 });

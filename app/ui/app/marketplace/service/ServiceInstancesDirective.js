@@ -105,11 +105,18 @@
             .withErrorMessage('Failed to retrieve service instances')
             .getAllByType(space.guid, serviceId)
             .then(function (instances) {
-                self.instances = instances;
+                self.instances =_.each(instances, function(instance) {
+                    instance.last_operation.state = normalizeLastOperationState(instance.last_operation.state);
+                });
                 self.instancesState.setLoaded();
             })
             .catch(function () {
                 self.instancesState.setError();
             });
     }
+
+    function normalizeLastOperationState(lastOperationState) {
+        return lastOperationState.replace(/\s+/g, '-').toLowerCase();
+    }
+
 }());

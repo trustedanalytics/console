@@ -28,7 +28,7 @@ h3
 
         a.btn.btn-primary.pull-right.turn-export-on(ng-hide='exportMode' ng-show='services.length' ng-click="exportMode = true") Export keys
         a.btn.btn-default.pull-right.turn-export-off(ng-show="exportMode" ng-click="exportMode = false") Cancel export
-        .service-item(ng-repeat="service in services | orderBy: 'displayName || label'")
+        .service-item(ng-repeat="service in services | orderBy: 'displayName || label'" ng-if="service.instances.length")
             .img
                 img(ng-src='{{ service.imageUrl }}', alt='{{ service.name }}', ng-if='service.imageUrl')
                 .placeholder(ng-if='!service.imageUrl')

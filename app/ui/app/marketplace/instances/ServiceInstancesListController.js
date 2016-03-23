@@ -88,7 +88,7 @@
                     .withErrorMessage('Error loading service keys')
                     .getSummary(targetProvider.getSpace().guid, true)
                     .then(function success(data) {
-                        $scope.services = mergeService(data);
+                        $scope.services = succeededInstances(mergeService(data));
                     })
                     .finally(function () {
                         state.setLoaded();
@@ -133,6 +133,21 @@
             tags: service.tags,
             credentials: key.credentials
         };
+    }
+
+    function succeededInstances(services) {
+         var result = _.each(services, function(service) {
+            service.instances = _.filter(service.instances, function(si) {
+                return normalizeLastOperationState(si.last_operation.state) === "succeeded";
+            });
+        });
+        return _.filter(result, function(service) {
+            return !_.isEmpty(service.instances);
+        });
+    }
+
+    function normalizeLastOperationState(lastOperationState) {
+        return lastOperationState.replace(/\s+/g, '-').toLowerCase();
     }
 
 }());

@@ -107,7 +107,7 @@ describe("Unit: ServiceInstancesListController", function () {
         createController();
 
         expect(scope.state.isLoaded(), 'loaded').to.be.true;
-        expect(scope.services.length).to.be.equal(services.length);
+        expect(scope.services.length).to.be.equal(2);
         expect(scope.services[0].like).to.be.equal('bananas');
         expect(scope.services[0].label).to.be.equal('service1-extra');
         expect(scope.services[0].tags.length).to.be.equal(2);
@@ -247,10 +247,28 @@ describe("Unit: ServiceInstancesListController", function () {
                     service_keys: getSampleKeys(),
                     service_plan: {
                         name: 'free'
-                    }
+                    },
+                    last_operation: {state: "succeeded"}
                 }]
             }, {
+                guid: 's2',
                 label: 'service2',
+                tags: [
+                    't1', 't2', 't3'
+                ],
+                extra: '{"label":"service1-extra","tags":["t1-extra","t2-extra"],"like":"bananas"}',
+                instances: [{
+                    guid: 'i1',
+                    name: 'inst1',
+                    service_guid: 's1',
+                    service_keys: getSampleKeys(),
+                    service_plan: {
+                        name: 'free'
+                    },
+                    last_operation: {state: "succeeded"}
+                }]
+            }, {
+                label: 'service3',
                 tags: []
             }
         ];
