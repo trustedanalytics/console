@@ -32,5 +32,8 @@ header(ng-controller='HeaderController')
                     a(ng-click="onLogout()" href='/logout')
                         em.icon-lock-open
                         span Sign Out
+                li
+                    a(ui-sref='app.documentation')
+                        em.icon-question
 
             d-search(control="searchControl")

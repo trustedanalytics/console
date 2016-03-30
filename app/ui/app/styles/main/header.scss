@@ -84,7 +84,7 @@ $header-item-active: $header-item;
     display: -webkit-box;
     position: absolute;
     top: 0;
-    right: 0;
+    right: -3px;
     min-width: 450px;
     li:first-child {
       padding: 0 24px;

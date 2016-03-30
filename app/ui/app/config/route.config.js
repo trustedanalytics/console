@@ -330,6 +330,11 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
             url: '/loading',
             title: 'Loading data',
             templateUrl: getViewPath('main/loading.html')
+        })
+        .state('app.documentation', {
+            url: '/documentation',
+            title: 'Documentation',
+            templateUrl: getViewPath('documentation/documentation.html')
         });
 
     function getViewPath(path) {
