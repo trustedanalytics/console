@@ -303,9 +303,6 @@
       }
     }
     table.table tbody tr {
-      td.state-succeeded {
-        color: $color-green;
-      }
       td.state-in-progress {
         color: $color-orange;
       }
