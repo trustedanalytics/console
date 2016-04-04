@@ -102,6 +102,9 @@
                                 deferred.resolve(arguments);
                                 $scope.closeThisDialog();
                             };
+                            $scope.$on('uploadError', function() {
+                                $scope.ok();
+                            });
                         }]
                     });
                 return deferred.promise;

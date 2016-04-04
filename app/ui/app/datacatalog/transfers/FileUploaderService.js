@@ -17,7 +17,7 @@
 (function () {
     "use strict";
 
-    App.factory('FileUploaderService', function (targetProvider, FileUploader, NotificationService, ConfigResource) {
+    App.factory('FileUploaderService', function (targetProvider, FileUploader, NotificationService, ConfigResource, ngDialog, $rootScope) {
 
         var fileSizeLimit = null;
         var fileBlackListTypes = [];
@@ -76,6 +76,10 @@
                     },
                     onWhenAddingFileFailed: function (item, filter) {
                         NotificationService.error(filter.onError);
+                    },
+                    onErrorItem: function (item, response) {
+                        NotificationService.error(response.message);
+                        $rootScope.$broadcast('uploadError');
                     }
                 });
 
