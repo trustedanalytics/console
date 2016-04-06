@@ -13,8 +13,5 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 //-
-form.navbar-form(role='search' ng-submit="search(SearchCause.VALUE_CHANGED)" ng-class="{ open: control.opened }")
-    .form-group.has-feedback
-        input.form-control(type='text', placeholder="Search here...", ng-model='value')
-        .fa.fa-times(ng-click="hideSearch()" ng-show='control.opened')
-    button.hidden.btn.btn-default(type='submit')
+input.form-control(type="text" role="search" ng-model='value' ng-keyup="search($event)")
+em.icon-magnifier

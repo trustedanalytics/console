@@ -17,7 +17,7 @@
     "use strict";
 
     App.controller('DataSetsController', function ($scope, DataSetResource, $routeParams, ngTableParams, State,
-                                                   $cookies, PlatformContextProvider, SearchCause) {
+                                                   $cookies, PlatformContextProvider) { 
 
         var TOOL_KEY = 'datacatalog_tool',
             DEFAULT_TOOL = 'arcadia',
@@ -95,8 +95,8 @@
             $scope.pagination.numPerPage = Math.min($scope.pagination.total, $scope.pagination.pageSize);
         }
 
-        $scope.$on('searchChanged', function (eventName, _searchText, cause) {
-            if(_searchText !== searchText && cause !== SearchCause.URL_CHANGED) {
+        $scope.$on('searchChanged', function (eventName, _searchText) {
+            if(_searchText !== searchText) {
                 searchText = _searchText;
                 $scope.changePage(1);
             }

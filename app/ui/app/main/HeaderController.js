@@ -17,27 +17,10 @@
     "use strict";
 
     App.controller('HeaderController', function($scope, $rootScope, $state, UserProvider, targetProvider) {
-        $scope.searchControl = {};
-        $scope.searchEnabled = $state.current.searchEnabled;
 
         UserProvider.getUser(function(user){
             $scope.user = user;
         });
-
-        $scope.showSearch = function() {
-            $scope.searchControl.opened = true;
-        };
-
-        $rootScope.search = "";
-
-        $rootScope.$on('$stateChangeSuccess', function() {
-            $scope.searchEnabled = $state.current.searchEnabled;
-            $rootScope.search = "";
-        });
-
-        $scope.onSearch = function(){
-            $rootScope.$emit('searchChanged');
-        };
 
         $scope.onLogout = function(){
             targetProvider.clear();

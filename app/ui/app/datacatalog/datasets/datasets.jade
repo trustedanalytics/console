@@ -23,6 +23,10 @@ h3
         | Advanced search
     .body
         div
+            .heading Keyword
+            .searchbar
+                search-bar
+        div
             .heading Format
             a.format-filter(ng-click='format.value = null', ng-class='{selected: !format.value}')
                 div
@@ -65,13 +69,6 @@ h3
                             | Hue
 
 d-categories(on-category-change='onCategoryChange(category)', categories='categories')
-
-//.clearfix
-    .search
-        .input-group
-            span.input-group-addon.icon-search
-            form(data-ng-submit='search()')
-                input.form-control(type='text', placeholder='Search', data-ng-model='textToFind')
 
 spinner(ng-show='state.isPending()')
 

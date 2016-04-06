@@ -13,50 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 (function () {
     "use strict";
 
-    App.value('SearchCause', {
-        VALUE_CHANGED: 'VALUE_CHANGED',
-        URL_CHANGED: 'URL_CHANGED'
-    });
+    App.component('searchBar', {
+        templateUrl: 'app/common/search.html',
+        controller: function($scope) {
 
-    App.directive('dSearch', function () {
-        return {
-            scope: {
-                control: '='
-            },
-
-            controller: function ($scope, $element, $rootScope, $timeout, SearchCause) {
-                $scope.SearchCause = SearchCause;
-
-                var input = $element.find('input');
-
-                input.on('blur', function () {
-                    $scope.control.opened = false;
-                    $timeout(function () {
-                        $scope.$apply();
-                    });
-                });
-
-                $scope.search = function (cause) {
-                    $rootScope.$broadcast('searchChanged', $scope.value, cause);
-                };
-
-                $rootScope.$on('$stateChangeSuccess', function () {
-                    $scope.value = '';
-                    $scope.search(SearchCause.URL_CHANGED);
-                });
-
-                $scope.$watch('control', function (newValue) {
-                    if (newValue.opened) {
-                        input.focus();
-                    } else {
-                        input.blur();
-                    }
-                }, true);
-            },
-            templateUrl: 'app/common/search.html'
-        };
+            $scope.search = function (event) {
+                if(event.keyCode === 13) {
+                    $scope.$emit('searchChanged', $scope.value);
+                }
+            };
+        }
     });
 }());

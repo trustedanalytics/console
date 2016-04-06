@@ -23,9 +23,6 @@ header(ng-controller='HeaderController')
         .navbar-content
             ul.nav.navbar-nav.navbar-right
                 li {{user.email}}
-                li(ng-show="searchEnabled")
-                    a(ng-click="showSearch()")
-                        em.icon-magnifier
                 li
                     a(ui-sref='app.changepassword') Account Settings
                 li
@@ -35,5 +32,3 @@ header(ng-controller='HeaderController')
                 li
                     a(ui-sref='app.documentation')
                         em.icon-question
-
-            d-search(control="searchControl")

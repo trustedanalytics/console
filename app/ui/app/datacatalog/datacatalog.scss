@@ -186,11 +186,34 @@
         display: inline-block;
         margin: 10px 20px 0 0;
         vertical-align: top;
+
+        &:first-child {
+          display: block;
+          max-width: 400px;
+        }
       }
+
 
       .heading {
         font-weight: bold;
         font-size: 14px;
+      }
+
+      .searchbar {
+        width:100%;
+        search-bar {
+          display: block;
+          position: relative;
+          .form-control {
+            max-width: 400px;
+          }
+          em {
+            position: absolute;
+            right: 12px;
+            top: 25%;
+            font-size: 14px;
+          }
+        }
       }
 
       .dates {

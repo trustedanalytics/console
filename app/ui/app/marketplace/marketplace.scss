@@ -15,6 +15,23 @@
  */
 .marketplace {
 
+  .searchbar {
+    width: 100%;
+    padding: 10px;
+    search-bar {
+      position: relative;
+      width: 33.333%;
+      max-width: 400px;
+
+      em {
+        position: absolute;
+        right: 12px;
+        top: 25%;
+        font-size: 14px;
+      }
+    }
+  }
+
   .service-list {
     display: flex;
     flex-flow: row wrap;
