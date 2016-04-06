@@ -21,7 +21,6 @@ applications:
       - service-exposer
       - platform-operations
       - model-catalog
-      - platform-tests
     env:
       NPM_CONFIG_PRODUCTION: true
       VERSION: dev

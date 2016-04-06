@@ -96,9 +96,6 @@
   "path": "/rest/platform/summary",
   "name": "platform-operations"
 }, {
-  "path": "/rest/platform_tests/testsuites",
-  "name": "platform-tests"
-}, {
   "path": "/rest/v1/analytics/h2o/models/organizations",
   "name": "model-catalog"
 }, {
