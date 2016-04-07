@@ -112,7 +112,7 @@
             if(angular.equals(appArguments.usersArgs, {})) {
                 delete appArguments.usersArgs;
             }
-            $scope.uploadFormData.appResultantArguments = angular.toJson(appArguments);
+            $scope.uploadFormData.appResultantArguments = 'tap=' + angular.toJson(appArguments);
         };
 
         $scope.addExtraParam = function () {
@@ -127,13 +127,8 @@
             $scope.state.setPending();
             getGPTokenPromise(GearPumpAppDeployResource, $scope.uiInstanceName, $scope.gpUiData.login, $scope.gpUiData.password)
                 .then(function() {
-                    var uriArguments;
-                    if ($scope.uploadFormData && $scope.uploadFormData.appResultantArguments) {
-                        uriArguments = encodeURI($scope.uploadFormData.appResultantArguments);
-                    }
-
                     var uploader = uploadFiles(Upload, $scope.uploadFormData.jarFile, $scope.uploadFormData.configFile,
-                        $scope.uiInstanceName, uriArguments);
+                        $scope.uiInstanceName, $scope.uploadFormData.appResultantArguments);
 
                     return NotificationService.progress('progress-upload', uploader);
                 }).finally(function() {
@@ -166,15 +161,16 @@
         return GearPumpAppDeployResource.getGPToken(gpInstance, username, password);
     }
 
-    function uploadFiles(Upload, jarFile, configFile, uiInstance, urlArguments) {
-        var urlBase = ["/rest/gearpump/", "/api/v1.0/master/submitapp", "?args="];
+    function uploadFiles(Upload, jarFile, configFile, uiInstance, parameters) {
+        var urlBase = ["/rest/gearpump/", "/api/v1.0/master/submitapp"];
         var uploaderData = {};
 
         Upload.upload({
-            url: urlBase[0] + uiInstance + urlBase[1] + (urlArguments ? urlBase[2] + urlArguments : ""),
+            url: urlBase[0] + uiInstance + urlBase[1],
             data: {
                 jar: jarFile,
-                conf: configFile
+                configfile: configFile,
+                configstring: parameters
             }
         })
         .then(function (response) {
