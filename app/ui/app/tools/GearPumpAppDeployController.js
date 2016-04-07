@@ -138,7 +138,8 @@
         };
 
         $scope.clearForm = function() {
-            $scope.uploadFormData.filename = '';
+            $scope.uploadFormData.jarFile = '';
+            $scope.uploadFormData.configFile = '';
             angular.element("input[name='upfile']").val(null);
             $scope.uploadFormData.appResultantArguments = '';
             $scope.uploadFormData.usersArguments = '';
