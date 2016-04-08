@@ -82,7 +82,12 @@
                     "text": "GearPump",
                     "sref": "app.gearpump",
                     "tool": "gearpump"
+                }, {
+                    "text": "Jupyter",
+                    "sref": "app.jupyter",
+                    "tool": "jupyter"
                 }
+
             ]
         }, {
             "text": "User management",
