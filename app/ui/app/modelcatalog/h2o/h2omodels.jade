@@ -37,4 +37,4 @@ div(ng-if='state.isLoaded()')
                 td(data-title="'Type'") {{ model.type }}
                 td(data-title="'Timestamp'" sortable="'timestamp'") {{ model.timestamp | date: 'yyyy-MM-dd h:mm:ss a' }}
                 td(data-title="'Publishing'")
-                    button.btn.btn-primary Publish Data Model
+                    button.btn.btn-primary(ng-click='publish(model)') Publish Data Model

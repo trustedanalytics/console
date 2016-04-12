@@ -25,13 +25,17 @@ describe("Unit: H2OModelsController", function() {
     var controller,
         scope,
         ModelResource,
+        h2oPublisherResource,
         targetProvider,
+        notificationService,
+        state,
         $q;
 
 
-    beforeEach(inject(function ($controller, $rootScope, _$q_) {
+    beforeEach(inject(function ($controller, $rootScope, _$q_, State) {
         scope = $rootScope.$new();
         $q = _$q_;
+        state = new State();
 
         targetProvider = {
             getOrganization: sinon.stub().returns({ guid: 'o1' })
@@ -41,12 +45,25 @@ describe("Unit: H2OModelsController", function() {
             controller = $controller('H2OModelsController', {
                 $scope: scope,
                 targetProvider: targetProvider,
-                ModelResource: ModelResource
+                ModelResource: ModelResource,
+                H2OPublisherResource: h2oPublisherResource,
+                NotificationService: notificationService
             });
         };
 
         ModelResource = {
             getInstances: sinon.stub().returns($q.defer().promise)
+        };
+
+        h2oPublisherResource = {
+            withErrorMessage: function () {
+                return this;
+            },
+            postDataModel: sinon.stub().returns($q.defer().promise)
+        };
+
+        notificationService = {
+            success: function() {}
         };
 
     }));
@@ -68,6 +85,30 @@ describe("Unit: H2OModelsController", function() {
         scope.$emit('targetChanged');
 
         expect(ModelResource.getInstances).to.be.calledTwice;
+    });
+
+    it('publish, success, set state on loaded', function () {
+        createController();
+
+        var publishDefferred = $q.defer();
+        var successSpied = sinon.spy(notificationService, 'success');
+        h2oPublisherResource.postDataModel = sinon.stub().returns(publishDefferred.promise);
+        publishDefferred.resolve();
+        scope.publish();
+        scope.$digest();
+        expect(successSpied.called).to.be.true;
+        expect(scope.state.value).to.be.equals(scope.state.values.LOADED);
+    });
+
+    it('publish, error, set state on error', function () {
+        createController();
+
+        var publishDefferred = $q.defer();
+        h2oPublisherResource.postDataModel = sinon.stub().returns(publishDefferred.promise);
+        publishDefferred.reject();
+        scope.publish();
+        scope.$digest();
+        expect(scope.state.value).to.be.equals(scope.state.values.ERROR);
     });
 
 });

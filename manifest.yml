@@ -21,6 +21,7 @@ applications:
       - service-exposer
       - platform-operations
       - model-catalog
+      - h2o-model-publisher
     env:
       NPM_CONFIG_PRODUCTION: true
       VERSION: dev

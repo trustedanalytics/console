@@ -16,7 +16,8 @@
 (function () {
     "use strict";
 
-    App.controller('H2OModelsController', function ($scope, State, ModelResource, ModelsTableParams, targetProvider) {
+    App.controller('H2OModelsController', function ($scope, State, ModelResource, ModelsTableParams,
+                                                    targetProvider, H2OPublisherResource, NotificationService) {
 
         var state = new State().setPending();
         $scope.state = state;
@@ -42,7 +43,7 @@
         $scope.onInstanceChange = function (instance) {
             chosenInstance = instance;
             if (!chosenInstance) {
-                $scope.filteredModels = getAllModels();
+                $scope.filteredModels = getAllExtendedModels();
             }
             else {
                 $scope.filteredModels = chosenInstance.models;
@@ -50,7 +51,12 @@
             $scope.tableParams.reload();
         };
 
-        function getAllModels() {
+        function getAllExtendedModels() {
+            _.map($scope.instances, function(instance) {
+                _.each(instance.models, function(model) {
+                   extendModel(instance, model);
+                });
+            });
             return _.flatten(_.pluck($scope.instances, "models"), true);
         }
 
@@ -58,6 +64,28 @@
             return $scope.filteredModels;
 
         });
+
+        $scope.publish = function(model) {
+            $scope.state.setPending();
+            H2OPublisherResource
+                .withErrorMessage('Error when publishing data model')
+                .postDataModel(model, targetProvider.getOrganization().guid)
+                .then(function () {
+                    $scope.state.setLoaded();
+                    NotificationService.success('Data Model has been uploaded');
+
+                }).catch(function () {
+                    $scope.state.setError();
+                });
+        };
+
+        function extendModel(instance, model) {
+            model.guid = instance.guid;
+            model.login = instance.login;
+            model.password = instance.password;
+            model.hostname = instance.hostname;
+            return model;
+        }
 
     });
 }());
