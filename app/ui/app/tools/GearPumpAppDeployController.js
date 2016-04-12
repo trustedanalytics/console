@@ -16,8 +16,8 @@
 (function () {
     "use strict";
 
-    App.controller('GearPumpAppDeployController', function ($scope, $window, $location, targetProvider, Upload, State, ServiceInstancesMapper,
-        NotificationService, GearPumpAppDeployResource, ToolsInstanceResource, ServiceKeysResource, ServiceInstancesResource) {
+    App.controller('GearPumpAppDeployController', function ($scope, $window, $location, targetProvider, State, ServiceInstancesMapper,
+        NotificationService, GearPumpAppDeployResource, ToolsInstanceResource, ServiceKeysResource, ServiceInstancesResource, FileUploaderService) {
 
         var GP_SERVICES_WHITE_LIST = ['hbase', 'kafka', 'zookeeper', 'hdfs'];
 
@@ -56,7 +56,7 @@
                 $scope.instancesState.setPending();
                 $scope.setAppArguments(instanceGuid, serviceLabel)
                     .then(function success() {
-                        $scope.uploadFormData.appResultantArguments = angular.toJson(appArguments);
+                        $scope.uploadFormData.appResultantArguments = 'tap=' + angular.toJson(appArguments);
                     })
                     .catch(function() {
                         $scope.uploadFormData.instances[instanceGuid] = false;
@@ -71,7 +71,7 @@
                 if(_.isEmpty(appArguments[serviceLabel])) {
                     delete appArguments[serviceLabel];
                 }
-                $scope.uploadFormData.appResultantArguments = angular.toJson(appArguments);
+                $scope.uploadFormData.appResultantArguments = 'tap=' + angular.toJson(appArguments);
             }
         };
 
@@ -127,8 +127,24 @@
             $scope.state.setPending();
             getGPTokenPromise(GearPumpAppDeployResource, $scope.uiInstanceName, $scope.gpUiData.login, $scope.gpUiData.password)
                 .then(function() {
-                    var uploader = uploadFiles(Upload, $scope.uploadFormData.jarFile, $scope.uploadFormData.configFile,
-                        $scope.uiInstanceName, $scope.uploadFormData.appResultantArguments);
+
+                    var data = {
+                        configstring: $scope.uploadFormData.appResultantArguments
+                    };
+
+                    var files = {
+                        jar: $scope.uploadFormData.jarFile,
+                        configfile: $scope.uploadFormData.configFile
+                    };
+
+                    var url = '/rest/gearpump/' + $scope.uiInstanceName + '/api/v1.0/master/submitapp';
+
+                    var uploader = FileUploaderService.uploadFiles(url, data, files, function (response) {
+                        return {
+                            message: response.status + ': ' + response.data,
+                            close: false
+                        };
+                    });
 
                     return NotificationService.progress('progress-upload', uploader);
                 }).finally(function() {
@@ -141,7 +157,7 @@
             $scope.uploadFormData.jarFile = '';
             $scope.uploadFormData.configFile = '';
             angular.element("input[name='upfile']").val(null);
-            $scope.uploadFormData.appResultantArguments = '';
+            $scope.uploadFormData.appResultantArguments = 'tap={}';
             $scope.uploadFormData.usersArguments = '';
             $scope.uploadFormData.instances = {};
             $scope.usersParameters = [];
@@ -160,30 +176,6 @@
 
     function getGPTokenPromise(GearPumpAppDeployResource, gpInstance, username, password) {
         return GearPumpAppDeployResource.getGPToken(gpInstance, username, password);
-    }
-
-    function uploadFiles(Upload, jarFile, configFile, uiInstance, parameters) {
-        var urlBase = ["/rest/gearpump/", "/api/v1.0/master/submitapp"];
-        var uploaderData = {};
-
-        Upload.upload({
-            url: urlBase[0] + uiInstance + urlBase[1],
-            data: {
-                jar: jarFile,
-                configfile: configFile,
-                configstring: parameters
-            }
-        })
-        .then(function (response) {
-            uploaderData.response = response.data;
-            uploaderData.status = response.status;
-        }, function (response) {
-            uploaderData.error = response.status + ': ' + response.data;
-        }, function (evt) {
-            uploaderData.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-        });
-
-        return uploaderData;
     }
 
     function getServicesInstancesPromise(ServiceInstancesResource, targetProvider) {

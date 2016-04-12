@@ -42,7 +42,7 @@
             .form-group(ng-if="uploadFormData.input.type === 'local'")
                 label.col-sm-2.control-label(for='file') {{ uploadFormData.input.text }}
                 .col-sm-10
-                    input.btn.btn-primary(type='file', nv-file-select, uploader="uploader", name='upfile', required,
+                    input.btn.btn-primary(type='file', nv-file-select, ngf-select, name='upfile', required,
                     data-ng-model='uploadFormData.filename', file-valid)
 
             .form-group
@@ -76,22 +76,21 @@
 
 script(type="text/ng-template", id="progress-upload")
     .ngdialog-message.clearfix
-        div(ng-repeat="file in data.uploader.queue")
-            div(ng-if="file.isUploading")
-                div
-                    p.text-center
-                        | Uploading file
-                    .progress
-                        .progress-bar(ng-style="{ 'width': file.progress + '%' }")
-                    div
-                        span.col-sm-7.text-left
-                            | Uploading speed: {{ file.speed ? file.speed : '-' }} MB/s
-                        span.col-sm-5.text-right
-                            | Time left: {{ file.timeLeft ? (file.timeLeft | presentTimeFilter | date:'HH:mm:ss') : '-' }}
-                button.btn.btn-warning.pull-right(type='button', ng-click="file.cancel(); ok()") Cancel
-            p(ng-if="file.isSuccess")
-                | Upload finished successfully!
-            p(ng-if="file.isError")
-                | Upload finished with error!
+        div(ng-if="!data.response && !data.error")
+            p.text-center
+                | Uploading file
+            .progress
+                .progress-bar(ng-style="{ 'width': data.progress + '%' }")
+            div
+                span.col-sm-7.text-left
+                    | Uploading speed: {{ data.speed ? data.speed : '-' }} MB/s
+                span.col-sm-5.text-right
+                    | Time left: {{ data.timeLeft ? (data.timeLeft | presentTimeFilter | date:'HH:mm:ss') : '-' }}
+            button.btn.btn-warning.pull-right(type='button', ng-click="data.abort(); ok()") Cancel
+        div(ng-if="data.response && !data.error")
+            p Upload finished successfully!
+        div(ng-if="data.error")
+            p Upload finished with error:
+            div.list {{ data.error.message }}
 
-        button.btn.btn-default(ng-if="!data.uploader.isUploading" type='button', ng-click="ok()") OK
+        button.btn.btn-default(ng-if="data.response || data.error" type='button', ng-click="ok()") OK

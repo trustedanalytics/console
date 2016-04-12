@@ -17,31 +17,23 @@
     "use strict";
 
     App.controller('UploadDataSetController', function ($scope, DasResource, State, categoriesIcons,
-        NotificationService, FileUploader, targetProvider, UploaderConfig, FileUploaderService) {
+        NotificationService, Upload, targetProvider, UploaderConfig, FileUploaderService) {
 
         var self = this;
 
         self.getInitData = UploaderConfig;
 
-        $scope.state = new State().setPending();
         $scope.uploadFormData = self.getInitData();
         $scope.fileSizeLimit = 0;
         $scope.fileBlackListTypes = [];
+        $scope.state = new State().setLoaded();
 
         $scope.input = "link";
 
         self.clearInput = function () {
             $scope.uploadFormData = self.getInitData();
             $scope.inputFile = null;
-            $scope.uploader.clearQueue();
         };
-
-        FileUploaderService.createFileUploader(function() {
-            return $scope.uploadFormData;
-        }).then(function (uploader) {
-            $scope.uploader = uploader;
-            $scope.state.setLoaded();
-        });
 
         $scope.submitDownload = function () {
             $scope.state.setPending();
@@ -61,14 +53,35 @@
                     $scope.state.setError();
                 });
             } else {
-                $scope.uploader.queue[0].upload();
-                NotificationService.progress('progress-upload', {uploader: $scope.uploader})
-                    .then(function () {
-                        $scope.state.setLoaded();
-                        self.clearInput();
-                    }).catch(function onError() {
-                    $scope.state.setError();
+
+                var data = {
+                    orgUUID: targetProvider.getOrganization().guid,
+                    category: $scope.uploadFormData.category,
+                    title: $scope.uploadFormData.title,
+                    publicRequest: $scope.uploadFormData.public
+                };
+
+                var files = {
+                    file: $scope.uploadFormData.filename
+                };
+
+                var url = '/rest/upload/' + targetProvider.getOrganization().guid;
+
+                var uploader = FileUploaderService.uploadFiles(url, data, files, function (response) {
+                    var message = response.status + ': ' + (response.data ? response.data.message : '');
+
+                    NotificationService.error(message);
+                    return {
+                        message: message,
+                        close: true
+                    };
                 });
+
+                NotificationService.progress('progress-upload', uploader)
+                    .then(function() {
+                        self.clearInput();
+                        $scope.state.setLoaded();
+                    });
             }
         };
 

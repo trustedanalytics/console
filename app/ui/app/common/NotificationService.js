@@ -102,7 +102,7 @@
                                 deferred.resolve(arguments);
                                 $scope.closeThisDialog();
                             };
-                            $scope.$on('uploadError', function() {
+                            $scope.$on('closeDialog', function() {
                                 $scope.ok();
                             });
                         }]

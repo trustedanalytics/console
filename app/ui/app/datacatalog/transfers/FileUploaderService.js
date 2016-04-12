@@ -17,78 +17,53 @@
 (function () {
     "use strict";
 
-    App.factory('FileUploaderService', function (targetProvider, FileUploader, NotificationService, ConfigResource, ngDialog, $rootScope) {
-
-        var fileSizeLimit = null;
-        var fileBlackListTypes = [];
-        var uploadEnvsPromise = ConfigResource.getUploadEnvs().then(function onSuccess(configData) {
-            fileSizeLimit = configData.file_size_limit;
-            fileBlackListTypes = configData.file_black_list_types;
-        });
+    App.factory('FileUploaderService', function (Upload, $rootScope) {
 
         return {
+            uploadFiles: function (url, data, files, errorFunction) {
+                var uploaderData = {};
+                var timeStart = Date.now();
+                var MEGA_BYTE = 1024 * 1024;
 
-            createFileUploader: function (formDataGetter) {
-                var MEGA_BYTE_SIZE = 1024 * 1024;
-                var uploader = new FileUploader({
-                    url: "/rest/upload/" + targetProvider.getOrganization().guid,
-                    onBeforeUploadItem: function (item) {
-                        var formData = formDataGetter();
-                        item.formData.push({
-                            orgUUID: targetProvider.getOrganization().guid,
-                            category: formData.category,
-                            title: formData.title,
-                            publicRequest: formData.public
-                        });
-                        item.timeStart = Date.now();
-                        item.prevProgress = 0;
-                        item.uploadedSize = 0;
-                    },
-                    filters: [{
-                        name: 'sizeFilter',
-                        onError: 'Size of selected file is too large.',
-                        fn: function (item) {
-                            return item.size <= fileSizeLimit * MEGA_BYTE_SIZE;
-                        }
-                    },
-                        {
-                            name: 'typeFilter',
-                            fn: function (item) {
-                                if(_.contains(fileBlackListTypes, item.type)) {
-                                    NotificationService.warning('Selected file may be not supported by analytics tools. ' +
-                                        'Please make sure you want to proceed with the upload.');
-                                }
-                                return true;
-                            }
-                        }],
+                var filesSize = _.reduce(files, function (memo, file) {
+                    return memo + (file ? file.size : 0);
+                }, 0);
 
-                    onProgressItem: function (item, progress) {
-                        var time = Date.now() - item.timeStart;
-                        item.uploadedSize = progress * item.file.size / 100;
-                        var speed = (item.uploadedSize / MEGA_BYTE_SIZE) / (time / 1000);
-                        item.speed = speed.toFixed(1);
-                        item.timeLeft = ((item.file.size - item.uploadedSize) / MEGA_BYTE_SIZE) / speed;
+                angular.extend(data, files);
 
-                        if (_.isNaN(item.timeLeft) || !_.isFinite(item.timeLeft)) {
-                            item.timeLeft = 0;
-                            item.speed = null;
-                        }
-                    },
-                    onWhenAddingFileFailed: function (item, filter) {
-                        NotificationService.error(filter.onError);
-                    },
-                    onErrorItem: function (item, response) {
-                        NotificationService.error(response.message);
-                        $rootScope.$broadcast('uploadError');
+                var uploader = Upload.upload({
+                    url: url,
+                    data: data
+                });
+
+                uploaderData.abort = uploader.abort;
+
+                uploader.then(function (response) {
+                    uploaderData.response = response.data;
+                    uploaderData.status = response.status;
+                }, function (response) {
+                    uploaderData.error = errorFunction(response);
+                    if(uploaderData.error.close){
+                        $rootScope.$broadcast('closeDialog');
+                    }
+                }, function (evt) {
+                    uploaderData.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+
+                    var time = Date.now() - timeStart;
+                    var uploadedSize = uploaderData.progress * filesSize / 100;
+                    var speed = uploadedSize / (time / 1000);
+                    uploaderData.speed = (speed / MEGA_BYTE).toFixed(1);
+                    uploaderData.timeLeft = (filesSize - uploadedSize) / speed;
+
+                    if (_.isNaN(uploaderData.timeLeft) || !_.isFinite(uploaderData.timeLeft)) {
+                        uploaderData.timeLeft = 0;
+                        uploaderData.speed = null;
                     }
                 });
 
-                return uploadEnvsPromise.then(function () {
-                    return uploader;
-                });
+                return uploaderData;
             }
         };
-
 
     });
 }());

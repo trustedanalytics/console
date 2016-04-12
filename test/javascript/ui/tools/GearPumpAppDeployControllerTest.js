@@ -22,7 +22,7 @@ describe("Unit: GearPumpAppDeployController", function () {
         httpBackend,
         locationMock,
         _targetProvider,
-        upload,
+        fileUploaderServiceMock,
         state,
         serviceInstancesMapperMock,
         notificationService,
@@ -140,7 +140,7 @@ describe("Unit: GearPumpAppDeployController", function () {
         notificationService = NotificationService;
         gearPumpAppDeployResource = GearPumpAppDeployResource;
         locationMock = $location;
-        upload = {};
+        fileUploaderServiceMock = {};
 
         createController = function() {
             controller = $controller('GearPumpAppDeployController', {
@@ -148,7 +148,7 @@ describe("Unit: GearPumpAppDeployController", function () {
                 $scope: scope,
                 $location: locationMock,
                 targetProvider: _targetProvider,
-                Upload: upload,
+                FileUploaderService: fileUploaderServiceMock,
                 NotificationService: notificationService,
                 ServiceInstancesMapper: serviceInstancesMapperMock,
                 ServiceKeysResource: serviceKeysResourceMock,
@@ -287,7 +287,7 @@ describe("Unit: GearPumpAppDeployController", function () {
 
         gearPumpAppDeployResource.getGPToken = sinon.stub().returns(resolvedPromise());
         notificationService.progress = sinon.stub().returns(resolvedPromise());
-        upload.upload = sinon.stub().returns(resolvedPromise({
+        fileUploaderServiceMock.uploadFiles = sinon.stub().returns(resolvedPromise({
             data: 'great',
             status: 200,
             loaded: 100
@@ -296,7 +296,7 @@ describe("Unit: GearPumpAppDeployController", function () {
         scope.deployGPApp();
         rootScope.$digest();
 
-        expect(upload.upload).to.be.called;
+        expect(fileUploaderServiceMock.uploadFiles).to.be.called;
         expect(notificationService.progress).to.be.called;
         expect(scope.state.value).to.be.equal(state.values.LOADED);
 
@@ -312,14 +312,14 @@ describe("Unit: GearPumpAppDeployController", function () {
 
         gearPumpAppDeployResource.getGPToken = sinon.stub().returns(resolvedPromise());
         notificationService.progress = sinon.stub().returns(resolvedPromise());
-        upload.upload = sinon.stub().returns(rejectedPromise({
+        fileUploaderServiceMock.uploadFiles = sinon.stub().returns(rejectedPromise({
             status: 404
         }));
 
         scope.deployGPApp();
         rootScope.$digest();
 
-        expect(upload.upload).to.be.called;
+        expect(fileUploaderServiceMock.uploadFiles).to.be.called;
         expect(notificationService.progress).to.be.called;
         expect(scope.state.value).to.be.equal(state.values.LOADED);
 
