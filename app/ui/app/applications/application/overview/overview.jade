@@ -21,16 +21,16 @@ div
             | Starting
         span.fa-stop(ng-if='$ctrl.application.state.toLowerCase() === "stopped"')
             | Stopped
-        button.btn.btn-primary.fa-refresh.app-refresher(ng-click='onRefresh()') Refresh page
+        button.btn.btn-primary.fa-refresh.app-refresher(ng-click='$ctrl.onRefresh()') Refresh page
 
     h4 Actions
     div.actions
-        button.btn.btn-primary.fa-times(ng-click='onDelete()') Delete
-        button.btn.btn-primary.fa-play(ng-click='onStart()'
+        button.btn.btn-primary.fa-times(ng-click='$ctrl.onDelete()') Delete
+        button.btn.btn-primary.fa-play(ng-click='$ctrl.onStart()'
                 ng-disabled="$ctrl.application.state.toLowerCase() === 'started'") Start
-        button.btn.btn-primary.fa-stop(ng-click='onStop()'
+        button.btn.btn-primary.fa-stop(ng-click='$ctrl.onStop()'
                 ng-disabled="$ctrl.application.state.toLowerCase() === 'stopped'") Stop
-        button.btn.btn-primary.fa-refresh(ng-click='onRestage()') Restage
+        button.btn.btn-primary.fa-refresh(ng-click='$ctrl.onRestage()') Restage
 
     h4 Metrics
     table.table.metrics

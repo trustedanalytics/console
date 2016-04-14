@@ -20,7 +20,7 @@
     .clearfix(ng-if='state.isLoaded()')
         .panel.panel-blue.restage-info
             | You have to restage the app after binding/unbinding a service
-            button.btn.btn-primary.fa-refresh(ng-click='appCtrl.restage()') Restage
+            button.btn.btn-primary.fa-refresh(ng-click='$parent.restage()') Restage
         div
             .col.col-md-6
                 ul.list-group.panel
