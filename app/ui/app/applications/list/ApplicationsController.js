@@ -70,5 +70,4 @@
             return app.running_instances === 0 && app.state === 'STARTED';
         };
     });
-
 }());

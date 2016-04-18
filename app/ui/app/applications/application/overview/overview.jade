@@ -15,7 +15,9 @@
 //-
 div
     h4.state State:
-        span.fa-check(ng-if='$ctrl.application.state.toLowerCase() === "started"')
+        span.fa-exclamation-triangle(ng-if='!$ctrl.application.running_instances')
+            | No running instances
+        span.fa-check(ng-if='$ctrl.application.running_instances && $ctrl.application.state.toLowerCase() === "started"')
             | OK
         span.fa-refresh(ng-if='$ctrl.application.state.toLowerCase() === "starting"')
             | Starting
