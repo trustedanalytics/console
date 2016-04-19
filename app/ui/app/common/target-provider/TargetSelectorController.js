@@ -16,9 +16,7 @@
 (function () {
     "use strict";
 
-    App.controller('TargetSelectorController', function (targetProvider, $scope, UserProvider) {
-
-        var requiresManagerRole = this.managedOnly;
+    App.controller('TargetSelectorController', function (targetProvider, $scope, UserProvider, $state, $rootScope) {
 
         $scope.organization = {
             selected: targetProvider.getOrganization(),
@@ -37,7 +35,11 @@
             }
         };
 
-        $scope.organizations = targetProvider.getOrganizations();
+        $rootScope.$on("$stateChangeSuccess", function() {
+            $scope.targetHeader = $state.current.targetHeader;
+            $scope.organization.available = getAvailableOrgs(UserProvider, targetProvider, $scope.targetHeader);
+
+        });
 
         $scope.$watch('selectedOrg', function () {
             $scope.targetSpace.available = sortOrgAndSpacesByName($scope.organization.selected.spaces);
@@ -52,7 +54,7 @@
 
             UserProvider.getUser(function (user) {
                 $scope.organization.available = sortOrgAndSpacesByName($scope.organizations);
-                if (user.role !== 'ADMIN' && requiresManagerRole) {
+                if (user.role !== 'ADMIN' && $scope.targetHeader.managedOnly) {
                     $scope.organization.available = _.where($scope.organizations, {manager: true});
                 }
 
@@ -62,9 +64,24 @@
                 }
             });
         });
+
+        this.$onInit = function () {
+            $scope.targetHeader = $state.current.targetHeader;
+            $scope.organization.available = getAvailableOrgs(UserProvider, targetProvider, $scope.targetHeader);
+        };
     });
 
     function sortOrgAndSpacesByName(items) {
         return _.sortBy(items, 'name');
+    }
+
+    function getAvailableOrgs(userProvider, TargetProvider, targetHeader) {
+        var orgs = TargetProvider.getOrganizations();
+        return userProvider.isAdmin() ? orgs : targetHeader.managedOnly ?
+            getCurrentOrgManagerOrgs(orgs) : orgs;
+    }
+
+    function getCurrentOrgManagerOrgs(orgs) {
+        return _.where(orgs, {manager: true});
     }
 }());

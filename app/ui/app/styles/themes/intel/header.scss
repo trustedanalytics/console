@@ -42,5 +42,26 @@
       }
     }
   }
+}
 
+target-selector {
+  background-color: $header-org-space-bg-color;
+
+  .target-container {
+
+    .group-section {
+
+      label {
+        color: $header-org-space-text-label-color;
+      }
+
+      .btn-group {
+
+        button {
+          background-color: $header-org-space-button-bg-color;
+          color: #fff;
+        }
+      }
+    }
+  }
 }

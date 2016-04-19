@@ -40,6 +40,7 @@
             $timeout.cancel(metricsTimeoutHandler);
             $timeout.cancel(loadTimeoutHandler);
         });
+
         $scope.canManageUsers = function() {
             return $scope.anyOrgManager || $scope.admin;
         };

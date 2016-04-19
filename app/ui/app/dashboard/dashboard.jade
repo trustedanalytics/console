@@ -16,12 +16,10 @@
 spinner(ng-show='state.isPending()')
 
 .dashboard.error-state(ng-show='state.isError()')
-    target-selector.target-selector.pull-right(hide-space="true")
     .error Error loading metrics
 
 .dashboard.row(d-visible="state.isLoaded()")
     .category-title.clearfix
-        target-selector.target-selector.pull-right(hide-space="true")
         | Health & metrics
 
     tile-small-white-numeric(number="data.appsRunning", text="'Applications running'", link="#/app/applications").col-lg-4.col-md-6.col-sm-6

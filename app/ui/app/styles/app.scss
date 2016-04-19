@@ -47,10 +47,6 @@
   }
 }
 
-target-selector > div {
-  display: inline-block;
-}
-
 .state.fa {
   &.started {
     color: $color-green;

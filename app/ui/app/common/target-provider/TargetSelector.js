@@ -17,10 +17,6 @@
     "use strict";
 
     App.component('targetSelector', {
-        bindings: {
-            hideSpace: '<',
-            managedOnly: '@'
-        },
         controller: 'TargetSelectorController',
         templateUrl: 'app/common/target-provider/target-selector.html'
     });

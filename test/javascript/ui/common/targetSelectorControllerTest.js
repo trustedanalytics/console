@@ -30,6 +30,7 @@ describe("Unit: TargetSelectorController", function() {
     var $controller;
     var scope;
     var UserProvider;
+    var state;
 
     beforeEach(module('app'));
 
@@ -50,8 +51,15 @@ describe("Unit: TargetSelectorController", function() {
         UserProvider = {
             getUser: function(callback){
                 callback({role: 'USER'});
+            },
+            isAdmin: function() {return false;}
+        };
+        state = {
+            current: {
+                targetHeader: {
+                    managedOnly: false
+                }
             }
-
         };
 
     }));
@@ -61,25 +69,27 @@ describe("Unit: TargetSelectorController", function() {
         return $controller('TargetSelectorController', {
             targetProvider: targetProvider,
             $scope: scope,
-            UserProvider: UserProvider
+            UserProvider: UserProvider,
+            $state: state
         }, parameters);
     }
 
-    it('should return all organizations if managedOnly attribute is not set', function() {
-        getSUT();
+    it('should return all organizations if managedOnly is not set', function() {
+        var component = getSUT();
+        component.$onInit();
         scope.$digest();
 
         expect(scope.organization.selected).to.be.deep.equals(allOrgs[0]);
         expect(scope.organization.available).to.be.deep.equals(allOrgs);
         expect(targetProvider.getSpace.called).to.be.true;
         expect(targetProvider.getSpaces.called).to.be.true;
+
     });
 
     it('should return managed organizations if managedOnly attribute is set', function() {
-        getSUT({
-            managedOnly: 'managed-only'
-        });
-
+        var component = getSUT();
+        state.current.targetHeader.managedOnly = true;
+        component.$onInit();
         scope.$digest();
 
         expect(scope.organization.selected, 'selected').to.be.deep.equals(allOrgs[0]);
@@ -88,13 +98,12 @@ describe("Unit: TargetSelectorController", function() {
 
 
     it('should return all organizations if managedOnly attribute is set but user is admin', function() {
-        UserProvider.getUser = function(callback){
-            callback({role: 'ADMIN'});
+        var component = getSUT();
+        UserProvider.isAdmin = function() {
+            return true;
         };
-
-        getSUT({
-            managedOnly: 'managed-only'
-        });
+        state.current.targetHeader.managedOnly = true;
+        component.$onInit();
         scope.$digest();
 
         expect(scope.organization.selected).to.be.deep.equals(allOrgs[0]);

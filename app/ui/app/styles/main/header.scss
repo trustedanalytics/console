@@ -127,3 +127,44 @@ $header-item-active: $header-item;
     }
   }
 }
+
+target-selector {
+  height: $header-org-space-height;
+  width: 100%;
+  display: block;
+
+  .target-container {
+    width: 100%;
+    font-size: 14px;
+
+    .group-section {
+      float: right;
+      margin-left: 30px;
+      max-height: $header-org-space-height;
+
+      &:first-child {
+        margin-right: 20px;
+      }
+
+      label {
+        line-height: $header-org-space-height;
+        height: $header-org-space-height;
+        padding: 0px;
+      }
+
+      .btn-group {
+        padding: 15px 6px;
+        float: right;
+        margin-left: 6px;
+
+        button {
+          border: none;
+
+          .caret {
+            margin-left: 20px;
+          }
+        }
+      }
+    }
+  }
+}
