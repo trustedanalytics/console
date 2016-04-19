@@ -54,7 +54,7 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
         .state('app.jobsscheduler.importdata.fromdatabase', {
             url: '/fromdatabase',
             title: 'Import data from database',
-            targetHeader: {org: true, space:false},
+            targetHeader: {org: true, space: false},
             controller: 'FromDatabaseController',
             templateUrl: getViewPath('jobsscheduler/importdata/fromDatabase.html'),
             resolve: LazyLoadProvider.load(['bootstrap-datetimepicker', 'ngMessages'])
@@ -69,35 +69,34 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
         .state('app.jobsscheduler.jobs.workflowjobs', {
             url: '/workflowjobs',
             title: 'Workflow jobs',
-            targetHeader: {org: true, space:false},
+            targetHeader: {org: true, space: false},
             controller: 'WorkflowJobsController',
             templateUrl: getViewPath('jobsscheduler/jobs/workflow/workflowjobs.html')
         })
         .state('app.jobsscheduler.workflowjob', {
             url: '/workflowjobs/:workflowjobId',
             title: 'Workflow job',
-            targetHeader: {org: true, space:false},
+            targetHeader: {org: true, space: false},
             controller: 'WorkflowJobController',
             templateUrl: getViewPath('jobsscheduler/jobs/workflow/workflowjob.html')
         })
         .state('app.jobsscheduler.jobs.coordinatorjobs', {
             url: '/coordinatorjobs',
             title: 'Coordinator jobs',
-            targetHeader: {org: true, space:false},
+            targetHeader: {org: true, space: false},
             controller: 'CoordinatorJobsController',
             templateUrl: getViewPath('jobsscheduler/jobs/coordinator/coordinatorjobs.html')
         })
         .state('app.jobsscheduler.coordinatorjob', {
             url: '/coordinatorjobs/:coordinatorjobId',
             title: 'Coordinator job',
-            targetHeader: {org: true, space:false},
+            targetHeader: {org: true, space: false},
             controller: 'CoordinatorJobController',
             templateUrl: getViewPath('jobsscheduler/jobs/coordinator/coordinatorjob.html')
         })
         .state('app.platformdashboard', {
             url: '/platformdashboard',
             title: 'Platform Dashboard',
-            targetHeader: {org: false, space:false},
             controller: 'PlatformDashboardController',
             controllerAs: 'ctrl',
             templateUrl: getViewPath('operations/platform-dashboard.html')
@@ -105,26 +104,26 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
         .state('app.platformdashboard.summary', {
             url: '/summary',
             title: 'Summary',
-            targetHeader: {org: false, space:false},
+            targetHeader: {org: false, space: false},
             templateUrl: getViewPath('operations/platform-summary.html')
         })
         .state('app.platformdashboard.dea', {
             url: '/dea',
             title: 'DEA',
-            targetHeader: {org: false, space:false},
+            targetHeader: {org: false, space: false},
             templateUrl: getViewPath('operations/dea.html')
         })
         .state('app.dashboard', {
             url: '/dashboard',
             title: 'Dashboard',
-            targetHeader: {org: true, space:false},
+            targetHeader: {org: true, space: false},
             controller: 'DashboardController',
             templateUrl: getViewPath('dashboard/dashboard.html'),
             resolve: LazyLoadProvider.load(['c3charts-serial'])
         })
         .state('app.latestevents', {
             url: '/events',
-            targetHeader: {org: true, space:false},
+            targetHeader: {org: true, space: false},
             controller: 'LatestEventsController',
             templateUrl: getViewPath('latestevents/events.html')
         })
@@ -136,7 +135,7 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
         .state('app.services.marketplace', {
             url: '/marketplace',
             title: 'Marketplace',
-            targetHeader: {org: true, space:true},
+            targetHeader: {org: true, space: true},
             controller: 'ServicesController',
             controllerAs: 'ctrl',
             templateUrl: getViewPath('marketplace/list/services.html'),
@@ -145,14 +144,14 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
         .state('app.services.instances', {
             url: '/instances',
             title: 'Service instances',
-            targetHeader: {org: true, space:true},
+            targetHeader: {org: true, space: true},
             controller: 'ServiceInstancesListController',
             templateUrl: getViewPath('marketplace/instances/list.html')
         })
         .state('app.service', {
             url: '/service/:serviceId',
             title: 'Service',
-            targetHeader: {org: true, space:true},
+            targetHeader: {org: true, space: true},
             controller: 'ServiceController',
             controllerAs: 'ctrl',
             templateUrl: getViewPath('marketplace/service/service.html'),
@@ -161,7 +160,7 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
         .state('app.applications', {
             url: '/applications',
             title: 'Applications',
-            targetHeader: {org: true, space:true},
+            targetHeader: {org: true, space: true},
             controller: 'ApplicationsController',
             controllerAs: 'ctrl',
             templateUrl: getViewPath('applications/list/apps.html')
@@ -261,7 +260,7 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
         .state('app.gearpumpappdeploy', {
             url: '/gearpumpappdeploy/:instanceId',
             title: 'GearPump App Deploy',
-            targetHeader: {org: false, space: true},
+            targetHeader: {org: false, space: false},
             controller: 'GearPumpAppDeployController',
             templateUrl: getViewPath('tools/gearpumpappdeploy.html'),
             resolve: LazyLoadProvider.load(['ng-file-upload'])

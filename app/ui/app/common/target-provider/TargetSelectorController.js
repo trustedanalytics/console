@@ -17,9 +17,12 @@
     "use strict";
 
     App.controller('TargetSelectorController', function (targetProvider, $scope, UserProvider, $state, $rootScope) {
+        var user = {};
+
+        $scope.targetHeader = $state.current.targetHeader;
 
         $scope.organization = {
-            selected: targetProvider.getOrganization(),
+            selected: targetProvider.getOrganization(), 
             available: targetProvider.getOrganizations(),
             set: function (org) {
                 $scope.selectedOrg = org;
@@ -35,10 +38,16 @@
             }
         };
 
+        UserProvider.getUser(function (_user) {
+            user = _user;
+            $scope.organization.available = getAvailableOrgs(user.role, targetProvider.getOrganizations(),
+                $scope.targetHeader);
+        });
+
         $rootScope.$on("$stateChangeSuccess", function() {
             $scope.targetHeader = $state.current.targetHeader;
-            $scope.organization.available = getAvailableOrgs(UserProvider, targetProvider, $scope.targetHeader);
-
+            $scope.organization.available = getAvailableOrgs(user.role, targetProvider.getOrganizations(),
+                $scope.targetHeader);
         });
 
         $scope.$watch('selectedOrg', function () {
@@ -64,21 +73,18 @@
                 }
             });
         });
-
-        this.$onInit = function () {
-            $scope.targetHeader = $state.current.targetHeader;
-            $scope.organization.available = getAvailableOrgs(UserProvider, targetProvider, $scope.targetHeader);
-        };
     });
 
     function sortOrgAndSpacesByName(items) {
         return _.sortBy(items, 'name');
     }
 
-    function getAvailableOrgs(userProvider, TargetProvider, targetHeader) {
-        var orgs = TargetProvider.getOrganizations();
-        return userProvider.isAdmin() ? orgs : targetHeader.managedOnly ?
-            getCurrentOrgManagerOrgs(orgs) : orgs;
+    function getAvailableOrgs(role, orgs, targetHeader) {
+        orgs = sortOrgAndSpacesByName(orgs);
+        if(role !== 'ADMIN' && targetHeader.managedOnly) {
+            return getCurrentOrgManagerOrgs(orgs);
+        }
+        return orgs;
     }
 
     function getCurrentOrgManagerOrgs(orgs) {

@@ -51,8 +51,7 @@ describe("Unit: TargetSelectorController", function() {
         UserProvider = {
             getUser: function(callback){
                 callback({role: 'USER'});
-            },
-            isAdmin: function() {return false;}
+            }
         };
         state = {
             current: {
@@ -75,36 +74,28 @@ describe("Unit: TargetSelectorController", function() {
     }
 
     it('should return all organizations if managedOnly is not set', function() {
-        var component = getSUT();
-        component.$onInit();
-        scope.$digest();
+        getSUT();
 
         expect(scope.organization.selected).to.be.deep.equals(allOrgs[0]);
         expect(scope.organization.available).to.be.deep.equals(allOrgs);
         expect(targetProvider.getSpace.called).to.be.true;
         expect(targetProvider.getSpaces.called).to.be.true;
-
     });
 
-    it('should return managed organizations if managedOnly attribute is set', function() {
-        var component = getSUT();
+    it('should return managed organizations if managedOnly is set', function() {
         state.current.targetHeader.managedOnly = true;
-        component.$onInit();
-        scope.$digest();
-
+        getSUT();
+        
         expect(scope.organization.selected, 'selected').to.be.deep.equals(allOrgs[0]);
         expect(scope.organization.available, 'available').to.be.deep.equals(_.where(allOrgs, {manager:true}));
     });
 
-
-    it('should return all organizations if managedOnly attribute is set but user is admin', function() {
-        var component = getSUT();
-        UserProvider.isAdmin = function() {
-            return true;
-        };
+    it('should return all organizations if managedOnly is set but user is admin', function() {
         state.current.targetHeader.managedOnly = true;
-        component.$onInit();
-        scope.$digest();
+        UserProvider.getUser = function(callback) {
+            callback({role: 'ADMIN'});
+        };
+        getSUT();
 
         expect(scope.organization.selected).to.be.deep.equals(allOrgs[0]);
         expect(scope.organization.available).to.be.deep.equals(allOrgs);
