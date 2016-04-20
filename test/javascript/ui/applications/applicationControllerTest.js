@@ -149,6 +149,7 @@ describe("Unit: ApplicationController", function () {
 
         var deferredConfirm = $q.defer();
         notificationService.confirm = sinon.stub().returns(deferredConfirm.promise);
+        notificationService.success = sinon.stub();
         $state.go = sinon.stub();
         createAndInitializeController();
 

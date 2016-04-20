@@ -120,6 +120,7 @@
                         })
                         .then(function onSuccess() {
                             $state.go('app.applications');
+                            NotificationService.success('Application has been deleted');
                         })
                         .finally(function onError() {
                             $scope.state.setLoaded();
