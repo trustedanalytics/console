@@ -1,9 +1,9 @@
 applications:
-  - name: platform-snapshot-console
+  - name: console
     memory: 512M
     disk_quota: 128M
     instances: 1
-    host: platform-snapshot-console
+    host: console
     buildpack: nodejs_buildpack
     services:
       - user-management
