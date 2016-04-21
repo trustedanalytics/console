@@ -26,6 +26,7 @@
     "fontawesome": "4.5.0",
     "jquery": "2.2.1",
     "modernizr": "3.3.1",
+    "moment": "2.11.1",
     "ng-table": "0.8.3",
     "ngDialog": "0.5.8",
     "ngstorage": "0.3.10",

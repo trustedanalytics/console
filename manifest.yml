@@ -1,9 +1,9 @@
 applications:
-  - name: console
+  - name: platform-snapshot-console
     memory: 512M
     disk_quota: 128M
     instances: 1
-    host: console
+    host: platform-snapshot-console
     buildpack: nodejs_buildpack
     services:
       - user-management
@@ -22,6 +22,7 @@ applications:
       - platform-operations
       - model-catalog
       - h2o-model-publisher
+      - platform-snapshot
     env:
       NPM_CONFIG_PRODUCTION: true
       VERSION: dev

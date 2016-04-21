@@ -20,5 +20,6 @@
     "../../bower_components/ngDialog/js/ngDialog.min.js",
     "../../bower_components/ngDialog/css/ngDialog.min.css",
     "../../bower_components/ngDialog/css/ngDialog-theme-default.min.css",
-    "../../bower_components/ng-idle/angular-idle.min.js"
+    "../../bower_components/ng-idle/angular-idle.min.js",
+    "../../bower_components/moment/min/moment.min.js"
 ]

@@ -16,7 +16,8 @@
 (function () {
     "use strict";
 
-    App.controller('MainController', function($scope, AppConfig, targetProvider, NotificationService, $window, Idle, Keepalive, ConfigResource, $http) {
+    App.controller('MainController', function($scope, AppConfig, targetProvider, NotificationService, $window, Idle,
+                                              Keepalive, UserProvider, ConfigResource, $http, PlatformContextProvider) {
         $scope.appConfig = AppConfig;
         $scope.year = new Date().getFullYear();
         $scope.infoConfig = {
@@ -47,5 +48,18 @@
                 });
         });
 
+
+        PlatformContextProvider.getPlatformContext()
+            .then(function (response) {
+                $scope.platformInfo = response;
+            });
+
+        UserProvider.getUser(function (user) {
+            $scope.isAdmin = isAdmin(user);
+        });
+
+        function isAdmin(user) {
+            return (user || {}).role === "ADMIN";
+        }
     });
 })();

@@ -13,17 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 (function () {
     "use strict";
 
-    App.component('searchBar', {
-        templateUrl: 'app/common/search.html',
-        controller: function($scope) {
+    App.factory('PlatformSnapshotResource', function (Restangular) {
+        var resource = Restangular.service("v1");
 
-            $scope.search = function () {
-                $scope.$emit('searchChanged', $scope.value);
-            };
-        }
+        resource.getSnapshots = function (scope, startDate) {
+            return this.one("snapshots").get({scope: scope, from: startDate});
+        };
+
+        resource.getConfiguration = function () {
+            return this.one("configuration").get();
+        };
+
+        return resource;
     });
 }());

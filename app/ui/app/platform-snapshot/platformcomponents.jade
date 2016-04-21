@@ -1,0 +1,152 @@
+//
+   Copyright (c) 2015 Intel Corporation
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+//-
+
+h3
+    | Platform snapshot - {{currentVersion}}
+
+spinner(ng-show='state.isPending()')
+
+div(ng-show='state.isLoaded()')
+    .platform-snapshot.content
+
+        div.export
+            a(ng-href="{{ downloadLink }}" download="snapshot.txt")
+                button.btn.btn-primary(data-ng-click='export()')
+                    span.glyphicon.glyphicon-export
+                    |  Export
+
+            .btn-group(uib-dropdown)
+                button.btn.btn-default.details(type='button', uib-dropdown-toggle)
+                    | Details
+                    span.caret
+                ul.dropdown-menu.animated.fadeInUpShort(role="menu")
+                    li(ng-repeat="(field, visible) in fields")
+                        label.list-item
+                            input(type="checkbox", ng-change="showDetails(field, visible)", ng-model="fields")
+                            span.option {{field}}
+
+            .btn-group(uib-dropdown)
+                button.btn.btn-default(type='button', uib-dropdown-toggle, ng-disabled="!scopes.length")
+                    | {{defaultScope.toLowerCase()}}
+                    span.caret
+                ul.dropdown-menu.animated.fadeInUpShort(role="menu")
+                    li(ng-repeat="scope in scopes")
+                        a(ng-click="setScope(scope)") {{scope.toLowerCase()}}
+
+            .range.pull-right
+                button.btn.btn-default(ng-click='getSnapshotsByRange(1)') 1 day
+                button.btn.btn-default(ng-click='getSnapshotsByRange(2)') 2 days
+                button.btn.btn-default(ng-click='getSnapshotsByRange(7)') 1 week
+                button.btn.btn-default(ng-click='getSnapshotsByRange(30)') 1 month
+
+        d-spinner(ng-show='state.isPending()')
+        div(ng-if='state.isLoaded()')
+            .panel.panel-default
+                .panel-heading Snapshots
+                .panel-body
+                    table.table
+                        thead
+                            tr
+                                th Id
+                                th Created at
+                                th Platform version
+                            tbody
+                                tr(ng-repeat='snapshot in response' ng-class="{'selected': chosenSnapshot.id==snapshot.id}"
+                                ng-click="getAppsForSnapshot(snapshot.id)")
+                                    td {{snapshot.id}}
+                                    td {{snapshot.created_at | date: 'yyyy-MM-dd h:mm:ss a'}}
+                                    td {{snapshot.platform_version}}
+
+
+        d-spinner(ng-show='state.isPending()')
+        div(ng-if='state.isLoaded()')
+            .panel.panel-default
+                .panel-heading Applications
+                .panel-body
+                    .searchbar
+                        search-bar
+                    table.table
+                        thead
+                            tr
+                                th Name
+                                th Version
+                                th(ng-if="fields.guid") Guid
+                                th(ng-if="fields.created") Created
+                                th(ng-if="fields.updated") Updated
+                                th(ng-if="fields.orgguid") Organization
+                                th(ng-if="fields.spaceguid") Space
+                                th(ng-if="fields.memory") Memory
+                                th(ng-if="fields.instances") Instances
+                                th(ng-if="fields.state") State
+                                th(ng-if="fields.disk") Disk quota
+                        tbody
+                            tr(ng-repeat-start='app in chosenSnapshot.applications')
+                                td
+                                    a(ng-click='isCollapsed = !isCollapsed') {{app.name}}
+                                td {{app.version || "-"}}
+                                td(ng-if="fields.guid") {{app.guid}}
+                                td(ng-if="fields.created") {{app.created_at | date: 'yyyy-MM-dd h:mm:ss a'}}
+                                td(ng-if="fields.updated") {{app.updated_at | date: 'yyyy-MM-dd h:mm:ss a'}}
+                                td(ng-if="fields.organization") {{app.organization}}
+                                td(ng-if="fields.space") {{app.space} }
+                                td(ng-if="fields.memory") {{app.memory}}
+                                td(ng-if="fields.instances") {{app.instances}}
+                                td(ng-if="fields.state") {{app.state}}
+                                td(ng-if="fields.disk") {{app.disk_quota}}
+                            tr(uib-collapse='isCollapsed', ng-repeat-end='')
+                                td(colspan='12')
+                                    table.table.app-details
+                                        tr
+                                            td Guid
+                                            td {{app.guid || "-"}}
+                                        tr
+                                            td Created at
+                                            td {{app.created_at | date: 'yyyy-MM-dd h:mm:ss a'}}
+                                        tr
+                                            td Updated at
+                                            td {{app.updated_at | date: 'yyyy-MM-dd h:mm:ss a'}}
+                                        tr
+                                            td  Organization
+                                            td {{app.organization}}
+                                        tr
+                                            td  Space
+                                            td {{app.space}}
+                                        tr
+                                            td  Buildpack
+                                            td {{app.buildpack || "-"}}
+                                        tr
+                                            td  Detected buildpack
+                                            td {{app.detected_buildpack || "-"}}
+                                        tr
+                                            td  Memory
+                                            td {{app.memory}} MB
+                                        tr
+                                            td  Instances
+                                            td {{app.instances}}
+                                        tr
+                                            td  Disk quota
+                                            td {{app.disk_quota}} MB
+                                        tr
+                                            td  State
+                                            td {{app.state}}
+                                        tr
+                                            td  Health check type
+                                            td {{app.health_check_type || "-"}}
+                                        tr
+                                            td  Health check timeout
+                                            td {{app.health_check_timeout || "-"}}
+
+                                    b Detected start command
+                                    figure.highlight
+                                        pre
+                                            code {{ app.detected_start_command || "-"}}

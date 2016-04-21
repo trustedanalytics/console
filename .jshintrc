@@ -22,6 +22,7 @@
         "console": true,
         "App": true,
         "c3": true,
+        "moment": true,
         "hljs": true,
         // expect.js UTs methods
         "describe": true,

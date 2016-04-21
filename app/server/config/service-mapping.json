@@ -105,4 +105,7 @@
   "path": "/rest/gearpump/([^/]+)/(.*)",
   "name": "gearpump-dashboard",
   "domainRewrite": true
+}, {
+  "path": "/rest/v1",
+  "name": "platform-snapshot"
 }]

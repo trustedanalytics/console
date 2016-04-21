@@ -50,6 +50,7 @@ module.exports = function (config) {
             'bower_components/restangular/dist/restangular.js',
             'bower_components/angular-mocks/angular-mocks.js',
             'bower_components/ng-idle/angular-idle.min.js',
+            'bower_components/moment/min/moment.min.js',
 
             'app/ui/**/*.js',
 

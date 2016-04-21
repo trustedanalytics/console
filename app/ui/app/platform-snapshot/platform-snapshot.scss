@@ -1,0 +1,82 @@
+/**
+ * Copyright (c) 2015 Intel Corporation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+.platform-snapshot {
+
+  .panel-heading {
+      background-color: #0076c7;
+      color: #fff;
+  }
+
+  .panel-body {
+    .searchbar {
+      width:30%;
+      search-bar {
+        display: block;
+        position: relative;
+        em {
+          position: absolute;
+          right: 12px;
+          top: 25%;
+          font-size: 14px;
+        }
+      }
+    }
+  }
+
+  .ng-table-pager {
+    display: none;
+  }
+
+  .glyphicon {
+    color: #FBDE2A;
+  }
+
+  .export {
+    margin-bottom: 30px;
+  }
+
+  .app-details {
+    td:first-child{
+        font-weight: bold;
+      }
+  }
+
+  .list-item {
+    margin-left: 20px;
+  }
+
+  .option {
+    margin-left: 10px;
+  }
+
+  .details {
+    margin-left: 20px;
+  }
+
+  .chosen-row{
+    background: #0062a8;
+    a {
+      color: white;
+    }
+    color: white;
+  }
+
+  .selected {
+    background: #0062a8;
+    color: white;
+  }
+}

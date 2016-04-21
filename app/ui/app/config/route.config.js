@@ -31,7 +31,7 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
             abstract: true,
             templateUrl: getViewPath('main/app.html'),
             resolve: _.extend(LazyLoadProvider.load(['icons']), {
-                orgs: /*@ngInject*/ function (targetProvider) {
+                orgs: function (targetProvider) {
                     return targetProvider.refresh();
                 }
             })
@@ -321,6 +321,13 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
             controller: 'ChangePasswordController',
             templateUrl: getViewPath('changepassword/changepassword.html'),
             resolve: LazyLoadProvider.load(['parsley'])
+        })
+        .state('app.platform-snapshot', {
+            url: '/platformsnapshot',
+            title: 'Platform snapshot',
+            controller: 'PlatformSnapshotController',
+            controllerAs: 'ctrl',
+            templateUrl: getViewPath('platform-snapshot/platformcomponents.html')
         })
         .state('app.terms', {
             url: '/termsofuse',

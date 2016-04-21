@@ -130,7 +130,7 @@
     }
 
 
-    function getExternalTools(PlatformContextProvider, targetProvider, MenuItems, $scope) {
+    function getExternalTools(PlatformContextProvider, targetProvider, $scope) {
         PlatformContextProvider
             .getExternalTools(targetProvider.getOrganization().guid)
             .then(function (externalTools) {
