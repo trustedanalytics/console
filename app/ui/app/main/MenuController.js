@@ -25,7 +25,7 @@
         $scope.organizations = targetProvider.getOrganizations();
 
         function updateExternalTools() {
-            getExternalTools(PlatformContextProvider, targetProvider, MenuItems, $scope);
+            getExternalTools(PlatformContextProvider, targetProvider, $scope);
         }
         updateExternalTools();
 
