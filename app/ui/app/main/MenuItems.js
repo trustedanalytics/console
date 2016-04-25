@@ -39,6 +39,19 @@
             "sref": "app.modelcatalog",
             "icon": "icon-folder-alt"
         }, {
+            "text": "Job Scheduler",
+            "icon": "icon-hourglass",
+            "items": [
+                {
+                    "text": "Import data",
+                    "sref": "app.jobsscheduler.importdata.fromdatabase"
+                },
+                {
+                    "text": "Job browser",
+                    "sref": "app.jobsscheduler.jobs.workflowjobs"
+                }
+            ]
+        }, {
             "text": "Applications",
             "sref": "app.applications",
             "icon": "icon-grid"

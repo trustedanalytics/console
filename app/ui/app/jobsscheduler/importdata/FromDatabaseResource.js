@@ -16,11 +16,20 @@
 (function () {
     "use strict";
 
-    App.component('spinner', {
-        bindings: {
-            text: '<'
-        },
-        templateUrl: 'app/common/directives/spinner.html'
-    });
+    App.factory('FromDatabaseResource', function (Restangular, targetProvider) {
 
+        var resource = Restangular.service("v1").one("oozie");
+
+        var organization = targetProvider.getOrganization();
+
+        resource.getConfiguration = function () {
+            return this.one("configuration").get({org: organization.guid});
+        };
+
+        resource.postJob = function(jobData) {
+            return this.all('schedule_job').all('coordinated').post(jobData, {org: organization.guid});
+        };
+
+        return resource;
+    });
 }());

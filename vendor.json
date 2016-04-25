@@ -13,5 +13,7 @@
     "../../bower_components/c3/c3.min.js",
     "../../bower_components/c3/c3.min.css",
     "../../bower_components/angular-ellipsis/src/angular-ellipsis.min.js",
-    "../../bower_components/angular-messages/angular-messages.min.js"
+    "../../bower_components/angular-messages/angular-messages.min.js",
+    "../../bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js",
+    "../../bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css"
 ]

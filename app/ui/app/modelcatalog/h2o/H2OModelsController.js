@@ -16,7 +16,7 @@
 (function () {
     "use strict";
 
-    App.controller('H2OModelsController', function ($scope, State, ModelResource, ModelsTableParams,
+    App.controller('H2OModelsController', function ($scope, State, ModelResource, CommonTableParams,
                                                     targetProvider, H2OPublisherResource, NotificationService) {
 
         var state = new State().setPending();
@@ -39,15 +39,9 @@
         getInstances();
 
         var chosenInstance;
-
         $scope.onInstanceChange = function (instance) {
             chosenInstance = instance;
-            if (!chosenInstance) {
-                $scope.filteredModels = getAllExtendedModels();
-            }
-            else {
-                $scope.filteredModels = chosenInstance.models;
-            }
+            $scope.filteredModels =  chosenInstance ? chosenInstance.models : getAllExtendedModels();
             $scope.tableParams.reload();
         };
 
@@ -59,8 +53,9 @@
             });
             return _.flatten(_.pluck($scope.instances, "models"), true);
         }
+        $scope.filteredModels = getAllExtendedModels();
 
-        $scope.tableParams = ModelsTableParams.getTableParams($scope, function () {
+        $scope.tableParams = CommonTableParams.getTableParams($scope, function () {
             return $scope.filteredModels;
 
         });

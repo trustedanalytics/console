@@ -17,7 +17,7 @@
     "use strict";
 
     /*jshint newcap: false*/
-    App.factory('ApplicationsTableParams', function (ngTableParams, $filter) {
+    App.factory('CommonTableParams', function (ngTableParams, $filter) {
 
         return {
             getTableParams: function ($scope, dataCallback) {

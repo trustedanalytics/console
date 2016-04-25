@@ -23,6 +23,9 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
     $urlRouterProvider.when('/app/modelcatalog', '/app/modelcatalog/h2omodels');
     $urlRouterProvider.when('/app/services', '/app/services/marketplace');
     $urlRouterProvider.when('/app/platformdashboard', '/app/platformdashboard/summary');
+    $urlRouterProvider.when('/app/jobsscheduler/jobs', '/app/jobsscheduler/jobs/workflowjobs');
+    $urlRouterProvider.when('/app/jobsscheduler/importdata', '/app/jobsscheduler/importdata/fromdatabase');
+
     $urlRouterProvider.otherwise('/app/dashboard');
 
     $stateProvider
@@ -36,10 +39,65 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
                 }
             })
         })
+        .state('app.jobsscheduler', {
+            url: '/jobsscheduler',
+            abstract: true,
+            template: '<ui-view />'
+        })
+        .state('app.jobsscheduler.importdata', {
+            url: '/importdata',
+            abstract: true,
+            title: 'Import data',
+            controller: 'ImportDataController',
+            templateUrl: getViewPath('jobsscheduler/importdata/importdata.html')
+        })
+        .state('app.jobsscheduler.importdata.fromdatabase', {
+            url: '/fromdatabase',
+            title: 'Import data from database',
+            targetHeader: {org: true, space:false},
+            controller: 'FromDatabaseController',
+            templateUrl: getViewPath('jobsscheduler/importdata/fromDatabase.html'),
+            resolve: LazyLoadProvider.load(['bootstrap-datetimepicker', 'ngMessages'])
+        })
+        .state('app.jobsscheduler.jobs', {
+            url: '/jobs',
+            abstract: true,
+            title: 'Jobs browser',
+            controller: 'JobsBrowserController',
+            templateUrl: getViewPath('jobsscheduler/jobs/jobsbrowser.html')
+        })
+        .state('app.jobsscheduler.jobs.workflowjobs', {
+            url: '/workflowjobs',
+            title: 'Workflow jobs',
+            targetHeader: {org: true, space:false},
+            controller: 'WorkflowJobsController',
+            templateUrl: getViewPath('jobsscheduler/jobs/workflow/workflowjobs.html')
+        })
+        .state('app.jobsscheduler.workflowjob', {
+            url: '/workflowjobs/:workflowjobId',
+            title: 'Workflow job',
+            targetHeader: {org: true, space:false},
+            controller: 'WorkflowJobController',
+            templateUrl: getViewPath('jobsscheduler/jobs/workflow/workflowjob.html')
+        })
+        .state('app.jobsscheduler.jobs.coordinatorjobs', {
+            url: '/coordinatorjobs',
+            title: 'Coordinator jobs',
+            targetHeader: {org: true, space:false},
+            controller: 'CoordinatorJobsController',
+            templateUrl: getViewPath('jobsscheduler/jobs/coordinator/coordinatorjobs.html')
+        })
+        .state('app.jobsscheduler.coordinatorjob', {
+            url: '/coordinatorjobs/:coordinatorjobId',
+            title: 'Coordinator job',
+            targetHeader: {org: true, space:false},
+            controller: 'CoordinatorJobController',
+            templateUrl: getViewPath('jobsscheduler/jobs/coordinator/coordinatorjob.html')
+        })
         .state('app.platformdashboard', {
             url: '/platformdashboard',
             title: 'Platform Dashboard',
-
+            targetHeader: {org: false, space:false},
             controller: 'PlatformDashboardController',
             controllerAs: 'ctrl',
             templateUrl: getViewPath('operations/platform-dashboard.html')
@@ -221,7 +279,7 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
             controller: 'DataSetsController',
             controllerAs: 'ctrl',
             templateUrl: getViewPath('datacatalog/datasets/datasets.html'),
-            resolve: LazyLoadProvider.load(['dibari.angular-ellipsis']),
+            resolve: LazyLoadProvider.load(['bootstrap-datetimepicker','dibari.angular-ellipsis']),
             searchEnabled: true
         })
         .state('app.dataset', {

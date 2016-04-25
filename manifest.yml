@@ -23,6 +23,7 @@ applications:
       - model-catalog
       - h2o-model-publisher
       - platform-snapshot
+      - workflow-scheduler
     env:
       NPM_CONFIG_PRODUCTION: true
       VERSION: dev

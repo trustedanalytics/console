@@ -16,11 +16,10 @@
 (function () {
     "use strict";
 
-    App.component('spinner', {
-        bindings: {
-            text: '<'
-        },
-        templateUrl: 'app/common/directives/spinner.html'
-    });
+    App.controller('JobsBrowserController', function ($scope, $routeParams, $state) {
 
+        $scope.isTabActive = function (sref) {
+            return $state.is(sref) || $state.includes(sref);
+        };
+    });
 }());

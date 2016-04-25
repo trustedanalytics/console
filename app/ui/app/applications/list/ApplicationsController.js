@@ -17,7 +17,7 @@
     "use strict";
 
     App.controller('ApplicationsController', function (ApplicationResource, targetProvider, $scope, ngTableParams,
-        $q, AtkInstanceResource, ApplicationsTableParams, State) {
+        $q, AtkInstanceResource, CommonTableParams, State) {
 
         $scope.state = new State().setPending();
         $scope.details = [];
@@ -48,7 +48,7 @@
         };
         updateApplications();
 
-        $scope.tableParams = ApplicationsTableParams.getTableParams($scope, function () {
+        $scope.tableParams = CommonTableParams.getTableParams($scope, function () {
             return $scope.applications;
         });
 

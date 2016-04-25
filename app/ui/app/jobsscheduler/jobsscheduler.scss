@@ -1,0 +1,244 @@
+/**
+ * Copyright (c) 2015 Intel Corporation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+.importdata {
+
+  form {
+
+    .panel {
+      border: 1px solid #D3DAF5;
+    }
+
+    .panel-heading {
+      color: #fff;
+      background-color: #0076C7;
+      border-radius: 0;
+
+      a, a:active, a:hover{
+        color: #fff;
+      }
+    }
+
+    .panel .btn-group {
+      border: 1px solid #adadad;
+      height: 34px;
+    }
+
+    .panel-group .panel + .panel {
+      margin-top: 20px;
+    }
+
+    .panel-group .panel {
+      border-radius: 0;
+    }
+
+    .panel-body {
+      padding: 15px;
+    }
+
+    .sub-group {
+      display: flex;
+      display: -webkit-flex;
+    }
+
+    .group {
+      margin-bottom: 15px;
+    }
+
+    .input-group {
+      .input-group-addon {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 31vw;
+      }
+    }
+
+    .label-panel {
+      border-radius: 5px;
+      background-color: #f8f8f8;
+      background-clip: content-box;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      display: -webkit-flex;
+      -webkit-flex-direction: column;
+      -webkit-justify-content: center;
+
+      > p {
+        word-wrap: break-word;
+        text-align: center;
+        margin: 7px 0;
+        padding: 0 10px;
+      }
+
+      .or {
+        font-weight: bold;
+      }
+    }
+
+    .underlined-group {
+      padding-bottom: 15px;
+      border-bottom: 2px dotted #f0f0f0;
+    }
+
+    .databaseAddress {
+
+      label {
+        display: block;
+      }
+    }
+    
+    #access {
+      display: flex;
+      display: -webkit-flex;
+
+      > .radio{
+        margin-right: 10px;
+      }
+    }
+
+    #defaultDir {
+      display: inline;
+      margin-left: 10px;
+
+      .fa-check {
+        margin-right: 5px;
+      }
+    }
+
+    .dropdown-menu.timezones{
+      max-height: 160px;
+      overflow-y: scroll;
+    }
+  }
+
+  .fa-info-circle {
+    color: $btn-primary-color;
+    margin-left: 5px;
+  }
+  .validationMessage {
+    color: red;
+  }
+}
+
+
+.jobsbrowser {
+
+  label{
+    border-radius: 0.25em;
+    color: #fff;
+    margin: 0;
+    width: 150px;
+    text-align: center;
+  }
+
+  label.success {
+    background: $color-green;
+  }
+
+  label.notsuccess {
+    background: $color-red;
+  }
+
+  label.intermediate {
+    background: #FBB900;
+  }
+
+  .panel {
+    border: 1px solid #D3DAF5;
+  }
+
+  .panel .btn {
+    border: 1px solid #ccc !important;
+  }
+
+  .panel-default {
+    .panel-heading {
+      font-size: 16px;
+      background-color: #0076C7;
+      color: #fff;
+
+      a, a:active, a:hover {
+        color: #fff;
+      }
+    }
+  }
+
+  .actions {
+    margin-top: 10px;
+    margin-bottom: 30px;
+
+    button {
+      margin-right: 10px;
+      width: 90px;
+
+      &::before {
+        margin-right: 10px;
+      }
+    }
+  }
+
+  h4 {
+    margin-top: 30px;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  .btn-default {
+    border-color: #ccc !important;
+  }
+
+  .table {
+
+    li {
+      list-style: none !important;
+    }
+
+  }
+
+  .jobdetails{
+
+    td:first-child{
+      font-weight: bold;
+    }
+  }
+
+  .logs {
+    pre {
+      height: 350px !important;
+      overflow-y: scroll;
+      display: table;
+      table-layout: fixed;
+      width: 100%;
+      padding: 0;
+      margin: 0;
+
+      p {
+        width: 100%;
+        height: 100%;
+        overflow: scroll;
+        margin: 0;
+        padding-left: 5px;
+      }
+    }
+  }
+}
+
+.range {
+  margin-right: 15px;
+}

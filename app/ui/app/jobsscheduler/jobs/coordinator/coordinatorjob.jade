@@ -1,0 +1,77 @@
+//
+   Copyright (c) 2015 Intel Corporation
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+//-
+spinner(ng-show='state.isPending()')
+div(ng-if='state.isLoaded()')
+   h3
+       | {{job.coordJobName}} - coordinator
+   .content.jobsbrowser
+      div(ng-show="toKilled(job.status)")
+         h4 Actions
+            div.actions
+               button.btn.btn-primary(ng-click='onStatusChange("kill")') Kill
+      .panel-group
+         .panel.panel-default
+            .panel-heading Details
+            .panel-body
+               table.table.jobdetails
+                  tbody
+                     tr
+                        td Status
+                        td
+                           d-status(status="job.status")
+                     tr
+                        td Job id
+                        td {{ job.coordJobId }}
+                     tr
+                        td Start time
+                        td {{ job.startTime }}
+                     tr
+                        td End time
+                        td {{ job.endTime }}
+                     tr
+                        td Next materialized time
+                        td {{ job.nextMaterializedTime }}
+                     tr
+                        td Last action
+                        td {{ job.lastAction }}
+                     tr
+                        td Coordinated job path
+                        td {{ job.coordJobPath }}
+                     tr
+                        td Frequency
+                        td {{ job.frequency }} {{ job.timeUnit.toLowerCase() }}
+                     tr
+                        td Timezone
+                        td {{ job.timeZone }}
+
+      .panel-group
+         .panel.panel-default
+            .panel-heading Started workflow jobs
+            .panel-body
+               div(ng-if='!startedJobs.length')
+                  h4 No running jobs
+               .span12.row-fluid(ng-if='startedJobs.length')
+                  table.table-striped(ng-show='startedJobs.length', ng-table="tableParams", show-filter="true" class="table")
+                     tr(ng-repeat="job in $data")
+                        td(data-title="'Name'" filter="{ 'appName': 'text'}" sortable="'appName'") {{ job.appName }}
+                        td(data-title="'Job id'" filter="{ 'id': 'text'}") {{ job.id }}
+                        td(data-title="'Created time'" sortable="'createdTime'") {{ job.createdTime }}
+                        td(data-title="'Start time'" sortable="'startTime'") {{ job.startTime }}
+                        td(data-title="'End time'" sortable="'endTime'") {{ job.endTime }}
+                        td(data-title="'Status'" filter="{ 'status': 'text'}" sortable="'status'")
+                           d-status(status="job.status")
+                        td
+                           a(ui-sref='app.jobsscheduler.workflowjob({ workflowjobId: job.id })') See details

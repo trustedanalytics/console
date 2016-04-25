@@ -36,6 +36,7 @@
 @import "../latestevents/latestevents";
 @import "../operations/operations";
 @import "../modelcatalog/modelcatalog";
+@import "../jobsscheduler/jobsscheduler";
 @import "../documentation/documentation";
 @import "../platform-snapshot/platform-snapshot";
 
@@ -90,5 +91,22 @@
 
   > tbody > tr:first-child > td {
     border-top: none;
+  }
+}
+
+date-time-picker > div {
+  line-height: 35px;
+
+  .btn {
+    border: none;
+    height: auto;
+  }
+
+  table tr {
+    border-bottom: 1px #eee dotted;
+    td {
+      padding: 4px;
+      vertical-align: middle;
+    }
   }
 }

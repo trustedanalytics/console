@@ -66,6 +66,11 @@
             }, {
                 name: 'ng-file-upload',
                 files: ['vendor/ng-file-upload/ng-file-upload.min.js']
+            },
+            {
+                name: 'bootstrap-datetimepicker',
+                files: ['vendor/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
+                        'vendor/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css']
             }
         ]
     });

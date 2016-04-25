@@ -15,12 +15,12 @@
  */
 (function () {
     "use strict";
-
-    App.component('spinner', {
-        bindings: {
-            text: '<'
-        },
-        templateUrl: 'app/common/directives/spinner.html'
+    App.directive('dStatus', function () {
+        return {
+            scope: {
+                status: '='
+            },
+            templateUrl: 'app/jobsscheduler/jobs/status.html'
+        };
     });
-
 }());

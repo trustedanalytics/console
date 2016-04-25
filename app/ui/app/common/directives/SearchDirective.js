@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 (function () {
     "use strict";
 
     App.component('searchBar', {
-        templateUrl: 'app/common/search.html',
+        templateUrl: 'app/common/directives/search.html',
         controller: function($scope) {
 
             $scope.search = function () {
