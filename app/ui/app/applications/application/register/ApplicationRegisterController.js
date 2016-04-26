@@ -42,7 +42,7 @@
                     .withErrorMessage('Failed to get cloned applications from catalog')
                     .getClonedApplication($scope.service.app.metadata.guid )
                     .then(function (response) {
-                        $scope.clonedApps = response.plain();
+                        $scope.offerings = response.plain();
                     });
             }
         });

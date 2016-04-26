@@ -83,7 +83,7 @@
         self.tryDeleteOffering = function() {
             self.state.setPending();
             ApplicationRegisterResource
-                .withErrorMessage('Failed to delete application from marketplace')
+                .withErrorMessage('Failed to delete service offering from marketplace')
                 .deregisterApplication(self.serviceId)
                 .then(function () {
                     NotificationService.success('Application has been delete from marketplace');
