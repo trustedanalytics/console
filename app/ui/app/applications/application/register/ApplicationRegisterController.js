@@ -34,24 +34,34 @@
 
         $scope.submitRegister = submitRegister;
         $scope.addTag = addTag;
-        $scope.$watch('appCtrl.application', function (application) {
+        $scope.$parent.$watch('application', function (application) {
             if(application) {
                 $scope.service.app.metadata.guid = application.guid;
-                $scope.state.value = $scope.state.values.LOADED;
+                $scope.state.setLoaded();
+                ApplicationRegisterResource
+                    .withErrorMessage('Failed to get cloned applications from catalog')
+                    .getClonedApplication($scope.service.app.metadata.guid )
+                    .then(function (response) {
+                        $scope.clonedApps = response.plain();
+                    });
             }
         });
 
-        function submitRegister() {
-            $scope.state.value = $scope.state.values.PENDING;
 
+
+        function submitRegister() {
+            $scope.state.setPending();
+
+            $scope.service.creator_info = { creator_guid: $scope.$parent.appId, creator_name: $scope.$parent.application.name };
             $scope.service.org_guid = (targetProvider.getOrganization() || {}).guid;
             ApplicationRegisterResource
                 .withErrorMessage('Failed to register application in marketplace')
                 .registerApplication($scope.service)
-                .then(function () {
+                .then(function (response) {
+                    $scope.clonedApps.push(response.plain());
                     NotificationService.success('Application has been registered in marketplace');
                 }).finally(function () {
-                    $scope.state.value = $scope.state.values.LOADED;
+                    $scope.state.setLoaded();
                 });
         }
 

@@ -273,6 +273,9 @@
 
     padding: 25px 30px;
 
+    &.pull-right {
+      padding: 0px;
+    }
     .header {
       font-size: 20px;
       font-weight: lighter;

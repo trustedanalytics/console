@@ -18,7 +18,7 @@
    spinner(ng-if='state.isPending()')
 
    .clearfix(ng-if='state.isLoaded()')
-      form.form-horizontal(name="uploadForm" data-ng-submit='submitRegister()')
+      form.col-sm-6.form-horizontal(name="uploadForm" data-ng-submit='submitRegister()')
          .form-group
             label.col-sm-2.control-label(for='uniq') Name
             .col-sm-10
@@ -41,9 +41,9 @@
 
          .form-group
             .col-sm-2
-            .col-sm-2
+            .col-sm-4
                input#uniq.form-control(type='text', placeholder='tag name...', data-ng-model='tag')
-            .col-sm-8
+            .col-sm-6
                input.btn.btn-primary(type='button', value='Add tag', ng-click='addTag(tag)')
 
          .form-group(ng-if='service.tags.length')
@@ -55,3 +55,11 @@
          .form-group
             .col-sm-offset-2.col-sm-10
                input.btn.btn-primary(type='submit', value='Register')
+
+      .col-sm-6
+         .panel.panel-default
+            .panel-heading Cloned applications
+            spinner(ng-if='clonedApps === undefined')
+            .list-group#cloned
+               .list-group-item(ng-repeat="app in clonedApps")
+                  a(href="{{ '#/app/service/'+app.metadata.guid }}") {{ app.entity.label }}

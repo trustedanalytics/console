@@ -31,6 +31,10 @@
 
             | {{ ctrl.service.description }}
 
+            .pull-right(ng-if='ctrl.deletable')
+                button.btn.btn-danger(ng-click='ctrl.tryDeleteOffering()')
+                    | Delete offering
+
             .tags(ng-if='ctrl.service.tags.length')
                 span.label.label-tag(data-ng-repeat='tag in ctrl.service.tags')
                     | {{ tag }}

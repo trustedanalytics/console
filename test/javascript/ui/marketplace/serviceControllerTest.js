@@ -100,7 +100,7 @@ describe("Unit: ServiceController", function () {
 
     it('init, got service, set state loaded', function () {
         createController();
-        getServiceDefer.resolve();
+        getServiceDefer.resolve({service: {}, deletable: true});
         $rootScope.$digest();
 
         expect(controller.state.value).to.be.equals(state.values.LOADED);
@@ -123,7 +123,7 @@ describe("Unit: ServiceController", function () {
 
     it('init, got service, select first plan', function () {
         createController();
-        getServiceDefer.resolve();
+        getServiceDefer.resolve({service: {}, deletable: true});
         $rootScope.$digest();
         expect(controller.selectedPlan).to.be.equals(extractedService.plans[0]);
     });

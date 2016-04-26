@@ -18,7 +18,7 @@
 
 
     App.controller('ServiceController', function (ServiceResource, serviceExtractor, NotificationService, $stateParams,
-        targetProvider, $scope, ServiceInstanceResource, State) {
+        targetProvider, $scope, ServiceInstanceResource, State, ApplicationRegisterResource, $location) {
 
         var GATEWAY_TIMEOUT_ERROR = 504;
 
@@ -80,6 +80,19 @@
             }
         };
 
+        self.tryDeleteOffering = function() {
+            self.state.setPending();
+            ApplicationRegisterResource
+                .withErrorMessage('Failed to delete application from marketplace')
+                .deregisterApplication(self.serviceId)
+                .then(function () {
+                    NotificationService.success('Application has been delete from marketplace');
+                    $location.path('/app/services/marketplace');
+                }).finally(function () {
+                    self.state.setLoaded();
+                });
+        };
+
         self.getService();
 
         self.selectPlan = function (plan) {
@@ -101,8 +114,9 @@
             .withErrorMessage('Failed to retrieve service details')
             .getService(id)
             .then(function (serviceData) {
-                self.service = serviceExtractor.extractService(serviceData || {});
+                self.service = serviceExtractor.extractService(serviceData.service || {});
                 self.selectedPlan = self.service.plans[0];
+                self.deletable = serviceData.deletable;
                 self.state.setLoaded();
             })
             .catch(function (status) {
