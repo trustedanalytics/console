@@ -246,7 +246,7 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
             targetHeader: {org: true, space: true},
             entityDisplayName: 'GearPump',
             controller: 'ToolsInstancesListController',
-            templateUrl: getViewPath('tools/toolsInstancesList.html'),
+            templateUrl: getViewPath('tools/gearpumpInstancesList.html'),
             resolve: LazyLoadProvider.load(['ngMessages'])
         })
         .state('app.jupyter', {
