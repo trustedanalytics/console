@@ -58,7 +58,7 @@ describe("Unit: PendingInvitationsController", function() {
         ngTableParams = function() {
             this.page = sinon.stub();
             this.reload = sinon.stub();
-        }
+        };
     }));
 
     it('should initialize controller', function() {

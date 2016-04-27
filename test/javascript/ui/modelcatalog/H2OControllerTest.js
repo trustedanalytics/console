@@ -16,12 +16,6 @@
 
 describe("Unit: H2OModelsController", function() {
 
-    beforeEach(module('app'));
-
-    beforeEach(module(function($provide){
-        $provide.value('targetProvider', targetProvider);
-    }));
-
     var controller,
         scope,
         ModelResource,
@@ -31,6 +25,11 @@ describe("Unit: H2OModelsController", function() {
         state,
         $q;
 
+    beforeEach(module('app'));
+
+    beforeEach(module(function($provide){
+        $provide.value('targetProvider', targetProvider);
+    }));
 
     beforeEach(inject(function ($controller, $rootScope, _$q_, State) {
         scope = $rootScope.$new();

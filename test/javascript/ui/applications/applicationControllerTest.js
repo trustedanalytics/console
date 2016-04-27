@@ -21,13 +21,21 @@ describe("Unit: ApplicationController", function () {
         applicationResource,
         serviceInstanceResource,
         notificationService,
+        applicationHelper,
         state,
         $q,
         $state,
         $scope,
         APP_ID = "app-guid";
 
-    beforeEach(module('app'));
+    beforeEach(module('app', function($provide) {
+        notificationService = sinon.stub({
+            success: function () {},
+            error: function () {}
+        });
+
+        $provide.value('NotificationService', notificationService);
+    }));
 
     beforeEach(inject(function(targetProvider) {
        targetProvider.refresh = sinon.stub().returns([]);
@@ -35,19 +43,19 @@ describe("Unit: ApplicationController", function () {
 
     beforeEach(inject(function ($controller, ApplicationResource,
                                 ServiceInstanceResource, $routeParams,
-                                State, _$q_, $rootScope, _$state_) {
+                                State, _$q_, $rootScope, _$state_, ApplicationHelper) {
         state = new State();
         serviceInstanceResource = ServiceInstanceResource;
         applicationResource = ApplicationResource;
-        notificationService = {};
+        applicationHelper = ApplicationHelper;
         $q = _$q_;
         $scope = $rootScope.$new();
         $state = _$state_;
         createController = function () {
             controller = $controller('ApplicationController', {
                 $stateParams: {appId: APP_ID},
-                NotificationService: notificationService,
-                $scope: $scope
+                $scope: $scope,
+                ApplicationHelper: applicationHelper
             });
         };
 
@@ -70,7 +78,7 @@ describe("Unit: ApplicationController", function () {
 
     it('getApplication error 404, set state error not found', function () {
         var deferred = $q.defer();
-        applicationResource.getApplication = sinon.stub().returns(deferred.promise)
+        applicationResource.getApplication = sinon.stub().returns(deferred.promise);
         deferred.reject({ status: 404 });
         createController();
         $scope.$digest();

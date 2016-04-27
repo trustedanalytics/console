@@ -149,7 +149,7 @@ describe("Unit: ToolsInstanceListController", function () {
                     free: true
                 }
             }
-        ]
+        ];
 
         var deferredApp = $q.defer();
         toolsInstanceMock.deleteInstance = sinon.stub().returns(deferredApp.promise);

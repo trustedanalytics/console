@@ -65,7 +65,7 @@ describe("Unit: LatestEventsController", function() {
             total: 0
         };
 
-        toReturn.plain = function(){return this};
+        toReturn.plain = function(){return this;};
 
         scope.collectData(deferred, params);
         deferred.resolve(toReturn);

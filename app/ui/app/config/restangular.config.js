@@ -32,18 +32,13 @@
             var notificationPromise = null;
             return {
                 'responseError': function(response) {
-                    if(response.status === 401) {
+                    if(response.status === 401 && response.data === 'session_expired' && notificationPromise === null) {
                         //probably session expired. Reload the whole page so it is redirected to login form.
-                        if(response.data === 'session_expired') {
-
-                            if(notificationPromise === null) {
-                                var notificationService = $injector.get('NotificationService');
-                                notificationPromise = notificationService.info('confirm-logout');
-                                notificationPromise.then(function () {
-                                        $window.location.href = '/logout';
-                                    });
-                            }
-                        }
+                        var notificationService = $injector.get('NotificationService');
+                        notificationPromise = notificationService.info('confirm-logout');
+                        notificationPromise.then(function () {
+                            $window.location.href = '/logout';
+                        });
                     }
                     return $q.reject(response);
                  }

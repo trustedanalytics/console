@@ -44,34 +44,45 @@ describe("Unit: ManageOrganizationsController", function () {
         }
     ];
 
-    beforeEach(module('app'));
+    beforeEach(module('app', function($provide) {
+        notificationService = {
+            error: sinon.stub(),
+            success: sinon.stub()
+        };
 
-    beforeEach(inject(function (State, _OrganizationResource_, _$controller_, _$q_, _$rootScope_) {
-        $rootScope = _$rootScope_;
-        scope = $rootScope.$new();
-        OrganizationResource = _OrganizationResource_;
-        SpaceResource = {
-            withErrorMessage: function() {
-                return this;
-            }
-        };
-        state = {
-            go: sinon.stub()
-        };
-        $controller = _$controller_;
-        OrganizationsModalsService = sinon.stub();
-        OrganizationsModalsService.supressGenericError = sinon.stub().returns(OrganizationsModalsService);
-        $q = _$q_;
         targetProvider = {
             setOrganization: sinon.stub(),
             refresh: function () {
                 return $q.defer().promise;
             }
         };
-        notificationService = {
-            error: sinon.stub(),
-            success: sinon.stub()
+
+        OrganizationsModalsService = sinon.stub();
+        OrganizationsModalsService.supressGenericError = sinon.stub().returns(OrganizationsModalsService);
+
+        SpaceResource = {
+            withErrorMessage: function() {
+                return this;
+            }
         };
+
+        $provide.value('NotificationService', notificationService);
+        $provide.value('OrganizationsModalsService', OrganizationsModalsService);
+        $provide.value('SpaceResource', SpaceResource);
+        $provide.value('targetProvider', targetProvider);
+    }));
+
+    beforeEach(inject(function (State, _OrganizationResource_, _$controller_, _$q_, _$rootScope_) {
+        $rootScope = _$rootScope_;
+        scope = $rootScope.$new();
+        OrganizationResource = _OrganizationResource_;
+
+        state = {
+            go: sinon.stub()
+        };
+        $controller = _$controller_;
+
+        $q = _$q_;
 
         currentUser = {
             "email": "email@email"

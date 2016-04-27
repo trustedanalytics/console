@@ -106,7 +106,7 @@ describe("Unit: AddOrganizationsController", function () {
         $scope.$root.$digest();
 
         expect(NotificationService.success.called).to.be.true;
-        expect(state.go.calledWith('app.manage.organizations.manage'))
+        expect(state.go.calledWith('app.manage.organizations.manage'));
 
     });
 });

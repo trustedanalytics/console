@@ -17,7 +17,7 @@ describe("Unit: InvitationSendController", function() {
 
     beforeEach(module('app'));
 
-    var controller, scope, httpBackend, state;
+    var controller, scope, httpBackend;
 
     beforeEach(inject(function($injector){
         scope = $injector.get('$rootScope');
@@ -28,7 +28,6 @@ describe("Unit: InvitationSendController", function() {
                 error: function(){}
             }
         });
-        //state = controller.state;
 
         httpBackend = $injector.get('$httpBackend');
     }));

@@ -94,7 +94,7 @@ describe("Unit: GearPumpAppDeployController", function () {
                         "login": "login",
                         "password": "password"
                     }
-                }
+                };
             }
         },
         EXAMPLE_FORM = {

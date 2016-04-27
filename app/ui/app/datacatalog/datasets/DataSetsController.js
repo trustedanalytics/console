@@ -17,7 +17,7 @@
     "use strict";
 
     App.controller('DataSetsController', function ($scope, DataSetResource, $routeParams, ngTableParams, State,
-                                                   $cookies, PlatformContextProvider) { 
+                                                   $cookies, PlatformContextProvider) {
 
         var TOOL_KEY = 'datacatalog_tool',
             DEFAULT_TOOL = 'arcadia',
@@ -129,7 +129,7 @@
             $event.preventDefault();
             $event.stopPropagation();
             $scope.toOpened = true;
-        }; 
+        };
     });
 
     function getFormatIcon(format) {

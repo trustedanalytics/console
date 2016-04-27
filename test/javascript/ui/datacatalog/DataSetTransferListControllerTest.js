@@ -166,7 +166,7 @@ describe("Unit: DataSetTransferListControllerTest", function() {
             "ERROR" : 1440505096,
             "VALIDATED" : 1440504890,
             "NEW" : 1440504890
-        }
+        };
 
         var maxPairs = controller.getCurrentStatesTimestamp(testTimestamps, "ERROR");
         expect(maxPairs.state).to.be.equal("ERROR");

@@ -69,12 +69,6 @@
             }
         };
 
-        var checkSpace = function (space) {
-            return _.some(spaces, function (item) {
-                return angular.equals(item, space);
-            });
-        };
-
         return angular.extend(target, {
             getOrganization: function () {
                 ensureData();
@@ -89,7 +83,7 @@
                 $cookies.putObject(ORGANIZATION_KEY, organization);
 
                 angular.copy(organization.spaces, spaces);
-                if (!checkSpace(space)) {
+                if (!checkSpace(spaces, space)) {
                     target.setSpace(spaces[0], true);
                 }
                 if (!muteEvent) {
@@ -123,5 +117,11 @@
             }
         });
     });
+
+    function checkSpace (spaces, space) {
+        return _.some(spaces, function (item) {
+            return angular.equals(item, space);
+        });
+    }
 
 }());

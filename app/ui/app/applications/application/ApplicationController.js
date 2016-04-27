@@ -16,8 +16,7 @@
 (function () {
     "use strict";
 
-    App.controller('ApplicationController', function ($scope, $stateParams, State, ServiceInstanceResource, ApplicationResource,
-                                                      $state, NotificationService, $q) {
+    App.controller('ApplicationController', function ($scope, $stateParams, State, $state, ApplicationHelper) {
 
         var appId = $stateParams.appId;
 
@@ -36,136 +35,36 @@
             return $state.is(sref);
         };
 
-        /*jshint latedef: false */
-        loadApplicationSummary(ApplicationResource, $scope.appId, ServiceInstanceResource, $scope.state, $q)
-            .then(function(data){
-                $scope.instances = data.instances;
-                $scope.application = data.application;
-            });
-
+        loadApplication();
 
         $scope.refresh = function () {
             $scope.state.setPending();
-            loadApplicationSummary(ApplicationResource, $scope.appId, ServiceInstanceResource, $scope.state, $q)
+            loadApplication();
+        };
+
+        $scope.restage = function () {
+            ApplicationHelper.restageApplication($scope.state, appId);
+        };
+
+        $scope.start = function () {
+            ApplicationHelper.startApplication($scope.state, appId);
+        };
+
+        $scope.stop = function () {
+            ApplicationHelper.stopApplication($scope.state, appId);
+        };
+
+        $scope.delete = function () {
+            ApplicationHelper.deleteApp($scope.state, appId);
+        };
+
+        function loadApplication() {
+            ApplicationHelper.loadApplicationSummary($scope.state, appId)
                 .then(function(data){
                     $scope.instances = data.instances;
                     $scope.application = data.application;
                 });
-        };
-
-        $scope.restage = function () {
-            $scope.state.setPending();
-
-            ApplicationResource
-                .withErrorMessage('Restage failed')
-                .postStatus(appId, {
-                    state: 'RESTAGING'
-                })
-                .then(function () {
-                    NotificationService.success('Restage has been scheduled');
-                })
-                .finally(function () {
-                    $scope.state.setLoaded();
-                });
-        };
-
-        $scope.start = function () {
-            $scope.state.setPending();
-
-            ApplicationResource.postStatus(appId, {
-                state: 'STARTED'
-            })
-                .then(function onSuccess() {
-                    NotificationService.success('Starting application has been scheduled.');
-                })
-                .catch(function onError() {
-                    NotificationService.error('Starting application failed');
-                })
-                .finally(function () {
-                    $scope.state.setLoaded();
-                });
-        };
-
-        $scope.stop = function () {
-            $scope.state.setPending();
-
-            ApplicationResource.postStatus(appId, {
-                state: 'STOPPED'
-            })
-                .then(function onSuccess() {
-                    NotificationService.success('Stopping the application has been scheduled.');
-                })
-                .catch(function onError() {
-                    NotificationService.error('Stopping the application failed.');
-                })
-                .finally(function () {
-                    $scope.state.setLoaded();
-                });
-        };
-
-        $scope.delete = function () {
-            $scope.state.setPending();
-
-            ApplicationResource
-                .withErrorMessage('Deleting application failed')
-                .getOrphanServices(appId)
-                .then(function onSuccess(servicesToDelete) {
-                    $scope.state.setLoaded();
-                    NotificationService.confirm('confirm-delete', {servicesToDelete: servicesToDelete})
-                        .then(function (cascade) {
-                            $scope.state.setPending();
-                            return ApplicationResource
-                                .withErrorMessage('Deleting application failed')
-                                .deleteApplication(appId, cascade[0]);
-                        })
-                        .then(function onSuccess() {
-                            $state.go('app.applications');
-                            NotificationService.success('Application has been deleted');
-                        })
-                        .finally(function onError() {
-                            $scope.state.setLoaded();
-                        });
-                })
-                .catch(function onError() {
-                    $scope.state.setError();
-                });
-        };
+        }
 
     });
-
-    function loadInstances(serviceInstanceResource, spaceGuid, state) {
-        return serviceInstanceResource.getAll(spaceGuid)
-            .then(function(instances) {
-                state.setLoaded();
-                return instances;
-            });
-    }
-
-    function loadApplicationSummary(applicationResource, appId, serviceInstanceResource, state, $q) {
-        var application, instances;
-        return applicationResource.getApplication(appId)
-            .then(function onSuccess(_application_) {
-                application = _application_;
-                application.env = application.environment_json ?
-                    Object.keys(application.environment_json).map(function (k) {
-                        return { key: k, value: application.environment_json[k] };
-                    }) : [];
-            })
-            .then(function onSuccess() {
-                return loadInstances(serviceInstanceResource, application.space_guid, state);
-            })
-            .then(function(_instances_) {
-                instances = _instances_;
-            })
-            .then(function() {
-                return {
-                    application: application,
-                    instances: instances
-                };
-            })
-            .catch(function onError(response) {
-                state.setError(response.status);
-                return $q.reject();
-            });
-    }
 }());

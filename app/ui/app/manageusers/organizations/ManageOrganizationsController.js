@@ -18,17 +18,9 @@
 
     /*jshint newcap: false*/
     App.controller('ManageOrganizationsController', function ($scope, OrganizationResource, $stateParams, State,
-        editableOptions, editableThemes, targetProvider, $state, OrganizationsModalsService, SpaceResource,
-        NotificationService, UserProvider) {
+        editableOptions, editableThemes, targetProvider, $state, OrganizationsModalsService, UserProvider, OrganizationHelper) {
 
-        editableOptions.theme = 'bs3';
-
-        editableThemes.bs3.inputClass = 'input-lg';
-        editableThemes.bs3.buttonsClass = 'btn-sm';
-        editableThemes.bs3.submitTpl = '<button type="submit" class="btn btn-success"><span class="fa fa-check"></span></button>';
-        editableThemes.bs3.cancelTpl = '<button type="button" class="btn btn-default" ng-click="$form.$cancel()">' +
-            '<span class="fa fa-times text-muted"></span>' +
-            '</button>';
+        OrganizationHelper.configEditable(editableOptions, editableThemes);
         $scope.organizations = [];
         $scope.isAdmin = false;
         $scope.state = new State();
@@ -36,7 +28,7 @@
         var shownOrgUuid = $stateParams.orgId || null;
 
         /*jshint latedef: false */
-        loadOrganizations();
+        OrganizationHelper.loadOrganizations($scope.state, refreshOrganizations);
 
         $scope.showOrg = function (orgGuid) {
             if (orgGuid) {
@@ -58,15 +50,7 @@
         };
 
         $scope.updateName = function (newName) {
-            $scope.state.setPending();
-            OrganizationResource
-                .withErrorMessage('Failed to change organization name')
-                .updateName($scope.current.guid, newName)
-                .then(OrganizationsModalsService.onUpdateSuccess)
-                .catch(OrganizationsModalsService.onUpdateError)
-                .finally(function () {
-                    $scope.state.setLoaded();
-                });
+            OrganizationHelper.updateName($scope.state, $scope.current, newName);
         };
 
         $scope.deleteOrganization = function () {
@@ -80,7 +64,7 @@
 
                 })
                 .then(OrganizationsModalsService.onDeleteSuccess)
-                .then(loadOrganizations)
+                .then(OrganizationHelper.loadOrganizations($scope.state, refreshOrganizations))
                 .catch(OrganizationsModalsService.onDeleteError)
                 .finally(function () {
                     $scope.state.setLoaded();
@@ -88,47 +72,12 @@
         };
 
         $scope.addSpace = function () {
-            var existingSpace = _.findWhere($scope.current.spaces, {name: $scope.spaceName});
-            if (existingSpace) {
-                NotificationService.error('Space "' + $scope.spaceName + '" already exists');
-            }
-            else {
-                $scope.state.setPending();
-                SpaceResource
-                    .withErrorMessage("Failed to create a space")
-                    .createSpace($scope.spaceName, $scope.current.guid)
-                    .then(function () {
-                        return targetProvider.refresh();
-                    })
-                    .then(function (organizations) {
-                        refreshOrganizations(organizations);
-                        $scope.spaceName = '';
-                        NotificationService.success("Space created");
-                    })
-                    .finally(function () {
-                        $scope.state.setLoaded();
-                    });
-            }
+            OrganizationHelper.addSpace($scope.state, $scope.current, $scope.spaceName, refreshOrganizations);
+            $scope.spaceName = '';
         };
 
         $scope.deleteSpace = function (space) {
-            NotificationService.confirm('delete-space-confirm')
-                .then(function () {
-                    $scope.state.setPending();
-                    return SpaceResource
-                        .withErrorMessage('Failed to remove the space')
-                        .removeSpace(space.guid);
-                })
-                .then(function () {
-                    return targetProvider.refresh();
-                })
-                .then(function (organizations) {
-                    refreshOrganizations(organizations);
-                    NotificationService.success("Space deletion scheduled. Please try to refresh page after a while.");
-                })
-                .finally(function () {
-                    $scope.state.setLoaded();
-                });
+            OrganizationHelper.deleteSpace(space, $scope.state, refreshOrganizations);
         };
 
         $scope.$watchCollection('organizations', function () {
@@ -138,10 +87,10 @@
         });
 
         function refreshOrganizations(organizations) {
-            var visibleOrganizations = $scope.isAdmin ? organizations : filterManagedOrganizations(organizations);
+            var visibleOrganizations = $scope.isAdmin ? organizations : OrganizationHelper.filterManagedOrganizations(organizations);
             $scope.organizations = visibleOrganizations.sort(function (org1, org2) {
                 return org1.name.localeCompare(org2.name);
-            }); 
+            });
             if ($scope.current) {
                 $scope.showOrg($scope.current.guid);
             }
@@ -150,27 +99,10 @@
             }
         }
 
-        function loadOrganizations() {
-            $scope.state.setPending();
-
-            targetProvider.refresh()
-                .then(function (organizations) {
-                    refreshOrganizations(organizations);
-                    $scope.state.setLoaded();
-                })
-                .catch(function () {
-                    NotificationService.error("Loading organizations failed");
-                });
-        }
-
         $scope.setCurrentOrg = function () {
             $scope.current = targetProvider.getOrganization();
         };
     });
 
-    function filterManagedOrganizations(organizations) {
-        return _.filter(organizations, function (org) {
-            return org.manager;
-        });
-    }
+
 }());
