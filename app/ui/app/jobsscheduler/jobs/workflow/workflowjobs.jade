@@ -17,11 +17,9 @@ h3
     | Workflow jobs browser
 
     .range.pull-right
-        button.btn.btn-default(ng-click='getJobs("hours",1)' ) 1 hour
-        button.btn.btn-default(ng-click='getJobs("days",1)' ng-class='{active: unit=="days" && amount==1}') 1 day
-        button.btn.btn-default(ng-click='getJobs("days",2)') 2 days
-        button.btn.btn-default(ng-click='getJobs("weeks",1)') 1 week
-        button.btn.btn-default(ng-click='getJobs("days",30)') 1 month
+        button.btn.btn-default(ng-repeat='button in timeButtons', ng-click='getJobs(button.unit, button.amount)',
+            ng-class='{active: unit===button.unit && amount===button.amount}')
+            | {{button.text}}
 
 spinner(ng-show='state.isPending()')
 

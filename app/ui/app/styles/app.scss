@@ -27,6 +27,8 @@
 @import "main/sidebar";
 @import "main/spinner";
 
+@import "themes/intel/intel-theme";
+
 @import "../applications/applications";
 @import "../tools/tools";
 @import "../datacatalog/datacatalog";
@@ -39,8 +41,6 @@
 @import "../jobsscheduler/jobsscheduler";
 @import "../documentation/documentation";
 @import "../platform-snapshot/platform-snapshot";
-
-@import "themes/intel/intel-theme";
 
 @media screen and (max-width: 768px) {
   .page-box {
@@ -103,7 +103,7 @@ date-time-picker > div {
   }
 
   table tr {
-    border-bottom: 1px #eee dotted;
+    border-bottom: 1px $datetimpicker-intersection-borderline dotted;
     td {
       padding: 4px;
       vertical-align: middle;

@@ -57,11 +57,13 @@ describe("Unit: WorkflowJobController", function() {
 
     it('should not be null', function () {
         controller = createController();
+
         expect(controller).not.to.be.null;
     });
 
     it('init, set pending and get job details', function () {
         createController();
+
         expect(scope.state.isPending(), 'pending').to.be.true;
         expect(workflowJobResource.getJob).to.be.called;
     });
@@ -70,6 +72,7 @@ describe("Unit: WorkflowJobController", function() {
         createController();
         defer.resolve("response");
         scope.$apply();
+
         expect(scope.state.isLoaded(), 'loaded').to.be.true;
         expect(workflowJobResource.getJob).to.be.called;
         expect(scope.job).to.be.equal("response");
@@ -84,13 +87,16 @@ describe("Unit: WorkflowJobController", function() {
             return deferred.promise;
         };
         deferred.resolve();
+
         scope.onStatusChange();
         scope.$digest();
+
         expect(changedSpied.called).to.be.true;
     });
 
     it('init, set pending and get job logs', function () {
         createController();
+
         expect(scope.state.isPending(), 'pending').to.be.true;
         expect(workflowJobResource.getLogs).to.be.called;
     });

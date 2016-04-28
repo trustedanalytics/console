@@ -16,7 +16,7 @@
 (function () {
     "use strict";
 
-    App.controller('CoordinatorJobsController', function ($scope, State, CommonTableParams,
+    App.controller('CoordinatorJobsController', function ($scope, State, CommonTableParams, JobsConfig,
                                                           CoordinatorJobResource, targetProvider) {
 
         var state = new State().setPending();
@@ -27,6 +27,7 @@
             $scope.getJobs($scope.unit, $scope.amount);
         });
 
+        $scope.timeButtons = JobsConfig.timeButtons;
         $scope.unit = 'days';
         $scope.amount = 1;
 

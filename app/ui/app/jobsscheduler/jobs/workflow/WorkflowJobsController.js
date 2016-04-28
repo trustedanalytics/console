@@ -16,8 +16,8 @@
 (function () {
     "use strict";
 
-    App.controller('WorkflowJobsController', function ($scope, State, CommonTableParams,
-                                                       WorkflowJobResource, targetProvider) {
+    App.controller('WorkflowJobsController', function ($scope, State, CommonTableParams, WorkflowJobResource,
+                                                       JobsConfig, targetProvider) {
 
         var state = new State().setPending();
         $scope.state = state;
@@ -27,6 +27,7 @@
             $scope.getJobs($scope.unit, $scope.amount);
         });
 
+        $scope.timeButtons = JobsConfig.timeButtons;
         $scope.unit = 'days';
         $scope.amount = 1;
 
@@ -48,7 +49,6 @@
         };
 
         $scope.getJobs($scope.unit, $scope.amount);
-
 
         $scope.isActive = true;
 

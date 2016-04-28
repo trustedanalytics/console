@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+/*jshint -W030 */
 describe("Unit: CoordinatorJobController", function() {
 
     beforeEach(module("app"));
 
-    var controller, scope, targetProvider, coordinatorJobResource, notificationService, $q;
-    var JOB_ID = "job-id", defer;
+    var controller, scope, targetProvider, coordinatorJobResource, notificationService, $q, defer;
+    var JOB_ID = "job-id";
 
     beforeEach(inject(function($controller, $rootScope, $stateParams, _$q_){
         scope = $rootScope.$new();
@@ -57,11 +57,13 @@ describe("Unit: CoordinatorJobController", function() {
 
     it('should not be null', function () {
         controller = createController();
+
         expect(controller).not.to.be.null;
     });
 
      it('init, set pending and get job details', function () {
          createController();
+
          expect(scope.state.isPending(), 'pending').to.be.true;
          expect(coordinatorJobResource.getJob).to.be.called;
      });
@@ -70,6 +72,7 @@ describe("Unit: CoordinatorJobController", function() {
         createController();
         defer.resolve("response");
         scope.$apply();
+
         expect(scope.state.isLoaded(), 'loaded').to.be.true;
         expect(coordinatorJobResource.getJob).to.be.called;
         expect(scope.job).to.be.equal("response");
@@ -79,6 +82,7 @@ describe("Unit: CoordinatorJobController", function() {
         createController();
         defer.resolve("response");
         scope.$apply();
+
         expect(scope.state.isLoaded(), 'loaded').to.be.true;
         expect(coordinatorJobResource.getJobsForCoord).to.be.called;
         expect(scope.startedJobs).to.be.equal("response");
@@ -92,8 +96,10 @@ describe("Unit: CoordinatorJobController", function() {
             return deferred.promise;
         };
         deferred.resolve();
+
         scope.onStatusChange();
         scope.$digest();
+
         expect(changedSpied.called).to.be.true;
     });
 

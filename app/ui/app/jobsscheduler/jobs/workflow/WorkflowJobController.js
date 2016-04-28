@@ -50,12 +50,7 @@
         };
 
         $scope.toKilled = function(status){
-            if(status === 'KILLED' || status==='FAILED' || status==='DONEWITHERROR'){
-                return false;
-            }
-            else{
-                return true;
-            }
+            return (status !== 'KILLED' && status !=='FAILED' && status !=='DONEWITHERROR');
         };
     });
 }());

@@ -115,7 +115,7 @@
 
         function validateDates () {
             var diff = moment($scope.importModel.schedulerConfig.end).diff($scope.importModel.schedulerConfig.start);
-            return diff > 0 ? true : false;
+            return diff > 0;
         }
 
         function preparePostImportBody() {

@@ -27,8 +27,6 @@ $font-family: 'Intel Clear W';
 
 $text-color-blue: #2f72be;
 
-$panel-blue-color: $btn-primary-color;
-
 $header-background-color: #0076c7;
 $header-item: #fff;
 $header-item-active-color: #1C5FA6;
@@ -53,3 +51,9 @@ $footer-border-color: #ffffff;
 
 $color-error: #DD0D2F;
 $color-cookies: #F09E00;
+
+$panel-blue-color: $btn-primary-color;
+$panel-border-color: #D3DAF5;
+$panel-heading-text-color: #fff;
+$panel-heading-color: $header-background-color;
+$panel-button-group-border: #adadad;

@@ -49,18 +49,22 @@ describe("Unit: WorkflowJobsController", function() {
 
     it('should not be null', function () {
         controller = createController();
+
         expect(controller).not.to.be.null;
     });
 
     it('init, set pending and get jobs', function () {
         createController();
+
         expect(scope.state.isPending(), 'pending').to.be.true;
         expect(workflowJobResource.getJobs).to.be.called;
     });
 
     it('targetChanged, get jobs', function () {
         createController();
+
         scope.$emit('targetChanged');
+
         expect(workflowJobResource.getJobs).to.be.calledTwice;
     });
 
@@ -68,6 +72,7 @@ describe("Unit: WorkflowJobsController", function() {
         createController();
         defer.resolve("response");
         scope.$digest();
+
         expect(scope.state.isLoaded(), 'loaded').to.be.true;
         expect(workflowJobResource.getJobs).to.be.called;
         expect(scope.workflows).to.be.equal("response");
@@ -80,8 +85,10 @@ describe("Unit: WorkflowJobsController", function() {
             return deferred.promise;
         };
         deferred.resolve();
+
         scope.getJobs;
         scope.$digest();
+
         expect(scope.state.isPending(), 'pending').to.be.true;
         expect(scope.unit).to.be.equal("days");
         expect(scope.amount).to.be.equal(1);

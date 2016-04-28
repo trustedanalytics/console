@@ -14,26 +14,28 @@
  * limitations under the License.
  */
 
+@import "themes/intel/intel-theme";
+
 .importdata {
 
   form {
 
     .panel {
-      border: 1px solid #D3DAF5;
+      border: 1px solid $panel-border-color;
     }
 
     .panel-heading {
-      color: #fff;
-      background-color: #0076C7;
+      color: $panel-heading-text-color;
+      background-color: $panel-heading-color;
       border-radius: 0;
 
       a, a:active, a:hover{
-        color: #fff;
+        color: $panel-heading-text-color;
       }
     }
 
     .panel .btn-group {
-      border: 1px solid #adadad;
+      border: 1px solid $panel-button-group-border;
       height: 34px;
     }
 
@@ -158,7 +160,7 @@
   }
 
   .panel {
-    border: 1px solid #D3DAF5;
+    border: 1px solid $panel-border-color;
   }
 
   .panel .btn {
@@ -168,11 +170,11 @@
   .panel-default {
     .panel-heading {
       font-size: 16px;
-      background-color: #0076C7;
-      color: #fff;
+      background-color: $panel-heading-color;
+      color: $panel-heading-text-color;
 
       a, a:active, a:hover {
-        color: #fff;
+        color: $panel-heading-text-color;
       }
     }
   }

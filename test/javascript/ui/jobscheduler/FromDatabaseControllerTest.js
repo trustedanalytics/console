@@ -61,6 +61,7 @@ describe("Unit: FromDatabaseController", function() {
 
     it('should not be null', function () {
         controller = createController();
+
         expect(controller).not.to.be.null;
     });
 
@@ -69,7 +70,9 @@ describe("Unit: FromDatabaseController", function() {
         var changedSpied = sinon.spy(notificationService, 'error');
         scope.importModel.schedulerConfig.end = "11/04/2016 12:00 AM";
         scope.importModel.schedulerConfig.start = "13/04/2016 12:00 AM";
+
         scope.submitImport();
+
         expect(changedSpied.called).to.be.true;
     });
 
