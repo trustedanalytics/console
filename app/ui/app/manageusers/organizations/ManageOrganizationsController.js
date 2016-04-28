@@ -48,8 +48,8 @@
             }
         };
 
-        UserProvider.getUser(function (user) {
-            $scope.isAdmin = isAdmin(user);
+        UserProvider.isAdmin().then(function (isAdmin) {
+            $scope.isAdmin = isAdmin;
         });
 
         $scope.redirectTo = function (whereTo) {
@@ -172,9 +172,5 @@
         return _.filter(organizations, function (org) {
             return org.manager;
         });
-    }
-
-    function isAdmin(user) {
-        return (user || {}).role === "ADMIN";
     }
 }());

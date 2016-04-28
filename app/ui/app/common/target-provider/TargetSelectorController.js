@@ -38,7 +38,7 @@
             }
         };
 
-        UserProvider.getUser(function (_user) {
+        UserProvider.getUser().then(function (_user) {
             user = _user;
             $scope.organization.available = getAvailableOrgs(user.role, targetProvider.getOrganizations(),
                 $scope.targetHeader);
@@ -61,7 +61,7 @@
                 return;
             }
 
-            UserProvider.getUser(function (user) {
+            UserProvider.getUser().then(function (user) {
                 $scope.organization.available = sortOrgAndSpacesByName($scope.organizations);
                 if (user.role !== 'ADMIN' && $scope.targetHeader.managedOnly) {
                     $scope.organization.available = _.where($scope.organizations, {manager: true});

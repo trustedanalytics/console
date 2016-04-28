@@ -63,9 +63,8 @@
             $scope.access.anyOrgManager = UserProvider.isAnyOrgManager(orgs);
         });
 
-
-        UserProvider.getUser(function (user) {
-            $scope.access.admin = isAdmin(user);
+        UserProvider.isAdmin().then(function (isAdmin) {
+            $scope.access.admin = isAdmin;
         });
 
         $scope.getHref = function (sref) {
@@ -119,10 +118,6 @@
         }
         var tool = _.findWhere(tools, {name: toolName});
         return tool && tool.available;
-    }
-
-    function isAdmin(user) {
-        return (user || {}).role === "ADMIN";
     }
 
     function isCurrentOrgManager(organization) {

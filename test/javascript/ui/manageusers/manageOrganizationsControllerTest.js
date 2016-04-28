@@ -26,6 +26,8 @@ describe("Unit: ManageOrganizationsController", function () {
     var targetProvider;
     var UserProvider;
     var currentUser;
+    var userDeferred;
+    var isAdminDeferred;
 
     var orgs = [
         {
@@ -75,8 +77,11 @@ describe("Unit: ManageOrganizationsController", function () {
             "email": "email@email"
         };
 
+        userDeferred = $q.defer();
+        isAdminDeferred = $q.defer();
         UserProvider = {
-            getUser: sinon.stub().returns(currentUser)
+            getUser: sinon.stub().returns(userDeferred.promise),
+            isAdmin: sinon.stub().returns(isAdminDeferred.promise)
         }
     }));
 

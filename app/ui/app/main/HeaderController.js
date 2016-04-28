@@ -18,7 +18,7 @@
 
     App.controller('HeaderController', function($scope, $rootScope, $state, UserProvider, targetProvider) {
 
-        UserProvider.getUser(function(user){
+        UserProvider.getUser().then(function(user){
             $scope.user = user;
         });
 

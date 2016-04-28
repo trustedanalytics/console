@@ -39,7 +39,7 @@ describe("Unit: UserProvider", function() {
         var sut = getSut();
 
         var result;
-        sut.getUser(function(user){
+        sut.getUser().then(function(user){
             result = user;
         });
         $httpBackend.flush();
@@ -52,9 +52,9 @@ describe("Unit: UserProvider", function() {
         $httpBackend.expectGET('/rest/users/current').respond(USER);
         var sut = getSut();
 
-        sut.getUser(function(){});
+        sut.getUser();
         $httpBackend.flush();
-        sut.getUser(function(){});
+        sut.getUser();
         $httpBackend.verifyNoOutstandingRequest();
     }));
 

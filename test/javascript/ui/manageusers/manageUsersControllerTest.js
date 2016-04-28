@@ -54,8 +54,10 @@ describe("Unit: ManageUsersController", function () {
             "email": "email@email"
         };
 
+        var userDeferred = $q.defer();
+
         userProviderMock = {
-            getUser: sinon.stub().returns(currentUser)
+            getUser: sinon.stub().returns(userDeferred.promise)
         };
 
         UserActionsNotificationsService =  {

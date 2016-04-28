@@ -31,10 +31,13 @@ describe("Unit: TargetSelectorController", function() {
     var scope;
     var UserProvider;
     var state;
+    var $q;
+    var userDeferred;
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function(_$controller_, $rootScope) {
+    beforeEach(inject(function(_$controller_, $rootScope, _$q_) {
+        $q = _$q_;
         $controller = _$controller_;
         scope = $rootScope.$new();
         targetProvider = {
@@ -48,10 +51,11 @@ describe("Unit: TargetSelectorController", function() {
             getSpace: sinon.stub(),
             getSpaces: sinon.stub()
         };
+
+        userDeferred = $q.defer();
+
         UserProvider = {
-            getUser: function(callback){
-                callback({role: 'USER'});
-            }
+            getUser: sinon.stub().returns(userDeferred.promise)
         };
         state = {
             current: {
@@ -85,16 +89,16 @@ describe("Unit: TargetSelectorController", function() {
     it('should return managed organizations if managedOnly is set', function() {
         state.current.targetHeader.managedOnly = true;
         getSUT();
-        
-        expect(scope.organization.selected, 'selected').to.be.deep.equals(allOrgs[0]);
+
+        userDeferred.resolve({role: 'USER'});
+        scope.$digest();
+        console.log(scope.organization.available)
         expect(scope.organization.available, 'available').to.be.deep.equals(_.where(allOrgs, {manager:true}));
     });
 
     it('should return all organizations if managedOnly is set but user is admin', function() {
         state.current.targetHeader.managedOnly = true;
-        UserProvider.getUser = function(callback) {
-            callback({role: 'ADMIN'});
-        };
+
         getSUT();
 
         expect(scope.organization.selected).to.be.deep.equals(allOrgs[0]);

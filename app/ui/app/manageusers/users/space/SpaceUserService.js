@@ -45,7 +45,7 @@
         service.getSpaceUser = function() {
             var deferred = $q.defer();
             var spaceId = getSpaceId();
-            UserProvider.getUser(function(user) {
+            UserProvider.getUser().then(function(user) {
                 if (spaceId) {
                     service.one(spaceId).customGET("users", {username: user.email})
                         .then(function(users) {

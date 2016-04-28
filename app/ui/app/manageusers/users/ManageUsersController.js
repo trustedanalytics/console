@@ -26,7 +26,7 @@
             $scope.tab = tab;
         };
 
-        UserProvider.getUser(function (user) {
+        UserProvider.getUser().then(function (user) {
             $scope.currentUser = user;
         });
 

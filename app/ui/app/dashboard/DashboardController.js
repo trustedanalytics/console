@@ -45,8 +45,8 @@
             return $scope.anyOrgManager || $scope.admin;
         };
 
-        UserProvider.getUser(function (user) {
-            $scope.admin = isAdmin(user);
+        UserProvider.isAdmin(function (isAdmin) {
+            $scope.admin = isAdmin;
         });
 
 
@@ -93,8 +93,4 @@
         }
 
     });
-
-    function isAdmin(user) {
-        return (user || {}).role === "ADMIN";
-    }
 }());

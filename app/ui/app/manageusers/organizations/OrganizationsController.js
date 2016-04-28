@@ -24,12 +24,8 @@
             return $state.is(sref) || $state.includes(sref);
         };
 
-        UserProvider.getUser(function (user) {
-            $scope.isAdmin = isAdmin(user);
+        UserProvider.isAdmin().then(function (isAdmin) {
+            $scope.isAdmin = isAdmin;
         });
     });
-
-    function isAdmin(user) {
-        return (user || {}).role === "ADMIN";
-    }
 }());

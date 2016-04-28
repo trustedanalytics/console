@@ -17,20 +17,13 @@
     "use strict";
 
     App.factory('UserProvider', function (Restangular) {
-
         var service = Restangular.service("users");
-        var user = null;
-        var callbacks = [];
-        service.getUser = function (userCallback) {
-            if (user) {
-                userCallback(user);
+        var userPromise = null;
+        service.getUser = function() {
+            if(userPromise == null) {
+                userPromise = service.one("current").get();
             }
-            else {
-                callbacks.push(userCallback);
-                if (callbacks.length === 1) {
-                    service.one("current").get().then(doCallbacks);
-                }
-            }
+            return userPromise;
         };
 
         service.updatePassword = function (oldPassword, newPassword) {
@@ -43,7 +36,10 @@
         };
 
         service.isAdmin = function () {
-            return (user || {}).role === 'ADMIN';
+            return service.getUser()
+                .then(function(user) {
+                    return user.role === 'ADMIN';
+                });
         };
 
         service.isAnyOrgManager = function(organizations) {
@@ -52,14 +48,6 @@
             });
         };
         
-        function doCallbacks(userData) {
-            user = userData;
-            callbacks.forEach(function (callback) {
-                callback(userData);
-            });
-            callbacks = [];
-        }
-
         return service;
     });
 }());
