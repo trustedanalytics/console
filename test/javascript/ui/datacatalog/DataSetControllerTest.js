@@ -27,13 +27,11 @@ describe("Unit: DataSetController", function() {
         angularState,
         SAMPLE_DATASET = Object.freeze({
             id: "i1",
-            orgUUID: ["o1", "o2"],
-            isPublic: false
+            orgUUID: ["o1", "o2"]
         }),
-        SAMPLE_PUBLIC_DATASET = Object.freeze({
+        ANOTHER_DATASET = Object.freeze({
             id: "i1",
-            orgUUID: ["o1", "o2"],
-            isPublic: true
+            orgUUID: ["o1", "o2"]
         });
 
     beforeEach(inject(function($injector, State, $q, TestHelpers){
@@ -79,105 +77,6 @@ describe("Unit: DataSetController", function() {
         expect(controller).not.to.be.null;
     });
 
-    it('makePublic, show confirmation dialog', function(){
-        var confirmSpied = sinon.spy(notificationService, 'confirm');
-
-        scope.makePublic();
-
-        expect(confirmSpied.called).to.be.true;
-    });
-
-    it('makePublic, confirmed, post dataset with public org', function(){
-        var confirmDeferred = q.defer();
-        notificationService.confirm = function(){
-            return confirmDeferred.promise;
-        };
-        scope.dataSet = SAMPLE_DATASET;
-
-        var called = false;
-
-        dataSetResource.update = function (id, body) {
-            expect(id).to.be.equal(SAMPLE_DATASET.id);
-            expect(body.isPublic).to.be.equal(SAMPLE_PUBLIC_DATASET.isPublic);
-            called = true;
-            return q.defer().promise;
-        };
-
-        scope.makePublic();
-        confirmDeferred.resolve();
-        scope.$apply();
-
-        expect(called, "called").to.be.true;
-    });
-
-    it('makePublic, success, reload data', function(){
-        var confirmDeferred = mockConfirm();
-        scope.dataSet = SAMPLE_DATASET;
-
-        var updateDefer = q.defer();
-
-        var getDatasetSpied = sinon.spy(dataSetResource, 'getById');
-
-        dataSetResource.update = function(){
-            return updateDefer.promise;
-        };
-
-        scope.makePublic();
-        updateDefer.resolve();
-        confirmDeferred.resolve();
-        scope.$apply();
-
-        expect(getDatasetSpied.called, "called").to.be.true;
-        expect(scope.state.value).to.be.equal(state.values.PENDING);
-    });
-
-    it('makePrivate, show confirmation dialog', function(){
-        var confirmSpied = sinon.spy(notificationService, 'confirm');
-
-        scope.makePrivate();
-
-        expect(confirmSpied.called).to.be.true;
-    });
-
-    it('makePrivate, confirmed, post dataset with public org', function(){
-        var confirmDeferred = mockConfirm();
-        scope.dataSet = SAMPLE_PUBLIC_DATASET;
-
-        var called = false;
-        dataSetResource.update = function(id, body){
-            expect(id).to.be.equal(SAMPLE_PUBLIC_DATASET.id);
-            expect(body.isPublic).to.be.equal(SAMPLE_DATASET.isPublic);
-            called = true;
-            return q.defer().promise;
-        };
-
-        scope.makePrivate();
-        confirmDeferred.resolve();
-        scope.$apply();
-
-        expect(called, "called").to.be.true;
-    });
-
-    it('makePrivate, success, reload data', function(){
-        var confirmDeferred = mockConfirm();
-        scope.dataSet = SAMPLE_PUBLIC_DATASET;
-
-        var updateDefer = q.defer();
-
-        var getDatasetSpied = sinon.spy(dataSetResource, 'getById');
-        dataSetResource.update = function(){
-            return updateDefer.promise;
-        };
-
-        scope.makePrivate();
-        updateDefer.resolve();
-        confirmDeferred.resolve();
-        scope.$apply();
-
-        expect(getDatasetSpied.called, "called").to.be.true;
-        expect(scope.state.value).to.be.equal(state.values.PENDING);
-    });
-
     it('delete, show confirmation dialog', function(){
         var confirmSpied = sinon.spy(notificationService, 'confirm');
 
@@ -188,7 +87,7 @@ describe("Unit: DataSetController", function() {
 
     it('delete, confirmed, send delete request', function(){
         var confirmDeferred = mockConfirm();
-        scope.dataSet = SAMPLE_PUBLIC_DATASET;
+        scope.dataSet = ANOTHER_DATASET;
 
         var called = false;
         dataSetResource.deleteById = function(id){
@@ -207,7 +106,7 @@ describe("Unit: DataSetController", function() {
 
     it('delete, success, go to data catalog', function(){
         var confirmDeferred = mockConfirm();
-        scope.dataSet = SAMPLE_PUBLIC_DATASET;
+        scope.dataSet = ANOTHER_DATASET;
 
         var deleteDeferred = q.defer();
         dataSetResource.deleteById = function(){
@@ -230,7 +129,7 @@ describe("Unit: DataSetController", function() {
 
     it('delete, error, show error msg', function(){
         var confirmDeferred = mockConfirm();
-        scope.dataSet = SAMPLE_PUBLIC_DATASET;
+        scope.dataSet = ANOTHER_DATASET;
 
         var deleteDeferred = q.defer();
         dataSetResource.deleteById = function(){

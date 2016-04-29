@@ -44,7 +44,7 @@
                         source: $scope.uploadFormData.link,
                         category: $scope.uploadFormData.category,
                         title: $scope.uploadFormData.title
-                    }, $scope.uploadFormData.public)
+                    })
                     .then(function onSuccess() {
                         $scope.state.setLoaded();
                         NotificationService.success('Link has been sent');
@@ -57,8 +57,7 @@
                 var data = {
                     orgUUID: targetProvider.getOrganization().guid,
                     category: $scope.uploadFormData.category,
-                    title: $scope.uploadFormData.title,
-                    publicRequest: $scope.uploadFormData.public
+                    title: $scope.uploadFormData.title
                 };
 
                 var files = {

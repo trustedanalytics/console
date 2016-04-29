@@ -81,13 +81,8 @@ div(ng-show='state.isLoaded() || state.isError()')
 
         .card.col-lg-3.col-md-4.col-sm-6(data-ng-repeat='dataSet in dataSets track by $index')
             div
-                span.fa.fa-lock.private-indicator(ng-hide="dataSet.isPublic")
                 span.format.fa(class='fa-{{ getFormatIcon(dataSet.format) }}')
                 a.title(ui-sref='app.dataset({ datasetId: dataSet.id })' ng-bind="dataSet.title" data-ellipsis data-ellipsis-separator="")
-                //.description {{ dataSet._source.description | limitTo: 256}}
-                //.tags
-                    span(data-ng-repeat='tag in dataSet._source.keyword | limitTo: 10')
-                        | {{ tag | limitTo: 30 }}
                 d-publish-data-set.publish-btn(data='dataSet', tool="tool", mode="unified")
 
     .clearfix

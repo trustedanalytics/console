@@ -30,18 +30,10 @@
             .btns
                 d-publish-data-set.view-btn(data='dataSet', mode="separate")
                 button.btn.btn-primary.with-icon.fa-times(ng-click="delete()", ng-show="canModifyOrDelete") Delete
-                button.btn.btn-primary.ng-hide(ng-click="makePublic()", ng-show="!dataSet.isPublic && canModifyOrDelete") Make public
-                button.btn.btn-primary.ng-hide(ng-click="makePrivate()", ng-show="dataSet.isPublic && canModifyOrDelete") Make private
 
             h4 Metadata
 
             table
-                tr
-                    td
-                        b accessibility
-                    td
-                        span(ng-show="dataSet && dataSet.isPublic") PUBLIC
-                        span(ng-show="dataSet && !dataSet.isPublic") PRIVATE
                 tr(data-ng-repeat='(fieldName, fieldValue) in dataSet', ng-if='isArray(fieldValue)==false')
                     td
                         b {{fieldName}}
@@ -59,19 +51,6 @@
                         span.formatTypes(data-ng-repeat='keyword in dataSet.keyword')
                             span.label.label-default {{keyword}}
 
-script(type="text/ng-template", id="confirm-public")
-    .ngdialog-message.clearfix
-        p Are you sure you want to make this dataset public?
-        .pull-right
-            button.btn.btn-primary(type='button', ng-click='confirm()') OK
-            button.btn.btn-default(type='button', ng-click="cancel()") Cancel
-
-script(type="text/ng-template", id="confirm-private")
-    .ngdialog-message.clearfix
-        p Are you sure you want to revoke public access to this dataset?
-        .pull-right
-            button.btn.btn-primary(type='button', ng-click='confirm()') OK
-            button.btn.btn-default(type='button', ng-click="cancel()") Cancel
 
 script(type="text/ng-template", id="confirm-delete")
     .ngdialog-message.clearfix

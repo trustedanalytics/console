@@ -76,14 +76,6 @@
                 });
         };
 
-        $scope.makePublic = function () {
-            makePublic($scope.id, NotificationService, DataSetResource, updateDataset);
-        };
-
-        $scope.makePrivate = function () {
-            makePrivate($scope.id, NotificationService, DataSetResource, updateDataset);
-        };
-
         $scope.delete = function () {
             NotificationService.confirm('confirm-delete')
                 .then(function () {
@@ -101,32 +93,5 @@
         };
 
     });
-
-
-    function makePublic(id, NotificationService, DataSetResource, updateDatasetCallback) {
-        NotificationService.confirm('confirm-public')
-            .then(function () {
-                return DataSetResource
-                    .withErrorMessage("Error while publishing dataset")
-                    .update(id, {isPublic: true});
-            })
-            .then(function onSuccess() {
-                NotificationService.success("Dataset is now public");
-                updateDatasetCallback();
-            });
-    }
-
-    function makePrivate(id, NotificationService, DataSetResource, updateDatasetCallback) {
-        NotificationService.confirm('confirm-private')
-            .then(function () {
-                return DataSetResource
-                    .withErrorMessage("Error while publishing dataset")
-                    .update(id, {isPublic: false});
-            })
-            .then(function onSuccess() {
-                NotificationService.success("Dataset is now private");
-                updateDatasetCallback();
-            });
-    }
 }());
 

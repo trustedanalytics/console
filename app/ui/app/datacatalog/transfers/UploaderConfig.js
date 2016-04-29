@@ -20,7 +20,6 @@
     App.constant("UploaderConfig", function() {
         return {
             category: "other",
-            public: false,
             filename: "",
             link: "",
             title: "",

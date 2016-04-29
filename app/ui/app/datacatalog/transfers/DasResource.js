@@ -25,13 +25,8 @@
             return this.getList({orgs: organization.guid});
         };
 
-        das.postTransfer = function (transfer, isPublic) {
-            if(!isPublic){
-                isPublic = false;
-            }
-            var orgId = organization.guid;
-            transfer["orgUUID"] = orgId;
-            transfer["publicRequest"] = isPublic;
+        das.postTransfer = function (transfer) {
+            transfer["orgUUID"] = organization.guid;
             return this.post(transfer);
         };
 

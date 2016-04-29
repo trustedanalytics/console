@@ -51,17 +51,6 @@
                     input#title.form-control(type='text', placeholder='title for link...', data-ng-model='uploadFormData.title', required)
 
             .form-group
-                label.col-sm-2.control-label(for='public') Should be public?
-                .col-sm-10
-                    .checkbox.c-checkbox
-                        label
-                            input#public(type="checkbox"
-                            ng-model="uploadFormData.public"
-                            ng-click="updateUserRoles(user, avRole)",
-                            placeholder='Check if the dataset should be accessible for other organizations')
-                            span.fa.fa-check
-
-            .form-group
                 label.col-sm-2.control-label Choose category
                 .categories.col-sm-5
                     a.btn-radio(ng-repeat='c in uploadFormData.categories',
