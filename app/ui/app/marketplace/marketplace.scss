@@ -421,21 +421,11 @@
 
       > .name {
         font-size: 20px;
-        font-weight: lighter;
+        font-weight: 400;
         margin-bottom: 6px;
       }
 
-      .instance {
-        margin-bottom: 10px;
-
-        > .name {
-          span {
-            font-weight: bold;
-          }
-          a {
-            margin-left: 10px;
-          }
-        }
+      .keys {
 
         .key, .add-key {
           margin-left: 20px;
@@ -471,6 +461,17 @@
         a.export-remove {
           color: $color-red;
         }
+      }
+
+      .visibleUris {
+
+        .link, .actions {
+          margin-left: 20px;
+        }
+      }
+
+      .panel-group .panel {
+        margin-bottom: 10px;
       }
     }
   }

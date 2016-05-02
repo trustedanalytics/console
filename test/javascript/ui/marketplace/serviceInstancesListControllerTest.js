@@ -21,6 +21,7 @@ describe("Unit: ServiceInstancesListController", function () {
         targetProvider,
         ServiceInstancesResource,
         ServiceKeysResource,
+        KubernetesServicesResource,
         NotificationService,
         state,
         $q,
@@ -51,6 +52,12 @@ describe("Unit: ServiceInstancesListController", function () {
             deleteKey: sinon.stub().returns($q.defer().promise)
         };
 
+        KubernetesServicesResource = {
+            withErrorMessage: sinon.stub().returnsThis(),
+            services: sinon.stub().returns($q.defer().promise),
+            setVisibility: sinon.stub().returns($q.defer().promise),
+        }
+
         NotificationService = {
             error: sinon.stub(),
             success: sinon.stub(),
@@ -65,6 +72,7 @@ describe("Unit: ServiceInstancesListController", function () {
                 targetProvider: targetProvider,
                 ServiceInstancesResource: ServiceInstancesResource,
                 ServiceKeysResource: ServiceKeysResource,
+                KubernetesServicesResource: KubernetesServicesResource,
                 NotificationService: NotificationService,
                 blobFilter: sinon.stub()
             });
@@ -84,7 +92,7 @@ describe("Unit: ServiceInstancesListController", function () {
         targetProvider.getSpace = sinon.stub().returns({});
         createController();
 
-        expect(scope.state.isPending(), 'pending').to.be.true;
+        expect(scope.state.isLoaded(), 'loaded').to.be.true;
         expect(ServiceInstancesResource.getSummary).not.to.be.called;
     });
 

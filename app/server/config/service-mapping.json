@@ -114,4 +114,7 @@
 }, {
   "path": "/rest/v1",
   "name": "platform-snapshot"
+}, {
+  "path": "/rest/kubernetes/(.*)",
+  "name": "kubernetes-broker"
 }]

@@ -20,10 +20,10 @@ h3
 
     spinner(ng-show='state.isPending()')
 
-    div(ng-if='!services.length')
+    div(ng-if='state.isLoaded() && !services.length')
         | You have no service instances
 
-    div(ng-show='state.isLoaded()' ng-init="exportMode = false")
+    div(ng-show='state.isLoaded() && services.length' ng-init="exportMode = false")
 
         a.btn.btn-primary.pull-right.turn-export-on(ng-hide='exportMode' ng-show='services.length' ng-click="exportMode = true") Export keys
         a.btn.btn-default.pull-right.turn-export-off(ng-show="exportMode" ng-click="exportMode = false") Cancel export
@@ -35,30 +35,37 @@ h3
             .service-content
                 .name {{service.displayName || service.label }}
                 .instances
-                    .instance(ng-repeat="instance in service.instances" ng-init="formVisible = false")
-
-                        .name
-                            span {{ instance.name }}
-                            a.add-key(ng-show="!exportMode && !formVisible", ng-click="formVisible = true")
-                                | + Create key
-
-                        .key(ng-repeat="key in instance.service_keys")
-                            | {{ key.name }}
-                            a.delete-key.fa.fa-times(ng-click="deleteKey(key)" ng-hide="exportMode")
-                            a.export-add(ng-show="!isExported(key) && exportMode",
-                                ng-click="addExport(key)")
-                                | + Add to exports
-                            a.export-remove(ng-show="isExported(key) && exportMode"
-                                ng-click="removeExport(key)")
-                                | - Remove from exports
-
-                        .new-key.form-group(ng-show="formVisible")
-                            form(ng-submit="addKey(newServiceName, instance)")
-                                input(ng-model="newServiceName" placeholder="Service key name")
-                                input.btn.btn-primary(type="submit" value="Add")
-                                a(ng-click="formVisible = false")
-                                    | Cancel
-
+                    uib-accordion(close-others="false")
+                        uib-accordion-group(ng-repeat="instance in service.instances" ng-init="formVisible = false")
+                            uib-accordion-heading {{ instance.name }}
+                            .keys.col-md-6
+                                label Keys:
+                                .add-key(ng-show="!exportMode && !formVisible", ng-click="formVisible = true")
+                                    a + Create key
+                                .new-key.form-group(ng-show="formVisible")
+                                    form(ng-submit="addKey(newServiceName, instance)")
+                                        input(ng-model="newServiceName" placeholder="Service key name")
+                                        input.btn.btn-primary(type="submit" value="Add")
+                                        a(ng-click="formVisible = false")
+                                            | Cancel
+                                .key(ng-repeat="key in instance.service_keys")
+                                    | {{ key.name }}
+                                    a.delete-key.fa.fa-times(ng-click="deleteKey(key)" ng-hide="exportMode")
+                                    a.export-add(ng-show="!isExported(key) && exportMode",
+                                    ng-click="addExport(key)")
+                                        | + Add to exports
+                                    a.export-remove(ng-show="isExported(key) && exportMode"
+                                    ng-click="removeExport(key)")
+                                        | - Remove from exports
+                            .visibleUris.col-md-6(ng-if="instance.kubernetes")
+                                label Visible uri:
+                                .actions
+                                    a(ng-show="instance.kubernetes.public == false", ng-click="exposeInstance(instance, true)")
+                                        | + Expose
+                                    a(ng-show="instance.kubernetes.public", ng-click="exposeInstance(instance, false)")
+                                        | - Unexpose
+                                .link(ng-repeat="uri in instance.kubernetes.uri" ng-if="instance.kubernetes.public")
+                                    | {{uri}}
 
         .vcap(ng-show="exports.length && exportMode")
             .title exported Keys:
