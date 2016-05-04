@@ -92,7 +92,6 @@ describe("Unit: TargetSelectorController", function() {
 
         userDeferred.resolve({role: 'USER'});
         scope.$digest();
-        console.log(scope.organization.available)
         expect(scope.organization.available, 'available').to.be.deep.equals(_.where(allOrgs, {manager:true}));
     });
 

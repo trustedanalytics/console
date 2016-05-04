@@ -41,7 +41,8 @@
         }, {
             "text": "Model catalog",
             "sref": "app.modelcatalog",
-            "icon": "icon-folder-alt"
+            "icon": "icon-folder-alt",
+            "tool": "h2o"
         }, {
             "text": "Job Scheduler",
             "icon": "icon-hourglass",
