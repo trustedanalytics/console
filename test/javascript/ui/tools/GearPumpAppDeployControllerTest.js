@@ -275,7 +275,7 @@ describe("Unit: GearPumpAppDeployController", function () {
 
     });
 
-    it('deployGPApp, success, deploy application on GearPump', function () {
+    it('deployGPApp, success, deploy application on Apache Gearpump', function () {
 
         httpBackend.whenPOST('/rest/gearpump/instanceName/login').respond();
 
@@ -302,7 +302,7 @@ describe("Unit: GearPumpAppDeployController", function () {
 
     });
 
-    it('deployGPApp, upload error, deploy application on GearPump', function () {
+    it('deployGPApp, upload error, deploy application on Apache Gearpump', function () {
 
         scope.uiInstanceName = 'instanceName';
         scope.gpUiData = {

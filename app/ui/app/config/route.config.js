@@ -270,9 +270,9 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
         })
         .state('app.gearpump', {
             url: '/gearpump',
-            title: 'GearPump',
+            title: 'Apache Gearpump',
             targetHeader: {org: true, space: true},
-            entityDisplayName: 'GearPump',
+            entityDisplayName: 'Apache Gearpump',
             controller: 'ToolsInstancesListController',
             templateUrl: getViewPath('tools/gearpumpInstancesList.html'),
             resolve: LazyLoadProvider.load(['ngMessages'])
@@ -288,7 +288,7 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
         })
         .state('app.gearpumpappdeploy', {
             url: '/gearpumpappdeploy/:instanceId',
-            title: 'GearPump App Deploy',
+            title: 'Apache Gearpump App Deploy',
             targetHeader: {org: false, space: false},
             controller: 'GearPumpAppDeployController',
             templateUrl: getViewPath('tools/gearpumpappdeploy.html'),

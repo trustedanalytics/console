@@ -97,7 +97,7 @@
                     "sref": "app.h2o",
                     "tool": "h2o"
                 }, {
-                    "text": "GearPump",
+                    "text": "Apache Gearpump",
                     "sref": "app.gearpump",
                     "tool": "gearpump"
                 }, {

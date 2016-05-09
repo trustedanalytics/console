@@ -15,7 +15,7 @@
 //-
 .gearpumpappdeploy
     h3
-        | Deploy application on GearPump instance {{ gpInstanceName }}
+        | Deploy application on Apache Gearpump instance {{ gpInstanceName }}
 
     spinner(ng-show='state.isPending()')
 
@@ -73,7 +73,7 @@
     div(ng-show='state.isError()')
         .panel.panel-danger
             .panel-body
-                | The Error occurred. GearPump instance with name {{ gpInstanceName }} may not exist.
+                | The Error occurred. Apache Gearpump instance with name {{ gpInstanceName }} may not exist.
 
 script(type="text/ng-template", id="progress-upload")
     .ngdialog-message.clearfix
