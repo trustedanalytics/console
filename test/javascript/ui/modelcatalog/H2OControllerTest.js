@@ -107,7 +107,6 @@ describe("Unit: H2OModelsController", function() {
         publishDefferred.reject();
         scope.publish();
         scope.$digest();
-        expect(scope.state.value).to.be.equals(scope.state.values.ERROR);
+        expect(scope.state.value).to.be.equals(scope.state.values.LOADED);
     });
-
 });
