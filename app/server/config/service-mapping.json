@@ -105,7 +105,10 @@
   "path": "/rest/v1/oozie",
   "name": "workflow-scheduler"
 }, {
-  "path": "/rest/engine",
+  "path": "/rest/h2o/engines/[^/]+/downloads",
+  "name": "h2o-model-publisher"
+}, {
+  "path": "/rest/h2o/engines",
   "name": "h2o-model-publisher"
 }, {
   "path": "/rest/gearpump/([^/]+)/(.*)",

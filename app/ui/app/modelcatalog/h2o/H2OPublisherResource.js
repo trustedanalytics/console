@@ -17,7 +17,7 @@
     "use strict";
 
     App.factory('H2OPublisherResource', function (Restangular) {
-        var service = Restangular.service("engine");
+        var service = Restangular.all("h2o").all("engines");
 
         service.postDataModel = function(model, guid) {
             return this.post({
