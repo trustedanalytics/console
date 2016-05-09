@@ -18,7 +18,6 @@
 
     App.controller('H2OModelsController', function ($scope, State, ModelResource, CommonTableParams,
                                                     targetProvider, H2OPublisherResource, NotificationService) {
-
         var state = new State().setPending();
         $scope.state = state;
 
@@ -66,12 +65,16 @@
                 .withErrorMessage('Error when publishing data model')
                 .postDataModel(model, targetProvider.getOrganization().guid)
                 .then(function () {
-                    $scope.state.setLoaded();
                     NotificationService.success('Data Model has been uploaded');
 
-                }).catch(function () {
-                    $scope.state.setError();
+                })
+                .finally(function() {
+                    $scope.state.setLoaded();
                 });
+        };
+
+        $scope.downloadPath = function(modelName) {
+            return '/rest/h2o/engines/' + modelName + '/downloads';
         };
 
         function extendModel(instance, model) {

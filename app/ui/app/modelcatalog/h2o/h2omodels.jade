@@ -37,3 +37,10 @@ div(ng-if='state.isLoaded()')
                 td(data-title="'Timestamp'" sortable="'timestamp'") {{ model.timestamp | date: 'yyyy-MM-dd h:mm:ss a' }}
                 td(data-title="'Publishing'")
                     button.btn.btn-primary(ng-click='publish(model)') Publish Data Model
+                td(data-title="'Downloading'")
+                  form(name="downloadDataModel" action='{{downloadPath(model.name)}}'
+                     enctype='application/x-www-form-urlencoded' method='post')
+                     input(name='host' value='http://'+'{{model.hostname}}' type='hidden')
+                     input(name='username' value='{{model.login}}' type='hidden')
+                     input(name='password' value='{{model.password}}' type='hidden')
+                     button.btn.btn-primary(type='submit') Download Data Model
