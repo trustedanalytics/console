@@ -13,11 +13,19 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 //-
-footer
-    a(ui-sref="app.version" ng-if="isAdmin") Version {{platformInfo.platform_version}}
-    |  | &copy; {{ year }} - {{ appConfig.company }}
-    a(ui-sref="app.terms") Terms of Use
-    a(href="http://www.intel.com/content/www/us/en/privacy/intel-cookie-notice.html", target="_blank") Cookie Agreement
-    a(href="http://www.intel.com/content/www/us/en/legal/trademarks.html", target="_blank") Trademarks
-    a(href="http://www.intel.com/content/www/us/en/privacy/intel-privacy-notice.html", target="_blank") Privacy Agreement
-    a(ui-sref="app.disclaimers") Disclaimers
+
+table.table.table-striped
+   thead
+      th UUID
+      th Host
+      th Uptime
+      th Memory
+      th Reservable stagers
+   tbody
+      tr(ng-repeat="dea in componentSummary.componentMetrics" ng-class="table")
+         td {{dea.uuid}}
+         td {{dea.host}}
+         td {{dea.uptime}}
+         td
+            progressbar.memory(value='dea.memUsedBytes/(dea.memUsedBytes + dea.memFreeBytes) * 100')
+         td {{dea.reservableStagers}}

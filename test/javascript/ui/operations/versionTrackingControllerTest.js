@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-describe("Unit: PlatformSnapshotController", function() {
+describe("Unit: VersionTrackingController", function() {
 
     beforeEach(module('app'));
 
     var controller,
         scope,
-        platformSnapshotResource,
+        versionTrackingResource,
         defer,
         $q;
 
@@ -29,17 +29,16 @@ describe("Unit: PlatformSnapshotController", function() {
         $q = _$q_;
         state = new State();
         createController = function () {
-            controller = $controller('PlatformSnapshotController', {
+            controller = $controller('VersionTrackingController', {
                 $scope: scope,
-                PlatformSnapshotResource: platformSnapshotResource
+                VersionTrackingResource: versionTrackingResource
             });
         };
 
         defer = $q.defer();
 
-        platformSnapshotResource = {
-            getSnapshots: sinon.stub().returns($q.defer().promise),
-            getConfiguration: sinon.stub().returns($q.defer().promise)
+        versionTrackingResource = {
+            getSnapshots: sinon.stub().returns($q.defer().promise)
         };
 
     }));
@@ -49,22 +48,28 @@ describe("Unit: PlatformSnapshotController", function() {
         expect(controller).not.to.be.null;
     });
 
-    it('init, set pending and get snapshots', function () {
+    it('init, set pending and get snapshots method call', function () {
         createController();
         expect(scope.state.isPending(), 'pending').to.be.true;
-        expect(platformSnapshotResource.getConfiguration).to.be.called;
+        expect(versionTrackingResource.getSnapshots).to.be.called;
     });
 
-    it('getConfiguration success, set state on loaded', function() {
-        var deferConfig = $q.defer();
+    it('getSnapshots success, set state on loaded', function() {
         var deferSnapshot = $q.defer();
-        platformSnapshotResource.getConfiguration = sinon.stub().returns(deferConfig.promise);
-        deferConfig.resolve({"scopes": ["core","other","all"]});
-        platformSnapshotResource.getSnapshots = sinon.stub().returns(deferSnapshot.promise);
+        versionTrackingResource.getSnapshots = sinon.stub().returns(deferSnapshot.promise);
         deferSnapshot.resolve({"id": "1"});
         createController();
         scope.$digest();
         expect(scope.state.value).to.be.equals(scope.state.values.LOADED);
+    });
+
+    it('getSnapshots error, set state on error', function() {
+        var deferSnapshot = $q.defer();
+        versionTrackingResource.getSnapshots = sinon.stub().returns(deferSnapshot.promise);
+        deferSnapshot.reject();
+        createController();
+        scope.$digest();
+        expect(scope.state.value).to.be.equals(scope.state.values.ERROR);
     });
 
 });

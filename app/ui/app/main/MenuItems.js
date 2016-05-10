@@ -26,6 +26,10 @@
                 {
                     "text": "Platform Tests",
                     "sref": "app.platformtests"
+                },
+                {
+                    "text": "Version Tracking",
+                    "sref": "app.versiontracking"
                 }
             ],
             "access": ["admin"]

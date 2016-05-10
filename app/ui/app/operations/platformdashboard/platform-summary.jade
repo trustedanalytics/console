@@ -36,14 +36,13 @@
       .col-lg-4.col-sm-12
          tile-blue-numeric(float="componentSummary.memUsedInMb/1024", text="'Memory'", unit="'GB'").tile-height-large
       .col-lg-8.col-sm-12
-         .table-responsive
-            table.table.buildpacks
-               thead
-                  th Name
-                  th Version
-                  th Enabled
-               tbody
-                  tr(ng-repeat="buildpack in controllerSummary.buildpacks" ng-class-even="'even'" ng-class-odd="'odd'")
-                     td {{ buildpack.entity.name }}
-                     td {{ buildpack.entity.filename }}
-                     td(ng-class="{'fa-check': buildpack.entity.enabled, 'fa-cross': !buildpack.entity.enabled}")
+         table.table.table-striped
+            thead
+               th Name
+               th Version
+               th Enabled
+            tbody
+               tr(ng-repeat="buildpack in controllerSummary.buildpacks")
+                  td {{ buildpack.entity.name }}
+                  td {{ buildpack.entity.filename }}
+                  td(ng-class="{'fa-check': buildpack.entity.enabled, 'fa-cross': !buildpack.entity.enabled}")

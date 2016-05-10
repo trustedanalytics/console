@@ -1,0 +1,91 @@
+//
+   Copyright (c) 2015 Intel Corporation
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+//-
+spinner(ng-show='state.isPending()')
+div(ng-show='state.isLoaded()')
+    h3
+        | {{app.name}} {{app.version}}
+    .versiontracking.content
+        spinner(ng-if='state.isPending()')
+        h4.state State
+            span.fa-check(ng-if='app.state.toLowerCase() === "started"')
+                | OK
+            span.fa-refresh(ng-if='app.state.toLowerCase() === "starting"')
+                | Starting
+            span.fa-stop(ng-if='app.state.toLowerCase() === "stopped"')
+                | Stopped
+        .metrics
+            h4 Metrics
+            table.table.app
+                tr
+                    td Memory:
+                    td
+                        | {{ app.memory }}
+                tr
+                    td Disk quota:
+                    td
+                        | {{ app.disk_quota }}
+        h4 Details
+        table.table.app
+            tr
+                td Guid:
+                td
+                    | {{ app.guid }}
+            tr
+                td Organization guid:
+                td
+                    | {{ app.organization }}
+            tr
+                td Space guid:
+                td
+                    | {{ app.space }}
+            tr
+                td Created at:
+                td
+                    | {{ app.created_at | date: 'yyyy-MM-dd h:mm:ss a'}}
+            tr
+                td Updated at:
+                td
+                    | {{ app.updated_at | date: 'yyyy-MM-dd h:mm:ss a'}}
+            tr
+                td Health check timeout:
+                td
+                    | {{ app.health_check_timeout }} s
+            tr
+                td Health check type:
+                td
+                    | {{ app.health_check_type }}
+            tr
+                td Buildpack:
+                td
+                    | {{ app.buildpack || "-"}}
+            tr
+                td Detected buildpack:
+                td
+                    | {{ app.detected_buildpack || "-"}}
+            tr
+                td Command:
+                td(ng-if="!app.command") {{ "-" }}
+                td(ng-if="app.command")
+                    figure.highlight
+                        pre
+                            code  {{ app.command }}
+            tr
+                td Detected start command:
+                td(ng-if="!app.detected_start_command") {{ "-" }}
+                td(ng-if="app.detected_start_command")
+                    figure.highlight
+                        pre
+                            code  {{ app.detected_start_command }}

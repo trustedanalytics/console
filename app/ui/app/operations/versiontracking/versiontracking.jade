@@ -1,0 +1,126 @@
+//
+   Copyright (c) 2015 Intel Corporation
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+//-
+spinner(ng-show='state.isPending()')
+div(ng-show='state.isLoaded()')
+    h3
+        | Version Tracking
+    .versiontracking.content
+        spinner(ng-if='state.isPending()')
+        h4
+            | Platform Snapshots
+        .panel.time-range-filter
+            .body
+                div
+                    .heading Time range
+                label.radio.radio-inline
+                    input(type='radio', name='timeRange', ng-click="getSnapshotsByRange(1)", ng-checked="'true'")
+                    span.fa.fa-circle
+                    | 1 day
+                label.radio.radio-inline
+                    input(type='radio', name='timeRange', ng-click="getSnapshotsByRange(2)")
+                    span.fa.fa-circle
+                    | 2 days
+                label.radio.radio-inline
+                    input(type='radio', name='timeRange', ng-click="getSnapshotsByRange(7)")
+                    span.fa.fa-circle
+                    | 1 week
+                label.radio.radio-inline
+                    input(type='radio', name='timeRange', ng-click="getSnapshotsByRange(30)")
+                    span.fa.fa-circle
+                    | 1 months
+        b Select snapshot to view details
+        div(ng-if='state.isLoaded()')
+            div(ng-if='!response.length')
+                h4 No snapshots
+            .span12.row-fluid
+                div
+                    table.table.snapshots(ng-show='response.length', ng-table="snapshotsTableParams", show-filter="true")
+                        tr(ng-repeat="snapshot in $data" ng-class="{'selected': chosenSnapshot.id==snapshot.id}"
+                        ng-click="getSnapshotDetails(snapshot.id)")
+                            td(data-title="'Date & Time'" sortable="'created_at'") {{ snapshot.created_at | date: 'yyyy-MM-dd h:mm:ss a' }}
+                            td(data-title="'Platform Version'" sortable="'platform_version'") {{ snapshot.platform_version }}
+                            td(data-title="'CDH Version'" sortable="'cdh_version'") {{ snapshot.cdh_version }}
+                            td(data-title="'CF API Version'" sortable="'cf_version'") {{ snapshot.cf_version }}
+        p
+            span See more about: &nbsp;
+            span
+                a(href="http://www.cloudera.com/documentation/enterprise/release-notes/topics/cdh_vd_cdh_package_tarball.html", target="_blank") Cloudera Release Notes &nbsp;
+            span and &nbsp;
+                a(href="https://apidocs.cloudfoundry.org", target="_blank") Cloud Foundry API documentation
+        .panel.time-range-filter
+            .export-file
+                export-file(content="response" filename='snapshot.json').pull-right
+
+            h4
+                | Snapshot details:
+                span.snapshot-details
+                    b  {{chosenSnapshot.created_at | date: 'yyyy-MM-dd h:mm:ss a'}}
+            .filter
+                .heading
+                    b Filter by:
+                label.radio.radio-inline
+                    input(type='radio', name='componentsCategory', ng-checked="'true'", ng-model="visible" value="apps", ng-init="visible='apps'")
+                    span.fa.fa-circle
+                    | Platform Applications
+                label.radio.radio-inline
+                    input(type='radio', name='componentsCategory', ng-model="visible" value="cdh_services")
+                    span.fa.fa-circle
+                    | Cloudera (CDH) services
+                label.radio.radio-inline
+                    input(type='radio', name='componentsCategory', ng-model="visible" value="cf_services")
+                    span.fa.fa-circle
+                    | Cloud Foundry Services
+
+            spinner(ng-show='state.isPending()')
+            div(ng-show='state.isLoaded()')
+                div(ng-show="visible=='apps'")
+                    div(ng-if='state.isLoaded()')
+                        div(ng-if='!chosenSnapshot.applications.length')
+                            h4 No applications
+                        .span12.row-fluid
+                            div
+                                table.table-striped.common(ng-show='chosenSnapshot.applications.length', ng-table="appsTableParams", show-filter="true" class="table")
+                                    tr(ng-repeat="app in $data")
+                                        td(data-title="'Name'" sortable="'name'" filter="{ 'name': 'text' }")
+                                            a(ui-sref='app.versiontrackingapp({ snapshotId: chosenSnapshot.id, appGuid: app.guid })') {{ app.name }}
+                                        td(data-title="'Version'" sortable="'version'") {{ app.version }}
+                                        td(data-title="'Memory'" sortable="'memory'") {{ app.memory }} MB
+                                        td(data-title="'Instances'" sortable="'instances'") {{ app.instances }}
+                                        td(data-title="'State'" sortable="'state'") {{ app.state }}
+                                        td(data-title="'Disk quota'" sortable="'disk_quota'") {{ app.disk_quota }} MB
+                div(ng-show="visible=='cdh_services'")
+                    div(ng-if='state.isLoaded()')
+                        div(ng-if='!chosenSnapshot.cdh_services.length')
+                            h4 No CDH services
+                        .span12.row-fluid
+                            div
+                                table.table-striped.common(ng-show='chosenSnapshot.cdh_services.length', ng-table="cdhServicesTableParams",
+                                show-filter="true" class="table")
+                                    tr(ng-repeat="service in $data")
+                                        td(data-title="'Name'" sortable="'name'" filter="{ 'name': 'text' }") {{ service.name }}
+                                        td(data-title="'Entity status'" sortable="'entity_status'") {{ service.entity_status }}
+                                        td(data-title="'Service state'" sortable="'service_state'") {{ service.service_state }}
+                                        td(data-title="'Health summary'" sortable="'health_summary'") {{ service.health_summary }}
+                div(ng-show="visible=='cf_services'")
+                    div(ng-if='state.isLoaded()')
+                        div(ng-if='!chosenSnapshot.cf_services.length')
+                            h4 No CF services
+                        .span12.row-fluid
+                            div
+                                table.table-striped.common(ng-show='chosenSnapshot.cf_services.length', ng-table="cfServicesTableParams", show-filter="true" class="table")
+                                    tr(ng-repeat="service in $data")
+                                        td(data-title="'Name'" sortable="'label'" filter="{ 'label': 'text' }") {{ service.label }}
+                                        td(data-title="'Description'") {{ service.description }}

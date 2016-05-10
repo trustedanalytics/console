@@ -123,38 +123,6 @@ $dashboard-red: #DD1031;
     }
 
   }
-
-  .deapanel {
-    background-color: #fff;
-    min-width: 100%;
-    height: 100%;
-
-    .dea {
-      color: #595959;
-      width: 100%;
-    }
-
-    .progress-bar {
-      background-color: $dashboard-orange;
-      color: $dashboard-text-gray-darker;
-      padding-left: 50%;
-    }
-
-    .memory {
-      margin: 0;
-      width: 250px;
-    }
-
-  }
-
-  .odd {
-    background: #fff;
-  }
-
-  .even {
-    background: #F8F8F8;
-  }
-
 }
 
 .platfromtests {
@@ -181,6 +149,117 @@ $dashboard-red: #DD1031;
   ul {
     list-style-type: none;
     padding-left: 10px;
+  }
+
+}
+
+.versiontracking {
+  .time-range-filter {
+
+    padding: 20px;
+    box-shadow: none;
+
+    .body {
+      .heading {
+        font-weight: bold;
+        font-size: 14px;
+      }
+    }
+  }
+
+
+  .selected {
+    background: #0e1d2e;
+    color: #2c7fca;
+  }
+
+  .snapshots {
+    tr:hover td {
+      background: #68a7dd;
+    }
+  }
+
+  .searchbar {
+    width:30%;
+    search-bar {
+      display: block;
+      position: relative;
+      em {
+        position: absolute;
+        right: 12px;
+        top: 25%;
+        font-size: 14px;
+      }
+    }
+  }
+
+  .snapshots {
+    text-align: center;
+  }
+
+  .snapshot-details {
+    color: #2c7fca;
+  }
+
+  .filter {
+    padding: 20px 0;
+  }
+
+  .radio, .checkbox {
+    margin-top: 0 !important;
+  }
+
+  .filter, .panel.time-range-filter {
+    .heading {
+      padding-bottom: 10px;
+    }
+  }
+
+  .state {
+    > span {
+      margin-left: 10px;
+
+      &::before {
+        margin-right: 5px;
+      }
+
+      &.fa-check {
+        color: $color-green;
+      }
+
+      &.fa-refresh {
+        color: $color-orange;
+      }
+
+      &.fa-stop {
+        color: $color-red;
+      }
+    }
+  }
+
+  .metrics {
+    .table {
+      width: auto;
+
+      td:nth-child(2) {
+        padding-left: 30px;
+      }
+    }
+    padding-top: 15px;
+  }
+
+  .app {
+    td:first-child {
+      font-weight: bold;
+    }
+  }
+
+  .panel .btn {
+    border: solid 1px #ddd !important;
+  }
+
+  .common, .snapshots {
+    text-align: center;
   }
 
 }

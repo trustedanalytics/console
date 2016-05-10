@@ -13,20 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-(function () {
-    "use strict";
 
-    App.factory('PlatformSnapshotResource', function (Restangular) {
-        var resource = Restangular.service("v1");
+.version {
+  .selected {
+    background: #0e1d2e !important;
+    color: #2c7fca;
+  }
 
-        resource.getSnapshots = function (scope, startDate) {
-            return this.one("snapshots").get({scope: scope, from: startDate});
-        };
+  .table {
+    text-align: center;
+  }
 
-        resource.getConfiguration = function () {
-            return this.one("configuration").get();
-        };
-
-        return resource;
-    });
-}());
+  .export-file {
+    button {
+      margin-bottom: 25px;
+    }
+  }
+}

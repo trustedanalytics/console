@@ -100,19 +100,32 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
             title: 'Platform Dashboard',
             controller: 'PlatformDashboardController',
             controllerAs: 'ctrl',
-            templateUrl: getViewPath('operations/platform-dashboard.html')
+            templateUrl: getViewPath('operations/platformdashboard/platform-dashboard.html')
         })
         .state('app.platformdashboard.summary', {
             url: '/summary',
             title: 'Summary',
             targetHeader: {org: false, space: false},
-            templateUrl: getViewPath('operations/platform-summary.html')
+            templateUrl: getViewPath('operations/platformdashboard/platform-summary.html')
         })
         .state('app.platformdashboard.dea', {
             url: '/dea',
             title: 'DEA',
             targetHeader: {org: false, space: false},
-            templateUrl: getViewPath('operations/dea.html')
+            templateUrl: getViewPath('operations/platformdashboard/dea.html')
+        })
+        .state('app.versiontracking', {
+            url: '/versiontracking',
+            title: 'Version tracking',
+            controller: 'VersionTrackingController',
+            controllerAs: 'ctrl',
+            templateUrl: getViewPath('operations/versiontracking/versiontracking.html')
+        })
+        .state('app.versiontrackingapp', {
+            url: '/versiontracking/:snapshotId/:appGuid',
+            title: 'Application details',
+            controller: 'ApplicationOverviewController',
+            templateUrl: getViewPath('operations/versiontracking/appoverview.html')
         })
         .state('app.platformtests', {
             url: '/platformtests',
@@ -442,12 +455,12 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
             templateUrl: getViewPath('changepassword/changepassword.html'),
             resolve: LazyLoadProvider.load(['parsley'])
         })
-        .state('app.platform-snapshot', {
-            url: '/platformsnapshot',
-            title: 'Platform snapshot',
-            controller: 'PlatformSnapshotController',
+        .state('app.version', {
+            url: '/platformversion',
+            title: 'Platform Version',
+            controller: 'VersionController',
             controllerAs: 'ctrl',
-            templateUrl: getViewPath('platform-snapshot/platformcomponents.html')
+            templateUrl: getViewPath('version/version.html')
         })
         .state('app.terms', {
             url: '/termsofuse',

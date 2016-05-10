@@ -1,0 +1,38 @@
+//
+   Copyright (c) 2015 Intel Corporation
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+//-
+h3
+    | Platform and Component Versions
+spinner(ng-show='state.isPending()')
+div(ng-show='state.isLoaded()')
+    .content.version
+        .export-file
+            export-file(content="versionTracking" filename='tap_version.json')
+
+        div(ng-if='state.isLoaded()')
+            div(ng-if='!versionTracking.length')
+                h4 No components
+            .span12.row-fluid
+                div
+                    table.table-striped.table(ng-show='versionTracking.length', ng-table="tableParams", show-filter="true")
+                        tr(ng-repeat="component in $data", ng-class="{'selected': component.name==' TAP Platform'}")
+                            td(data-title="'Component name'" sortable="'name'") {{component.name}}
+                            td(data-title="'Current Version'" sortable="'version'") {{component.version}}
+        p
+        span See more about: &nbsp;
+        span
+            a(href="http://www.cloudera.com/documentation/enterprise/release-notes/topics/cdh_vd_cdh_package_tarball.html", target="_blank") Cloudera Release Notes &nbsp;
+        span and &nbsp;
+            a(href="https://apidocs.cloudfoundry.org", target="_blank") Cloud Foundry API documentation
