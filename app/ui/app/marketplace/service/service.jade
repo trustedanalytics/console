@@ -87,3 +87,14 @@
     .panel.panel-danger(ng-show='ctrl.state.is(ctrl.state.values.NOT_FOUND)')
         .panel-heading Error
         .panel-body Service not found
+
+    script(type="text/ng-template", id="confirm-delete-offering")
+        .ngdialog-message.clearfix
+            p
+                | Are you sure you want to delete service offering
+                = ' '
+                b {{ data.service.name }}
+                | ?
+            .pull-right
+                button.btn.btn-primary(type='button', ng-click='confirm()') Delete
+                button.btn.btn-default(type='button', ng-click="cancel()") Cancel

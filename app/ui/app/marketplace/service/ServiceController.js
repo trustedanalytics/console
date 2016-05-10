@@ -81,15 +81,18 @@
         };
 
         self.tryDeleteOffering = function() {
-            self.state.setPending();
-            ApplicationRegisterResource
-                .withErrorMessage('Failed to delete service offering from marketplace')
-                .deregisterApplication(self.serviceId)
+            NotificationService.confirm('confirm-delete-offering', { service: self.service })
                 .then(function () {
-                    NotificationService.success('Application has been delete from marketplace');
-                    $location.path('/app/services/marketplace');
-                }).finally(function () {
-                    self.state.setLoaded();
+                    self.state.setPending();
+                    ApplicationRegisterResource
+                        .withErrorMessage('Failed to delete service offering from marketplace')
+                        .deregisterApplication(self.serviceId)
+                        .then(function () {
+                            NotificationService.success('Application has been delete from marketplace');
+                            $location.path('/app/services/marketplace');
+                        }).finally(function () {
+                            self.state.setLoaded();
+                        });
                 });
         };
 

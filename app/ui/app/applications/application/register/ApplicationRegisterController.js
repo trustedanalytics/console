@@ -31,6 +31,7 @@
             metadata: {}
         };
         $scope.state = new State().setPending();
+        $scope.clonedApps = [];
 
         $scope.submitRegister = submitRegister;
         $scope.addTag = addTag;
