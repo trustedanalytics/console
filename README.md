@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/trustedanalytics/console.svg)](https://travis-ci.org/trustedanalytics/console)
-[![Dependency Status](https://gemnasium.com/trustedanalytics/console.svg)](https://gemnasium.com/trustedanalytics/console)
+[![Dependency Status](https://www.versioneye.com/user/projects/572364f9ba37ce00350af4fc/badge.svg?style=flat)](https://www.versioneye.com/user/projects/572364f9ba37ce00350af4fc)
 [![Code Climate](https://codeclimate.com/github/trustedanalytics/console/badges/gpa.svg)](https://codeclimate.com/github/trustedanalytics/console)
 
 Console
