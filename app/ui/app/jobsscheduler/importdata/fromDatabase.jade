@@ -64,7 +64,7 @@ div(ng-if='state.isLoaded()')
                                     data-ng-model='importModel.host' ng-change='updateUri()')
                             .col-lg-2.col-md-4
                                 label(for='port') Port
-                                input#port.form-control(type='number', min='1024' max='65535', required,l
+                                input#port.form-control(type='number', min='1' max='65535', required,l
                                     data-ng-model='importModel.port' ng-change='updateUri()')
                             .col-lg-3.col-md-12
                                 label(for='dbName') Database Name

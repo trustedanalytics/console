@@ -46,7 +46,7 @@
         /*
             catches pattern -> jdbc:driver://host:port/databaseName*
         */
-        $scope.jdbcUriPattern = 'jdbc:([\\w]+)://([\\w._-]+|[[\\w:.]+]):([1-6][0-9]{3,4})/([\\w][\\w]*)';
+        $scope.jdbcUriPattern = 'jdbc:([\\w]+)://([\\w._-]+|[[\\w:.]+]):([1-9][0-9]{0,4})/([\\w][\\w]*)';
 
         $scope.submitImport = function() {
             var valid = validateDates();
