@@ -163,6 +163,10 @@ target-selector {
             margin-left: 20px;
           }
         }
+
+        ul {
+          overflow-y: auto;
+        }
       }
     }
   }

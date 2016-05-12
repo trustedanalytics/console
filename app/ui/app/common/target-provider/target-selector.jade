@@ -23,7 +23,7 @@
             | {{ targetSpace.selected.name }}
             span.caret
 
-         ul(aria-labelledby='spaceDropdown', role='menu').dropdown-menu.dropdown-menu-right.animated.fadeInUpShort
+         ul(aria-labelledby='spaceDropdown', role='menu' target-selector-dropdown).dropdown-menu.dropdown-menu-right.animated.fadeInUpShort
             li(ng-repeat='space in targetSpace.available')
                a(ng-click='targetSpace.set(space, $event)') {{ space.name }}
 
@@ -34,6 +34,6 @@
             | {{ organization.selected.name }}
             span.caret
 
-         ul.dropdown-menu.dropdown-menu-right.animated.fadeInUpShort(role='menu')
+         ul.dropdown-menu.dropdown-menu-right.animated.fadeInUpShort(role='menu', target-selector-dropdown)
             li(ng-repeat='org in organization.available')
                a(ng-click='organization.set(org, $event)') {{ org.name }}
