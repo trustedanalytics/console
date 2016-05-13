@@ -55,7 +55,7 @@ describe("Unit: FromDatabaseController", function() {
 
         scope.validateDates = function() {
             return true;
-        }
+        };
 
     }));
 

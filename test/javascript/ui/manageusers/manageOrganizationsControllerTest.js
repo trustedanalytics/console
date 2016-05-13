@@ -93,7 +93,7 @@ describe("Unit: ManageOrganizationsController", function () {
         UserProvider = {
             getUser: sinon.stub().returns(userDeferred.promise),
             isAdmin: sinon.stub().returns(isAdminDeferred.promise)
-        }
+        };
     }));
 
     function getSut() {

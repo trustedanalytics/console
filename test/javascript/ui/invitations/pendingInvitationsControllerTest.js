@@ -70,7 +70,7 @@ describe("Unit: PendingInvitationsController", function() {
     it('resend, when called should pass request to backend and show notification', function(){
         var deferred = $q.defer();
         PendingInvitationsResource.resend = sinon.stub().returns(deferred.promise);
-        var controller = getSUT();
+        getSUT();
         var testMail = "eustachy@example.com";
 
 
@@ -89,7 +89,7 @@ describe("Unit: PendingInvitationsController", function() {
         var deferred = $q.defer();
         PendingInvitationsResource.delete = sinon.stub().returns(deferred.promise);
         deferred.resolve();
-        var controller = getSUT();
+        getSUT();
         var testMail = "eustachy@example.com";
         var successMessageSpy = sinon.spy(NotificationService, 'success');
         scope.delete(testMail);

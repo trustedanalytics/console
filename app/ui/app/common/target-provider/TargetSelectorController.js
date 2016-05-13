@@ -22,7 +22,7 @@
         $scope.targetHeader = $state.current.targetHeader;
 
         $scope.organization = {
-            selected: targetProvider.getOrganization(), 
+            selected: targetProvider.getOrganization(),
             available: targetProvider.getOrganizations(),
             set: function (org) {
                 $scope.selectedOrg = org;

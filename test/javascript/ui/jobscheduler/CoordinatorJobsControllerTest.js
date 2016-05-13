@@ -19,6 +19,10 @@ describe("Unit: CoordinatorJobsController", function() {
     beforeEach(module('app'));
 
     beforeEach(module(function($provide){
+        targetProvider = {
+            getOrganization: sinon.stub().returns({ guid: 'o1' })
+        };
+
         $provide.value('targetProvider', targetProvider);
     }));
 
@@ -27,10 +31,6 @@ describe("Unit: CoordinatorJobsController", function() {
     beforeEach(inject(function($controller, $rootScope, _$state_, _$q_){
         scope = $rootScope.$new();
         $q = _$q_;
-
-        targetProvider = {
-            getOrganization: sinon.stub().returns({ guid: 'o1' })
-        };
 
         createController = function () {
             controller = $controller('CoordinatorJobsController', {

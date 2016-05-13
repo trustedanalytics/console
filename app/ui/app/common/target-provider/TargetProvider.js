@@ -19,9 +19,7 @@
     App.factory('targetProvider', function ($cookies, OrganizationResource, $rootScope, $q, NotificationService) {
         var ORGANIZATION_KEY = "organization";
         var SPACE = "space";
-
-        var
-            organization = {},
+        var organization = {},
             space = {},
             organizations = [],
             spaces = [],
