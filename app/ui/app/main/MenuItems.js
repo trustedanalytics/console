@@ -92,6 +92,10 @@
                     "text": "IPython",
                     "sref": "app.ipython",
                     "tool": 'ipython'
+                }, {
+                    "text": "Jupyter",
+                    "sref": "app.jupyter",
+                    "tool": "jupyter"
                 },  {
                     "text": "RStudio®",
                     "sref": "app.rstudio",
@@ -104,10 +108,6 @@
                     "text": "Apache Gearpump",
                     "sref": "app.gearpump",
                     "tool": "gearpump"
-                }, {
-                    "text": "Jupyter",
-                    "sref": "app.jupyter",
-                    "tool": "jupyter"
                 }
 
             ]
