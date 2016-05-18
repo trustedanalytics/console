@@ -13,25 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-var passport = require('passport');
-var OAUTH2Strategy = require('passport-cloudfoundry').Strategy;
-var config = require('../config/config');
+var passport = require('passport'),
+    OAuth2Strategy = require('passport-oauth2').Strategy,
+    config = require('../config/config');
 
 var sso = config.getSso();
 
-var strategy = new OAUTH2Strategy({
+var customHeaders = {
+    'Authorization': 'Basic ' + new Buffer(sso.clientId + ':' + sso.clientSecret).toString('base64')
+};
+
+var strategy = new OAuth2Strategy({
     authorizationURL: sso.authorizationUri,
     tokenURL: sso.tokenUri,
     clientID: sso.clientId,
     clientSecret: sso.clientSecret,
     callbackURL: '/oauth/callback',
-    passReqToCallback: false
+    customHeaders: customHeaders
 }, function (accessToken, refreshToken, profile, done) {
     profile.accessToken = accessToken;
     done(null, profile);
 });
 
-strategy.setUserProfileURI(sso.userInfoUri);
 passport.use(strategy);
 
 passport.serializeUser(function (user, done) {

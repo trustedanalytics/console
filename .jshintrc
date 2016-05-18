@@ -14,6 +14,7 @@
     "latedef" :false,
     "globals": {
         "process": true,
+        "Buffer": true,
         "angular": true,
 	    "google":true,
         "$": true,

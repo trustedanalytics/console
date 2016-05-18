@@ -18,7 +18,6 @@ var crypto = require('crypto');
 var oauth2 = require('./oauth2');
 var config = require('../config/config');
 var passport = oauth2.passport;
-var strategy = oauth2.strategy;
 
 var sso = config.getSso();
 
@@ -40,10 +39,10 @@ function init(app) {
 
 
     app.get('/oauth',
-        passport.authenticate('cloudfoundry'));
+        passport.authenticate('oauth2'));
 
     app.get('/oauth/callback',
-        passport.authenticate('cloudfoundry'),
+        passport.authenticate('oauth2'),
         function (req, res) {
             console.info('Authenticated, redirecting');
             res.redirect('/');
@@ -52,7 +51,6 @@ function init(app) {
     app.get('/logout', function (req, res) {
         req.session.destroy();
         req.logout();
-        strategy.reset();
         res.redirect(sso.logoutUri);
     });
 }
@@ -63,7 +61,6 @@ function login(req, res, next) {
             req.session.destroy();
         }
         req.logout();
-        strategy.reset();
         res.redirect('/oauth');
     } else {
         next();
