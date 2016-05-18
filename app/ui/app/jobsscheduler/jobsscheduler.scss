@@ -61,10 +61,13 @@
     }
 
     .input-group {
+
       .input-group-addon {
         overflow: hidden;
         text-overflow: ellipsis;
         max-width: 31vw;
+        //// workaround for resizing input-group controls within nested rows in IE and Twitter Bootstrap 3
+        width: auto;
       }
     }
 
