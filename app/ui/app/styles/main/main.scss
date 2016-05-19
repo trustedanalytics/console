@@ -43,7 +43,7 @@ a {
     .main-content {
       @include flexbox;
       @include flex-direction(column);
-      @include flex(1 1 auto);
+      @include flex(1);
 
       > section {
         @include flex(1 0 auto);
