@@ -84,6 +84,13 @@
   padding: 0;
 }
 
+.ng-table-filters {
+  input::-ms-clear {
+    width: 0;
+    height: 0;
+  }
+}
+
 .table {
   > thead > tr > th {
     border-bottom: none;
