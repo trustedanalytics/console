@@ -16,10 +16,14 @@
 h3
    | Coordinator jobs browser
 
-   .range.pull-right
-      button.btn.btn-default(ng-repeat='button in timeButtons', ng-click='getJobs(button.unit, button.amount)',
-         ng-class='{active: unit===button.unit && amount===button.amount}')
-            | {{button.text}}
+.time-range-filter
+   label Time range:
+   div
+      label.radio.radio-inline(ng-repeat='range in timeRanges')
+         input(type='radio', name='timeRange', ng-click='getJobs(range.unit, range.amount)',
+         ng-checked='unit===range.unit && amount===range.amount')
+         span.fa.fa-circle
+         | {{range.text}}
 
 spinner(ng-show='state.isPending()')
 

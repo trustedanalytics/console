@@ -16,10 +16,107 @@
 (function () {
     "use strict";
 
-    App.controller('ImportDataController', function ($scope, $routeParams, $state) {
+    App.controller('ImportDataController', function ($scope, State, JobFormConfig,
+                                                       ImportDataResource,
+                                                       NotificationService,
+                                                       $state) {
+        var state = new State().setPending();
+        $scope.state = state;
 
-        $scope.isTabActive = function (sref) {
-            return $state.is(sref) || $state.includes(sref);
+        var getInitData = JobFormConfig;
+
+        function loadInitialData() {
+            $scope.importModel = getInitData().importModel;
+            $scope.config = getInitData().config;
+            $scope.importModes = getInitData().importModes;
+            $scope.frequencyUnits = getInitData().frequencyUnits;
+            ImportDataResource
+                .withErrorMessage('Could not get configuration data')
+                .getConfiguration()
+                .then(function onSuccess(config) {
+                    $scope.databases = config.databases;
+                    $scope.chooseDatabaseType($scope.databases[0]);
+                    $scope.timezones = config.timezones;
+                    $scope.config.dirPrefix = config.organizationDirectory;
+                    $scope.state = state.setLoaded();
+                })
+                .catch(function onError() {
+                    $scope.state = state.setError();
+                });
+        }
+        loadInitialData();
+
+        /*
+         catches pattern -> jdbc:driver://host:port/databaseName*
+         */
+        $scope.jdbcUriPattern = 'jdbc:([\\w]+)://([\\w._-]+|[[\\w:.]+]):([1-9][0-9]{0,4})/([\\w][\\w]*)';
+
+        $scope.submitImport = function() {
+            if(!validateDates()) {
+                NotificationService.error('Invalid dates provided. Please provide end date that is after start date.');
+                return;
+            }
+            $scope.state.setPending();
+            ImportDataResource
+                .withErrorMessage('Creating workflow job failed')
+                .postJob($scope.importModel)
+                .then(function onSuccess(coordinator) {
+                    NotificationService.success('New workflow job has been created');
+                    $state.go('app.jobsscheduler.coordinatorjob', { coordinatorjobId: coordinator.id });
+                })
+                .finally(function () {
+                    $scope.state.setLoaded();
+                });
         };
+
+        $scope.setTimezone = function (timezone) {
+            $scope.importModel.schedule.zoneId = timezone;
+        };
+
+        $scope.chooseDatabaseType = function (database) {
+            $scope.config.databaseType = database;
+            $scope.chooseDriver(database.drivers[0]);
+        };
+
+        $scope.chooseDriver = function (driver) {
+            $scope.config.driver = driver;
+            $scope.updateUri();
+        };
+
+        $scope.updateUri = function () {
+            var jdbcUri = "jdbc:";
+            jdbcUri = "jdbc:";
+            jdbcUri += $scope.config.driver ? $scope.config.driver.name + "://" : '';
+            jdbcUri += $scope.config.host ? $scope.config.host : '';
+            jdbcUri += $scope.config.port ? ':' + $scope.config.port + "/" : '';
+            jdbcUri += $scope.config.dbName ? $scope.config.dbName : '';
+            $scope.importModel.sqoopImport.jdbcUri = jdbcUri;
+        };
+
+        $scope.updateDbAddress = function (form) {
+            var regExp = new RegExp($scope.jdbcUriPattern);
+            if(!form.jdbcUri.$error.pattern && form.jdbcUri.$viewValue) {
+                var matches = regExp.exec(form.jdbcUri.$viewValue);
+                $scope.config.driver = findDriverByName(matches[1]);
+                form.jdbcUri.$setValidity('invalidDriver', !!$scope.config.driver);
+                $scope.config.host = matches[2];
+                $scope.config.port = Number(matches[3]);
+                $scope.config.dbName = matches[4];
+            }
+        };
+
+        function findDriverByName (driverName) {
+            var result = null;
+            _.find($scope.databases, function (db) {
+                result = _.findWhere(db.drivers, {name: driverName});
+                return result;
+            });
+            return result;
+        }
+
+        function validateDates () {
+            var diff = moment($scope.importModel.schedule.end).diff($scope.importModel.schedule.start);
+            return diff > 0;
+        }
     });
 }());

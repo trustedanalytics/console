@@ -13,12 +13,150 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 //-
-.importdata(data-ng-controller='ImportDataController')
-    ul.nav.nav-tabs
-        li(role='presentation', ng-class='{active: isTabActive("app.jobsscheduler.importdata.fromdatabase")}')
-            a(ui-sref='app.jobsscheduler.importdata.fromdatabase')
-                em.icon-plus
-                | From database
 
-    .tabcontent
-        ui-view
+h3
+    | Import Data Scheduler
+
+.importdata.content
+    spinner(ng-show='state.isPending()')
+
+    .panel.panel-warning(ng-show='state.isError()')
+        .panel-heading Error loading content
+        .panel-body Service is unavailable
+
+    form(ng-if='state.isLoaded()', name="importForm", data-ng-submit='submitImport()')
+        .form-content
+            .form-group
+                label(for='jobName') Name
+                input#jobName.form-control(type='text', placeholder="Job name...", ng-model='importModel.name',
+                required)
+
+            .group-title.required
+                h4 Specify Database Address
+                    span &nbsp;-or-&nbsp;
+                    | Provide JDBC Uri
+            .form-group.databaseAddress
+                .col-lg-2.col-md-5
+                    label(for='databaseType') Database Type
+                    #databaseType.btn-group(uib-dropdown='')
+                        button.btn.btn-default.driver-button(type='button', uib-dropdown-toggle="")
+                            | {{config.databaseType.name}}
+                            span.caret.pull-right
+                        ul.dropdown-menu.dropdown-menu-left.animated.fadeInUpShort(role="menu")
+                            li(ng-repeat='db in databases')
+                                a(ng-click='chooseDatabaseType(db)') {{db.name}}
+                .col-lg-2.col-md-7
+                    label(for='driver') JDBC driver
+                    #driver.btn-group(uib-dropdown='')
+                        button.btn.btn-default.driver-button(type='button', uib-dropdown-toggle="" required)
+                            | {{config.driver.name}} {{config.driver.version}}
+                            span.caret.pull-right
+                        ul.dropdown-menu.dropdown-menu-left.animated.fadeInUpShort(role="menu")
+                            li(ng-repeat='driver in config.databaseType.drivers')
+                                a(ng-click='chooseDriver(driver)') {{driver.name}} {{driver.version}}
+                .col-lg-3.col-md-8
+                    label(for='host') Host
+                    input#host.form-control(type='text', placeholder='Host name...', required,
+                    data-ng-model='config.host', ng-change='updateUri()')
+                .col-lg-2.col-md-4
+                    label(for='port') Port
+                    input#port.form-control(type='number', min='1' max='65535', required,
+                    data-ng-model='config.port', ng-change='updateUri()')
+                .col-lg-3.col-md-12
+                    label(for='dbName') Database Name
+                    input#dbName.form-control(type='text', placeholder='Database name...', required,
+                    data-ng-model='config.dbName', ng-change='updateUri()')
+            .form-group.jdbcUri
+                label(for='jdbcUri') JDBC Uri
+                input#jdbcUri.form-control(name="jdbcUri", type='text', placeholder='JDBC connection string...',
+                    data-ng-model='importModel.sqoopImport.jdbcUri', ng-change='updateDbAddress(importForm)', required,
+                    pattern='{{jdbcUriPattern}}')
+                div(ng-messages="importForm.jdbcUri.$error")
+                    span.validationMessage(ng-message="pattern")
+                        | Required schema - jdbc:driver://host:port/databaseName
+                    span.validationMessage(ng-message="invalidDriver")
+                        | TAP platform do not support provided driver
+
+            .group-title.required
+                h4 Details
+            .form-group
+                label(for='table') Table
+                input#table.form-control(type='text', data-ng-model='importModel.sqoopImport.table', required)
+            .form-group
+                label(for='schemaName') Schema
+                    span.i &nbsp(optional)
+                input#schema.form-control(type='text', data-ng-model='importModel.sqoopImport.schema')
+            .form-group
+                label(for='targetDir') HDFS destination directory
+                    #defaultDir.checkbox.c-checkbox
+                        label
+                            input(type="checkbox", ng-model="config.useDefaultDir")
+                            span.fa.fa-check
+                            | Use default
+                .input-group
+                    span#dirPrefix.input-group-addon(uib-tooltip="{{config.dirPrefix}}") {{config.dirPrefix}}
+                    input#targetDir.form-control(type='text' placeholder='Destination dir...',
+                    data-ng-model='importModel.sqoopImport.targetDir', ng-disabled='config.useDefaultDir',
+                    aria-describedby="dirPrefix")
+            .form-group
+                label(for='access') Choose import mode
+                #access
+                    div(ng-repeat="mode in importModes")
+                        label.radio.radio-inline
+                            input(type='radio', name='importMode', ng-value='mode.name', ng-model="importModel.sqoopImport.importMode",
+                                ng-selected="mode.name === importModel.sqoopImport.importMode")
+                            span.fa.fa-circle
+                            | {{ mode.name }}
+                        span.fa.fa-info-circle(uib-tooltip="{{mode.description}}")
+            div(ng-if="importModel.sqoopImport.importMode === 'Incremental'")
+                label.i Provide config data for incremental mode
+                .form-group
+                    label(for="columnName") Column name
+                    input#columnName.form-control(type='text', ng-model='importModel.sqoopImport.checkColumn', required)
+                .form-group
+                    label(for="incrementalValue") Value
+                    input#incrementalValue.form-control(type='text', ng-model='importModel.sqoopImport.lastValue', required)
+
+            .group-title.required
+                h4 Set job schedule
+            .form-group.calendar
+                label(for='start') Start time
+                date-time-picker#start(ng-model='importModel.schedule.start' required)
+            .form-group.calendar
+                label(for='end') End time
+                date-time-picker#end(ng-model='importModel.schedule.end' required)
+            .form-group.timezones
+                label(for='timezone') Timezone
+                .btn-group(uib-dropdown)
+                    button.btn.btn-default.timezone-button(type='button', uib-dropdown-toggle,
+                    ng-disabled="!timezones.length")
+                        | {{ importModel.schedule.zoneId }}
+                        span.caret
+                    ul.dropdown-menu.animated.fadeInUpShort(role="menu")
+                        li(ng-repeat="timezone in timezones")
+                            a(ng-click="setTimezone(timezone)") {{timezone}}
+            .form-group.frequency
+                label(for='frequency') Frequency
+                .col-sm-3
+                    input#frequency.form-control(type='number', min='0', required,
+                    ng-model='importModel.schedule.frequency.amount')
+                .col-sm-9
+                    label.radio-inline(ng-repeat="unit in frequencyUnits")
+                        input(type='radio', name='frequencyUnits', ng-value='unit',
+                        ng-model='importModel.schedule.frequency.unit',
+                        ng-selected="unit === importModel.schedule.frequency.unit")
+                        |  {{unit}}
+
+            .group-title.optional
+                h4 Include Authentication
+                    span.i &nbsp(optional)
+            .form-group
+                label(for='username') Username
+                input#username.form-control(type='text', data-ng-model='importModel.sqoopImport.username')
+            .form-group
+                label(for='password') Password
+                input#password.form-control(type='password', data-ng-model='importModel.sqoopImport.password')
+
+        .form-submit
+            .form-group
+                input.btn.btn-primary(type='submit', value='Import Data', ng-disabled="importModel.$invalid")

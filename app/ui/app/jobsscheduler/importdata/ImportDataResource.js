@@ -16,7 +16,7 @@
 (function () {
     "use strict";
 
-    App.factory('FromDatabaseResource', function (Restangular, targetProvider) {
+    App.factory('ImportDataResource', function (Restangular, targetProvider) {
 
         var resource = Restangular.service("v1").one("oozie");
 
