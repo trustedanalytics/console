@@ -53,7 +53,7 @@
             "items": [
                 {
                     "text": "Import data",
-                    "sref": "app.jobsscheduler.importdata.fromdatabase"
+                    "sref": "app.jobsscheduler.importdata"
                 },
                 {
                     "text": "Job browser",

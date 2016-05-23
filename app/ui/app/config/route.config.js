@@ -24,7 +24,6 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
     $urlRouterProvider.when('/app/services', '/app/services/marketplace');
     $urlRouterProvider.when('/app/platformdashboard', '/app/platformdashboard/summary');
     $urlRouterProvider.when('/app/jobsscheduler/jobs', '/app/jobsscheduler/jobs/workflowjobs');
-    $urlRouterProvider.when('/app/jobsscheduler/importdata', '/app/jobsscheduler/importdata/fromdatabase');
 
     $urlRouterProvider.when('/app/platformtests', '/app/platformtests/list');
     $urlRouterProvider.otherwise('/app/dashboard');
@@ -50,17 +49,10 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
         })
         .state('app.jobsscheduler.importdata', {
             url: '/importdata',
-            abstract: true,
-            title: 'Import data',
-            controller: 'ImportDataController',
-            templateUrl: getViewPath('jobsscheduler/importdata/importdata.html')
-        })
-        .state('app.jobsscheduler.importdata.fromdatabase', {
-            url: '/fromdatabase',
-            title: 'Import data from database',
+            title: 'Import data scheduler',
             targetHeader: {org: true, space: false},
-            controller: 'FromDatabaseController',
-            templateUrl: getViewPath('jobsscheduler/importdata/fromDatabase.html'),
+            controller: 'ImportDataController',
+            templateUrl: getViewPath('jobsscheduler/importdata/importdata.html'),
             resolve: LazyLoadProvider.load(['bootstrap-datetimepicker', 'ngMessages'])
         })
         .state('app.jobsscheduler.jobs', {

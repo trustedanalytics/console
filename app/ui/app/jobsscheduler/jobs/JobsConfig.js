@@ -18,7 +18,7 @@
     "use strict";
 
     App.constant("JobsConfig", {
-        timeButtons: [
+        timeRanges: [
             {
                 text: "1 hour",
                 unit: "hours",

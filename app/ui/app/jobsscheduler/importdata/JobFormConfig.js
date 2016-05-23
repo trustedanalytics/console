@@ -19,34 +19,40 @@
 
     App.constant("JobFormConfig", function() {
         return {
-            name : "",
-            jdbcUri: "jdbc:",
-            driver: {},
-            databaseType: {
-                name: "",
-                drivers: {}
-            },
-            host: "",
-            port: "",
-            dbName: "",
-            username: "",
-            password: "",
-            table: "",
-            schema: "",
-            useDefaultDir: true,
-            dirPrefix: "",
-            targetDir: "",
-            mode: "Append",
-            columnName: "",
-            incrementalValue: "",
-            schedulerConfig: {
-                start: "",
-                end: "",
-                timezone: "UTC",
-                frequency: {
-                    unit: "Minutes",
-                    amount: ""
+            importModel: {
+                "name" : "",
+                "sqoopImport" : {
+                    "jdbcUri" : "jdbc:",
+                    "table" : "",
+                    "username" : "",
+                    "password" : "",
+                    "targetDir" : "",
+                    "importMode": "Append",
+                    "checkColumn": "",
+                    "lastValue": "",
+                    "schema": ""
+                },
+                "schedule" : {
+                    "zoneId" : "UTC",
+                    "frequency" : {
+                        "unit" : "Minutes",
+                        "amount": ""
+                    },
+                    "start" : "",
+                    "end" : ""
                 }
+            },
+            config: {
+                driver: {},
+                databaseType: {
+                    name: "",
+                    drivers: {}
+                },
+                host: "",
+                port: "",
+                dbName: "",
+                useDefaultDir: true,
+                dirPrefix: ""
             },
             importModes: [
                 {
@@ -64,10 +70,10 @@
                 }
             ],
             frequencyUnits: [
-                "Minutes",
-                "Hours",
-                "Days",
-                "Months"
+                "minutes",
+                "hours",
+                "days",
+                "months"
             ]
         };
     });

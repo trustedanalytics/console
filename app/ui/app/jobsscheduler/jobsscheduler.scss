@@ -18,112 +18,112 @@
 
 .importdata {
 
-  form {
+  .form-group {
+    display: table;
+    width: 100%;
+  }
 
-    .panel {
-      border: 1px solid $panel-border-color;
+  .form-content {
+    padding: 30px 0px;
+    border: 1px solid #ddd;
+    
+    > * {
+      padding-right: 15px;
+      padding-left: 15px;
+    }
+  }
+
+  .form-submit {
+    margin-top: 15px;
+  }
+
+  .group-title {
+    margin-top: 60px;
+    margin-bottom: 15px;
+
+    h4 {
+      font-weight: 400;
     }
 
-    .panel-heading {
-      color: $panel-heading-text-color;
-      background-color: $panel-heading-color;
-      border-radius: 0;
+    &.required {
+      color: $intel-blue;
 
-      a, a:active, a:hover{
-        color: $panel-heading-text-color;
-      }
-    }
-
-    .panel .btn-group {
-      border: 1px solid $panel-button-group-border;
-      height: 34px;
-    }
-
-    .panel-group .panel + .panel {
-      margin-top: 20px;
-    }
-
-    .panel-group .panel {
-      border-radius: 0;
-    }
-
-    .panel-body {
-      padding: 15px;
-    }
-
-    .sub-group {
-      display: flex;
-      display: -webkit-flex;
-    }
-
-    .group {
-      margin-bottom: 15px;
-    }
-
-    .input-group {
-      .input-group-addon {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 31vw;
-      }
-    }
-
-    .label-panel {
-      border-radius: 5px;
-      background-color: #f8f8f8;
-      background-clip: content-box;
-      display: flex;
-      justify-content: center;
-      flex-direction: column;
-      display: -webkit-flex;
-      -webkit-flex-direction: column;
-      -webkit-justify-content: center;
-
-      > p {
-        word-wrap: break-word;
-        text-align: center;
-        margin: 7px 0;
-        padding: 0 10px;
-      }
-
-      .or {
+      span {
+        color: red;
         font-weight: bold;
       }
     }
+  }
 
-    .underlined-group {
-      padding-bottom: 15px;
-      border-bottom: 2px dotted #f0f0f0;
+  #jobName {
+    width: 58%;
+  }
+
+  .databaseAddress, {
+    padding: 0;
+
+    label {
+      padding-top: 5px;
+      display: block;
     }
 
-    .databaseAddress {
-
-      label {
-        display: block;
-      }
-    }
-    
-    #access {
-      display: flex;
-      display: -webkit-flex;
-
-      > .radio{
-        margin-right: 10px;
-      }
+    .caret {
+      margin-top: 7px;
     }
 
-    #defaultDir {
-      display: inline;
-      margin-left: 10px;
+    .btn, .btn-group {
+      width: 100%;
+    }
+  }
 
-      .fa-check {
-        margin-right: 5px;
-      }
+  #defaultDir {
+    display: inline;
+    margin-left: 10px;
+
+    .fa-check {
+      margin-right: 5px;
+    }
+  }
+
+  #access {
+    display: flex;
+    display: -webkit-flex;
+
+    > .radio{
+      margin-right: 10px;
+    }
+  }
+
+  .calendar {
+    width: 50%;
+  }
+
+  .timezones {
+
+    label {
+      display: block;
     }
 
-    .dropdown-menu.timezones{
+    .dropdown-menu{
       max-height: 160px;
       overflow-y: scroll;
+    }
+  }
+
+  .frequency {
+    padding: 0;
+
+    > label {
+      padding: 0 15px;
+      display: block;
+    }
+  }
+
+  .input-group {
+    .input-group-addon {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 31vw;
     }
   }
 
@@ -131,13 +131,33 @@
     color: $btn-primary-color;
     margin-left: 5px;
   }
+
   .validationMessage {
     color: red;
+  }
+
+  .i {
+    font-style: italic;
   }
 }
 
 
 .jobsbrowser {
+
+  .time-range-filter {
+    border: 1px solid #ccc;
+    margin: 30px 0 50px;
+    padding: 20px;
+
+    label {
+      color: black;
+      width: auto;
+    }
+
+    > div {
+      padding-top: 10px;
+    }
+  }
 
   label{
     border-radius: 0.25em;

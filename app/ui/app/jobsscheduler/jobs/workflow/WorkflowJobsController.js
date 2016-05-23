@@ -27,7 +27,7 @@
             $scope.getJobs($scope.unit, $scope.amount);
         });
 
-        $scope.timeButtons = JobsConfig.timeButtons;
+        $scope.timeRanges = JobsConfig.timeRanges;
         $scope.unit = 'days';
         $scope.amount = 1;
 
