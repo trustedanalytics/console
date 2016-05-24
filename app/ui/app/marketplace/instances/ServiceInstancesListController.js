@@ -117,23 +117,28 @@
             var isK8sAvailable = _.some($scope.services, function(s) {
                 return _.contains(s.tags, "k8s");
             });
-            if(!isK8sAvailable) { return; }
-            KubernetesServicesResource
-                .withErrorMessage('Error loading kubernetes services')
-                .services(targetProvider.getOrganization().guid, targetProvider.getSpace().guid)
-                .then(function success(data) {
-                    mergeWithScopeServices(data);
-                });
+            if(isK8sAvailable) {
+                KubernetesServicesResource
+                    .withErrorMessage('Error loading kubernetes services')
+                    .services(targetProvider.getOrganization().guid, targetProvider.getSpace().guid)
+                    .then(function success(data) {
+                        mergeWithScopeServices(data);
+                    });
+            }
         }
 
         function mergeWithScopeServices(data) {
-            var predata = {};
-            _.each(data, function (instance) {
-                predata[instance.serviceId] = {
-                    public: instance.tapPublic,
-                    uri: instance.uri
-                };
-            });
+            var predata = _.reduce(data, function (memo, instance) {
+                if(!memo[instance.serviceId]) {
+                    memo[instance.serviceId] = {public: false, uri: []};
+                }
+                if(instance.tapPublic) {
+                    memo[instance.serviceId].public = true;
+                    memo[instance.serviceId].uri = memo[instance.serviceId].uri.concat(instance.uri);
+                }
+                return memo;
+            }, {});
+
             _.each($scope.services, function (service) {
                 _.each(service.instances, function(instance) {
                     if(predata[instance.guid]) {
