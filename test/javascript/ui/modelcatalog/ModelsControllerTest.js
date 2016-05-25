@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-describe("Unit: H2OModelsController", function() {
+describe("Unit: ModelsController", function() {
 
     var controller,
         scope,
@@ -41,7 +41,7 @@ describe("Unit: H2OModelsController", function() {
         };
 
         createController = function () {
-            controller = $controller('H2OModelsController', {
+            controller = $controller('ModelsController', {
                 $scope: scope,
                 targetProvider: targetProvider,
                 ModelResource: ModelResource,

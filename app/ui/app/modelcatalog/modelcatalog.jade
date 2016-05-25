@@ -13,11 +13,29 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 //-
+
+h3
+   | Models Inventory
 .modelcatalog
-    ul.nav.nav-tabs
-        li(role='presentation', ng-class='{active: ctrl.isTabActive("app.modelcatalog.h2o")}')
-            a(ui-sref='app.modelcatalog.h2o') H2O
-        li(role='presentation', ng-class='{active: ctrl.isTabActive("app.modelcatalog.atk")}')
-            a(ui-sref='app.modelcatalog.atk') TAP Analytics Toolkit
-    .tabcontent
-        ui-view
+   .panel
+      spinner(ng-show='state.isPending()')
+      div(ng-if='state.isLoaded()')
+         .models
+            div(ng-if='!filteredModels.length')
+               h4 No models for this instance
+            table.table-striped(ng-show='filteredModels.length', ng-table="tableParams", show-filter="true" class="table")
+               tr(ng-repeat="model in $data")
+                  td(data-title="'Name'" filter="{ 'name': 'text'}" sortable="'name'")
+                     | {{model.name}}
+                  td(data-title="'Algorithm'" filter="{ 'algo_full_name': 'text'}" sortable="'algo_full_name'") {{ model.algo_full_name }}
+                  td(data-title="'Type'") {{ model.type }}
+                  td(data-title="'Timestamp'" sortable="'timestamp'") {{ model.timestamp | date: 'yyyy-MM-dd h:mm:ss a' }}
+                  td(data-title="'Publishing'")
+                     button.btn.btn-primary(ng-click='publish(model)') Publish Data Model
+                  td(data-title="'Downloading'")
+                     form(name="downloadDataModel" action='{{downloadPath(model.name)}}'
+                     enctype='application/x-www-form-urlencoded' method='post')
+                        input(name='host' value='http://' + '{{model.hostname}}' type='hidden')
+                        input(name='username' value='{{model.login}}' type='hidden')
+                        input(name='password' value='{{model.password}}' type='hidden')
+                        button.btn.btn-primary(type='submit') Download Data Model

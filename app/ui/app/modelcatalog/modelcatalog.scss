@@ -15,71 +15,8 @@
  */
 
 .modelcatalog {
-  .instances {
-    > a {
-      margin: 2px 12px 12px 2px;
-      border: 1px solid #ebebeb;
-      color: $btn-primary-color;
-      text-decoration: none;
-      height: 130px;
-      display: inline-block;
-      vertical-align: top;
 
-      &.instance {
-        text-align: center;
-        padding: 45px 15px;
-        min-width: 130px;
-      }
-
-      &.all {
-        width: 100px;
-        padding: 50px 0;
-        text-align: center;
-      }
-
-      &:hover, &:active {
-        background-color: darken(#fff, 5%);
-      }
-
-      &.active {
-        border: 3px solid $btn-primary-color;
-      }
-
-      > div {
-        margin-bottom: 5px;
-        display: block;
-      }
-
-      .fa {
-        font-size: 21px;
-      }
-    }
-
-    .instance-credentials {
-
-      label {
-        font-weight: lighter;
-        font-style: italic;
-        margin: 0;
-      }
-
-      table {
-        input {
-          width: 170px;
-          float: left;
-        }
-
-        button {
-          float: left;
-          width: 50px;
-        }
-
-        input, button {
-          height: 30px;
-        }
-      }
-    }
+  .panel {
+    padding: 25px 20px;
   }
 }
-
-

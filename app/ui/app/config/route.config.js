@@ -20,7 +20,6 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
     $sceProvider.enabled(false);
 
     $urlRouterProvider.when('/app/datacatalog', '/app/datacatalog/datasets');
-    $urlRouterProvider.when('/app/modelcatalog', '/app/modelcatalog/h2omodels');
     $urlRouterProvider.when('/app/services', '/app/services/marketplace');
     $urlRouterProvider.when('/app/platformdashboard', '/app/platformdashboard/summary');
     $urlRouterProvider.when('/app/jobsscheduler/jobs', '/app/jobsscheduler/jobs/workflowjobs');
@@ -351,23 +350,10 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
         })
         .state('app.modelcatalog', {
             url: '/modelcatalog',
-            controller: 'ModelCatalogController',
+            targetHeader: {org: true, space: false},
+            controller: 'ModelsController',
             controllerAs: 'ctrl',
             templateUrl: getViewPath('modelcatalog/modelcatalog.html')
-        })
-        .state('app.modelcatalog.h2o', {
-            url: '/h2omodels',
-            title: 'H2O models',
-            targetHeader: {org: true, space: false},
-            controller: 'H2OModelsController',
-            controllerAs: 'ctrl',
-            templateUrl: getViewPath('modelcatalog/h2o/h2omodels.html')
-        })
-        .state('app.modelcatalog.atk', {
-            url: '/atkmodels',
-            title: 'TAP Analytics Toolkit models',
-            targetHeader: {org: true, space: false},
-            templateUrl: getViewPath('modelcatalog/atk/atkmodels.html')
         })
         .state('app.manage', {
             url: '/manage',
