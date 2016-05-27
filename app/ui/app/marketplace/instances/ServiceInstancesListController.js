@@ -17,14 +17,18 @@
     "use strict";
 
     App.controller('ServiceInstancesListController', function ($scope, State, targetProvider, ServiceInstancesResource,
-        ServiceKeysResource, NotificationService, jsonFilter, blobFilter, KubernetesServicesResource, ServiceInstancesMapper) {
+        ServiceKeysResource, NotificationService, jsonFilter, blobFilter, KubernetesServicesResource, ServiceInstancesMapper,
+        UserProvider) {
 
         var state = new State().setPending();
         $scope.state = state;
         $scope.exports = [];
         $scope.vcap = {};
 
-        refreshContent();
+        UserProvider.isAdmin().then(function (isAdmin) {
+            $scope.admin = isAdmin;
+            refreshContent();
+        });
 
         $scope.$on('targetChanged', function () {
             refreshContent();
@@ -117,7 +121,7 @@
             var isK8sAvailable = _.some($scope.services, function(s) {
                 return _.contains(s.tags, "k8s");
             });
-            if(isK8sAvailable) {
+            if(isK8sAvailable && $scope.admin) {
                 KubernetesServicesResource
                     .withErrorMessage('Error loading kubernetes services')
                     .services(targetProvider.getOrganization().guid, targetProvider.getSpace().guid)
