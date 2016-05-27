@@ -19,6 +19,7 @@ describe("Unit: ServiceInstancesListController", function () {
     var sut,
         scope,
         targetProvider,
+        UserProvider,
         ServiceInstancesResource,
         ServiceKeysResource,
         KubernetesServicesResource,
@@ -39,6 +40,10 @@ describe("Unit: ServiceInstancesListController", function () {
         targetProvider = {
             getSpace: sinon.stub().returns(space),
             getOrganization: sinon.stub().returns({})
+        };
+
+        UserProvider = {
+            isAdmin: sinon.stub().returns(getResolvedPromise("USER"))
         };
 
         ServiceInstancesResource = {
@@ -74,16 +79,18 @@ describe("Unit: ServiceInstancesListController", function () {
                 ServiceKeysResource: ServiceKeysResource,
                 KubernetesServicesResource: KubernetesServicesResource,
                 NotificationService: NotificationService,
-                blobFilter: sinon.stub()
+                blobFilter: sinon.stub(),
+                UserProvider: UserProvider
             });
             scope.$apply();
         };
     }));
 
-    it('init, set state pending get summary', function() {
+    it('init, set state pending and get summary', function() {
         createController();
 
         expect(scope.state.isPending(), 'pending').to.be.true;
+        expect(UserProvider.isAdmin).to.be.called;
         expect(ServiceInstancesResource.withErrorMessage).to.be.called;
         expect(ServiceInstancesResource.getSummary).to.be.calledWith(space.guid);
     });
@@ -92,6 +99,7 @@ describe("Unit: ServiceInstancesListController", function () {
         targetProvider.getSpace = sinon.stub().returns({});
         createController();
 
+        expect(UserProvider.isAdmin).to.be.called;
         expect(scope.state.isLoaded(), 'loaded').to.be.true;
         expect(ServiceInstancesResource.getSummary).not.to.be.called;
     });
@@ -103,6 +111,7 @@ describe("Unit: ServiceInstancesListController", function () {
 
         scope.$emit('targetChanged');
 
+        expect(UserProvider.isAdmin).to.be.called;
         expect(scope.state.isPending(), 'pending').to.be.true;
         expect(ServiceInstancesResource.getSummary).to.be.calledTwice;
     });
@@ -114,6 +123,7 @@ describe("Unit: ServiceInstancesListController", function () {
 
         createController();
 
+        expect(UserProvider.isAdmin).to.be.called;
         expect(scope.state.isLoaded(), 'loaded').to.be.true;
         expect(scope.services.length).to.be.equal(2);
         expect(scope.services[0].like).to.be.equal('bananas');
@@ -129,6 +139,8 @@ describe("Unit: ServiceInstancesListController", function () {
         createController();
         scope.addExport(keys[0]);
         scope.addExport(keys[1]);
+
+        expect(UserProvider.isAdmin).to.be.called;
         expect(scope.exports).to.be.deep.equal(keys);
         expect(scope.vcap['service1-extra'].length).to.be.deep.equal(2);
     });
@@ -142,6 +154,7 @@ describe("Unit: ServiceInstancesListController", function () {
         scope.addExport(keys[0]);
         scope.$emit('targetChanged');
 
+        expect(UserProvider.isAdmin).to.be.called;
         expect(scope.exports).to.be.empty;
         expect(scope.vcap).to.be.empty;
     });
@@ -154,6 +167,7 @@ describe("Unit: ServiceInstancesListController", function () {
         deferred.reject();
         scope.$apply();
 
+        expect(UserProvider.isAdmin).to.be.called;
         expect(scope.state.isLoaded(), 'loaded').to.be.true;
     });
 
