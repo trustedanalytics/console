@@ -24,7 +24,7 @@
             organizations = [],
             spaces = [],
             target = {},
-            emptyOrganizationsError = 'You are not assigned to any organization. Contact administrators.',
+            emptyOrganizationsError = 'You are not assigned to any organization. Please contact platform administrator.',
             empty = true;
         angular.copy($cookies.getObject(ORGANIZATION_KEY), organization);
         angular.copy($cookies.getObject(SPACE), space);
@@ -45,7 +45,7 @@
 
                     var newOrganization = (organization &&
                         _.findWhere(organizations, {guid: organization.guid})) ||
-                        organizations[0];
+                        organizations[0] || {};
                     var orgChanged = organization.guid !== newOrganization.guid;
 
                     target.setOrganization(newOrganization, true);
