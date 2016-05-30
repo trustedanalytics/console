@@ -36,7 +36,10 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
             templateUrl: getViewPath('main/app.html'),
             resolve: _.extend(LazyLoadProvider.load(['icons']), {
                 orgs: /*@ngInject*/ function (targetProvider) {
-                    return targetProvider.refresh();
+                    return targetProvider.refresh()
+                        .catch(function() {
+                            // ignore error
+                        });
                 }
             })
         })

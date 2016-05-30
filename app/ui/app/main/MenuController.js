@@ -126,6 +126,9 @@
 
 
     function getExternalTools(PlatformContextProvider, targetProvider, $scope) {
+        if(!targetProvider.getOrganization().guid) {
+            return;
+        }
         PlatformContextProvider
             .getExternalTools(targetProvider.getOrganization().guid)
             .then(function (externalTools) {
