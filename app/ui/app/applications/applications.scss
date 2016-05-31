@@ -193,10 +193,26 @@
         height: 28px;
         border: none;
       }
-
     }
   }
 
+  .item {
+    display: flex;
+  }
+
+  .instance-name {
+    flex: 1;
+    min-width: 0;
+    padding-right: 8px;
+
+    a, span {
+      word-break: break-all;
+    }
+  }
+
+  .btn-wrapper {
+    display: inline-block;
+  }
 }
 
 .application-register {

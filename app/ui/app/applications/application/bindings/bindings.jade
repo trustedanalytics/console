@@ -29,10 +29,12 @@
                         .search.input-group.input-group-sm
                             input.form-control(type='text', placeholder='Search', ng-model='boundSearchText')
 
-                    li.list-group-item(ng-repeat="service in servicesBound | filter: boundSearchText | orderBy: 'name'")
-                        a(ng-if='service.service', ui-sref='app.service({ serviceId: service.service })') {{ service.name }}
-                        span(ng-if='!service.service') {{ service.name }}
-                        a.btn.btn-primary.btn-xs.pull-right.bind-btn(ng-click='unbindService(service)') Unbind
+                    li.item.list-group-item(ng-repeat="service in servicesBound | filter: boundSearchText | orderBy: 'name'")
+                        .instance-name
+                           a(ng-if='service.service', ui-sref='app.service({ serviceId: service.service })') {{ service.name }}
+                           span(ng-if='!service.service') {{ service.name }}
+                        .btn-wrapper
+                           a.btn.btn-primary.btn-xs.pull-right.bind-btn(ng-click='unbindService(service)') Unbind
 
                     li.empty.list-group-item(ng-if='!servicesBound.length')
                         | No services bound
@@ -45,10 +47,12 @@
                         .search.input-group.input-group-sm
                             input.form-control(type='text', placeholder='Search', ng-model='availableSearchText')
 
-                    li.list-group-item(ng-repeat="service in servicesAvailable | filter: availableSearchText | orderBy: 'name'")
-                        a(ng-if='service.service', ui-sref='app.service({ serviceId: service.service })') {{ service.name }}
-                        span(ng-if='!service.service') {{ service.name }}
-                        a.btn.btn-primary.btn-xs.pull-right.bind-btn(ng-click='bindService(service)') Bind
+                    li.item.list-group-item(ng-repeat="service in servicesAvailable | filter: availableSearchText | orderBy: 'name'")
+                        .instance-name
+                           a(ng-if='service.service', ui-sref='app.service({ serviceId: service.service })') {{ service.name }}
+                           span(ng-if='!service.service') {{ service.name }}
+                        .btn-wrapper
+                           a.btn.btn-primary.btn-xs.pull-right.bind-btn(ng-click='bindService(service)') Bind
 
                     li.empty.list-group-item(ng-if='!servicesAvailable.length')
                         | No services available
