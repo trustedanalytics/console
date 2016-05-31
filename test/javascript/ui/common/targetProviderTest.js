@@ -164,7 +164,6 @@ describe("Unit: TargetProvider", function() {
     it('getOrganizations should display an error if organization list is empty', inject(function() {
 
         var deferred = $q.defer();
-        var emptyOrganizationsError = 'You are not assigned to any organization. Contact administrators.';
         var notificationServiceStub = {
             error: sinon.stub(),
             $rootScope: sinon.stub()
@@ -186,7 +185,7 @@ describe("Unit: TargetProvider", function() {
 
         expect(orgs).to.be.deep.equal([]);
         expect(notificationServiceStub.error.called).to.equal(true);
-        expect(notificationServiceStub.error.getCalls()[0].args[0]).to.deep.equal(emptyOrganizationsError);
+        expect(notificationServiceStub.error.getCalls()[0].args[0]).to.be.not.empty;
     }));
 
 });
