@@ -22,7 +22,7 @@ h3
 
     div(ng-show='ctrl.state.isLoaded()')
         .service-list
-            .searchbar
+            .searchbar.clearfix
                search-bar.pull-right
             .service-card.col-lg-3.col-md-4.col-sm-6(ng-repeat="service in filtered = (ctrl.services | orderBy: 'name' | filter: ctrl.filterService)")
                 a.panel(ui-sref='app.service({ serviceId: service.id })')
