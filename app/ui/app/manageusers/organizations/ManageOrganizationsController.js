@@ -63,8 +63,10 @@
                         .deleteOrg($scope.current.guid);
 
                 })
+                .then(function() {
+                    return targetProvider.refresh();
+                })
                 .then(OrganizationsModalsService.onDeleteSuccess)
-                .then(OrganizationHelper.loadOrganizations($scope.state, refreshOrganizations))
                 .catch(OrganizationsModalsService.onDeleteError)
                 .finally(function () {
                     $scope.state.setLoaded();
@@ -103,6 +105,4 @@
             $scope.current = targetProvider.getOrganization();
         };
     });
-
-
 }());
