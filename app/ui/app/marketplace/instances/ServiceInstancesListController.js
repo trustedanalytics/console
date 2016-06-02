@@ -17,8 +17,7 @@
     "use strict";
 
     App.controller('ServiceInstancesListController', function ($scope, State, targetProvider, ServiceInstancesResource,
-        ServiceKeysResource, NotificationService, jsonFilter, blobFilter, KubernetesServicesResource, ServiceInstancesMapper,
-        UserProvider) {
+        ServiceKeysResource, NotificationService, jsonFilter, blobFilter, KubernetesServicesResource, ServiceInstancesMapper, ServiceInstancesListHelper, UserProvider) {
 
         var state = new State().setPending();
         $scope.state = state;
@@ -54,11 +53,9 @@
 
         $scope.addKey = function(keyName, instance) {
             state.setPending();
-            ServiceKeysResource
-                .withErrorMessage('Adding new service key failed. Check that the service broker supports that feature.')
+            ServiceInstancesListHelper
                 .addKey(keyName, instance.guid)
                 .then(function() {
-                    NotificationService.success("Service key has been added");
                     refreshContent();
                 })
                 .catch(function() {
@@ -85,11 +82,9 @@
 
         $scope.exposeInstance = function(instance, visibility) {
             state.setPending();
-            KubernetesServicesResource
-                .withErrorMessage("Error changing service visibility")
-                .setVisibility(targetProvider.getOrganization().guid, targetProvider.getSpace().guid, instance.guid, visibility)
+            ServiceInstancesListHelper
+                .exposeInstance(instance.guid, visibility)
                 .then(function () {
-                    NotificationService.success("Service visibility has been changed");
                     refreshContent();
                 })
                 .catch(function() {
@@ -102,13 +97,8 @@
             $scope.exports = [];
             $scope.vcap = {};
             if (targetProvider.getSpace().guid) {
-                ServiceInstancesResource
-                    .withErrorMessage('Error loading service instances')
-                    .getSummary(targetProvider.getSpace().guid, true)
-                    .then(function success(data) {
-                        $scope.services = succeededInstances(mergeService(data));
-                        getKubernetesServices();
-                    })
+                ServiceInstancesListHelper
+                    .refreshContent($scope)
                     .finally(function () {
                         state.setLoaded();
                     });
@@ -117,68 +107,9 @@
             }
         }
 
-        function getKubernetesServices() {
-            var isK8sAvailable = _.some($scope.services, function(s) {
-                return _.contains(s.tags, "k8s");
-            });
-            if(isK8sAvailable && $scope.admin) {
-                KubernetesServicesResource
-                    .withErrorMessage('Error loading kubernetes services')
-                    .services(targetProvider.getOrganization().guid, targetProvider.getSpace().guid)
-                    .then(function success(data) {
-                        mergeWithScopeServices(data);
-                    });
-            }
-        }
-
-        function mergeWithScopeServices(data) {
-            var predata = _.reduce(data, function (memo, instance) {
-                if(!memo[instance.serviceId]) {
-                    memo[instance.serviceId] = {public: false, uri: []};
-                }
-                if(instance.tapPublic) {
-                    memo[instance.serviceId].public = true;
-                    memo[instance.serviceId].uri = memo[instance.serviceId].uri.concat(instance.uri);
-                }
-                return memo;
-            }, {});
-
-            _.each($scope.services, function (service) {
-                _.each(service.instances, function(instance) {
-                    if(predata[instance.guid]) {
-                        instance["kubernetes"] = predata[instance.guid];
-                    }
-                });
-            });
-        }
-
         function refreshVcapConfiguraton(ServiceInstancesMapper) {
             $scope.vcap = ServiceInstancesMapper.getVcapConfiguration($scope.services, $scope.exports);
             $scope.file = blobFilter(jsonFilter($scope.vcap));
         }
     });
-
-    function mergeService(data) {
-        return _.map(data, function (service) {
-            var extra = service.extra ? JSON.parse(service.extra) : {};
-            var merged = _.extend({}, service, extra);
-            return merged;
-        });
-    }
-
-    function succeededInstances(services) {
-         var result = _.each(services, function(service) {
-            service.instances = _.filter(service.instances, function(si) {
-                return normalizeLastOperationState(si.last_operation.state) === "succeeded";
-            });
-        });
-        return _.filter(result, function(service) {
-            return !_.isEmpty(service.instances);
-        });
-    }
-
-    function normalizeLastOperationState(lastOperationState) {
-        return lastOperationState.replace(/\s+/g, '-').toLowerCase();
-    }
-
 }());

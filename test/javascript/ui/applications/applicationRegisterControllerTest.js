@@ -15,8 +15,7 @@
  */
 /*jshint -W030 */
 describe("Unit: ApplicationRegisterController", function () {
-    var $controllerConstructor,
-        scope,
+    var scope,
         ctrl,
         state,
         mockNotificationService,

@@ -16,10 +16,8 @@
 (function () {
     "use strict";
 
-    App.controller('GearPumpAppDeployController', function ($scope, $window, $location, targetProvider, State, ServiceInstancesMapper,
-        NotificationService, GearPumpAppDeployResource, ToolsInstanceResource, ServiceKeysResource, ServiceInstancesResource, FileUploaderService) {
-
-        var GP_SERVICES_WHITE_LIST = ['hbase', 'kafka', 'zookeeper', 'hdfs'];
+    App.controller('GearPumpAppDeployController', function ($scope, $window, $location, State,
+        ServiceInstancesResource, GearPumpAppDeployHelper) {
 
         var appArguments = {};
 
@@ -30,7 +28,7 @@
         $scope.instancesState = new State().setPending();
         $scope.gpInstanceName = $location.path().split('/').pop();
 
-        getGPInstanceCredentialsPromise(ToolsInstanceResource, targetProvider.getOrganization().guid, targetProvider.getSpace().guid, $scope.gpInstanceName)
+        GearPumpAppDeployHelper.getGPInstanceCredentialsPromise($scope.gpInstanceName)
             .then(function(creds) {
                 if(creds) {
                     $scope.gpUiData = creds;
@@ -41,9 +39,9 @@
                 }
             });
 
-        getServicesInstancesPromise(ServiceInstancesResource, targetProvider)
+        GearPumpAppDeployHelper.getServicesInstancesPromise(ServiceInstancesResource)
             .then(function success(data) {
-                $scope.services = filterServices(data, GP_SERVICES_WHITE_LIST);
+                $scope.services = GearPumpAppDeployHelper.filterServices(data);
                 $scope.instancesState.setLoaded();
             });
 
@@ -76,43 +74,12 @@
         };
 
         $scope.setAppArguments = function (instanceGuid, serviceLabel){
-            var keyName = 'gp-app-creds-' + $scope.gpInstanceName + '-' + Math.floor(Math.random()*100);
-            return ServiceKeysResource
-                .withErrorMessage('Adding new service key failed. Check that the service broker supports that feature.')
-                .addKey(keyName, instanceGuid)
-                .then(function() {
-                    return getServicesInstancesPromise(ServiceInstancesResource, targetProvider);
-                })
-                .then(function success(data) {
-                    $scope.services = filterServices(data, GP_SERVICES_WHITE_LIST);
-                    var key = findKeyForInstance(instanceGuid, keyName, data);
-
-                    if(!appArguments[serviceLabel]) {
-                        appArguments[serviceLabel] = [];
-                    }
-                    appArguments[serviceLabel].push(ServiceInstancesMapper.getVcapForKey($scope.services, key));
-
-                    return ServiceKeysResource
-                        .withErrorMessage('Removing service key failed')
-                        .deleteKey(key.guid);
-                });
+            return GearPumpAppDeployHelper.setAppArguments($scope.gpInstanceName, $scope, instanceGuid, serviceLabel, appArguments,
+                ServiceInstancesResource);
         };
 
         $scope.usersArgumentsChange = function () {
-            appArguments.usersArgs = _.chain($scope.usersParameters)
-                .filter(function (parameter) {
-                    return parameter.key;
-                })
-                .map(function(element) {
-                    return [element.key, element.value];
-                })
-                .object()
-                .value();
-
-            if(angular.equals(appArguments.usersArgs, {})) {
-                delete appArguments.usersArgs;
-            }
-            $scope.uploadFormData.appResultantArguments = 'tap=' + angular.toJson(appArguments);
+            GearPumpAppDeployHelper.usersArgumentsChange(appArguments, $scope.usersParameters, $scope.uploadFormData);
         };
 
         $scope.addExtraParam = function () {
@@ -125,29 +92,8 @@
 
         $scope.deployGPApp = function() {
             $scope.state.setPending();
-            getGPTokenPromise(GearPumpAppDeployResource, $scope.uiInstanceName, $scope.gpUiData.login, $scope.gpUiData.password)
-                .then(function() {
-
-                    var data = {
-                        configstring: $scope.uploadFormData.appResultantArguments
-                    };
-
-                    var files = {
-                        jar: $scope.uploadFormData.jarFile,
-                        configfile: $scope.uploadFormData.configFile
-                    };
-
-                    var url = '/rest/gearpump/' + $scope.uiInstanceName + '/api/v1.0/master/submitapp';
-
-                    var uploader = FileUploaderService.uploadFiles(url, data, files, function (response) {
-                        return {
-                            message: response.status + ': ' + response.data,
-                            close: false
-                        };
-                    });
-
-                    return NotificationService.progress('progress-upload', uploader);
-                }).finally(function() {
+            GearPumpAppDeployHelper.deployGPApp($scope.uiInstanceName, $scope.gpUiData, $scope.uploadFormData)
+                .finally(function() {
                     $scope.clearForm();
                     $scope.state.setLoaded();
                 });
@@ -164,45 +110,4 @@
             appArguments = {};
         };
     });
-
-
-    function getGPInstanceCredentialsPromise(ToolsInstanceResource, orgId, spaceId, instanceName) {
-        return ToolsInstanceResource.getToolsInstances(orgId, spaceId, 'gearpump')
-            .then(function (response) {
-                var result = response.plain();
-                return result[instanceName];
-            });
-    }
-
-    function getGPTokenPromise(GearPumpAppDeployResource, gpInstance, username, password) {
-        return GearPumpAppDeployResource.getGPToken(gpInstance, username, password);
-    }
-
-    function getServicesInstancesPromise(ServiceInstancesResource, targetProvider) {
-        if (targetProvider.getSpace().guid) {
-            return ServiceInstancesResource
-                .withErrorMessage('Error loading service keys')
-                .getSummary(targetProvider.getSpace().guid, true);
-        }
-    }
-
-    function filterServices(data, whiteList) {
-        var mapped = _.map(data, function (service) {
-            var extra = JSON.parse(service.extra || '{}');
-            return _.extend({}, service, extra);
-        });
-
-        return _.filter(mapped, function (service) {
-            return _.contains(whiteList, service.label);
-        });
-    }
-
-    function findKeyForInstance(instanceGuid, keyName, data) {
-        var instance = _.chain(data)
-            .pluck('instances')
-            .flatten(true)
-            .findWhere({guid: instanceGuid})
-            .value();
-        return _.findWhere(instance.service_keys, {name: keyName});
-    }
 }());

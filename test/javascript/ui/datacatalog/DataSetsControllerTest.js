@@ -15,8 +15,6 @@
  */
 describe("Unit: DataSetsController", function() {
 
-    beforeEach(module('app'));
-
     var controller,
         scope,
         rootScope,
@@ -28,13 +26,12 @@ describe("Unit: DataSetsController", function() {
 
         DEFAULT_TOOL_NAME = 'arcadia';
 
-    beforeEach(inject(function($injector, $rootScope, State, $q){
-        rootScope = $rootScope;
-        q = $q;
-
-        scope = rootScope.$new();
-
-        rootScope.search = '';
+    beforeEach(module('app', function($provide) {
+        platformContextProvider = {
+            getPlatformContext: function() {
+                return q.defer().promise;
+            }
+        };
 
         dataSetResource = {
             getByQuery: function(){
@@ -44,11 +41,18 @@ describe("Unit: DataSetsController", function() {
                 return this;
             }
         };
-        platformContextProvider = {
-            getPlatformContext: function() {
-                return q.defer().promise;
-            }
-        };
+
+        $provide.value('DataSetResource', dataSetResource);
+        $provide.value('PlatformContextProvider', platformContextProvider);
+    }));
+
+    beforeEach(inject(function($injector, $rootScope, State, $q){
+        rootScope = $rootScope;
+        q = $q;
+
+        scope = rootScope.$new();
+
+        rootScope.search = '';
 
         cookies = {
             get: sinon.stub(),
@@ -63,7 +67,6 @@ describe("Unit: DataSetsController", function() {
         return controller = $injector.get('$controller')('DataSetsController', {
             $scope: scope,
             DataSetResource: dataSetResource,
-            PlatformContextProvider: platformContextProvider,
             $cookies: cookies
         });
     }
