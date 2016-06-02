@@ -28,7 +28,15 @@ describe("Unit: ManageUsersController", function () {
     var UserActionsNotificationsService;
     var $q;
     var UserView;
-    beforeEach(module('app'));
+    beforeEach(module('app', function($provide) {
+        UserActionsNotificationsService =  {
+            userAdded: sinon.stub(),
+            userNotAdded: sinon.stub(),
+            userInvited: sinon.stub()
+        };
+
+        $provide.value('UserActionsNotificationsService', UserActionsNotificationsService);
+    }));
 
     beforeEach(inject(function (_$controller_, _$rootScope_, _UserView_,/*, orgUserService, */State, _$q_) {
         $rootScope = _$rootScope_;
@@ -58,12 +66,6 @@ describe("Unit: ManageUsersController", function () {
 
         userProviderMock = {
             getUser: sinon.stub().returns(userDeferred.promise)
-        };
-
-        UserActionsNotificationsService =  {
-            userAdded: sinon.stub(),
-            userNotAdded: sinon.stub(),
-            userInvited: sinon.stub()
         };
 
         orgUserServiceMock = {

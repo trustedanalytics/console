@@ -19,7 +19,7 @@
     App.controller('ImportDataController', function ($scope, State, JobFormConfig,
                                                        ImportDataResource,
                                                        NotificationService,
-                                                       $state) {
+                                                       $state, ImportHelper) {
         var state = new State().setPending();
         $scope.state = state;
 
@@ -52,7 +52,7 @@
         $scope.jdbcUriPattern = 'jdbc:([\\w]+)://([\\w._-]+|[[\\w:.]+]):([1-9][0-9]{0,4})/([\\w][\\w]*)';
 
         $scope.submitImport = function() {
-            if(!validateDates()) {
+            if(!ImportHelper.validateDates($scope.importModel)) {
                 NotificationService.error('Invalid dates provided. Please provide end date that is after start date.');
                 return;
             }
@@ -97,26 +97,12 @@
             var regExp = new RegExp($scope.jdbcUriPattern);
             if(!form.jdbcUri.$error.pattern && form.jdbcUri.$viewValue) {
                 var matches = regExp.exec(form.jdbcUri.$viewValue);
-                $scope.config.driver = findDriverByName(matches[1]);
+                $scope.config.driver = ImportHelper.findDriverByName($scope.databases, matches[1]);
                 form.jdbcUri.$setValidity('invalidDriver', !!$scope.config.driver);
                 $scope.config.host = matches[2];
                 $scope.config.port = Number(matches[3]);
                 $scope.config.dbName = matches[4];
             }
         };
-
-        function findDriverByName (driverName) {
-            var result = null;
-            _.find($scope.databases, function (db) {
-                result = _.findWhere(db.drivers, {name: driverName});
-                return result;
-            });
-            return result;
-        }
-
-        function validateDates () {
-            var diff = moment($scope.importModel.schedule.end).diff($scope.importModel.schedule.start);
-            return diff > 0;
-        }
     });
 }());

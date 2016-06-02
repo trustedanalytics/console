@@ -47,7 +47,7 @@
                 return org.manager;
             });
         };
-        
+
         return service;
     });
 }());

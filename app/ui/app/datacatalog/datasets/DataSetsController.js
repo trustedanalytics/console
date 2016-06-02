@@ -16,8 +16,8 @@
 (function () {
     "use strict";
 
-    App.controller('DataSetsController', function ($scope, DataSetResource, $routeParams, ngTableParams, State,
-                                                   $cookies, PlatformContextProvider) {
+    App.controller('DataSetsController', function ($scope, $routeParams, ngTableParams, State,
+                                                   $cookies, DataSetsHelper) {
 
         var TOOL_KEY = 'datacatalog_tool',
             DEFAULT_TOOL = 'arcadia',
@@ -60,7 +60,7 @@
 
         $scope.availableVisualizationsTools =[];
 
-        loadPlatformContext(PlatformContextProvider, $scope.tool).then(function(data){
+        DataSetsHelper.loadPlatformContext($scope.tool).then(function(data){
             $scope.availableVisualizationsTools = data.availableVisualizations;
             $scope.tool = data.tool;
         });
@@ -70,30 +70,13 @@
         };
 
         /*jshint newcap: true*/
-
         $scope.search = function () {
-            state.value = state.values.PENDING;
-            var query = prepareQuery(category, $scope.created, $scope.format.value, $scope.pagination, searchText);
-            DataSetResource
-                .withErrorMessage('Failed to get the data sets')
-                .getByQuery(query)
-                .then(function onSuccess(data) {
-                    populate(data || {});
+            DataSetsHelper.search($scope, category, searchText)
+                .then(function onSuccess() {
                     preparePagination();
-                    state.value = state.values.LOADED;
-                }).catch(function () {
-                    populate({});
-                    $scope.state.setError();
+                    $scope.state.setLoaded();
                 });
         };
-
-        function populate(data) {
-            $scope.formats = data.formats;
-            $scope.dataSets = data.hits;
-            $scope.categories = data.categories;
-            $scope.pagination.total = data.total;
-            $scope.pagination.numPerPage = Math.min($scope.pagination.total, $scope.pagination.pageSize);
-        }
 
         $scope.$on('searchChanged', function (eventName, _searchText) {
             if(_searchText !== searchText) {
@@ -117,7 +100,7 @@
             $scope.search();
         };
 
-        $scope.getFormatIcon = getFormatIcon;
+        $scope.getFormatIcon = DataSetsHelper.getFormatIcon;
 
         $scope.openFrom = function ($event) {
             $event.preventDefault();
@@ -131,68 +114,4 @@
             $scope.toOpened = true;
         };
     });
-
-    function getFormatIcon(format) {
-        var knownFormats = {
-            csv: 'table',
-            json: 'json',
-            xml: 'code'
-        };
-
-        return knownFormats[(format || '').toLowerCase()] || 'question';
-    }
-
-    function prepareQuery(category, created, formatValue, pagination, _searchText) {
-        var filters = [];
-        if (category) {
-            filters.push({"category": [category]});
-        }
-        if (created.from || created.to) {
-            var creationTime = [-1, -1];
-            if (created.from) {
-                creationTime[0] = created.from;
-            }
-            if (created.to) {
-                creationTime[1] = created.to;
-                creationTime[1].setHours(23, 59, 59);
-            }
-            filters.push({
-                creationTime: creationTime
-            });
-        }
-        if (formatValue) {
-            filters.push({
-                format: [formatValue.toLowerCase()]
-            });
-        }
-        return {
-            "query": _searchText,
-            "filters": filters,
-            "size": pagination.pageSize,
-            "from": (pagination.currentPage - 1) * pagination.pageSize
-        };
-    }
-
-    function loadPlatformContext (platformCtxProvider, tool) {
-        return platformCtxProvider.getPlatformContext()
-            .then(function onSuccess(data) {
-                var DEFAULT_TOOL = 'arcadia';
-                var externalTools = data.external_tools;
-
-                var availableVisualizationsTools = _.pluck(_.where(externalTools.visualizations, {available: true}), 'name').map(function (name) {
-                    return name.toLowerCase();
-                });
-
-                if (!_.contains(availableVisualizationsTools, tool)) {
-                    tool = _.contains(availableVisualizationsTools, DEFAULT_TOOL) ?
-                        DEFAULT_TOOL :
-                        _.first(availableVisualizationsTools);
-                }
-
-                return {
-                    availableVisualizations: availableVisualizationsTools,
-                    tool: tool
-                };
-            });
-    }
 }());

@@ -107,28 +107,41 @@ describe("Unit: GearPumpAppDeployController", function () {
             }
         };
 
-    beforeEach(module('app'));
-
-    beforeEach(inject(function ($controller, $location, TestHelpers, $rootScope, _$q_, Restangular,
-                                ServiceInstancesResource, ServiceInstancesMapper, ServiceKeysResource, State,
-                                _$httpBackend_, NotificationService, GearPumpAppDeployResource) {
-
-        _targetProvider = new TestHelpers().stubTargetProvider();
-        state = new State();
-        $q = _$q_;
-        httpBackend = _$httpBackend_;
-        rootScope = $rootScope;
-        scope = $rootScope.$new();
-        scope.instancesState = new State();
-
-        _targetProvider.organization = organization;
-        _targetProvider.space = space;
+    beforeEach(module('app', function($provide) {
+        _targetProvider = {
+            getOrganization:function () {
+                return organization;
+            },
+            getSpace: function () {
+                return space;
+            }
+        };
 
         toolsInstanceResourceMock = {
             getToolsInstances: function () {
                 return resolvedPromise( GEARPUMP_INSTANCE_DATA );
             }
         };
+
+        serviceKeysResourceMock = {};
+        fileUploaderServiceMock = {};
+        $provide.value('FileUploaderService', fileUploaderServiceMock);
+        $provide.value('ServiceInstancesResource', serviceInstancesResourceMock);
+        $provide.value('ServiceKeysResource', serviceKeysResourceMock);
+        $provide.value('ToolsInstanceResource', toolsInstanceResourceMock);
+        $provide.value('targetProvider', _targetProvider);
+    }));
+
+    beforeEach(inject(function ($controller, $location, $rootScope, _$q_, Restangular,
+                                ServiceInstancesResource, ServiceInstancesMapper, ServiceKeysResource, State,
+                                _$httpBackend_, NotificationService, GearPumpAppDeployResource) {
+
+        state = new State();
+        $q = _$q_;
+        httpBackend = _$httpBackend_;
+        rootScope = $rootScope;
+        scope = $rootScope.$new();
+        scope.instancesState = new State();
 
         serviceInstancesResourceMock = Restangular.service("service_instances");
         serviceInstancesResourceMock.getSummary = function() {
@@ -140,19 +153,17 @@ describe("Unit: GearPumpAppDeployController", function () {
         notificationService = NotificationService;
         gearPumpAppDeployResource = GearPumpAppDeployResource;
         locationMock = $location;
-        fileUploaderServiceMock = {};
+
 
         createController = function() {
             controller = $controller('GearPumpAppDeployController', {
                 $routeParams: { instanceId: INSTANCE_NAME },
                 $scope: scope,
                 $location: locationMock,
-                targetProvider: _targetProvider,
                 FileUploaderService: fileUploaderServiceMock,
                 NotificationService: notificationService,
                 ServiceInstancesMapper: serviceInstancesMapperMock,
                 ServiceKeysResource: serviceKeysResourceMock,
-                ToolsInstanceResource: toolsInstanceResourceMock,
                 ServiceInstancesResource: serviceInstancesResourceMock,
                 GearPumpAppDeployResource: gearPumpAppDeployResource,
                 $state: state
@@ -219,6 +230,7 @@ describe("Unit: GearPumpAppDeployController", function () {
         });
 
         serviceKeysResourceMock.addKey = sinon.stub().returns(resolvedPromise());
+        serviceKeysResourceMock.withErrorMessage = sinon.stub().returns(serviceKeysResourceMock);
         serviceKeysResourceMock.deleteKey = sinon.stub().returns(resolvedPromise());
         serviceInstancesResourceMock.getSummary = sinon.stub().returns(resolvedPromise(SERVICE_INSTANCES_SUMMARY));
 

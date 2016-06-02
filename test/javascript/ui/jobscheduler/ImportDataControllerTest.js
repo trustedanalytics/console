@@ -75,7 +75,7 @@ describe("Unit: ImportDataController", function() {
 
     it('should get and set configuration data', inject(function($controller) {
         var sampleData = getSampleConfiguration();
-        var jdbcUri = "jdbc:postgresql://"
+        var jdbcUri = "jdbc:postgresql://";
         importDataResource.getConfiguration = sinon.spy(function() {
             var deferred = $q.defer();
             deferred.resolve(sampleData);
@@ -119,7 +119,7 @@ describe("Unit: ImportDataController", function() {
                     pattern: false
                 }
             }
-        }
+        };
         var sampleData = getSampleConfiguration();
         scope.databases = sampleData.databases;
         scope.$apply();
@@ -142,7 +142,7 @@ describe("Unit: ImportDataController", function() {
                     pattern: false
                 }
             }
-        }
+        };
         var sampleData = getSampleConfiguration();
         scope.databases = sampleData.databases;
         scope.$apply();

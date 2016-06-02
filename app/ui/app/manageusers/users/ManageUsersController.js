@@ -18,7 +18,7 @@
 
     /*jshint newcap: false*/
     App.controller('ManageUsersController', function ($scope, UserService, userViewType, ngTableParams, State,
-        UserRoleMapperService, UsersListService, UserActionsNotificationsService, UserProvider, UserView) {
+        UserRoleMapperService, UsersListService, UserActionsNotificationsService, UserProvider, UserView, ManageUsersHelper) {
         $scope.state = new State();
         $scope.viewTypes = UserView;
         $scope.viewType = userViewType;
@@ -38,15 +38,10 @@
         $scope.$on('targetChanged', loadUsers);
 
         $scope.targetAvailable = userService.targetAvailable;
-
         $scope.targetType = userService.getTargetType();
-
         $scope.userToAdd = {};
-
         $scope.availableRoles = userService.getRoles();
-
         $scope.roleCheckboxes = {};
-
         $scope.managersCounter = 0;
 
         $scope.$watch('users', function () {
@@ -55,21 +50,11 @@
         });
 
         $scope.updateUserRoles = function (user) {
-            user.roles = UserRoleMapperService.mapCheckboxesToRoles(user, $scope.roleCheckboxes);
-
-            userService.updateUserRoles(user)
-                .then(function () {
-                    UserActionsNotificationsService.userRolesChanged(user);
-                })
-                .catch(UserActionsNotificationsService.userRolesChangeFailed);
-
-            $scope.countManagers();
+            $scope.managersCounter = ManageUsersHelper.updateUserRoles(user, $scope.roleCheckboxes, $scope.users, userService);
         };
 
         $scope.countManagers = function () {
-            $scope.managersCounter = _.filter($scope.users, function (userData) {
-                return _.contains(userData.roles, 'managers');
-            }).length;
+            return ManageUsersHelper.countManagers($scope.users);
         };
 
         $scope.deleteUser = function (userToBeDeleted) {
@@ -81,20 +66,8 @@
 
         $scope.addUser = function () {
             $scope.state.setPending();
-            var user = UserRoleMapperService.mapSingleRoleToArray($scope.userToAdd);
-
-            userService
-                .withErrorMessage('Failed to add user')
-                .addUser(user)
-                .then(function onSuccess(data) {
-                    if (data != null) {
-                        UserActionsNotificationsService.userAdded(user);
-                    } else {
-                        UserActionsNotificationsService.userInvited(user);
-                    }
-                })
+            ManageUsersHelper.addUser($scope.userToAdd, userService)
                 .catch(function onError() {
-                    UserActionsNotificationsService.userNotAdded(user);
                     $scope.state.setError();
                 })
                 .then(loadUsers)

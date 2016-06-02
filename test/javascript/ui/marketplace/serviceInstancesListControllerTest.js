@@ -18,12 +18,12 @@ describe("Unit: ServiceInstancesListController", function () {
 
     var sut,
         scope,
-        targetProvider,
+        targetProvider = {},
+        ServiceInstancesResource = {},
+        ServiceKeysResource = {},
         UserProvider,
-        ServiceInstancesResource,
-        ServiceKeysResource,
         KubernetesServicesResource,
-        NotificationService,
+        NotificationService = {},
         state,
         $q,
         space = Object.freeze({
@@ -32,42 +32,38 @@ describe("Unit: ServiceInstancesListController", function () {
 
         createController;
 
-    beforeEach(module('app'));
+    beforeEach(module('app', function($provide) {
+        $provide.value('targetProvider', targetProvider);
+        $provide.value('ServiceInstancesResource', ServiceInstancesResource);
+        $provide.value('ServiceKeysResource', ServiceKeysResource);
+        $provide.value('NotificationService', NotificationService);
+    }));
 
     beforeEach(inject(function($controller, $rootScope, State, _$q_) {
         $q = _$q_;
         state = new State();
-        targetProvider = {
-            getSpace: sinon.stub().returns(space),
-            getOrganization: sinon.stub().returns({})
-        };
+        targetProvider.getSpace = sinon.stub().returns(space);
+        targetProvider.getOrganization = sinon.stub().returns({});
 
+        ServiceInstancesResource.withErrorMessage = sinon.stub().returnsThis();
+        ServiceInstancesResource.getSummary = sinon.stub().returns($q.defer().promise);
         UserProvider = {
             isAdmin: sinon.stub().returns(getResolvedPromise("USER"))
         };
 
-        ServiceInstancesResource = {
-            withErrorMessage: sinon.stub().returnsThis(),
-            getSummary: sinon.stub().returns($q.defer().promise)
-        };
-
-        ServiceKeysResource = {
-            withErrorMessage: sinon.stub().returnsThis(),
-            addKey: sinon.stub().returns($q.defer().promise),
-            deleteKey: sinon.stub().returns($q.defer().promise)
-        };
+        ServiceKeysResource.withErrorMessage = sinon.stub().returnsThis();
+        ServiceKeysResource.addKey = sinon.stub().returns($q.defer().promise);
+        ServiceKeysResource.deleteKey = sinon.stub().returns($q.defer().promise);
 
         KubernetesServicesResource = {
             withErrorMessage: sinon.stub().returnsThis(),
             services: sinon.stub().returns($q.defer().promise),
-            setVisibility: sinon.stub().returns($q.defer().promise),
-        }
-
-        NotificationService = {
-            error: sinon.stub(),
-            success: sinon.stub(),
-            confirm: sinon.stub().returns($q.defer().promise)
+            setVisibility: sinon.stub().returns($q.defer().promise)
         };
+
+        NotificationService.error =  sinon.stub();
+        NotificationService.success = sinon.stub();
+        NotificationService.confirm = sinon.stub().returns($q.defer().promise);
 
         createController = function() {
             scope = $rootScope.$new();
