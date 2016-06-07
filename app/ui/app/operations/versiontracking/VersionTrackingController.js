@@ -67,6 +67,9 @@
             var hasValue = newValue && oldValue;
             if ((oldValue && !newValue) || (hasValue && newValue.id !== oldValue.id)) {
                 NotificationService.success('Snapshot was changed');
+                $scope.appsTableParams.reload();
+                $scope.cdhServicesTableParams.reload();
+                $scope.cfServicesTableParams.reload();
             }
         });
 
