@@ -1,0 +1,6 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: latest-events-service
+data:
+  host: http://latest-events-service.{{ domain }}

@@ -1,0 +1,6 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: service-catalog
+data:
+  host: http://service-catalog.{{ domain }}

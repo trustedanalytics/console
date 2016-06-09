@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: console
+  labels:
+    tap-app-id: console
+    managed_by: TAP
+spec:
+  selector:
+    tap-app-id: console
+  ports:
+    - port: 8080
+      protocol: TCP

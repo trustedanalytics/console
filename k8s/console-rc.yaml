@@ -1,0 +1,185 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: console
+  labels:
+    tap-app-id: console
+    managed_by: TAP
+spec:
+  replicas: 1
+  selector: 
+    tap-app-id: console
+  template:
+    metadata:
+      name: console
+      labels:
+        tap-app-id: console
+    spec:
+      containers:
+        - name: console
+          image: tap-image-console
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          env:
+            - name: DATACATALOGEXPORT_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: hive
+                  key: host
+            - name: APP_LAUNCHER_HELPER_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: app-launcher-helper
+                  key: host
+            - name: MODEL_CATALOG_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: model-catalog
+                  key: host
+            - name: USER_MANAGEMENT_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: user-management
+                  key: host
+            - name: METRICS_PROVIDER_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: metrics-provider
+                  key: host
+            - name: PLATFORM_SNAPSHOT_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: platform-snapshot
+                  key: host
+            - name: ROUTER_METRICS_PROVIDER_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: router-metrics-provider
+                  key: host
+            - name: DATAAQUISITIONSERVICE_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: das
+                  key: host
+            - name: PLATFORM_OPERATIONS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: hive
+                  key: host
+            - name: WORKFLOW_SCHEDULER_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: workflow-scheduler
+                  key: host
+            - name: HDFS_UPLOADER_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: hdfs-uploader
+                  key: host
+            - name: SERVICECATALOG_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: service-catalog
+                  key: host
+            - name: H2O_SCORING_ENGINE_PUBLISHER_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: h2o-scoring-engine-publisher
+                  key: host
+            - name: LATEST_EVENTS_SERVICE_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: latest-events-service
+                  key: host
+            - name: SERVICE_EXPOSER_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: service-exposer
+                  key: host
+            - name: DATACATALOG_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: data-catalog
+                  key: host
+            - name: PLATFORMCONTEXT_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: platform-context
+                  key: host
+            - name: PLATFORM_TESTS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: platform-tests
+                  key: host
+            - name: KUBERNETES_BROKER_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: kubernetes-broker
+                  key: host
+            - name: SSO_API_ENDPOINT
+              valueFrom:
+                 secretKeyRef:
+                  name: sso
+                  key: api-endpoint
+            - name: SSO_AUTHORIZATION_URI
+              valueFrom:
+                secretKeyRef:
+                  name: sso
+                  key: authorization-uri
+            - name: SSO_CHECK_TOKEN_URI
+              valueFrom:
+                secretKeyRef:
+                  name: sso
+                  key: check-token-uri
+            - name: SSO_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: sso
+                  key: client-id
+            - name: SSO_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: sso
+                  key: client-secret
+            - name: SSO_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: sso
+                  key: email
+            - name: SSO_LOGOUT_URI
+              valueFrom:
+                secretKeyRef:
+                  name: sso
+                  key: logout-uri
+            - name: SSO_TOKEN_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: sso
+                  key: token-key
+            - name: SSO_TOKEN_URI
+              valueFrom:
+                secretKeyRef:
+                  name: sso
+                  key: token-uri
+            - name: SSO_UAA_URI
+              valueFrom:
+                secretKeyRef:
+                  name: sso
+                  key: uaa-uri
+            - name: SSO_USER_INFO_URI
+              valueFrom:
+                secretKeyRef:
+                  name: sso
+                  key: user-info-uri
+            - name: http_proxy
+              valueFrom:
+                configMapKeyRef:
+                  name: das
+                  key: http-proxy
+            - name: https_proxy
+              valueFrom:
+                configMapKeyRef:
+                  name: das
+                  key: https-proxy

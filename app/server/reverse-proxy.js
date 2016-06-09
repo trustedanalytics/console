@@ -24,6 +24,7 @@ var request = require('request'),
     httpException = require('./utils/http-exception'),
     gatewayErrors = require('./gateway-errors');
 
+const HOST_SUFFIX = "_HOST";
 
 function getHost(service, path) {
     var host = null;
@@ -47,6 +48,10 @@ function getHost(service, path) {
         return host;
     }
 
+    if(isServiceHostEnvExist(service.name)) {
+        return process.env[serviceNameInHostEnvNotation(service.name)];
+    }
+
     var userProvidedService = config.getUserProvidedSerice(service.name);
     return userProvidedService.host;
 }
@@ -55,6 +60,14 @@ function getServiceName(requestUrl) {
     return _.find(serviceMapping, function(service){
         return requestUrl.match(service.path);
     });
+}
+
+function serviceNameInHostEnvNotation(service) {
+    return service.toUpperCase().split("-").join("_") + HOST_SUFFIX;
+}
+
+function isServiceHostEnvExist(service) {
+    return process.env[serviceNameInHostEnvNotation(service)];
 }
 
 function forwardRequest(req, res) {
@@ -90,7 +103,6 @@ function forwardRequest(req, res) {
         handleProxyError(res, service.name, path)
     )).pipe(res);
 }
-
 
 function handleProxyError(res, serviceName, path) {
     return function(httpError) {

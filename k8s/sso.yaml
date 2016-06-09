@@ -1,0 +1,16 @@
+kind: Secret
+apiVersion: v1
+metadata:
+  name: sso
+data:
+  api-endpoint: base64_encoded_placeholder
+  authorization-uri: base64_encoded_placeholder
+  check-token-uri: base64_encoded_placeholder
+  client-id: base64_encoded_placeholder
+  client-secret: base64_encoded_placeholder
+  email: base64_encoded_placeholder
+  logout-uri: base64_encoded_placeholder
+  token-key: base64_encoded_placeholder
+  token-uri: base64_encoded_placeholder
+  uaa-uri: base64_encoded_placeholder
+  user-info-uri: base64_encoded_placeholder

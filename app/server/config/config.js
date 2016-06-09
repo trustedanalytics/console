@@ -49,9 +49,59 @@ function getVariable(name) {
     return value;
 }
 
+function getSso() {
+    var sso = getUserProvidedSerice('sso') || {};
+
+    if(process.env.SSO_TOKEN_URI) {
+        sso.tokenUri = process.env.SSO_TOKEN_URI;
+    }
+
+    if(process.env.SSO_UAA_URI) {
+        sso.uaaUri = process.env.SSO_UAA_URI;
+    }
+
+    if(process.env.SSO_TOKEN_KEY) {
+        sso.tokenKey = process.env.SSO_TOKEN_KEY;
+    }
+
+    if(process.env.SSO_EMAIL) {
+        sso.email = process.env.SSO_EMAIL;
+    }
+
+    if(process.env.SSO_LOGOUT_URI) {
+        sso.logoutUri = process.env.SSO_LOGOUT_URI;
+    }
+
+    if(process.env.SSO_AUTHORIZATION_URI) {
+        sso.authorizationUri = process.env.SSO_AUTHORIZATION_URI;
+    }
+
+    if(process.env.SSO_API_ENDPOINT) {
+        sso.apiEndpoint = process.env.SSO_API_ENDPOINT;
+    }
+
+    if(process.env.SSO_USER_INFO_URI) {
+        sso.userInfoUri = process.env.SSO_USER_INFO_URI;
+    }
+
+    if(process.env.SSO_CLIENT_ID) {
+        sso.clientId = process.env.SSO_CLIENT_ID;
+    }
+
+    if(process.env.SSO_CLIENT_SECRET) {
+        sso.clientSecret = process.env.SSO_CLIENT_SECRET;
+    }
+
+    if(process.env.SSO_CHECK_TOKEN_URI) {
+        sso.checkTokenUri = process.env.SSO_CHECK_TOKEN_URI;
+    }
+
+    return sso;
+}
+
 module.exports = {
     getUserProvidedSerice: getUserProvidedSerice,
     getDomain: getDomain,
-    getSso: _.partial(getUserProvidedSerice, 'sso'),
+    getSso: getSso,
     get: getVariable
 };

@@ -1,0 +1,6 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: h2o-scoring-engine-publisher
+data:
+  host: http://h2o-scoring-engine-publisher.{{ domain }}

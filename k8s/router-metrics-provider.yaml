@@ -1,0 +1,6 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: router-metrics-provider
+data:
+  host: http://router-metrics-provider.{{ domain }}

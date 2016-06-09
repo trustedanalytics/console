@@ -1,0 +1,6 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: metrics-provider
+data:
+  host: http://metrics-provider.{{ domain }}

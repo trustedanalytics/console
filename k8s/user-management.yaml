@@ -1,0 +1,6 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: user-management
+data:
+  host: http://user-management.{{ domain }}
