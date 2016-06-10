@@ -84,9 +84,9 @@
             NotificationService.confirm('confirm-delete-offering', { service: self.service })
                 .then(function () {
                     self.state.setPending();
-                    ApplicationRegisterResource
+                    ServiceResource
                         .withErrorMessage('Failed to delete service offering from marketplace')
-                        .deregisterApplication(self.serviceId)
+                        .deleteService(self.serviceId)
                         .then(function () {
                             NotificationService.success('Application has been delete from marketplace');
                             $location.path('/app/services/marketplace');

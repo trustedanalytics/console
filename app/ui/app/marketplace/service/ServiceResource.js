@@ -29,6 +29,11 @@
         service.getAllServicePlansForLabel = function (label) {
             return this.one(label).one("service_plans").get();
         };
+
+        service.deleteService = function(id) {
+            return this.one(id).remove();
+        };
+
         return service;
     });
 }());

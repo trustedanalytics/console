@@ -27,6 +27,7 @@ describe("Unit: ServiceController", function () {
         extractedService,
         $rootScope,
         $q,
+        location,
         scope,
         organization = { guid: 111, name: "org" },
         space = { guid: 222, name: "space" },
@@ -36,9 +37,7 @@ describe("Unit: ServiceController", function () {
 
     var notificationService;
 
-    beforeEach(inject(function ($controller, ServiceResource, serviceExtractor, _$rootScope_, _$q_,
-                                ServiceInstanceResource, TestHelpers, State) {
-        serviceMock = ServiceResource;
+    beforeEach(inject(function ($controller, serviceExtractor, _$rootScope_, _$q_, TestHelpers, State) {
         _serviceExtractor = serviceExtractor;
         _targetProvider = new TestHelpers().stubTargetProvider();
         state = new State();
@@ -49,12 +48,18 @@ describe("Unit: ServiceController", function () {
         scope.serviceId = SERVICE_ID;
 
         getServiceDefer = $q.defer();
-        serviceMock.getService = sinon.stub().returns(getServiceDefer.promise);
 
-        serviceInstanceMock = ServiceInstanceResource;
+        serviceMock = {
+            getService: sinon.stub().returns(getServiceDefer.promise),
+            withErrorMessage: sinon.stub().returnsThis()
+        };
+
 
         saveInstanceDefer = $q.defer();
-        serviceInstanceMock.createInstance = sinon.stub().returns(saveInstanceDefer.promise);
+        serviceInstanceMock = {
+            createInstance: sinon.stub().returns(saveInstanceDefer.promise),
+            supressGenericError: sinon.stub().returnsThis()
+        };
 
         extractedService = {
             plans: [{
@@ -68,8 +73,12 @@ describe("Unit: ServiceController", function () {
         };
 
         notificationService = {
-            genericError: function() {},
-            success: function(){}
+            genericError: sinon.stub(),
+            success: sinon.stub()
+        };
+
+        location = {
+            path: sinon.stub()
         };
 
         _targetProvider.organization = organization;
@@ -79,9 +88,12 @@ describe("Unit: ServiceController", function () {
             controller = $controller('ServiceController', {
                 serviceExtractor: serviceExtractor,
                 NotificationService: notificationService,
+                ServiceResource: serviceMock,
+                ServiceInstanceResource: serviceInstanceMock,
                 $scope: scope,
                 targetProvider: _targetProvider,
                 ngDialog: {},
+                $location: location
             });
         };
     }));
@@ -94,7 +106,7 @@ describe("Unit: ServiceController", function () {
     it('init, get service and set state pending', function () {
         createController();
 
-        expect(serviceMock.getService.called).to.be.true;
+        expect(serviceMock.getService).to.be.called;
         expect(controller.state.value).to.be.equals(state.values.PENDING);
     });
 
@@ -167,12 +179,62 @@ describe("Unit: ServiceController", function () {
         controller.service = {name: 'notAtk'};
         controller.newInstance = {};
         controller.createServiceInstance({});
-        var notification = sinon.spy(notificationService, 'genericError');
 
         saveInstanceDefer.reject({status: 500});
         $rootScope.$digest();
-        expect(notification).to.be.called;
+        expect(notificationService.genericError).to.be.called;
         expect(controller.newInstanceState.value).to.be.equals(state.values.ERROR);
+    });
+
+    it('tryDeleteOffering, confirm, delete service', function () {
+        createController();
+        notificationService.confirm = sinon.stub().returns(successPromise());
+        serviceMock.deleteService = sinon.stub().returns($q.defer().promise);
+        controller.serviceId = 'service-id';
+
+        controller.tryDeleteOffering();
+        $rootScope.$digest();
+
+        expect(controller.state.isPending(), 'pending').to.be.true;
+        expect(serviceMock.deleteService).to.be.called;
+        expect(serviceMock.deleteService).to.be.calledWith('service-id');
+    });
+
+    it('tryDeleteOffering, cancel, do not delete service', function () {
+        createController();
+        notificationService.confirm = sinon.stub().returns(rejectPromise());
+        serviceMock.deleteService = sinon.stub().returns($q.defer().promise);
+
+        controller.tryDeleteOffering();
+        $rootScope.$digest();
+
+        expect(serviceMock.deleteService).not.to.be.called;
+    });
+
+    it('tryDeleteOffering, deleted, show success and relocate page', function () {
+        createController();
+        notificationService.confirm = sinon.stub().returns(successPromise());
+        serviceMock.deleteService = sinon.stub().returns(successPromise());
+        controller.serviceId = 'service-id';
+
+        controller.tryDeleteOffering();
+        $rootScope.$digest();
+
+        expect(notificationService.success).to.be.called;
+        expect(location.path).to.be.called;
+    });
+
+    it('tryDeleteOffering, delete failed, set state loaded', function () {
+        createController();
+        notificationService.confirm = sinon.stub().returns(successPromise());
+        serviceMock.deleteService = sinon.stub().returns(rejectPromise());
+
+        controller.tryDeleteOffering();
+        $rootScope.$digest();
+
+        expect(notificationService.success).not.to.be.called;
+        expect(location.path).not.to.be.called;
+        expect(controller.state.isLoaded(), 'loaded').to.be.true;
     });
 
     it('addExtraParam, create one element array', function () {
@@ -195,4 +257,16 @@ describe("Unit: ServiceController", function () {
         expect(controller.newInstance.params[0]).to.be.deep.equal({key:'test', value:'banana'});
         expect(controller.newInstance.params[1]).to.be.deep.equal({key:null, value:null});
     });
+
+    function successPromise() {
+        var deferred = $q.defer();
+        deferred.resolve();
+        return deferred.promise;
+    }
+
+    function rejectPromise() {
+        var deferred = $q.defer();
+        deferred.reject();
+        return deferred.promise;
+    }
 });

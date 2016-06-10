@@ -17,7 +17,7 @@
     "use strict";
 
     App.factory('ApplicationRegisterResource', function (Restangular) {
-        var service = Restangular.service('marketplace/application');
+        var service = Restangular.service('marketplace').one('application');
 
         service.getClonedApplication = function (appName) {
             return this.one(appName).get();
@@ -25,10 +25,6 @@
 
         service.registerApplication = function (application_data) {
             return this.post(application_data);
-        };
-
-        service.deregisterApplication = function (appName) {
-            return this.one(appName).remove();
         };
 
         return service;
