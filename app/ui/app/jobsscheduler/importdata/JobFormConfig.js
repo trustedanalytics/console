@@ -35,7 +35,7 @@
                 "schedule" : {
                     "zoneId" : "UTC",
                     "frequency" : {
-                        "unit" : "Minutes",
+                        "unit" : "minutes",
                         "amount": ""
                     },
                     "start" : "",

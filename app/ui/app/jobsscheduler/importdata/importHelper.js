@@ -14,57 +14,31 @@
  * limitations under the License.
  */
 
-(function() {
+(function () {
     'use strict';
 
     App.factory('ImportHelper', function () {
-
         return {
             findDriverByName: findDriverByName,
             validateDates: validateDates,
-            preparePostImportBody: preparePostImportBody
+            validateFrequency: validateFrequency
         };
 
         function findDriverByName(databases, driverName) {
             var result = null;
             _.find(databases, function (db) {
-                result = _.find(db.drivers, function (driver) {
-                    return driver.name === driverName;
-                });
+                result = _.findWhere(db.drivers, {name: driverName});
                 return result != null;
             });
             return result;
         }
 
-        function validateDates(importModel) {
-            var diff = moment(importModel.schedule.end).diff(importModel.schedule.start);
-            return diff > 0;
+        function validateDates(schedule) {
+            return moment(schedule.end).diff(schedule.start) > 0;
         }
 
-        function preparePostImportBody(importModel) {
-            return {
-                "name": importModel.name,
-                "sqoopImport": {
-                    "jdbcUri": importModel.jdbcUri,
-                    "table": importModel.table,
-                    "username": importModel.username,
-                    "password": importModel.password,
-                    "targetDir": importModel.targetDir,
-                    "importMode": importModel.mode,
-                    "checkColumn": importModel.columnName,
-                    "lastValue": importModel.incrementalValue,
-                    "schema": importModel.schema
-                },
-                "schedule": {
-                    "zoneId": importModel.schedulerConfig.timezone,
-                    "frequency": {
-                        "unit": importModel.schedulerConfig.frequency.unit.toLowerCase(),
-                        "amount": importModel.schedulerConfig.frequency.amount
-                    },
-                    "start": importModel.schedulerConfig.start,
-                    "end": importModel.schedulerConfig.end
-                }
-            };
+        function validateFrequency(schedule, minimumFrequencyInSeconds) {
+            return moment.duration(schedule.frequency.amount, schedule.frequency.unit).asSeconds() >= minimumFrequencyInSeconds;
         }
     });
 }());
