@@ -103,7 +103,6 @@ describe("Unit: ImportDataController", function() {
         scope.config.host = "host";
         scope.config.port = "port";
         scope.config.dbName = "dbName";
-        scope.$apply();
 
         scope.updateUri();
 
@@ -122,7 +121,6 @@ describe("Unit: ImportDataController", function() {
         };
         var sampleData = getSampleConfiguration();
         scope.databases = sampleData.databases;
-        scope.$apply();
 
         scope.updateDbAddress(form);
 
@@ -164,15 +162,30 @@ describe("Unit: ImportDataController", function() {
         };
         var coordinatorRoute = 'app.jobsscheduler.coordinatorjob';
         var expectedImportModel = jobFormConfig().importModel;
-        expectedImportModel.schedule.start = startDate;
-        expectedImportModel.schedule.end = endDate;
+        var frequency = {
+            unit: "minutes",
+            amount: 10
+        };
+        var sampleData = getSampleConfiguration();
         importDataResource.postJob = sinon.spy(function() {
             var deferred = $q.defer();
             deferred.resolve(coordinatorId);
             return deferred.promise;
         });
+        importDataResource.getConfiguration = sinon.spy(function() {
+            var deferred = $q.defer();
+            deferred.resolve(sampleData);
+            return deferred.promise;
+        });
+        getSUT($controller);
+        expectedImportModel.schedule.start = startDate;
+        expectedImportModel.schedule.end = endDate;
+        expectedImportModel.schedule.frequency = frequency;
+        expectedImportModel.sqoopImport.jdbcUri = "jdbc:postgresql://";
         scope.importModel.schedule.start = startDate;
         scope.importModel.schedule.end = endDate;
+        scope.importModel.schedule.frequency = frequency;
+        scope.$apply();
 
         scope.submitImport();
         scope.$apply();
@@ -214,6 +227,7 @@ describe("Unit: ImportDataController", function() {
                     ]
                 }
             ],
+            "minimumFrequencyInSeconds": 300,
             "timezones": [
                 "Etc/GMT",
                 "Etc/UTC",

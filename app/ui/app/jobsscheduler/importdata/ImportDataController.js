@@ -16,14 +16,18 @@
 (function () {
     "use strict";
 
-    App.controller('ImportDataController', function ($scope, State, JobFormConfig,
-                                                       ImportDataResource,
-                                                       NotificationService,
-                                                       $state, ImportHelper) {
+    App.controller('ImportDataController', function ($scope,
+                                                     State,
+                                                     JobFormConfig,
+                                                     ImportDataResource,
+                                                     NotificationService,
+                                                     $state,
+                                                     ImportHelper) {
         var state = new State().setPending();
         $scope.state = state;
 
         var getInitData = JobFormConfig;
+        var minimumFrequencyInSeconds;
 
         function loadInitialData() {
             $scope.importModel = getInitData().importModel;
@@ -39,11 +43,13 @@
                     $scope.timezones = config.timezones;
                     $scope.config.dirPrefix = config.organizationDirectory;
                     $scope.state = state.setLoaded();
+                    minimumFrequencyInSeconds = config.minimumFrequencyInSeconds;
                 })
                 .catch(function onError() {
                     $scope.state = state.setError();
                 });
         }
+
         loadInitialData();
 
         /*
@@ -51,9 +57,14 @@
          */
         $scope.jdbcUriPattern = 'jdbc:([\\w]+)://([\\w._-]+|[[\\w:.]+]):([1-9][0-9]{0,4})/([\\w][\\w]*)';
 
-        $scope.submitImport = function() {
-            if(!ImportHelper.validateDates($scope.importModel)) {
+        $scope.submitImport = function () {
+            if (!ImportHelper.validateDates($scope.importModel.schedule)) {
                 NotificationService.error('Invalid dates provided. Please provide end date that is after start date.');
+                return;
+            }
+            if (!ImportHelper.validateFrequency($scope.importModel.schedule, minimumFrequencyInSeconds)) {
+                NotificationService.error('Invalid frequency provided. Please provide schedule period higher than ' +
+                    minimumFrequencyInSeconds);
                 return;
             }
             $scope.state.setPending();
@@ -62,7 +73,7 @@
                 .postJob($scope.importModel)
                 .then(function onSuccess(coordinator) {
                     NotificationService.success('New workflow job has been created');
-                    $state.go('app.jobsscheduler.coordinatorjob', { coordinatorjobId: coordinator.id });
+                    $state.go('app.jobsscheduler.coordinatorjob', {coordinatorjobId: coordinator.id});
                 })
                 .finally(function () {
                     $scope.state.setLoaded();
@@ -95,7 +106,7 @@
 
         $scope.updateDbAddress = function (form) {
             var regExp = new RegExp($scope.jdbcUriPattern);
-            if(!form.jdbcUri.$error.pattern && form.jdbcUri.$viewValue) {
+            if (!form.jdbcUri.$error.pattern && form.jdbcUri.$viewValue) {
                 var matches = regExp.exec(form.jdbcUri.$viewValue);
                 $scope.config.driver = ImportHelper.findDriverByName($scope.databases, matches[1]);
                 form.jdbcUri.$setValidity('invalidDriver', !!$scope.config.driver);
