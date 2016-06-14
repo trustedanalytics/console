@@ -28,6 +28,7 @@
 
         var getInitData = JobFormConfig;
         var minimumFrequencyInSeconds;
+        var regExpCheckDriver = new RegExp("jdbc:([\\w:]*[\\w])");
 
         function loadInitialData() {
             $scope.importModel = getInitData().importModel;
@@ -52,11 +53,6 @@
 
         loadInitialData();
 
-        /*
-         catches pattern -> jdbc:driver://host:port/databaseName*
-         */
-        $scope.jdbcUriPattern = 'jdbc:([\\w]+)://([\\w._-]+|[[\\w:.]+]):([1-9][0-9]{0,4})/([\\w][\\w]*)';
-
         $scope.submitImport = function () {
             if (!ImportHelper.validateDates($scope.importModel.schedule)) {
                 NotificationService.error('Invalid dates provided. Please provide end date that is after start date.');
@@ -64,7 +60,7 @@
             }
             if (!ImportHelper.validateFrequency($scope.importModel.schedule, minimumFrequencyInSeconds)) {
                 NotificationService.error('Invalid frequency provided. Please provide schedule period higher than ' +
-                    minimumFrequencyInSeconds);
+                    minimumFrequencyInSeconds / 60 + ' minutes');
                 return;
             }
             $scope.state.setPending();
@@ -91,29 +87,51 @@
 
         $scope.chooseDriver = function (driver) {
             $scope.config.driver = driver;
+            $scope.config.jdbcUriPattern = driver.jdbcRegex;
+            $scope.config.jdbcUriTemplate = driver.jdbcTemplate;
             $scope.updateUri();
         };
 
         $scope.updateUri = function () {
-            var jdbcUri = "jdbc:";
-            jdbcUri = "jdbc:";
-            jdbcUri += $scope.config.driver ? $scope.config.driver.name + "://" : '';
-            jdbcUri += $scope.config.host ? $scope.config.host : '';
-            jdbcUri += $scope.config.port ? ':' + $scope.config.port + "/" : '';
-            jdbcUri += $scope.config.dbName ? $scope.config.dbName : '';
+            var jdbcUri = $scope.config.jdbcUriTemplate;
+            jdbcUri = jdbcUri.replace('{host}', $scope.config.host);
+            jdbcUri = jdbcUri.replace('{port}', $scope.config.port);
+            jdbcUri = jdbcUri.replace('{database}', $scope.config.dbName);
             $scope.importModel.sqoopImport.jdbcUri = jdbcUri;
         };
 
         $scope.updateDbAddress = function (form) {
-            var regExp = new RegExp($scope.jdbcUriPattern);
-            if (!form.jdbcUri.$error.pattern && form.jdbcUri.$viewValue) {
-                var matches = regExp.exec(form.jdbcUri.$viewValue);
-                $scope.config.driver = ImportHelper.findDriverByName($scope.databases, matches[1]);
-                form.jdbcUri.$setValidity('invalidDriver', !!$scope.config.driver);
-                $scope.config.host = matches[2];
-                $scope.config.port = Number(matches[3]);
-                $scope.config.dbName = matches[4];
+            var matches = regExpCheckDriver.exec(form.jdbcUri.$viewValue);
+            if (!matches) {
+                form.jdbcUri.$setValidity('invalidDriver', true);
+                return;
+            }
+            setDatabaseAndDriverByDriverName(matches[1], form);
+
+            var regExp = new RegExp($scope.config.jdbcUriPattern);
+            matches = regExp.exec(form.jdbcUri.$viewValue);
+            if (matches) {
+                var order = ImportHelper.getOrder($scope.config.jdbcUriTemplate);
+                $scope.config.host = matches[order.indexOf('host') + 1];
+                $scope.config.port = Number(matches[order.indexOf('port') + 1]);
+                $scope.config.dbName = matches[order.indexOf('database') + 1];
             }
         };
+
+        function setDatabaseAndDriverByDriverName(driverName, form) {
+            var database;
+            var driver;
+            database = _.find($scope.databases, function (db) {
+                driver = _.findWhere(db.drivers, {name: driverName});
+                return driver != null;
+            });
+            if (database) {
+                $scope.config.databaseType = database;
+                $scope.config.driver = driver;
+                $scope.config.jdbcUriPattern = driver.jdbcRegex;
+                $scope.config.jdbcUriTemplate = driver.jdbcTemplate;
+            }
+            form.jdbcUri.$setValidity('invalidDriver', !!database);
+        }
     });
 }());
