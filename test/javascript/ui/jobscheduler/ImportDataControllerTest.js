@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-describe("Unit: ImportDataController", function() {
+describe("Unit: ImportDataController", function () {
 
     beforeEach(module('app'));
 
@@ -27,7 +27,7 @@ describe("Unit: ImportDataController", function() {
         jobFormConfig;
 
     beforeEach(inject(function ($controller, $rootScope, _$q_, State, JobFormConfig) {
-        scope =  $rootScope.$new();
+        scope = $rootScope.$new();
         $q = _$q_;
         jobFormConfig = JobFormConfig;
 
@@ -73,10 +73,10 @@ describe("Unit: ImportDataController", function() {
         expect(importDataResource.getConfiguration.called).to.be.true;
     });
 
-    it('should get and set configuration data', inject(function($controller) {
+    it('should get and set configuration data', inject(function ($controller) {
         var sampleData = getSampleConfiguration();
-        var jdbcUri = "jdbc:postgresql://";
-        importDataResource.getConfiguration = sinon.spy(function() {
+        var jdbcUri = "jdbc:postgresql://:/";
+        importDataResource.getConfiguration = sinon.spy(function () {
             var deferred = $q.defer();
             deferred.resolve(sampleData);
             return deferred.promise;
@@ -95,11 +95,9 @@ describe("Unit: ImportDataController", function() {
         expect(scope.state.value).to.be.equal(scope.state.values.LOADED);
     }));
 
-    it('should update jdbcUri', inject(function() {
+    it('should update jdbcUri', inject(function () {
         var expectedJdbcUri = "jdbc:driver://host:port/dbName";
-        scope.config.driver = {
-            name: "driver"
-        };
+        scope.config.jdbcUriTemplate = "jdbc:driver://{host}:{port}/{database}"
         scope.config.host = "host";
         scope.config.port = "port";
         scope.config.dbName = "dbName";
@@ -109,7 +107,7 @@ describe("Unit: ImportDataController", function() {
         expect(scope.importModel.sqoopImport.jdbcUri).to.be.equal(expectedJdbcUri);
     }));
 
-    it('should update data base address', inject(function() {
+    it('should update data base address', inject(function ($controller) {
         var form = {
             jdbcUri: {
                 $viewValue: "jdbc:postgresql://209.208.78.54:5432/tt",
@@ -120,7 +118,14 @@ describe("Unit: ImportDataController", function() {
             }
         };
         var sampleData = getSampleConfiguration();
-        scope.databases = sampleData.databases;
+        importDataResource.getConfiguration = sinon.spy(function () {
+            var deferred = $q.defer();
+            deferred.resolve(sampleData);
+            return deferred.promise;
+        });
+
+        getSUT($controller);
+        scope.$apply();
 
         scope.updateDbAddress(form);
 
@@ -131,7 +136,7 @@ describe("Unit: ImportDataController", function() {
         expect(scope.config.dbName).to.be.equal("tt");
     }));
 
-    it('should set invalid driver error', inject(function() {
+    it('should set invalid driver error', inject(function ($controller) {
         var form = {
             jdbcUri: {
                 $viewValue: "jdbc:nonexisting://209.208.78.54:5432/tt",
@@ -142,19 +147,22 @@ describe("Unit: ImportDataController", function() {
             }
         };
         var sampleData = getSampleConfiguration();
-        scope.databases = sampleData.databases;
+        importDataResource.getConfiguration = sinon.spy(function () {
+            var deferred = $q.defer();
+            deferred.resolve(sampleData);
+            return deferred.promise;
+        });
+
+        getSUT($controller);
         scope.$apply();
 
         scope.updateDbAddress(form);
 
-        expect(scope.config.driver).to.be.equal(undefined);
+        expect(scope.config.driver).to.be.equal(sampleData.databases[0].drivers[0]);
         expect(form.jdbcUri.$setValidity.calledWithExactly('invalidDriver', false)).to.be.true;
-        expect(scope.config.host).to.be.equal("209.208.78.54");
-        expect(scope.config.port).to.be.equal(5432);
-        expect(scope.config.dbName).to.be.equal("tt");
     }));
 
-    it('should import data', inject(function($controller) {
+    it('should import data', inject(function ($controller) {
         var startDate = "05/31/2016 12:00 AM";
         var endDate = "06/10/2016 12:00 AM";
         var coordinatorId = {
@@ -167,12 +175,12 @@ describe("Unit: ImportDataController", function() {
             amount: 10
         };
         var sampleData = getSampleConfiguration();
-        importDataResource.postJob = sinon.spy(function() {
+        importDataResource.postJob = sinon.spy(function () {
             var deferred = $q.defer();
             deferred.resolve(coordinatorId);
             return deferred.promise;
         });
-        importDataResource.getConfiguration = sinon.spy(function() {
+        importDataResource.getConfiguration = sinon.spy(function () {
             var deferred = $q.defer();
             deferred.resolve(sampleData);
             return deferred.promise;
@@ -181,7 +189,7 @@ describe("Unit: ImportDataController", function() {
         expectedImportModel.schedule.start = startDate;
         expectedImportModel.schedule.end = endDate;
         expectedImportModel.schedule.frequency = frequency;
-        expectedImportModel.sqoopImport.jdbcUri = "jdbc:postgresql://";
+        expectedImportModel.sqoopImport.jdbcUri = "jdbc:postgresql://:/";
         scope.importModel.schedule.start = startDate;
         scope.importModel.schedule.end = endDate;
         scope.importModel.schedule.frequency = frequency;
@@ -193,7 +201,7 @@ describe("Unit: ImportDataController", function() {
         expect(notificationService.error.called).to.be.equal(false);
         expect(importDataResource.postJob.calledWith(expectedImportModel)).to.be.equal(true);
         expect(notificationService.success.called).to.be.equal(true);
-        expect($state.go.calledWithExactly(coordinatorRoute, { coordinatorjobId: coordinatorId.id })).to.be.equal.true;
+        expect($state.go.calledWithExactly(coordinatorRoute, {coordinatorjobId: coordinatorId.id})).to.be.equal.true;
     }));
 
 
@@ -210,21 +218,37 @@ describe("Unit: ImportDataController", function() {
     function getSampleConfiguration() {
         return {
             "databases": [{
-                    "name": "PostgreSQL",
-                    "drivers": [{
-                            "name": "postgresql",
-                            "version": "9.3",
-                            "className": "org.postgresql.Driver"
-                        }
-                    ]
-                }, {
+                "name": "PostgreSQL",
+                "drivers": [
+                    {
+                        "name": "postgresql",
+                        "version": "9.3",
+                        "className": "org.postgresql.Driver",
+                        "jdbcRegex": "jdbc:postgresql:\/\/([\\w:._-]+):([1-9][0-9]{0,4})\/([\\w]+)",
+                        "jdbcTemplate": "jdbc:postgresql://{host}:{port}/{database}"
+                    }
+                ],
+                "schema": {
+                    "supported": true,
+                    "required": false
+                }
+
+            },
+                {
                     "name": "MySQL",
-                    "drivers": [{
+                    "drivers": [
+                        {
                             "name": "mysql",
                             "version": "5.1",
-                            "className": "org.mysql.Driver"
+                            "className": "com.mysql.jdbc.Driver",
+                            "jdbcRegex": "jdbc:mysql:\\/\\/([\\w:._-]+):([1-9][0-9]{0,4})\\/([\\w]+)",
+                            "jdbcTemplate": "jdbc:mysql://{host}:{port}/{database}"
                         }
-                    ]
+                    ],
+                    "schema": {
+                        "supported": false,
+                        "required": false
+                    }
                 }
             ],
             "minimumFrequencyInSeconds": 300,

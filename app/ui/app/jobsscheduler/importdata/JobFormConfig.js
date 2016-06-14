@@ -22,7 +22,7 @@
             importModel: {
                 "name" : "",
                 "sqoopImport" : {
-                    "jdbcUri" : "jdbc:",
+                    "jdbcUri" : "",
                     "table" : "",
                     "username" : "",
                     "password" : "",
@@ -46,13 +46,19 @@
                 driver: {},
                 databaseType: {
                     name: "",
-                    drivers: {}
+                    drivers: {},
+                    schema: {
+                        "suported": false,
+                        "required": false
+                    }
                 },
                 host: "",
                 port: "",
                 dbName: "",
                 useDefaultDir: true,
-                dirPrefix: ""
+                dirPrefix: "",
+                jdbcUriPattern: "",
+                jdbcUriTemplate: ""
             },
             importModes: [
                 {

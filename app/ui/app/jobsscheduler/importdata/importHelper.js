@@ -19,19 +19,10 @@
 
     App.factory('ImportHelper', function () {
         return {
-            findDriverByName: findDriverByName,
             validateDates: validateDates,
-            validateFrequency: validateFrequency
+            validateFrequency: validateFrequency,
+            getOrder: getOrder
         };
-
-        function findDriverByName(databases, driverName) {
-            var result = null;
-            _.find(databases, function (db) {
-                result = _.findWhere(db.drivers, {name: driverName});
-                return result != null;
-            });
-            return result;
-        }
 
         function validateDates(schedule) {
             return moment(schedule.end).diff(schedule.start) > 0;
@@ -39,6 +30,18 @@
 
         function validateFrequency(schedule, minimumFrequencyInSeconds) {
             return moment.duration(schedule.frequency.amount, schedule.frequency.unit).asSeconds() >= minimumFrequencyInSeconds;
+        }
+
+        function getOrder(template) {
+            var positions = {
+                'host': template.indexOf("host"),
+                'port': template.indexOf("port"),
+                'database': template.indexOf("database")
+            };
+            return Object.keys(positions)
+                .sort(function (a, b) {
+                    return positions[a] - positions[b];
+                });
         }
     });
 }());

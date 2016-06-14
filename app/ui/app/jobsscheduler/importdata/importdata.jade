@@ -68,23 +68,23 @@ h3
                     data-ng-model='config.dbName', ng-change='updateUri()')
             .form-group.jdbcUri
                 label(for='jdbcUri') JDBC Uri
-                input#jdbcUri.form-control(name="jdbcUri", type='text', placeholder='JDBC connection string...',
-                    data-ng-model='importModel.sqoopImport.jdbcUri', ng-change='updateDbAddress(importForm)', required,
-                    pattern='{{jdbcUriPattern}}')
+                input#jdbcUri.form-control(name="jdbcUri", type='text', placeholder='{{config.jdbcUriTemplate}}',
+                    data-ng-model='importModel.sqoopImport.jdbcUri', ng-model-options="{ allowInvalid: true}",
+                    ng-change='updateDbAddress(importForm)', required, pattern='{{config.jdbcUriPattern}}')
                 div(ng-messages="importForm.jdbcUri.$error")
-                    span.validationMessage(ng-message="pattern")
-                        | Required schema - jdbc:driver://host:port/databaseName
                     span.validationMessage(ng-message="invalidDriver")
                         | TAP platform do not support provided driver
+                    span.validationMessage(ng-message="pattern")
+                        | Invalid JDBC Uri. Required schema: {{config.jdbcUriTemplate}}
 
             .group-title.required
                 h4 Details
             .form-group
                 label(for='table') Table
                 input#table.form-control(type='text', data-ng-model='importModel.sqoopImport.table', required)
-            .form-group
+            .form-group(ng-if="config.databaseType.schema.supported")
                 label(for='schemaName') Schema
-                    span.i &nbsp(optional)
+                    span(ng-if="!config.databaseType.schema.required").i &nbsp(optional)
                 input#schema.form-control(type='text', data-ng-model='importModel.sqoopImport.schema')
             .form-group
                 label(for='targetDir') HDFS destination directory
