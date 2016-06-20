@@ -16,13 +16,13 @@
 (function () {
     'use strict';
 
-    App.controller('ApplicationRegisterController', function ($scope, State, ApplicationRegisterResource,
-        NotificationService, targetProvider) {
+    App.controller('ApplicationRegisterController', function ($scope, State, targetProvider,
+            ApplicationRegisterHelpers) {
 
         $scope.service = {
             app: {
                 metadata: {
-                    guid: ""
+                    guid: $scope.appId
                 }
             },
             description: "",
@@ -30,38 +30,44 @@
             tags: [],
             metadata: {}
         };
+
+
         $scope.state = new State().setPending();
-        $scope.clonedApps = [];
+        $scope.offerings = [];
 
         $scope.submitRegister = submitRegister;
         $scope.addTag = addTag;
-        $scope.$parent.$watch('application', function (application) {
-            if(application) {
-                $scope.service.app.metadata.guid = application.guid;
-                $scope.state.setLoaded();
-                ApplicationRegisterResource
-                    .withErrorMessage('Failed to get cloned applications from catalog')
-                    .getClonedApplication($scope.service.app.metadata.guid )
-                    .then(function (response) {
-                        $scope.offerings = response.plain();
-                    });
-            }
+
+        updateServiceOrgGuid();
+        refreshOfferings();
+
+
+        $scope.$on('targetChanged', function () {
+            updateServiceOrgGuid();
         });
-
-
 
         function submitRegister() {
             $scope.state.setPending();
 
-            $scope.service.creator_info = { creator_guid: $scope.$parent.appId, creator_name: $scope.$parent.application.name };
-            $scope.service.org_guid = (targetProvider.getOrganization() || {}).guid;
-            ApplicationRegisterResource
-                .withErrorMessage('Failed to register application in marketplace')
-                .registerApplication($scope.service)
-                .then(function (response) {
-                    $scope.clonedApps.push(response.plain());
-                    NotificationService.success('Application has been registered in marketplace');
-                }).finally(function () {
+            ApplicationRegisterHelpers
+                .registerApp($scope.service)
+                .then(function(newOffering) {
+                    $scope.offerings.push(newOffering);
+                })
+                .finally(function () {
+                    $scope.state.setLoaded();
+                });
+        }
+
+        function refreshOfferings() {
+            $scope.state.setPending();
+
+            ApplicationRegisterHelpers
+                .getOfferingsOfApp($scope.appId)
+                .then(function (offerings) {
+                    $scope.offerings = offerings;
+                })
+                .finally(function() {
                     $scope.state.setLoaded();
                 });
         }
@@ -69,5 +75,11 @@
         function addTag(tag) {
             $scope.service.tags.push(tag);
         }
+
+        function updateServiceOrgGuid() {
+            $scope.service.org_guid = (targetProvider.getOrganization() || {}).guid;
+        }
     });
+
+
 })();

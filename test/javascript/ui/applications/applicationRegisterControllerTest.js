@@ -18,8 +18,7 @@ describe("Unit: ApplicationRegisterController", function () {
     var scope,
         ctrl,
         state,
-        mockNotificationService,
-        mockApplicationRegisterResource,
+        mockApplicationRegisterHelpers,
         _targetProvider,
         $q,
         space = { guid: 's1', name: 'space1'},
@@ -30,32 +29,21 @@ describe("Unit: ApplicationRegisterController", function () {
     beforeEach(inject(function($controller, TestHelpers, $rootScope, ApplicationRegisterResource, State, _$q_) {
         scope = $rootScope.$new();
         $q = _$q_;
-        mockNotificationService = sinon.stub({success: function(){}});
-        var deferredStatus = $q.defer();
-        mockApplicationRegisterResource = {
-            withErrorMessage: sinon.stub().returnsThis(),
-            getClonedApplication: function() {
-                return  deferredStatus.promise;
-            }
+        mockApplicationRegisterHelpers = {
+            registerApp: sinon.stub().returns($q.defer().promise),
+            getOfferingsOfApp: sinon.stub().returns($q.defer().promise)
         };
-        deferredStatus.resolve({
-            plain: function() {
-                return {};
-            }
-        });
 
         _targetProvider = (new TestHelpers()).stubTargetProvider({});
         _targetProvider.space = space;
         _targetProvider.org = org;
         state = new State();
-        scope.clonedApps = [];
         scope.$parent = $rootScope.$new();
-        scope.$parent.application = {name: 'app'};
+        scope.$parent.appId = 'app-guid-1234';
         ctrl = $controller('ApplicationRegisterController',{
-            'targetProvider': _targetProvider,
-            '$scope': scope,
-            'NotificationService': mockNotificationService,
-            'ApplicationRegisterResource': mockApplicationRegisterResource
+            targetProvider: _targetProvider,
+            $scope: scope,
+            ApplicationRegisterHelpers: mockApplicationRegisterHelpers
         });
     }));
 
@@ -69,35 +57,41 @@ describe("Unit: ApplicationRegisterController", function () {
             description: "",
             name: "",
             tags: [],
-            metadata: {},
-            plain: function() {
-                return this;
-            }
+            metadata: {}
         };
-        var deferredStatus = $q.defer();
-        mockApplicationRegisterResource.registerApplication = function() {
-            return  deferredStatus.promise;
-        };
-        deferredStatus.resolve(service);
+        scope.offerings = [{id: "mock1"}];
+        mockApplicationRegisterHelpers.registerApp = sinon.stub().returns(successfulPromise(service));
 
         scope.submitRegister();
         scope.$digest();
 
-        expect(mockNotificationService.success.called).to.be.true;
+        expect(mockApplicationRegisterHelpers.registerApp).to.be.called;
         expect(scope.state.value, 'state').to.be.equal(state.values.LOADED);
+        expect(scope.offerings.length).to.be.equal(2);
+        expect(scope.offerings[1]).to.be.equal(service);
     });
 
     it('Register application with fail', function(){
-        var deferredStatus = $q.defer();
-        mockApplicationRegisterResource.registerApplication = function() {
-            return  deferredStatus.promise;
-        };
-        deferredStatus.reject({ status: 500 });
+        mockApplicationRegisterHelpers.registerApp = sinon.stub().returns(rejectedPromise({ status: 500 }));
+        scope.offerings = [{id: "mock1"}];
 
         scope.submitRegister();
         scope.$digest();
 
-        expect(mockNotificationService.success.called).to.be.false;
+        expect(mockApplicationRegisterHelpers.registerApp).to.be.called;
         expect(scope.state.value, 'state').to.be.equal(state.values.LOADED);
+        expect(scope.offerings.length).to.be.equal(1);
     });
+
+    function successfulPromise() {
+        var deferred = $q.defer();
+        deferred.resolve.apply(deferred, arguments);
+        return deferred.promise;
+    }
+
+    function rejectedPromise() {
+        var deferred = $q.defer();
+        deferred.reject.apply(deferred, arguments);
+        return deferred.promise;
+    }
 });
