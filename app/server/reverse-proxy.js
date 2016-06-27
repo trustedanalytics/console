@@ -24,7 +24,8 @@ var request = require('request'),
     httpException = require('./utils/http-exception'),
     gatewayErrors = require('./gateway-errors');
 
-const HOST_SUFFIX = "_HOST";
+// TODO: change to const after moving to newer version of node
+var HOST_SUFFIX = "_HOST";
 
 function getHost(service, path) {
     var host = null;
