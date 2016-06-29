@@ -173,13 +173,3 @@ spec:
                 secretKeyRef:
                   name: sso
                   key: user-info-uri
-            - name: http_proxy
-              valueFrom:
-                configMapKeyRef:
-                  name: das
-                  key: http-proxy
-            - name: https_proxy
-              valueFrom:
-                configMapKeyRef:
-                  name: das
-                  key: https-proxy
