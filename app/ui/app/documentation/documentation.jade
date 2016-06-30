@@ -15,12 +15,12 @@
 //-
 
 h3 Documentation
-
-.documentation
+spinner(ng-show='state.isPending()')
+.documentation(ng-show='state.isLoaded()')
    .panel
       h3 Getting Started with TAP
       .links-container
-         a(href="https://github.com/trustedanalytics/platform-wiki-latest/wiki" target="_blank") Wiki documentation for Trusted Analytics Platform >
+         a(href="{{platformWikiLink}}" target="_blank") Wiki documentation for Trusted Analytics Platform >
          a(href="https://github.com/trustedanalytics/dataset-reader-sample" target="_blank") Sample Project >
       .divider
 

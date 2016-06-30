@@ -465,6 +465,7 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
         .state('app.documentation', {
             url: '/documentation',
             title: 'Documentation',
+            controller: 'DocumentationController',
             targetHeader: {org: false, space: false},
             templateUrl: getViewPath('documentation/documentation.html')
         });
