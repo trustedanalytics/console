@@ -65,15 +65,15 @@
             "sref": "app.applications",
             "icon": "icon-grid"
         }, {
-            "text": "Services",
+            "text": "Marketplace",
             "icon": "icon-bag",
             "items": [
                 {
-                    "text": "Marketplace",
-                    "sref": "app.services.marketplace"
+                    "text": "Services",
+                    "sref": "app.marketplace.services"
                 }, {
                     "text": "Instances",
-                    "sref": "app.services.instances"
+                    "sref": "app.marketplace.instances"
                 }
             ]
         }, {

@@ -89,7 +89,7 @@
                         .deleteService(self.serviceId)
                         .then(function () {
                             NotificationService.success('Application has been delete from marketplace');
-                            $location.path('/app/services/marketplace');
+                            $location.path('/app/marketplace/service');
                         }).finally(function () {
                             self.state.setLoaded();
                         });

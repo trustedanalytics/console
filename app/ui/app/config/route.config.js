@@ -20,7 +20,7 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
     $sceProvider.enabled(false);
 
     $urlRouterProvider.when('/app/datacatalog', '/app/datacatalog/datasets');
-    $urlRouterProvider.when('/app/services', '/app/services/marketplace');
+    $urlRouterProvider.when('/app/marketplace', '/app/marketplace/services');
     $urlRouterProvider.when('/app/platformdashboard', '/app/platformdashboard/summary');
     $urlRouterProvider.when('/app/jobsscheduler/jobs', '/app/jobsscheduler/jobs/workflowjobs');
 
@@ -163,21 +163,21 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
             controller: 'LatestEventsController',
             templateUrl: getViewPath('latestevents/events.html')
         })
-        .state('app.services', {
-            url: '/services',
+        .state('app.marketplace', {
+            url: '/marketplace',
             abstract: true,
             template: '<ui-view />'
         })
-        .state('app.services.marketplace', {
-            url: '/marketplace',
-            title: 'Marketplace',
+        .state('app.marketplace.services', {
+            url: '/services',
+            title: 'Services',
             targetHeader: {org: true, space: true},
             controller: 'ServicesController',
             controllerAs: 'ctrl',
             templateUrl: getViewPath('marketplace/list/services.html'),
             searchEnabled: true
         })
-        .state('app.services.instances', {
+        .state('app.marketplace.instances', {
             url: '/instances',
             title: 'Service instances',
             targetHeader: {org: true, space: true},
