@@ -34,6 +34,7 @@
                 th Apps bound
                 th State
                 th
+                th
                 th Delete
         tbody
             tr(ng-repeat="instance in ctrl.instances | orderBy: 'name'")
@@ -44,6 +45,8 @@
                 td(class="state-{{instance.last_operation.state}}")  {{instance.last_operation.state}}
                 td
                     a(ng-if='instance.dashboard_url', ng-href='{{ instance.dashboard_url }}', target="_blank") Go to dashboard &raquo;
+                td
+                    a(ui-sref='app.marketplace.instance({instanceId: instance.guid})') See details &raquo;
                 td
                     a.delete(ng-click='ctrl.tryDeleteInstance(instance)')
 | {{ instanceToDelete.name }}

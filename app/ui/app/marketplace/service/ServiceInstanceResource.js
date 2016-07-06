@@ -49,8 +49,10 @@
             });
         };
 
+        service.getById = function (instanceId) {
+            return this.one(instanceId).get();
+        };
+
         return service;
     });
-
-
 }());

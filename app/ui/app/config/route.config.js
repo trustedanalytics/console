@@ -175,6 +175,13 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
             controller: 'ServiceInstancesListController',
             templateUrl: getViewPath('marketplace/instances/list.html')
         })
+        .state('app.marketplace.instance', {
+            url: '/instance/:instanceId',
+            title: 'Service instance details',
+            targetHeader: {org: false, space: false},
+            controller: 'ServiceInstanceDetailsController',
+            templateUrl: getViewPath('marketplace/instances/instance-details.html')
+        })
         .state('app.service', {
             url: '/service/:serviceId',
             title: 'Service',

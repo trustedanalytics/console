@@ -1,0 +1,58 @@
+//
+   Copyright (c) 2016 Intel Corporation
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+//-
+.instance-details
+   h3 Instances: {{serviceInstance.name}}
+   spinner(ng-show='state.isPending() || deleteState.isPending()')
+   .panel(ng-show='state.isLoaded() && deleteState.isDefault()')
+      h4 Actions
+
+      .actions
+         button.btn.btn-primary.fa-times(ng-click='tryDeleteInstance()') Delete
+         button.btn.btn-primary(ui-sref='app.service({serviceId: serviceInstance.service})') Create new instance
+
+      h4 Metadata
+      table.table
+         tr
+            td Instance name
+            td {{serviceInstance.name}}
+         tr
+            td State
+            td {{serviceInstance.last_operation.state}}
+         tr
+            td Plan instantiated
+            td {{serviceInstance.service_plan.name}}
+         tr
+            td Instance Creator
+            td {{serviceInstance.metadata.creator_name}}
+         tr
+            td Service Type
+            td {{serviceInstance.service_plan.service.label}}
+
+   .panel.panel-warning(ng-show='state.isError()')
+      .panel-heading Error loading content
+      .panel-body Service instance page is unavailable
+
+script(type="text/ng-template", id="confirm-delete")
+   .ngdialog-message.clearfix
+      | {{ serviceInstance.name }}
+      p
+         | Are you sure you want to delete
+         = ' '
+         b {{ data.instance }}
+         | ?
+      .pull-right
+         button.btn.btn-primary(type='button', ng-click='confirm()') Delete
+         button.btn.btn-default(type='button', ng-click="cancel()") Cancel

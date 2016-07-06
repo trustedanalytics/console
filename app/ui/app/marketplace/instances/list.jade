@@ -36,8 +36,11 @@ h3
                 .name {{service.displayName || service.label }}
                 .instances
                     uib-accordion(close-others="false")
-                        uib-accordion-group(ng-repeat="instance in service.instances" ng-init="formVisible = false")
+                        uib-accordion-group(ng-repeat="instance in service.instances"
+                            ng-init="formVisible = false" is-open='status.open')
                             uib-accordion-heading {{ instance.name }}
+                                a.see-details(ui-sref='app.marketplace.instance({instanceId: instance.guid})') See details &raquo;
+                                i.pull-right.glyphicon(ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}")
                             .keys.col-md-6
                                 label Keys:
                                 .add-key(ng-show="!exportMode && !formVisible", ng-click="formVisible = true")

@@ -339,6 +339,52 @@
   }
 }
 
+/********************************* SERVICE INSTANCE DETAILS VIEW ****************************/
+
+.instance-details {
+
+  .panel {
+    padding: 25px 30px;
+  }
+
+  h4 {
+    margin-top: 30px;
+
+    &:first-child {
+      margin-top: 0;
+      margin-bottom: 20px;
+    }
+  }
+
+  .actions {
+    button {
+      margin-right: 10px;
+
+      &::before {
+        margin-right: 10px;
+      }
+    }
+  }
+
+  .table {
+    width: 100%;
+    tr {
+      border: 1px none #E4E4E4;
+      border-style: solid none;
+
+      td {
+        padding: 15px 0;
+      }
+
+      td:first-child {
+        font-size: 15px;
+        font-weight: bold;
+        width: 160px;
+      }
+    }
+  }
+}
+
 .vertical-tabs {
   list-style: none;
   padding: 0;
@@ -429,6 +475,22 @@
         font-size: 20px;
         font-weight: 400;
         margin-bottom: 6px;
+      }
+
+      uib-accordion * {
+        outline: 0;
+        text-decoration: none;
+
+        &:hover {
+          color: #333333;
+        }
+      }
+
+      .see-details {
+        margin-left: 30px;
+        &:hover {
+          color: #2f72be;
+        }
       }
 
       .keys {
