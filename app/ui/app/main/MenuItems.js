@@ -88,7 +88,11 @@
                 {
                     "text": "TAP Analytics Toolkit",
                     "sref": "app.datatools"
-                },  {
+                }, {
+                    "text": "Seahorse",
+                    "sref": "app.seahorse",
+                    "tool": 'seahorse'
+                }, {
                     "text": "IPython",
                     "sref": "app.ipython",
                     "tool": 'ipython'

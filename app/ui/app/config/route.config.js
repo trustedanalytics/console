@@ -266,6 +266,15 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
             templateUrl: getViewPath('tools/toolsInstancesList.html'),
             resolve: LazyLoadProvider.load(['ngMessages'])
         })
+        .state('app.seahorse', {
+            url: '/seahorse',
+            title: 'Seahorse',
+            targetHeader: {org: true, space: true},
+            entityDisplayName: 'Seahorse',
+            controller: 'ToolsInstancesListController',
+            templateUrl: getViewPath('tools/toolsInstancesList.html'),
+            resolve: LazyLoadProvider.load(['ngMessages'])
+        })
         .state('app.h2o', {
             url: '/h2o',
             title: 'H2O UI',
