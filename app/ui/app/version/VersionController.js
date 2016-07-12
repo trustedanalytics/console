@@ -16,27 +16,20 @@
 (function () {
     "use strict";
 
-    App.controller('VersionController', function ($scope, State, VersionResource, CommonTableParams) {
+    App.controller('VersionController', function ($scope, State, VersionResource) {
 
         var state = new State().setPending();
         $scope.state = state;
 
+        $scope.componentsMapping = {
+            "TAP Platform":"tap",
+            "Cloud Foundry":"cf",
+            "CDH":"cdh"
+        };
+
         VersionResource.getSnapshots()
             .then(function (response) {
-                $scope.currentSnapshot = response;
-
-                $scope.platform_version = $scope.currentSnapshot.platform_version;
-                $scope.cf_version = $scope.currentSnapshot.cf_version;
-                $scope.cdh_version = $scope.currentSnapshot.cdh_version;
-                $scope.versionTracking = [
-                    {name: "Cloud Foundry API", version: $scope.cf_version},
-                    {name: " TAP Platform", version: $scope.platform_version},
-                    {name: "CDH", version: $scope.cdh_version}
-                ];
-
-                $scope.tableParams = CommonTableParams.getTableParams($scope, function () {
-                    return $scope.versionTracking;
-                });
+                $scope.currentSnapshot = response.plain();
                 state.setLoaded();
             }).catch(function onError() {
                 state.setError();

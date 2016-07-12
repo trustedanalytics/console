@@ -16,11 +16,13 @@
 
 .version {
   .selected {
-    background: #0e1d2e !important;
+    background: #0e1d2e;
     color: #2c7fca;
   }
-
   .table {
+    th {
+      text-align: center;
+    }
     text-align: center;
   }
 

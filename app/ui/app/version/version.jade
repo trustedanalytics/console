@@ -19,17 +19,21 @@ spinner(ng-show='state.isPending()')
 div(ng-show='state.isLoaded()')
     .content.version
         .export-file
-            export-file(content="versionTracking" filename='tap_version.json')
+            export-file(content="currentSnapshot" filename='tap_version.json')
 
         div(ng-if='state.isLoaded()')
-            div(ng-if='!versionTracking.length')
+            div(ng-if='!currentSnapshot')
                 h4 No components
             .span12.row-fluid
-                div
-                    table.table-striped.table(ng-show='versionTracking.length', ng-table="tableParams", show-filter="true")
-                        tr(ng-repeat="component in $data", ng-class="{'selected': component.name==' TAP Platform'}")
-                            td(data-title="'Component name'" sortable="'name'") {{component.name}}
-                            td(data-title="'Current Version'" sortable="'version'") {{component.version}}
+                table.table(ng-show='currentSnapshot')
+                    thead
+                        tr
+                            th Component name
+                            th Current version
+                    tbody
+                        tr(ng-repeat='(key, value) in componentsMapping' ng-class="{'selected': key=='TAP Platform'}")
+                            td {{ key }}
+                            td {{ currentSnapshot[value] }}
         p
         span See more about: &nbsp;
         span
