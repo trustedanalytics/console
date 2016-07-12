@@ -20,7 +20,7 @@
     App.factory('GearPumpAppDeployHelper', function (NotificationService, targetProvider, ToolsInstanceResource,
          ServiceKeysResource, GearPumpAppDeployResource, ServiceInstancesMapper, FileUploaderService) {
 
-        var GP_SERVICES_WHITE_LIST = ['hbase', 'kafka', 'zookeeper', 'hdfs'];
+        var GP_SERVICES_WHITE_LIST = ['hbase', 'kafka', 'zookeeper', 'hdfs', 'kerberos'];
 
         return {
             getGPInstanceCredentialsPromise: getGPInstanceCredentialsPromise,
