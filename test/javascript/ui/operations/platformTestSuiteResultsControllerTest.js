@@ -26,18 +26,27 @@ describe("Unit: PlatformTestSuiteResultsController", function () {
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function ($controller, _$rootScope_, _$q_, State, PlatformTestsResource) {
+    beforeEach(inject(function ($controller, _$rootScope_, _$q_, State) {
         $rootScope = _$rootScope_;
         scope = $rootScope.$new();
         $q = _$q_;
         state = new State();
 
-        platformTestsResource = PlatformTestsResource;
+        platformTestsResource = {
+            getResults: function(){
+                return $q.defer().promise;
+            },
+            success: function(){},
+            withErrorMessage: function() {
+                return this;
+            }
+        };
 
         createController = function () {
             controller = $controller('PlatformTestSuiteResultsController', {
                 $scope: scope,
-                $stateParams: {testSuiteId: TEST_SUITE_ID}
+                $stateParams: {testSuiteId: TEST_SUITE_ID},
+                PlatformTestsResource: platformTestsResource
             });
         };
 

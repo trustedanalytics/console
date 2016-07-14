@@ -18,10 +18,12 @@ describe("Unit: PlatformTestSuitesController", function () {
     var controller,
         createController,
         platformTestsResource,
+        notificationService,
         $rootScope,
         scope,
         $q,
-        state;
+        listTestSuiteState,
+        availableTestSuitesState;
 
     beforeEach(module('app'));
 
@@ -29,10 +31,17 @@ describe("Unit: PlatformTestSuitesController", function () {
         $rootScope = _$rootScope_;
         scope = $rootScope.$new();
         $q = _$q_;
-        state = new State();
+        listTestSuiteState = new State();
+        availableTestSuitesState = new State();
+        notificationService = {
+            warning: sinon.stub(),
+            success: sinon.stub()
+        };
 
         platformTestsResource = {
             getTestSuites: sinon.stub().returns($q.defer().promise),
+            getAvailableTestSuites: sinon.stub().returns($q.defer().promise),
+            runTestSuite: sinon.stub().returns($q.defer().promise),
             withErrorMessage: function() {
                 return this;
             }
@@ -41,7 +50,8 @@ describe("Unit: PlatformTestSuitesController", function () {
         createController = function () {
             controller = $controller('PlatformTestSuitesController', {
                 $scope: scope,
-                PlatformTestsResource: platformTestsResource
+                PlatformTestsResource: platformTestsResource,
+                NotificationService: notificationService
             });
         };
 
@@ -56,11 +66,14 @@ describe("Unit: PlatformTestSuitesController", function () {
     it('init, set states and request for platform test suites', function () {
         createController();
 
-        expect(scope.state.value, 'controller state').to.be.equal(state.values.PENDING);
+        expect(scope.listTestSuiteState.value, 'Init listTestSuiteState').to.be.equal(listTestSuiteState.values.PENDING);
+        expect(scope.availableTestSuitesState.value, 'Init availableTestSuitesState').to.be.equal(availableTestSuitesState.values.PENDING);
         expect(platformTestsResource.getTestSuites).to.be.called;
+        expect(platformTestsResource.getAvailableTestSuites).to.be.called;
+
     });
 
-    it('get platform test suites error, set state error', function () {
+    it('get platform test suites error, set listTestSuiteState error', function () {
         var deferred = $q.defer();
         deferred.reject();
         platformTestsResource.getTestSuites = sinon.stub().returns(deferred.promise);
@@ -68,7 +81,51 @@ describe("Unit: PlatformTestSuitesController", function () {
         $rootScope.$digest();
 
         expect(platformTestsResource.getTestSuites).to.be.calledOnce;
-        expect(scope.state.value, 'controller state').to.be.equal(state.values.ERROR);
+        expect(scope.listTestSuiteState.value, 'controller listTestSuiteState').to.be.equal(listTestSuiteState.values.ERROR);
     });
 
+     it('get platform available test suites error, set availableTestSuitesState error', function () {
+        var deferred = $q.defer();
+        deferred.reject();
+        platformTestsResource.getAvailableTestSuites = sinon.stub().returns(deferred.promise);
+        createController();
+        $rootScope.$digest();
+
+        expect(platformTestsResource.getAvailableTestSuites).to.be.calledOnce;
+        expect(scope.availableTestSuitesState.value, 'controller availableTestSuitesState').to.be.equal(availableTestSuitesState.values.ERROR);
+    });
+
+    it('add one suite to queue, set queue', function () {
+        var suite = {
+            id: 'TestID'
+        };
+        createController();
+        scope.addToQueue(suite);
+
+        expect(scope.queue.length).to.be.deep.equal(1);
+        expect(scope.queue).to.be.deep.equal([suite]);
+    });
+
+    it('add duplicated suite to queue, set queue trigger warning', function () {
+        var suite = {
+            id: 'TestID'
+        };
+        createController();
+        scope.addToQueue(suite);
+        scope.addToQueue(suite);
+
+        expect(scope.queue.length).to.be.deep.equal(1);
+        expect(scope.queue).to.be.deep.equal([suite]);
+        expect(notificationService.warning.calledWith('Duplicates are not allowed in queue')).to.be.true;
+    });
+
+    it('run test suite, remove suite from queue', function () {
+        var suite = {
+            id: 'TestID'
+        };
+        createController();
+        scope.runTestSuite(suite);
+
+        expect(platformTestsResource.runTestSuite).to.be.called;
+    });
 });

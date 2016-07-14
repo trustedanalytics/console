@@ -125,12 +125,16 @@ $dashboard-red: #DD1031;
   }
 }
 
-.platfromtests {
+.platform-tests {
 
   .table thead tr div div select:hover {
     option {
       max-width: 100%;
     }
+  }
+
+  .ng-table th {
+    text-align: left;
   }
 
   .ng-table-pager {
@@ -142,15 +146,43 @@ $dashboard-red: #DD1031;
   }
 
   .result-title {
-    padding-left: 15px;
-    margin-left: 10px;
+    padding-left: 25px;
   }
 
-  ul {
-    list-style-type: none;
-    padding-left: 10px;
+  .no-shadow {
+    padding: 20px;
+    box-shadow: none;
+    margin-bottom: 40px;
   }
 
+  .title {
+    font-size: 24px;
+    font-weight: lighter;
+    color: #53565b;
+  }
+
+  .info {
+    font-weight: bold;
+    padding-top: 20px;
+  }
+
+  .info-details {
+    padding-top: 20px;
+  }
+
+  .info-item {
+    font-size: 14px;
+    font-weight: normal;
+  }
+
+  .blue {
+    color: #2f72be;
+
+    .glyphicon {
+      font-size: 10px;
+      margin-left: 10px;
+    }
+  }
 }
 
 .versiontracking {
@@ -167,7 +199,6 @@ $dashboard-red: #DD1031;
     }
   }
 
-
   .selected {
     background: #0e1d2e;
     color: #2c7fca;
@@ -180,7 +211,7 @@ $dashboard-red: #DD1031;
   }
 
   .searchbar {
-    width:30%;
+    width: 30%;
     search-bar {
       display: block;
       position: relative;

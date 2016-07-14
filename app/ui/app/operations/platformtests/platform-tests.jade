@@ -15,12 +15,6 @@
 //-
 h3
     | Platform Tests
-ul.nav.nav-tabs
-    li(role='presentation', ng-class='{active: isTabActive("app.platformtests.list")}')
-        a(ui-sref='app.platformtests.list') Test suites list
-    li(role='presentation', ng-class='{active: isTabActive("app.platformtests.run")}')
-        a(ui-sref='app.platformtests.run')
-            em.icon-plus
-            | &nbsp;Run test suite
 .tabcontent
-    ui-view
+    .platform-tests.content
+        ui-view

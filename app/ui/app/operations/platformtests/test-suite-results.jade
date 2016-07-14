@@ -16,30 +16,30 @@
 spinner(ng-show='state.isPending()')
 button.btn.btn-primary.fa-refresh.pull-right(ng-click='updateResults()') Refresh
 div(ng-show='state.isLoaded()')
-   h3
-      d-test-state(state="results.state")
-      span.result-title
-         | ID: {{results.suiteId}}
-   uib-progressbar(value="results.progress")
-      | {{results.testsFinished}} / {{results.testsAll}}
-   uib-accordion(close-others='false')
-      uib-accordion-group(ng-repeat='test in results.tests' is-open="status.open")
-         uib-accordion-heading
-            d-test-state(state="test.result")
-            span.result-title
-               | {{test.name}}
-            i.pull-right.glyphicon(ng-class="{'glyphicon-chevron-down' : status.open, 'glyphicon-chevron-right': !status.open}")
-         p
-            | Id: {{test.id}}
-         p
-            | Order: {{test.order}}
-         p
-            | Components:
-            ul
-               li(ng-repeat='component in test.components')
-                  | {{component}}
-         p(ng-show='test.stacktrace')
-            | Stacktrace:
+    h3
+        d-test-state(state="results.state")
+        span.result-title
+            | ID: {{results.suiteId}}
+    uib-progressbar(value="results.progress")
+        | {{results.testsFinished}} / {{results.testsAll}}
+    uib-accordion(close-others='false')
+        uib-accordion-group(ng-repeat='test in results.tests' is-open="status.open")
+            uib-accordion-heading
+                d-test-state(state="test.result")
+                span.result-title
+                    | {{test.name}}
+                i.pull-right.glyphicon(ng-class="{'glyphicon-chevron-down' : status.open, 'glyphicon-chevron-right': !status.open}")
             p
-               code
-                  | {{test.stacktrace}}
+                | Id: {{test.id}}
+            p
+                | Order: {{test.order}}
+            p
+                | Components:
+                ul
+                    li(ng-repeat='component in test.components')
+                        | {{component}}
+            p(ng-show='test.stacktrace')
+                | Stacktrace:
+                p
+                    code
+                        | {{test.stacktrace}}

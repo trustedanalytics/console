@@ -16,39 +16,66 @@
 (function () {
     "use strict";
 
-    App.controller('PlatformTestSuitesController', function ($scope, State, $q, PlatformTestsResource,
-        PlatformTestSuitesTableParams) {
+    App.controller('PlatformTestSuitesController', function ($scope, State, PlatformTestsResource, NotificationService,
+                                                             PlatformTestSuitesTableParams) {
 
-        $scope.state = new State();
-        $scope.state.setPending();
+        $scope.availableTestSuitesState = new State();
+        $scope.availableTestSuitesState.setPending();
+        $scope.availableTestSuites = [];
+        $scope.listTestSuiteState = new State();
+        $scope.listTestSuiteState.setPending();
         $scope.testSuites = [];
+        $scope.queue = [];
+
+        $scope.updateAvailableTestSuites = function () {
+            $scope.availableTestSuitesState.setPending();
+            PlatformTestsResource
+                .withErrorMessage('Failed to load platform available tests list')
+                .getAvailableTestSuites()
+                .then(function (availableTestSuites) {
+                    $scope.availableTestSuites = availableTestSuites;
+                    $scope.availableTestSuitesState.setLoaded();
+                })
+                .catch(function () {
+                    $scope.availableTestSuitesState.setError();
+                });
+        };
+        $scope.updateAvailableTestSuites();
+
+        $scope.addToQueue = function (suite) {
+            if (_.some($scope.queue, {id: suite.id})) {
+                NotificationService.warning('Duplicates are not allowed in queue');
+            } else {
+                $scope.queue.push(suite);
+            }
+        };
+
+        $scope.runTestSuite = function (suite) {
+            PlatformTestsResource
+                .withErrorMessage('Failed to trigger platform test suite run')
+                .runTestSuite(suite.username, suite.password)
+                .then(function () {
+                    NotificationService.success('Platform test suite has been started');
+                    $scope.queue = _.reject($scope.queue, {id: suite.id});
+                    $scope.updateTestSuites();
+                });
+        };
 
         $scope.updateTestSuites = function () {
-            $scope.state.setPending();
+            $scope.listTestSuiteState.setPending();
             PlatformTestsResource
-                .withErrorMessage('Failed to load platform test suites list')
+                .withErrorMessage('Failed to load platform tests list')
                 .getTestSuites()
                 .then(function (testSuites) {
                     $scope.testSuites = testSuites;
-                    $scope.state.setLoaded();
+                    $scope.listTestSuiteState.setLoaded();
                     $scope.tableParams.reload();
                 })
                 .catch(function () {
-                    $scope.state.setError();
+                    $scope.listTestSuiteState.setError();
                 });
-
         };
         $scope.updateTestSuites();
-
-        $scope.states = function () {
-            var def = $q.defer();
-            def.resolve([
-                {id: 'PASS', title: 'PASS'},
-                {id: 'FAIL', title: 'FAIL'},
-                {id: 'IN_PROGRESS', title: 'IN PROGRESS'}
-            ]);
-            return def;
-        };
 
         $scope.tableParams = PlatformTestSuitesTableParams.getTableParams($scope, function () {
             return $scope.testSuites;

@@ -18,8 +18,7 @@
 
     App.factory('PlatformTestsResource', function (Restangular) {
 
-        // @TODO: Use real platform tests endpoint!
-        var service = Restangular.all('platform_tests').all('testsuites');
+        var service = Restangular.service('platform_tests').one().all('tests');
 
         service.getTestSuites = function () {
             return this.getList();
@@ -34,6 +33,10 @@
                 "username": username,
                 "password": password
             });
+        };
+
+        service.getAvailableTestSuites = function () {
+            return this.one().all('suites').getList();
         };
 
         return service;

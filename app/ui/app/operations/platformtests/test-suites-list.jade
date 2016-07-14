@@ -1,0 +1,36 @@
+//
+   Copyright (c) 2015 Intel Corporation
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+//-
+
+h3 Test Status
+spinner(ng-show='listTestSuiteState.isPending()')
+.table(ng-show='listTestSuiteState.isLoaded()')
+    table.table(ng-show='testSuites.length > 0', ng-table='tableParams')
+        tr(ng-repeat='testSuite in $data')
+            td(data-title="'Test name'", sortable="'testName'")
+                | {{ testSuite.testName }}
+            td(data-title="'Start date'", sortable="'startDate'", )
+                | {{ testSuite.startDate | date : "yyyy-MM-dd 'at' HH:mm:ss" }}
+            td(data-title="'End date'", sortable="'endDate'")
+                | {{ testSuite.endDate | date : "yyyy-MM-dd 'at' HH:mm:ss"}}
+            td.status(data-title="'State'", sortable="'state'")
+                d-test-state(state="testSuite.state")
+            td
+                a(ui-sref='app.platformtests.results({ testSuiteId: testSuite.suiteId })') See results &raquo;
+    div(ng-if='!testSuites.length')
+        | You have no test started
+.panel.panel-danger(ng-show='listTestSuiteState.isError()')
+    .panel-body
+        | Error while downloading tests list

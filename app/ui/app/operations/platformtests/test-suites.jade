@@ -13,22 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 //-
-.platfromtests
-   .content
-      spinner(ng-show='state.isPending()')
-      .table(ng-show='state.isLoaded()')
-         table.table(ng-show='testSuites.length > 0', ng-table='tableParams', show-filter='true')
-            tr(ng-repeat='testSuite in $data')
-               td(data-title="'Start date'", sortable="'startDate'", filter="{ 'startDate': 'text' }")
-                  | {{ testSuite.startDate | date : "yyyy-MM-dd 'at' HH:mm:ss" }}
-               td(data-title="'End date'", sortable="'endDate'", filter="{ 'endDate': 'text' }")
-                  | {{ testSuite.endDate | date : "yyyy-MM-dd 'at' HH:mm:ss"}}
-               td.status(data-title="'State'", sortable="'state'", filter="{ 'state': 'select' }", filter-data='states()')
-                  d-test-state(state="testSuite.state")
-               td
-                  a(ui-sref='app.platformtests.results({ testSuiteId: testSuite.suiteId })') See results &raquo;
-         div(ng-if='!testSuites.length')
-            | You have no platform test suites
-      .panel.panel-danger(ng-show='state.isError()')
-         .panel-body
-            | Error while downloading platform test suites list
+
+include ./test-suites-available.jade
+include ./test-suites-queue.jade
+include ./test-suites-list.jade

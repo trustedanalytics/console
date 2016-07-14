@@ -124,8 +124,6 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
         .state('app.platformtests', {
             url: '/platformtests',
             title: 'Platform Test Suites',
-            controller: 'PlatformTestsController',
-            controllerAs: 'ctrl',
             templateUrl: getViewPath('operations/platformtests/platform-tests.html')
         })
         .state('app.platformtests.list', {
@@ -134,13 +132,6 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
             controller: 'PlatformTestSuitesController',
             controllerAs: 'ctrl',
             templateUrl: getViewPath('operations/platformtests/test-suites.html')
-        })
-        .state('app.platformtests.run', {
-            url: '/run',
-            title: 'Run Platform Test Suite',
-            controller: 'PlatformTestSuiteRunController',
-            controllerAs: 'ctrl',
-            templateUrl: getViewPath('operations/platformtests/test-suite-run.html')
         })
         .state('app.platformtests.results', {
             url: '/results/:testSuiteId',

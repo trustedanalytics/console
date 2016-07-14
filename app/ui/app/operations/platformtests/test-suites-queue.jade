@@ -1,0 +1,41 @@
+//
+   Copyright (c) 2015 Intel Corporation
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+//-
+
+h3 Queue
+.panel.no-shadow
+    div.row(ng-repeat="suite in queue")
+        div.col-sm-5
+            div.title
+                | {{ suite.title }}
+            div.info
+                | Approx Run Time: &nbsp;
+                span.blue {{ suite.approxRunTime }}
+        div.col-sm-7
+            div
+                form.form-horizontal(data-ng-submit='runTestSuite(suite)', validate-form='', novalidate='')
+                    .form-group
+                        label.col-sm-2.control-label(for='suite.username') Username
+                        .col-sm-10
+                            input.form-control(type='text', placeholder='Enter username...', required='required', ng-model='suite.username')
+                    .form-group
+                        label-2.col-sm-2.control-label(for='suite.password') Password
+                        .col-sm-10
+                            input.form-control(type='password', placeholder='Enter password...', required='required', ng-model='suite.password')
+                    .form-group
+                        .col-sm-offset-10.col-sm-2
+                            input.btn.btn-primary(type='submit', value='Run test suite', ng-disabled="!suite.username || !suite.password")
+    div(ng-show='queue.length === 0 || !queue.length')
+        | No tests are in the queue. Add a test to the queue to begin.

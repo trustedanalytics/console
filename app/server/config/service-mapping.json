@@ -96,7 +96,7 @@
   "path": "/rest/platform/summary",
   "name": "platform-operations"
 }, {
-  "path": "/rest/platform_tests/testsuites",
+  "path": "/rest/platform_tests/tests",
   "name": "platform-tests"
 }, {
   "path": "/rest/v1/analytics/h2o/models/organizations",
