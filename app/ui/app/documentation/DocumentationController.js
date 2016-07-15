@@ -27,7 +27,7 @@
 
         VersionResource.getSnapshots()
             .then(function (response) {
-                platformVersion = response.platform_version;
+                platformVersion = response.tap;
                 getLinkToPlatformWiki();
                 $scope.state.setLoaded();
             })
