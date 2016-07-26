@@ -23,7 +23,7 @@
       position: relative;
       width: 33.333%;
       max-width: 400px;
-      height:35px;
+      height: 35px;
 
       em {
         position: absolute;
@@ -53,7 +53,7 @@
     }
 
     > a {
-      display: block; 
+      display: block;
       border: 1px solid #dddddd;
       color: $btn-primary-color;
       padding: 25px 20px;
@@ -78,7 +78,7 @@
 
     .label-tag {
       display: inline-block;
-    } 
+    }
 
     .description {
       margin-top: 5px;
@@ -374,12 +374,29 @@
 
       td {
         padding: 15px 0;
+        vertical-align: middle;
       }
 
       td:first-child {
         font-size: 15px;
         font-weight: bold;
         width: 160px;
+      }
+
+      .passwordView {
+        height: 30px;
+        padding-left: 10px;
+        margin-top: 4px;
+        margin-bottom: 6px;
+        vertical-align: middle;
+
+        &.input {
+          border-width: 1px;
+          padding-top: 1px;
+        }
+        &.button {
+          padding-top: 2px;
+        }
       }
     }
   }
@@ -423,7 +440,6 @@
           background-color: #ffffff;
           cursor: default;
         }
-
       }
     }
 
@@ -452,7 +468,7 @@
     min-height: 64px;
     box-sizing: content-box;
 
-    +.service-item {
+    + .service-item {
       border-top: 1px solid #ddd;
     }
 
@@ -543,7 +559,6 @@
       }
     }
   }
-
   .vcap {
     .title {
       font-size: 20px;

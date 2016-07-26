@@ -15,8 +15,13 @@
 //-
 .instance-details
    h3 Instances: {{serviceInstance.name}}
-   spinner(ng-show='state.isPending() || deleteState.isPending()')
-   .panel(ng-show='state.isLoaded() && deleteState.isDefault()')
+   spinner(ng-show='state.isPending() || deleteState.isPending() || toolsState.isPending()')
+   .panel(ng-show='state.isLoaded() && deleteState.isDefault() && !toolsState.isPending()')
+
+      div(ng-show="toolsState.isError()", class="alert alert-danger", role="alert")
+          span(class="glyphicon glyphicon-exclamation-sign")
+          Error An error occurred while loading service instance credentials
+
       h4 Actions
 
       .actions
@@ -40,6 +45,15 @@
          tr
             td Service Type
             td {{serviceInstance.service_plan.service.label}}
+         tr(ng-show="credentials.login")
+            td Login
+            td {{ credentials.login }}
+         tr(ng-show="credentials.password")
+             td Password
+             td
+                 input.passwordView(type="text", ng-disabled="!showPass", readonly="readonly", ng-value="showPass ? credentials.password : '****************'", disabled="disabled")
+                 button.passwordView(type="button", class="btn btn-sm", ng-class="!showPass ? 'btn-success' : 'btn-warning'"
+                                            ng-click="showPass = !showPass") {{ !showPass ? 'Show' : 'Hide' }}
 
    .panel.panel-warning(ng-show='state.isError()')
       .panel-heading Error loading content

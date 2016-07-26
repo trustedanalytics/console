@@ -19,13 +19,16 @@ describe("Unit: ServiceInstanceDetailsControllerTest", function () {
         rootScope,
         scope,
         state,
+        toolsState,
         deleteState,
         $q,
         $state,
         serviceInstanceResource,
+        toolsInstanceResource,
         notificationService,
         createController,
         serviceInstanceDeferred,
+        toolsInstanceDeferred,
         deleteInstanceDeferred,
         $httpBackend,
         redirect = 'app.marketplace.instances';
@@ -39,7 +42,9 @@ describe("Unit: ServiceInstanceDetailsControllerTest", function () {
         $state = _$state_;
         state = new State();
         deleteState = new State();
+        toolsState = new State();
         serviceInstanceDeferred = $q.defer();
+        toolsInstanceDeferred = $q.defer();
         deleteInstanceDeferred = $q.defer();
         $httpBackend = _$httpBackend_;
 
@@ -58,11 +63,16 @@ describe("Unit: ServiceInstanceDetailsControllerTest", function () {
             error: function () {}
         };
 
+        toolsInstanceResource = {
+            getServiceInstance: sinon.stub().returns(toolsInstanceDeferred.promise)
+        };
+
         createController = function () {
             controller = $controller('ServiceInstanceDetailsController', {
                 $scope: scope,
                 NotificationService: notificationService,
                 ServiceInstanceResource: serviceInstanceResource,
+                ToolsInstanceResource: toolsInstanceResource,
                 $state: $state
             });
         };
@@ -76,11 +86,12 @@ describe("Unit: ServiceInstanceDetailsControllerTest", function () {
 
     it('init, set state pending', function () {
         expect(scope.state.value).to.be.equals(state.values.PENDING);
+        expect(scope.toolsState.value).to.be.equals(toolsState.values.PENDING);
         expect(scope.deleteState.value).to.be.equals(deleteState.values.DEFAULT);
     });
 
     it('init, getById called', function () {
-        expect(serviceInstanceResource.getById.called).to.be.ok;
+        expect(serviceInstanceResource.getById).to.be.called;
     });
 
     it('init, getById success, set state on loaded', function () {
@@ -103,6 +114,22 @@ describe("Unit: ServiceInstanceDetailsControllerTest", function () {
         scope.$digest();
         expect(scope.state.value).to.be.equals(state.values.ERROR);
         expect(errorSpied.called).to.be.true;
+    });
+
+    it('init, getServiceInstance called', function () {
+        expect(toolsInstanceResource.getServiceInstance).to.be.called;
+    });
+
+    it('init, getServiceInstance success, set toolsState on loaded', function () {
+        toolsInstanceDeferred.resolve();
+        scope.$digest();
+        expect(scope.toolsState.value).to.be.equals(toolsState.values.LOADED);
+    });
+
+    it('init, getServiceInstance error, set toolsState on error', function () {
+        toolsInstanceDeferred.reject();
+        scope.$digest();
+        expect(scope.toolsState.value).to.be.equals(toolsState.values.ERROR);
     });
 
     it('deleteInstance, invoke, set deleteState on pending', function () {

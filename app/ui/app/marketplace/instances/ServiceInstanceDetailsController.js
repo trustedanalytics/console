@@ -18,13 +18,14 @@
     'use strict';
 
     App.controller('ServiceInstanceDetailsController', function ($scope, State, ServiceInstanceResource,
-            NotificationService, $stateParams, $state) {
+            NotificationService, $stateParams, $state, ToolsInstanceResource) {
         var instanceId = $stateParams.instanceId;
         var GATEWAY_TIMEOUT_ERROR = 504;
         var INSTANCE_NOT_FOUND_ERROR = 404;
         var state = new State().setPending();
+        var toolsState = new State().setPending();
         $scope.state = state;
-
+        $scope.toolsState = toolsState;
         $scope.deleteState = new State().setDefault();
 
         ServiceInstanceResource.getById(instanceId)
@@ -40,6 +41,15 @@
                     NotificationService.error(error.data.message || 'An error occurred while loading service instance page');
                 }
             });
+
+        ToolsInstanceResource.getServiceInstance(instanceId)
+                .then(function (credentials) {
+                    $scope.credentials = credentials;
+                    $scope.toolsState.setLoaded();
+                })
+                .catch(function () {
+                    $scope.toolsState.setError();
+                });
 
         $scope.tryDeleteInstance = function () {
             NotificationService.confirm('confirm-delete', {instance: $scope.serviceInstance.name})

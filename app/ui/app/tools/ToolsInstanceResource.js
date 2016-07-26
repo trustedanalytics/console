@@ -27,6 +27,10 @@
             });
         };
 
+        service.getServiceInstance = function (instanceId) {
+            return this.one(instanceId).get();
+        };
+
         return service;
     });
 
