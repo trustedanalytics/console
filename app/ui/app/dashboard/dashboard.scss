@@ -157,13 +157,17 @@ $dashboard-tile-margin: 20px;
       padding: 25px;
 
       .value {
-        font-size: 45px;
-        font-weight: lighter;
-        line-height: 45px;
+        font-size: 26px;
+        line-height: 26px;
+        margin-top: 5px;
+      }
+
+      .title {
+        font-size: 24px;
       }
 
       .progress {
-        margin-top: 15px;
+        margin-top: 10px;
       }
     }
   }

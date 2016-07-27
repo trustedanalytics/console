@@ -15,8 +15,8 @@
 //-
 .panel.widget.tile-progress.tile-height-large(ng-class='{"dashboard-green":$ctrl.value<30,' +
     '"dashboard-orange":($ctrl.value>=30 && $ctrl.value<80), "dashboard-red":$ctrl.value >= 80}')
-    .value
-        | {{ $ctrl.value }}%
     .title
         | {{ $ctrl.title }}
+    .value
+        | {{ $ctrl.value | number:0 }} of {{ $ctrl.total | number:0 }} {{ $ctrl.unit }} used
     uib-progressbar.progress-xs(value='$ctrl.value')

@@ -45,6 +45,8 @@
     App.component('tileProgress', {
         bindings: {
             value: '<',
+            total: '<',
+            unit: '<',
             title: '<'
         },
         templateUrl: 'app/dashboard/tile-progress.html'
