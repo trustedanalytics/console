@@ -23,6 +23,10 @@
             return this.one("snapshots").get({from: startDate});
         };
 
+        resource.getDiff = function (before, after) {
+            return this.one("snapshots").one(before).one("diff").one(after).get({aggregateBy: "type"});
+        };
+
         return resource;
     });
 }());

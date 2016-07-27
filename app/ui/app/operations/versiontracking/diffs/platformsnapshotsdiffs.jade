@@ -1,0 +1,135 @@
+//
+   Copyright (c) 2015 Intel Corporation
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+//-
+spinner(ng-show='state.isPending()')
+
+.panel.panel-warning(ng-show='state.isError()')
+    .panel-heading Error loading content
+    .panel-body Service is unavailable
+
+div(ng-show='state.isLoaded()')
+
+    h3
+        | Platform snapshots diffs
+    .panel.time-range-filter
+        label Time range:
+        div
+            label.radio.radio-inline
+                input(type='radio', name='timeRange', ng-click="getSnapshotsByRange(1)", ng-checked="'true'")
+                span.fa.fa-circle
+                | 1 day
+            label.radio.radio-inline
+                input(type='radio', name='timeRange', ng-click="getSnapshotsByRange(2)")
+                span.fa.fa-circle
+                | 2 days
+            label.radio.radio-inline
+                input(type='radio', name='timeRange', ng-click="getSnapshotsByRange(7)")
+                span.fa.fa-circle
+                | 1 week
+            label.radio.radio-inline
+                input(type='radio', name='timeRange', ng-click="getSnapshotsByRange(30)")
+                span.fa.fa-circle
+                | 1 months
+
+    b Select snapshots to compare
+
+    div(ng-if='state.isLoaded()')
+        div(ng-if='!response.length')
+            h4 No snapshots
+        .span12.row-fluid
+            div
+                table.table.snapshots(ng-show='response.length', ng-table="snapshotsTableParams", show-filter="true")
+                    tr(ng-repeat="snapshot in $data")
+                        td(data-title="'Select to compare'" ng-class="'selection-col'")
+                            input(type='checkbox', class='snapshot', value="{{ snapshot.id }}",
+                            name="snapshot", ng-model='selected[snapshot.id]', ng-disabled='!selected[snapshot.id] && maxSelected()')
+                        td(data-title="'Date & Time'" sortable="'created_at'") {{ snapshot.created_at | date: 'yyyy-MM-dd h:mm:ss a' }}
+                        td(data-title="'Platform Version'" sortable="'platform_version'") {{ snapshot.platform_version }}
+                        td(data-title="'CDH Version'" sortable="'cdh_version'") {{ snapshot.cdh_version }}
+                        td(data-title="'CF API Version'" sortable="'cf_version'") {{ snapshot.cf_version }}
+
+        div.comparison
+            button.btn.btn-primary(type='button', ng-click='getDiff()') Compare snapshots
+
+    .panel.time-range-filter(ng-show="diff")
+        .export-file
+            export-file(content="diff" filename='snapshot.json').pull-right
+        h4
+            | Changes from &nbsp;
+            span.snapshot-details
+                b {{ diff.created_at_before | date: 'yyyy-MM-dd h:mm:ss a' }} &nbsp;
+            span
+                | to &nbsp;
+            span.snapshot-details
+                b {{ diff.created_at_after | date: 'yyyy-MM-dd h:mm:ss a' }}
+        .filter
+            .heading
+                b Filter by:
+            label.radio.radio-inline
+                input(type='radio', name='componentsCategory', ng-checked="'true'", ng-model="visible" value="apps", ng-init="visible='apps'")
+                span.fa.fa-circle
+                | Platform Applications
+            label.radio.radio-inline
+                input(type='radio', name='componentsCategory', ng-model="visible" value="cdh_services")
+                span.fa.fa-circle
+                | Cloudera (CDH) services
+            label.radio.radio-inline
+                input(type='radio', name='componentsCategory', ng-model="visible" value="cf_services")
+                span.fa.fa-circle
+                | Cloud Foundry Services
+
+        spinner(ng-show='state.isPending()')
+        div(ng-show='state.isLoaded()')
+            div(ng-show="visible==='apps'")
+                div(ng-if='state.isLoaded()')
+                    div(ng-if='!appsList.length')
+                        h4 No applications changes
+                    .span12.row-fluid
+                        div
+                            table.table-striped.common(ng-show='appsList.length', ng-table="appsTableParams", show-filter="true" class="table")
+                                tr(ng-repeat="diff in $data")
+                                    td(data-title="'Artifact name'" sortable="'artifact'" filter="{ 'artifact': 'text' }") {{ diff.artifact }}
+                                    td(data-title="'Operation'" sortable="'operation'" filter="{ 'operation': 'text' }") {{ diff.operation }}
+                                    td(data-title="'Metric'" sortable="'metric'" filter="{ 'metric': 'text' }") {{ diff.metric }}
+                                    td(data-title="'Before'") {{ (diff.before | date: 'yyyy-MM-dd h:mm:ss a') || "-" }}
+                                    td(data-title="'After'") {{ (diff.after | date: 'yyyy-MM-dd h:mm:ss a') || "-"}}
+
+            div(ng-show="visible==='cdh_services'")
+                div(ng-if='state.isLoaded()')
+                    div(ng-if='!cdhServicesList.length')
+                        h4 No CDH services changes
+                    .span12.row-fluid
+                        div
+                            table.table-striped.common(ng-show='cdhServicesList.length', ng-table="cdhServicesTableParams", show-filter="true" class="table")
+                                tr(ng-repeat="diff in $data")
+                                    td(data-title="'Artifact name'" sortable="'artifact'" filter="{ 'artifact': 'text' }") {{ diff.artifact }}
+                                    td(data-title="'Operation'" sortable="'operation'" filter="{ 'operation': 'text' }") {{ diff.operation }}
+                                    td(data-title="'Metric'" sortable="'metric'" filter="{ 'metric': 'text' }") {{ diff.metric }}
+                                    td(data-title="'Before'") {{ (diff.before | date: 'yyyy-MM-dd h:mm:ss a') || "-" }}
+                                    td(data-title="'After'") {{ (diff.after | date: 'yyyy-MM-dd h:mm:ss a') || "-" }}
+
+            div(ng-show="visible==='cf_services'")
+                div(ng-if='state.isLoaded()')
+                    div(ng-if='!cfServicesList.length')
+                        h4 No CF services changes
+                    .span12.row-fluid
+                        div
+                            table.table-striped.common(ng-show='cfServicesList.length', ng-table="cfServicesTableParams", show-filter="true" class="table")
+                                tr(ng-repeat="diff in $data")
+                                    td(data-title="'Artifact name'" sortable="'artifact'" filter="{ 'artifact': 'text' }") {{ diff.artifact }}
+                                    td(data-title="'Operation'" sortable="'operation'" filter="{ 'operation': 'text' }") {{ diff.operation }}
+                                    td(data-title="'Metric'" sortable="'metric'" filter="{ 'metric': 'text' }") {{ diff.metric }}
+                                    td(data-title="'Before'") {{ (diff.before | date: 'yyyy-MM-dd h:mm:ss a') || "-"}}
+                                    td(data-title="'After'") {{ (diff.after | date: 'yyyy-MM-dd h:mm:ss a') || "-" }}

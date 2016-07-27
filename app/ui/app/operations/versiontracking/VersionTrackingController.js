@@ -16,65 +16,12 @@
 (function () {
     "use strict";
 
-    App.controller('VersionTrackingController', function ($scope, State, VersionTrackingResource, CommonTableParams, NotificationService) {
+    App.controller('VersionTrackingController', function ($scope, $routeParams, $state) {
+        var self = this;
 
-        var state = new State().setPending();
-        $scope.state = state;
-
-
-        function getSnapshots(startDate) {
-            state.setPending();
-            VersionTrackingResource.getSnapshots(startDate)
-                .then(function (response) {
-                    $scope.response = response;
-                    if ($scope.chosenSnapshot) {
-                        $scope.getSnapshotDetails($scope.chosenSnapshot.id);
-                    } else {
-                        $scope.chosenSnapshot = response[0];
-                    }
-                    state.setLoaded();
-                }).catch(function onError() {
-                    state.setError();
-                });
-        }
-
-        var currentDate = moment().utc().subtract(1, 'days').format("YYYY-MM-DDTHH:mm:ss") + 'Z';
-
-        getSnapshots(currentDate);
-
-        $scope.snapshotsTableParams = CommonTableParams.getTableParams($scope, function () {
-            return $scope.response;
-        });
-
-        $scope.appsTableParams = CommonTableParams.getTableParams($scope, function () {
-            return $scope.chosenSnapshot.applications;
-        });
-
-        $scope.cdhServicesTableParams = CommonTableParams.getTableParams($scope, function () {
-            return $scope.chosenSnapshot.cdh_services;
-        });
-
-        $scope.cfServicesTableParams = CommonTableParams.getTableParams($scope, function () {
-            return $scope.chosenSnapshot.cf_services;
-        });
-
-        $scope.getSnapshotsByRange = function (days) {
-            currentDate = moment().utc().subtract(days, 'days').format("YYYY-MM-DDTHH:mm:ss") + 'Z';
-            getSnapshots(currentDate);
+        self.isTabActive = function (sref) {
+            return $state.is(sref) || $state.includes(sref);
         };
 
-        $scope.$watch('chosenSnapshot', function (newValue, oldValue) {
-            var hasValue = newValue && oldValue;
-            if ((oldValue && !newValue) || (hasValue && newValue.id !== oldValue.id)) {
-                NotificationService.success('Snapshot was changed');
-                $scope.appsTableParams.reload();
-                $scope.cdhServicesTableParams.reload();
-                $scope.cfServicesTableParams.reload();
-            }
-        });
-
-        $scope.getSnapshotDetails = function (id) {
-            $scope.chosenSnapshot = _.findWhere($scope.response, {"id": id});
-        };
     });
 }());

@@ -20,6 +20,7 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
     $sceProvider.enabled(false);
 
     $urlRouterProvider.when('/app/datacatalog', '/app/datacatalog/datasets');
+    $urlRouterProvider.when('/app/versiontracking', '/app/versiontracking/snapshots');
     $urlRouterProvider.when('/app/marketplace', '/app/marketplace/services');
     $urlRouterProvider.when('/app/platformdashboard', '/app/platformdashboard/summary');
     $urlRouterProvider.when('/app/jobsscheduler/jobs', '/app/jobsscheduler/jobs/workflowjobs');
@@ -115,11 +116,25 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
             controllerAs: 'ctrl',
             templateUrl: getViewPath('operations/versiontracking/versiontracking.html')
         })
+        .state('app.versiontracking.snapshots', {
+            url: '/snapshots',
+            title: 'Snapshots',
+            controller: 'PlatformSnapshotsController',
+            controllerAs: 'ctrl',
+            templateUrl: getViewPath('operations/versiontracking/platformsnapshots/platformsnapshots.html')
+        })
+        .state('app.versiontracking.diffs', {
+            url: '/diffs',
+            title: 'Snapshots diffs',
+            controller: 'PlatformSnapshotsDiffsController',
+            controllerAs: 'ctrl',
+            templateUrl: getViewPath('operations/versiontracking/diffs/platformsnapshotsdiffs.html')
+        })
         .state('app.versiontrackingapp', {
-            url: '/versiontracking/:snapshotId/:appGuid',
+            url: '/versiontracking/snapshots/:snapshotId/:appGuid',
             title: 'Application details',
             controller: 'ApplicationOverviewController',
-            templateUrl: getViewPath('operations/versiontracking/appoverview.html')
+            templateUrl: getViewPath('operations/versiontracking/platformsnapshots/appoverview.html')
         })
         .state('app.platformtests', {
             url: '/platformtests',

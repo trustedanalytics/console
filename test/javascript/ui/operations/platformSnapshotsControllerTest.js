@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-describe("Unit: VersionTrackingController", function() {
+describe("Unit: PlatformSnapshotsController", function() {
 
     beforeEach(module('app'));
 
@@ -29,7 +29,7 @@ describe("Unit: VersionTrackingController", function() {
         $q = _$q_;
         state = new State();
         createController = function () {
-            controller = $controller('VersionTrackingController', {
+            controller = $controller('PlatformSnapshotsController', {
                 $scope: scope,
                 VersionTrackingResource: versionTrackingResource
             });

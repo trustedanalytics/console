@@ -30,8 +30,6 @@
                 $scope.chosenSnapshot = _.findWhere(response, {"id": (parseInt(snapshotId))});
                 $scope.app = _.findWhere($scope.chosenSnapshot.applications, {"guid": appGuid});
                 state.setLoaded();
-            }).catch(function onError() {
-                state.setError();
             });
 
     });
