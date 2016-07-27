@@ -25,6 +25,9 @@
 
         self.state = state;
 
+        $scope.currentPage = 1;
+        $scope.itemsPerPage = 12;
+
         self.isSpaceSet = function () {
             return !_.isEmpty(targetProvider.getSpace());
         };
@@ -39,9 +42,14 @@
                     .getListBySpace(targetProvider.getSpace().guid)
                     .then(function (data) {
                         data = data || {};
-                        self.services = serviceExtractor.extract(data);
+                        self.services = _.sortBy(serviceExtractor.extract(data), function (service) {
+                            return service.name.toLowerCase(); 
+                        });
+                        self.filtered = self.services;
+                        calculatePagination($scope.currentPage, $scope.itemsPerPage);
                         self.state.setLoaded();
                         self.space = targetProvider.getSpace();
+
                     })
                     .catch(function () {
                         self.state.setError();
@@ -60,8 +68,17 @@
             self.updateServices();
         });
 
+        $scope.$watch('currentPage + numPerPage', function() {
+            calculatePagination($scope.currentPage, $scope.itemsPerPage);
+        });
+
         searchHandler = $scope.$on('searchChanged', function (eventName, searchText) {
             $scope.searchText = searchText;
+            self.filtered = _.filter(self.services, function (service) {
+                return self.filterService(service);
+            });
+
+            calculatePagination($scope.currentPage, $scope.itemsPerPage);
         });
 
         $scope.$on('$destroy', function () {
@@ -74,8 +91,15 @@
             return isServiceMatching(service, $scope.searchText);
         };
 
+        function calculatePagination(currentPage, itemsPerPage) {
+            $scope.begin = ((currentPage - 1) * itemsPerPage);
+            $scope.end = $scope.begin + itemsPerPage;
+            if(self.filtered) {
+                $scope.numPages = Math.ceil(self.filtered.length / itemsPerPage);
+            }
+        }
     });
-
+    
     function contains(str, searchText) {
         return str.toLowerCase().indexOf(searchText) > -1;
     }

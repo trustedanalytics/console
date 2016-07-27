@@ -1,0 +1,63 @@
+/**
+ * Copyright (c) 2016 Intel Corporation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+$service-card-border-color: #cccccc;
+$service-card-bg-top: #f3f3f3;
+$service-card-bg-bottom: #fff;
+$service-card-description-color: #666666;
+$service-card-tags-text-color: #999999;
+
+
+.marketplace {
+
+  .service-list {
+
+    .available-services {
+
+      p {
+        font-weight: 400;
+        color: $intel-blue;
+      }
+    }
+
+    .service-card {
+      .card {
+        border: 1px solid $service-card-border-color;
+
+        .card-top {
+          background-color: $service-card-bg-top;
+
+          h1 {
+            color: $intel-blue;
+          }
+
+          .description {
+            color: $service-card-description-color;
+          }
+
+          a.details {
+            color: $intel-blue;
+          }
+        }
+
+        .card-bottom {
+          background-color: $service-card-bg-bottom;
+          color: $service-card-tags-text-color;
+        }
+      }
+    }
+  }
+}

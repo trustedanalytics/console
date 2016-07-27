@@ -23,21 +23,27 @@ h3
     div(ng-show='ctrl.state.isLoaded()')
         .service-list
             .searchbar.clearfix
-               search-bar.pull-right
-            .service-card.col-lg-3.col-md-4.col-sm-6(ng-repeat="service in filtered = (ctrl.services | orderBy: 'name' | filter: ctrl.filterService)")
-                a.panel(ui-sref='app.service({ serviceId: service.id })')
-                    img(ng-src='{{ service.image }}', alt='{{ service.name }}', ng-if='service.image')
-                    .placeholder(ng-if='!service.image')
-                        span.icons.icon-settings
-                    div {{ service.name }}
-                    .description {{ service.description }}
-                    .tags
-                        span.label.label-tag(data-ng-repeat='tag in service.tags')
-                            | {{ tag }}
-            div(class='clearing')
-            .items-count(ng-show='ctrl.services && ctrl.services.length != 0')
-                | Showing {{ filtered.length }} of {{ ctrl.services.length }}
+               search-bar.pull-left
+            .available-services
+               p {{ ctrl.filtered.length }} Available Services
+            .service-card.col-lg-4.col-md-6(ng-repeat="service in ctrl.filtered.slice(begin, end)")
+               .card
+                  .card-top
+                     h1
+                        a(ui-sref='app.service({ serviceId: service.id })') {{ service.name }}
+                     .description(data-ng-bind="service.description" data-ellipsis title="{{service.description}}")
+                     a.details(ui-sref='app.service({ serviceId: service.id })') See Details
+                        span.fa.fa-angle-double-right
+                  .card-bottom
+                     span.fa.fa-tags
+                     span.title Tags:
+                     .clearfix
+                     .tags
+                        span(ng-repeat='tag in service.tags') {{ tag }}{{ $last ? '' : ', ' }}
 
+            .pagination-wrapper
+               .pagination(ng-show="numPages > 1" uib-pagination total-items="ctrl.filtered.length" ng-model="currentPage"
+                  items-per-page="itemsPerPage" previous-text="«" next-text="»")
     .panel.panel-danger(ng-show='ctrl.state.isError()')
         .panel-heading Error
         .panel-body Error occurred

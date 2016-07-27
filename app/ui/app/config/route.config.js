@@ -180,7 +180,9 @@ App.config(function ($stateProvider, $urlRouterProvider, LazyLoadProvider, AppCo
             targetHeader: {org: true, space: true},
             controller: 'ServicesController',
             controllerAs: 'ctrl',
+            resolve: LazyLoadProvider.load(['dibari.angular-ellipsis']),
             templateUrl: getViewPath('marketplace/list/services.html'),
+
             searchEnabled: true
         })
         .state('app.marketplace.instances', {
