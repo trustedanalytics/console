@@ -28,7 +28,7 @@ var ERRORS = Object.freeze({
 
 var DEFAULT_ERROR = Object.freeze({
     code: 500,
-    title: "Error occured",
+    title: "Error occurred",
     description: 'Error while proxying request to service %s, path %s'
 });
 

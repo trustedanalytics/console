@@ -27,7 +27,7 @@ include ./cookiesalert.jade
               .toast-title(ng-if='toaster.data.status')
                 | {{ toaster.data.error }} ({{ toaster.data.status }})
               .toast-title(ng-if='!toaster.data.status')
-                | Error occured
+                | Error occurred
               .toast-message
                 span(ng-if='toaster.data.customMessage')
                   | {{ toaster.data.customMessage }}
