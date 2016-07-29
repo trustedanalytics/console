@@ -59,8 +59,8 @@
 
                         .new-instance
                             form(name='marketplaceNewInstance', ng-submit='ctrl.createServiceInstance(plan)', ng-if='!ctrl.newInstanceState.isPending()')
-                                input.form-control(name="instanceName" type='text', pattern-validator="^[a-zA-Z][a-zA-Z0-9-_\.]*",
-                                    required='', placeholder='Instance name', ng-model='ctrl.newInstance.name', ng-disabled='!ctrl.space()')
+                                input.form-control(name="instanceName" type='text', pattern-validator="^[a-zA-Z0-9-_.]*$", required='',
+                                placeholder='Instance name', ng-model='ctrl.newInstance.name', ng-disabled='!ctrl.space()')
                                 button.btn.btn-primary(type='submit', ng-disabled='!ctrl.space() || !marketplaceNewInstance.instanceName.$valid')
                                     | Create new instance
                                 .panel.panel-warning(ng-if='!ctrl.space()')
