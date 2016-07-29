@@ -19,6 +19,9 @@ var defaults = require('./default-config.json');
 var vcapServices = JSON.parse(process.env.VCAP_SERVICES || '{}');
 var vcapApplication = JSON.parse(process.env.VCAP_APPLICATION || '{}');
 var userProvided = vcapServices['user-provided'] || [];
+var ssoEnvList = _.keys(process.env).filter(function(vcapServiceName) {
+    return vcapServiceName.indexOf('SSO_') === 0;
+});
 
 function getUserProvidedSerice(name) {
     var service = _.findWhere(userProvided, { name: name });
@@ -51,52 +54,27 @@ function getVariable(name) {
 
 function getSso() {
     var sso = getUserProvidedSerice('sso') || {};
-
-    if(process.env.SSO_TOKEN_URI) {
-        sso.tokenUri = process.env.SSO_TOKEN_URI;
-    }
-
-    if(process.env.SSO_UAA_URI) {
-        sso.uaaUri = process.env.SSO_UAA_URI;
-    }
-
-    if(process.env.SSO_TOKEN_KEY) {
-        sso.tokenKey = process.env.SSO_TOKEN_KEY;
-    }
-
-    if(process.env.SSO_EMAIL) {
-        sso.email = process.env.SSO_EMAIL;
-    }
-
-    if(process.env.SSO_LOGOUT_URI) {
-        sso.logoutUri = process.env.SSO_LOGOUT_URI;
-    }
-
-    if(process.env.SSO_AUTHORIZATION_URI) {
-        sso.authorizationUri = process.env.SSO_AUTHORIZATION_URI;
-    }
-
-    if(process.env.SSO_API_ENDPOINT) {
-        sso.apiEndpoint = process.env.SSO_API_ENDPOINT;
-    }
-
-    if(process.env.SSO_USER_INFO_URI) {
-        sso.userInfoUri = process.env.SSO_USER_INFO_URI;
-    }
-
-    if(process.env.SSO_CLIENT_ID) {
-        sso.clientId = process.env.SSO_CLIENT_ID;
-    }
-
-    if(process.env.SSO_CLIENT_SECRET) {
-        sso.clientSecret = process.env.SSO_CLIENT_SECRET;
-    }
-
-    if(process.env.SSO_CHECK_TOKEN_URI) {
-        sso.checkTokenUri = process.env.SSO_CHECK_TOKEN_URI;
-    }
-
+    ssoEnvList.forEach(function(env){
+        if(process.env[env]) {
+            var userProvidedName = envNameToUserProvidedName(env);
+            sso[userProvidedName] = process.env[env];
+        }
+    });
     return sso;
+}
+
+function envNameToUserProvidedName(env) {
+    var envNameWithoutUnderscores = env.split('_').
+        slice(1).
+        forEach(function(splitEnv) {
+            splitEnv = capitalize(splitEnv);
+        }).
+        join('');
+    return envNameWithoutUnderscores.concat(envNameWithoutUnderscores[0].toLowerCase(), envNameWithoutUnderscores.substr(1));
+}
+
+function capitalize(input) {
+    return input[0].toUpperCase() + input.substr(1).toLowerCase();
 }
 
 module.exports = {

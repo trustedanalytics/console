@@ -106,7 +106,7 @@
                 form.jdbcUri.$setValidity('invalidDriver', true);
                 return;
             }
-            setDatabaseAndDriverByDriverName(matches[1], form);
+            ImportHelper.setDatabaseAndDriverByDriverName(matches[1], form, $scope);
 
             var regExp = new RegExp($scope.config.jdbcUriPattern);
             matches = regExp.exec(form.jdbcUri.$viewValue);
@@ -117,21 +117,5 @@
                 $scope.config.dbName = matches[order.indexOf('database') + 1];
             }
         };
-
-        function setDatabaseAndDriverByDriverName(driverName, form) {
-            var database;
-            var driver;
-            database = _.find($scope.databases, function (db) {
-                driver = _.findWhere(db.drivers, {name: driverName});
-                return driver != null;
-            });
-            if (database) {
-                $scope.config.databaseType = database;
-                $scope.config.driver = driver;
-                $scope.config.jdbcUriPattern = driver.jdbcRegex;
-                $scope.config.jdbcUriTemplate = driver.jdbcTemplate;
-            }
-            form.jdbcUri.$setValidity('invalidDriver', !!database);
-        }
     });
 }());

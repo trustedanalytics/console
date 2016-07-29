@@ -21,7 +21,8 @@
         return {
             validateDates: validateDates,
             validateFrequency: validateFrequency,
-            getOrder: getOrder
+            getOrder: getOrder,
+            setDatabaseAndDriverByDriverName : setDatabaseAndDriverByDriverName
         };
 
         function validateDates(schedule) {
@@ -42,6 +43,22 @@
                 .sort(function (a, b) {
                     return positions[a] - positions[b];
                 });
+        }
+
+        function setDatabaseAndDriverByDriverName(driverName, form, $scope) {
+            var database;
+            var driver;
+            database = _.find($scope.databases, function (db) {
+                driver = _.findWhere(db.drivers, {name: driverName});
+                return driver != null;
+            });
+            if (database) {
+                $scope.config.databaseType = database;
+                $scope.config.driver = driver;
+                $scope.config.jdbcUriPattern = driver.jdbcRegex;
+                $scope.config.jdbcUriTemplate = driver.jdbcTemplate;
+            }
+            form.jdbcUri.$setValidity('invalidDriver', !!database);
         }
     });
 }());

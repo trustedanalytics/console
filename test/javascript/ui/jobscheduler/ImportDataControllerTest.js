@@ -52,12 +52,13 @@ describe("Unit: ImportDataController", function () {
     }));
 
     function getSUT($controller) {
-        return controller = $controller('ImportDataController', {
+        controller = $controller('ImportDataController', {
             $scope: scope,
             ImportDataResource: importDataResource,
             NotificationService: notificationService,
             $state: $state
         });
+        return controller;
     }
 
     it('should not be null', function () {
@@ -97,7 +98,7 @@ describe("Unit: ImportDataController", function () {
 
     it('should update jdbcUri', inject(function () {
         var expectedJdbcUri = "jdbc:driver://host:port/dbName";
-        scope.config.jdbcUriTemplate = "jdbc:driver://{host}:{port}/{database}"
+        scope.config.jdbcUriTemplate = "jdbc:driver://{host}:{port}/{database}";
         scope.config.host = "host";
         scope.config.port = "port";
         scope.config.dbName = "dbName";
