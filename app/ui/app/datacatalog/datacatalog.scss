@@ -320,9 +320,12 @@
 
   .panel {
     padding: 35px 30px;
+    word-wrap: break-word;
+    word-break: break-all;
 
     table {
       width: 100%;
+      table-layout: fixed;
 
       tr {
         border: 1px none #E4E4E4;
@@ -334,6 +337,7 @@
 
         td:first-child {
           font-size: 15px;
+          width: 150px;
         }
       }
     }
