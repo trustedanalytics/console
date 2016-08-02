@@ -54,14 +54,14 @@ div(ng-show='state.isLoaded()')
                     tr(ng-repeat="snapshot in $data")
                         td(data-title="'Select to compare'" ng-class="'selection-col'")
                             input(type='checkbox', class='snapshot', value="{{ snapshot.id }}",
-                            name="snapshot", ng-model='selected[snapshot.id]', ng-disabled='!selected[snapshot.id] && maxSelected()')
+                            name="snapshot", ng-model='selected[snapshot.id]', ng-disabled='!selected[snapshot.id] && countSelected() === 2')
                         td(data-title="'Date & Time'" sortable="'created_at'") {{ snapshot.created_at | date: 'yyyy-MM-dd h:mm:ss a' }}
                         td(data-title="'Platform Version'" sortable="'platform_version'") {{ snapshot.platform_version }}
                         td(data-title="'CDH Version'" sortable="'cdh_version'") {{ snapshot.cdh_version }}
                         td(data-title="'CF API Version'" sortable="'cf_version'") {{ snapshot.cf_version }}
 
         div.comparison
-            button.btn.btn-primary(type='button', ng-click='getDiff()') Compare snapshots
+            button.btn.btn-primary(type='button', ng-click='getDiff()', ng-disabled="countSelected() !== 2") Compare snapshots
 
     .panel.time-range-filter(ng-show="diff")
         .export-file

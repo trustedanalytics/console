@@ -40,8 +40,8 @@
         getSnapshots(currentDate);
 
         $scope.selected = {};
-        $scope.maxSelected = function () {
-            return _.filter($scope.selected).length === 2;
+        $scope.countSelected = function () {
+            return _.filter($scope.selected).length;
         };
 
         $scope.getDiff = function () {
@@ -51,7 +51,7 @@
             state.setPending();
             VersionTrackingResource.getDiff(before, after)
                 .then(function (response) {
-                    $scope.diff = response;
+                    $scope.diff = response.plain();
                     $scope.appsList = filterMetrics($scope.diff.applications);
                     $scope.cdhServicesList = filterMetrics($scope.diff.cdh_services);
                     $scope.cfServicesList = filterMetrics($scope.diff.cf_services);
