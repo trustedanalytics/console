@@ -48,7 +48,7 @@ h3
                                 .new-key.form-group(ng-show="formVisible")
                                     form(ng-submit="addKey(newServiceName, instance)")
                                         input(ng-model="newServiceName" placeholder="Service key name")
-                                        input.btn.btn-primary(type="submit" value="Add")
+                                        input.btn.btn-primary(ng-disabled="!newServiceName" type="submit" value="Add")
                                         a(ng-click="formVisible = false")
                                             | Cancel
                                 .key(ng-repeat="key in instance.service_keys")
