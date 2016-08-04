@@ -54,7 +54,7 @@ div(ng-show='state.isLoaded()')
                     tr(ng-repeat="snapshot in $data")
                         td(data-title="'Select to compare'" ng-class="'selection-col'")
                             input(type='checkbox', class='snapshot', value="{{ snapshot.id }}",
-                            name="snapshot", ng-model='selected[snapshot.id]', ng-disabled='!selected[snapshot.id] && countSelected() === 2')
+                            name="snapshot", ng-model='selected[snapshot.id]', ng-change="changeSelected(snapshot.id)" ng-disabled='!selected[snapshot.id] && countSelected() === 2')
                         td(data-title="'Date & Time'" sortable="'created_at'") {{ snapshot.created_at | date: 'yyyy-MM-dd h:mm:ss a' }}
                         td(data-title="'Platform Version'" sortable="'platform_version'") {{ snapshot.platform_version }}
                         td(data-title="'CDH Version'" sortable="'cdh_version'") {{ snapshot.cdh_version }}

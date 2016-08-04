@@ -73,6 +73,12 @@
                 });
         };
 
+        $scope.changeSelected = function (id) {
+            if (!$scope.selected[id]) {
+                delete $scope.selected[id];
+            }
+        };
+
         $scope.getSnapshotsByRange = function (days) {
             currentDate = moment().utc().subtract(days, 'days').format("YYYY-MM-DDTHH:mm:ss") + 'Z';
             getSnapshots(currentDate);
