@@ -43,7 +43,7 @@
                     .then(function (data) {
                         data = data || {};
                         self.services = _.sortBy(serviceExtractor.extract(data), function (service) {
-                            return service.name.toLowerCase(); 
+                            return service.name.toLowerCase();
                         });
                         self.filtered = self.services;
                         calculatePagination($scope.currentPage, $scope.itemsPerPage);
@@ -99,7 +99,7 @@
             }
         }
     });
-    
+
     function contains(str, searchText) {
         return str.toLowerCase().indexOf(searchText) > -1;
     }

@@ -30,7 +30,9 @@ var strategy = new OAuth2Strategy({
     clientSecret: sso.clientSecret,
     callbackURL: '/oauth/callback',
     customHeaders: customHeaders,
-    proxy: true // tells strategy to use "X-Forwarded-*" headers - required for redirecting back to https protocol
+
+    // tells strategy to use "X-Forwarded-*" headers - required for redirecting back to https protocol
+    proxy: true
 }, function (accessToken, refreshToken, profile, done) {
     profile.accessToken = accessToken;
     done(null, profile);

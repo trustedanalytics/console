@@ -64,7 +64,10 @@
         };
 
         $scope.$watch('chosenSnapshot', function (newValue, oldValue) {
-            if ((oldValue && !newValue) || (newValue && oldValue && newValue.id !== oldValue.id)) {
+            if(!oldValue) {
+                return;
+            }
+            if (!newValue || (newValue.id !== oldValue.id)) {
                 NotificationService.success('Snapshot was changed');
             }
         });

@@ -86,8 +86,8 @@
 
         function filterMetrics(object) {
             return _.filter(object, function (obj) {
-                return obj.operation === "CHANGED" || (obj.operation === "ADDED" && obj.metric === "createdAt") ||
-                    (obj.operation === "REMOVED" && obj.metric === "createdAt");
+                return obj.operation === "CHANGED" || (obj.metric === "createdAt" &&
+                    _.contains(["ADDED", "REMOVED"], obj.operation));
             });
         }
     });
