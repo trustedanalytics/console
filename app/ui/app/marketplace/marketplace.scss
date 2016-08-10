@@ -138,6 +138,7 @@
 .marketplace .service-card img {
   float: left;
   margin-right: 15px;
+  max-width: 100%;
 }
 
 .service .placeholder, .marketplace .service-card .placeholder {
@@ -520,6 +521,9 @@
       float: left;
       width: 64px;
       text-align: center;
+      img {
+        max-width: 100%;
+      }
     }
 
     .placeholder > span {
